@@ -1,0 +1,24 @@
+{
+  "type": "object",
+  "required": ["base", "bull", "bear", "scenario_base_prob", "scenario_bull_prob", "scenario_bear_prob"],
+  "properties": {
+    "scenario_base_prob": { "type": "integer", "const": 0 },
+    "scenario_bull_prob": { "type": "integer", "const": 0 },
+    "scenario_bear_prob": { "type": "integer", "const": 0 },
+    "base": { "$ref": "#/$defs/scenario" },
+    "bull": { "$ref": "#/$defs/scenario" },
+    "bear": { "$ref": "#/$defs/scenario" }
+  },
+  "$defs": {
+    "scenario": {
+      "type": "object",
+      "required": ["type", "prob_label", "name", "description"],
+      "properties": {
+        "type":        { "type": "string", "enum": ["base", "bull", "bear"] },
+        "prob_label":  { "type": "string" },
+        "name":        { "type": "string" },
+        "description": { "type": "string" }
+      }
+    }
+  }
+}

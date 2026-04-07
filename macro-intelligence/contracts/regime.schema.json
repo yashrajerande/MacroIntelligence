@@ -1,0 +1,16 @@
+{
+  "type": "array",
+  "minItems": 6,
+  "maxItems": 6,
+  "items": {
+    "type": "object",
+    "required": ["dimension", "metric_summary", "signal_text", "badge_label", "badge_type"],
+    "properties": {
+      "dimension":      { "type": "string", "enum": ["growth", "inflation", "credit", "policy", "capex", "consumption"] },
+      "metric_summary": { "type": "string", "maxLength": 60 },
+      "signal_text":    { "type": "string" },
+      "badge_label":    { "type": "string" },
+      "badge_type":     { "type": "string", "enum": ["b-exp", "b-slow", "b-risk", "b-neu"] }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "array",
+  "minItems": 5,
+  "maxItems": 5,
+  "items": {
+    "type": "object",
+    "required": ["category", "headline", "url", "source_name", "buzz_tag"],
+    "properties": {
+      "category":    { "type": "string", "enum": ["geo", "ai", "india", "fintech", "ifs"] },
+      "headline":    { "type": "string" },
+      "url":         { "type": "string", "format": "uri" },
+      "source_name": { "type": "string" },
+      "buzz_tag":    { "type": "string", "enum": ["hot", "viral", "watch"] }
+    }
+  }
+}

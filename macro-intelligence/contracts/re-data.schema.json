@@ -1,0 +1,41 @@
+{
+  "type": "object",
+  "required": ["generated_at", "run_date", "indicators"],
+  "properties": {
+    "generated_at": { "type": "string", "format": "date-time" },
+    "run_date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "indicators": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/indicator" },
+      "propertyNames": {
+        "enum": [
+          "re_launches_units", "re_sales_units", "re_unsold_inventory",
+          "hpi_mumbai", "hpi_delhi", "hpi_bengaluru", "hpi_hyderabad",
+          "affordability_index", "home_loan_disbursements", "avg_home_loan_rate",
+          "office_absorption", "office_vacancy", "rent_bengaluru", "rent_mumbai",
+          "retail_mall_vacancy", "embassy_reit", "mindspace_reit", "brookfield_reit"
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "indicator": {
+      "type": "object",
+      "required": ["value", "direction", "source", "vintage", "confidence"],
+      "properties": {
+        "value":           { "type": ["number", "null"] },
+        "value_str":       { "type": "string" },
+        "previous":        { "type": ["number", "null"] },
+        "change_pct":      { "type": ["number", "null"] },
+        "direction":       { "type": "string", "enum": ["up", "down", "flat"] },
+        "source":          { "type": "string" },
+        "vintage":         { "type": "string" },
+        "is_estimated":    { "type": "boolean", "default": false },
+        "pct_10y":         { "type": "integer", "minimum": 0, "maximum": 100 },
+        "pct_10y_tier":    { "type": "string", "enum": ["hi", "mid", "lo"] },
+        "momentum_label":  { "type": "string" },
+        "confidence":      { "type": "string", "enum": ["high", "medium", "low"] }
+      }
+    }
+  }
+}

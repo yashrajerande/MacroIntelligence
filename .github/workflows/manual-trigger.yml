@@ -1,4 +1,4 @@
-name: MacroIntelligence Corp — Manual Run
+name: MacroIntelligence Corp - Manual Run
 
 on:
   workflow_dispatch:

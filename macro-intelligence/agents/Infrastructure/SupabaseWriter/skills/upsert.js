@@ -51,8 +51,9 @@ async function postWithRetry(url, body, headers, retries = 1) {
 /**
  * Upsert rows to a Supabase table, chunking at CHUNK_SIZE.
  */
-export async function upsert(table, rows, supabaseUrl, serviceKey) {
-  const url = `${supabaseUrl}/rest/v1/${table}`;
+export async function upsert(table, rows, supabaseUrl, serviceKey, onConflict) {
+  const conflict = onConflict ? `?on_conflict=${onConflict}` : '';
+  const url = `${supabaseUrl}/rest/v1/${table}${conflict}`;
   const headers = getHeaders(serviceKey);
   const rowArray = Array.isArray(rows) ? rows : [rows];
   const results = [];

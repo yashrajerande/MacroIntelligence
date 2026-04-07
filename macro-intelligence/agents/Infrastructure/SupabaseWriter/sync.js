@@ -56,7 +56,7 @@ export class SupabaseWriter {
       scenario_bear_name: run.scenario_bear_name || '',
       scenario_bear_txt:  run.scenario_bear_txt  || '',
       html_file_path:     macroData.html_file_path || '',
-    }, supabaseUrl, serviceKey);
+    }, supabaseUrl, serviceKey, 'run_date');
 
     // ── 2. Fetch run_id ──────────────────────────────────────────────
     console.log('[SupabaseWriter] 2/8: Fetching run_id...');
@@ -81,7 +81,7 @@ export class SupabaseWriter {
       badge_label:    r.badge_label,
       badge_type:     r.badge_type,
     }));
-    results.regime = await upsert('regime_classification', regimeRows, supabaseUrl, serviceKey);
+    results.regime = await upsert('regime_classification', regimeRows, supabaseUrl, serviceKey, 'run_date,dimension');
 
     // ── 4. signal_cards ──────────────────────────────────────────────
     console.log('[SupabaseWriter] 4/8: signal_cards');
@@ -98,7 +98,7 @@ export class SupabaseWriter {
       pct_note:     s.pct_note,
       is_surprise:  s.is_surprise,
     }));
-    results.signals = await upsert('signal_cards', signalRows, supabaseUrl, serviceKey);
+    results.signals = await upsert('signal_cards', signalRows, supabaseUrl, serviceKey, 'run_date,signal_num');
 
     // ── 5. news_feed ─────────────────────────────────────────────────
     console.log('[SupabaseWriter] 5/8: news_feed');
@@ -111,7 +111,7 @@ export class SupabaseWriter {
       source_name: n.source_name,
       buzz_tag:    n.buzz_tag,
     }));
-    results.news = await upsert('news_feed', newsRows, supabaseUrl, serviceKey);
+    results.news = await upsert('news_feed', newsRows, supabaseUrl, serviceKey, 'run_date,category');
 
     // ── 6. macro_indicators (chunked at 20) ──────────────────────────
     console.log('[SupabaseWriter] 6/8: macro_indicators');
@@ -137,7 +137,7 @@ export class SupabaseWriter {
       is_estimated:     ind.is_estimated    || false,
       source:           ind.source          || '',
     }));
-    results.indicators = await upsert('macro_indicators', indicatorRows, supabaseUrl, serviceKey);
+    results.indicators = await upsert('macro_indicators', indicatorRows, supabaseUrl, serviceKey, 'run_date,indicator_slug');
 
     // ── 7. executive_summary ─────────────────────────────────────────
     console.log('[SupabaseWriter] 7/8: executive_summary');
@@ -148,7 +148,7 @@ export class SupabaseWriter {
       para_label: p.para_label,
       para_html:  p.para_html,
     }));
-    results.exec_summary = await upsert('executive_summary', execRows, supabaseUrl, serviceKey);
+    results.exec_summary = await upsert('executive_summary', execRows, supabaseUrl, serviceKey, 'run_date,para_num');
 
     // ── 8. real_estate_summary ───────────────────────────────────────
     console.log('[SupabaseWriter] 8/8: real_estate_summary');
@@ -162,7 +162,7 @@ export class SupabaseWriter {
         commercial_regime:       re.commercial_regime       || '',
         reit_vs_gsec_spread_bps: re.reit_vs_gsec_spread_bps ?? null,
         key_risk_note:           re.key_risk_note           || '',
-      }, supabaseUrl, serviceKey);
+      }, supabaseUrl, serviceKey, 'run_date');
     }
 
     const latency = Date.now() - start;

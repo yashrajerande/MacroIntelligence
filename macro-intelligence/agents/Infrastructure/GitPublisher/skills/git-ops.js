@@ -10,14 +10,17 @@ const execAsync = promisify(exec);
 /**
  * Publish a file to GitHub via git add/commit/push.
  */
-export async function gitPublish(filePath, commitMessage, ghPat, repo) {
+export async function gitPublish(filePath, indexPath, commitMessage, ghPat, repo) {
   const remoteUrl = `https://x-access-token:${ghPat}@github.com/${repo}.git`;
+
+  const addIndex = indexPath ? `git add -f ${indexPath}` : null;
 
   const commands = [
     'git config user.name "MacroIntelligence Corp"',
     'git config user.email "pipeline@macrointelligence.corp"',
     `git remote set-url origin ${remoteUrl}`,
-    `git add ${filePath}`,
+    `git add -f ${filePath}`,
+    ...(addIndex ? [addIndex] : []),
     `git commit -m "${commitMessage}"`,
     'git push origin HEAD',
   ];

@@ -101,7 +101,7 @@ async function run() {
     // ── STEP 4: PRODUCTION ──────────────────────────────────────────
     logger.phase('Production');
 
-    const { html, macroDataObj, outputPath } = new DashboardRenderer().render({
+    const { html, macroDataObj, outputPath, indexPath } = new DashboardRenderer().render({
       ...allData, regime, signals, scenarios, news, execSummary,
     });
     logger.agent('DashboardRenderer', { model: 'none', latency_ms: 0, tokens: { input: 0, output: 0 } });
@@ -134,7 +134,7 @@ async function run() {
     );
     logger.agent('SupabaseWriter', { model: 'none', latency_ms: 0, tokens: { input: 0, output: 0 } });
 
-    await new GitPublisher().publish(outputPath, dateStr);
+    await new GitPublisher().publish(outputPath, dateStr, indexPath);
     logger.agent('GitPublisher', { model: 'none', latency_ms: 0, tokens: { input: 0, output: 0 } });
 
     // ── DONE ────────────────────────────────────────────────────────

@@ -321,12 +321,14 @@ export class DashboardRenderer {
     // ── Write output ─────────────────────────────────────────────────
     const filename = `macro-dashboard-${isoDate}.html`;
     const outputPath = join(ROOT, 'output', filename);
+    const indexPath  = join(ROOT, 'output', 'index.html');
     mkdirSync(join(ROOT, 'output'), { recursive: true });
     writeFileSync(outputPath, html, 'utf-8');
+    writeFileSync(indexPath,  html, 'utf-8'); // GitHub Pages stable URL
 
     const latency = Date.now() - start;
     console.log(`[DashboardRenderer] Done in ${latency}ms → ${outputPath}`);
 
-    return { html, macroDataObj, outputPath };
+    return { html, macroDataObj, outputPath, indexPath };
   }
 }

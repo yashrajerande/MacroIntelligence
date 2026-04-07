@@ -5,7 +5,7 @@
 import { gitPublish } from './skills/git-ops.js';
 
 export class GitPublisher {
-  async publish(outputPath, dateStr) {
+  async publish(outputPath, dateStr, indexPath) {
     if (process.env.SKIP_GIT_PUSH === 'true') {
       console.log('[GitPublisher] SKIP_GIT_PUSH=true — skipping commit and push.');
       return;
@@ -21,7 +21,7 @@ export class GitPublisher {
     const commitMessage = `Dashboard: ${dateStr} IST [skip ci]`;
 
     console.log(`[GitPublisher] Committing: ${commitMessage}`);
-    const results = await gitPublish(outputPath, commitMessage, ghPat, repo);
+    const results = await gitPublish(outputPath, indexPath, commitMessage, ghPat, repo);
 
     console.log('[GitPublisher] Push complete.');
     return results;

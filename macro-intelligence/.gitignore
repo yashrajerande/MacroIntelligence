@@ -4,3 +4,4 @@ logs/*.json
 !logs/.gitkeep
 output/*.html
 !output/.gitkeep
+!output/index.html

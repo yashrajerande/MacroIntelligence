@@ -6,6 +6,7 @@
 import { fetchAllYahoo } from './skills/yahoo-finance.js';
 import { fetchAllFred } from './skills/fred-api.js';
 import { getISTDate } from '../../../src/utils/ist-date.js';
+import { scorePct10y } from '../../Analysis/SignalDetector/skills/signal-scoring.js';
 
 export class MarketDataAnalyst {
   async fetch() {
@@ -34,6 +35,22 @@ export class MarketDataAnalyst {
         vintage: isoDate,
         is_estimated: false,
       };
+    }
+
+    // Score pct_10y and add momentum_label for all market prices
+    for (const [slug, p] of Object.entries(prices)) {
+      if (p.fetch_error) continue;
+      const scored = scorePct10y(slug, p.value);
+      if (scored) {
+        p.pct_10y      = scored.pct_10y;
+        p.pct_10y_tier = scored.pct_10y_tier;
+        p.pct_note     = scored.pct_note || '';
+      }
+      if (!p.momentum_label && p.change_pct !== undefined) {
+        const arrow = p.direction === 'up' ? '↑' : p.direction === 'down' ? '↓' : '→';
+        const sign  = p.change_pct >= 0 ? '+' : '';
+        p.momentum_label = `${arrow} ${sign}${p.change_pct}%`;
+      }
     }
 
     // Collect fetch errors for logging

@@ -107,6 +107,7 @@ async function run() {
     logger.agent('DashboardRenderer', { model: 'none', latency_ms: 0, tokens: { input: 0, output: 0 } });
 
     const validation = new Validator().validate(html, macroDataObj, isoDate);
+    logger.validation(validation);
     logger.agent('Validator', {
       model: 'none', latency_ms: 0,
       tokens: { input: 0, output: 0 },
@@ -124,6 +125,8 @@ async function run() {
         logger.warn('Validation warning', w);
       }
     }
+
+    logger.setOutputFile(outputPath);
 
     // ── STEP 5: INFRASTRUCTURE ──────────────────────────────────────
     logger.phase('Infrastructure');

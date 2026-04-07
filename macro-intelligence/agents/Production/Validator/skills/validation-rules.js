@@ -1,7 +1,10 @@
 /**
- * Validation Rules Skill — 22 deterministic checks as pure functions.
+ * Validation Rules Skill — 6-Layer Reliability Architecture.
+ * 22 deterministic checks + 6 reliability layers.
  * Returns { valid, errors, warnings }.
  */
+
+import { HISTORICAL_RANGES } from '../../../Analysis/SignalDetector/skills/signal-scoring.js';
 
 const VALID_SLUGS = [
   'india_gdp_yoy','india_gdp_fy_estimate','rbi_gdp_forecast',
@@ -40,10 +43,75 @@ const VALID_DIMENSIONS = new Set(['growth', 'inflation', 'credit', 'policy', 'ca
 const VALID_BADGE_TYPES = new Set(['b-exp', 'b-slow', 'b-risk', 'b-neu']);
 const VALID_SIGNAL_STATUSES = new Set(['positive', 'risk', 'watch', 'surprise']);
 const VALID_NEWS_CATEGORIES = new Set(['geo', 'ai', 'india', 'fintech', 'ifs']);
+const VALID_CONFIDENCES = new Set(['high', 'medium', 'low']);
+
+// ── ROUND NUMBER DETECTION (Layer 5) ─────────────────────────────────────
+// Slugs exempt from round-number warnings (rates, indices where integer values are normal)
+const ROUND_EXEMPT = new Set([
+  'rbi_repo_rate', 'fed_funds_rate', 'ecb_deposit_rate', 'boj_rate',
+  'capacity_utilisation', 'india_vix', 'us_vix',
+]);
+
+function isSuspiciouslyRound(value, slug) {
+  if (ROUND_EXEMPT.has(slug)) return false;
+  if (value === null || value === undefined) return false;
+  if (value === 0) return false;
+  // Flag values that are exactly integers ending in 0 (e.g. 100, 7.0, 50000)
+  return Number.isInteger(value) && value % 10 === 0;
+}
+
+// ── DATE HELPERS ─────────────────────────────────────────────────────────
+const MONTH_NAMES = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+
+function isVintageInFuture(vintage, runDate) {
+  if (!vintage || vintage === 'Awaited') return false;
+  const lower = vintage.toLowerCase().trim();
+
+  // Try ISO date: "2026-04-07"
+  if (/^\d{4}-\d{2}-\d{2}$/.test(lower)) {
+    return new Date(lower) > new Date(runDate);
+  }
+
+  // Try "DD Mon YYYY" or "Mon YYYY"
+  for (let i = 0; i < MONTH_NAMES.length; i++) {
+    if (lower.includes(MONTH_NAMES[i])) {
+      const yearMatch = lower.match(/\d{4}/);
+      if (yearMatch) {
+        const year = parseInt(yearMatch[0]);
+        const month = i;
+        const vintageDate = new Date(year, month + 1, 0); // end of month
+        return vintageDate > new Date(runDate);
+      }
+    }
+  }
+
+  // Try "Q3 FY26" → FY26 = 2025-26, Q3 = Oct-Dec 2025
+  const fyMatch = lower.match(/q(\d)\s*fy(\d{2})/);
+  if (fyMatch) {
+    const q = parseInt(fyMatch[1]);
+    const fy = parseInt(fyMatch[2]) + 2000;
+    // FY26 Q1=Apr-Jun 2025, Q2=Jul-Sep 2025, Q3=Oct-Dec 2025, Q4=Jan-Mar 2026
+    const yearMap = { 1: fy - 1, 2: fy - 1, 3: fy - 1, 4: fy };
+    const monthEnd = { 1: 5, 2: 8, 3: 11, 4: 2 }; // end months (0-indexed)
+    const endDate = new Date(yearMap[q], monthEnd[q] + 1, 0);
+    return endDate > new Date(runDate);
+  }
+
+  return false;
+}
+
+// ═════════════════════════════════════════════════════════════════════════
+// MAIN VALIDATION — 22 structural checks + 6 reliability layers
+// ═════════════════════════════════════════════════════════════════════════
 
 export function runAllChecks(html, macroData, expectedDate) {
   const errors = [];
   const warnings = [];
+
+  // macroData is now nested: { run: {...}, regime: [...], indicators: [...], ... }
+  const run = macroData?.run || {};
+
+  // ── STRUCTURAL CHECKS (Rules 1–22) ─────────────────────────────────
 
   // 1. HTML completeness
   if (!html.includes('<!DOCTYPE html>') && !html.includes('<!doctype html>')) {
@@ -54,7 +122,7 @@ export function runAllChecks(html, macroData, expectedDate) {
   }
 
   // 2. No FILL markers
-  const fillCount = (html.match(/<!--\s*FILL\s*-->/g) || []).length;
+  const fillCount = (html.match(/<!--\s*FILL[^>]*-->/g) || []).length;
   if (fillCount > 0) {
     errors.push(`Rule 2: ${fillCount} <!-- FILL --> placeholders remain`);
   }
@@ -65,30 +133,30 @@ export function runAllChecks(html, macroData, expectedDate) {
     return { valid: false, errors, warnings };
   }
 
-  // 4. run_date matches
-  if (macroData.run_date !== expectedDate) {
-    errors.push(`Rule 4: run_date "${macroData.run_date}" does not match expected "${expectedDate}"`);
+  // 4. run_date matches (now under macroData.run.run_date)
+  if (run.run_date !== expectedDate) {
+    errors.push(`Rule 4: run.run_date "${run.run_date}" does not match expected "${expectedDate}"`);
   }
 
   // 5-6. Indicators count and slugs
   const indicators = macroData.indicators || [];
-  const indicatorSlugs = indicators.map(i => i.indicator_slug || i.slug);
+  const indicatorSlugs = indicators.map(i => i.indicator_slug);
   if (indicators.length < 90) {
     errors.push(`Rule 5: indicators[] has ${indicators.length} entries (minimum 90)`);
   } else if (indicators.length < 97) {
     warnings.push(`W2: indicators[] has ${indicators.length} entries (expected 97)`);
   }
 
-  const missingSlgs = VALID_SLUGS.filter(s => !indicatorSlugs.includes(s));
-  if (missingSlgs.length > 0 && missingSlgs.length <= 7) {
-    warnings.push(`W2: Missing slugs: ${missingSlgs.join(', ')}`);
-  } else if (missingSlgs.length > 7) {
-    errors.push(`Rule 6: ${missingSlgs.length} slugs missing from indicators[]`);
+  const missingSlugs = VALID_SLUGS.filter(s => !indicatorSlugs.includes(s));
+  if (missingSlugs.length > 7) {
+    errors.push(`Rule 6: ${missingSlugs.length} slugs missing from indicators[]`);
+  } else if (missingSlugs.length > 0) {
+    warnings.push(`W2: Missing slugs: ${missingSlugs.join(', ')}`);
   }
 
   // 7-9. Indicator field validation
   for (const ind of indicators) {
-    const slug = ind.indicator_slug || ind.slug || 'unknown';
+    const slug = ind.indicator_slug || 'unknown';
     if (!VALID_DIRECTIONS.has(ind.direction)) {
       errors.push(`Rule 7: indicator "${slug}" has invalid direction "${ind.direction}"`);
     }
@@ -97,9 +165,6 @@ export function runAllChecks(html, macroData, expectedDate) {
     }
     if (typeof ind.pct_10y !== 'number' || ind.pct_10y < 0 || ind.pct_10y > 100) {
       errors.push(`Rule 9: indicator "${slug}" has invalid pct_10y "${ind.pct_10y}"`);
-    }
-    if (ind.confidence === 'low') {
-      warnings.push(`W1: indicator "${slug}" has low confidence`);
     }
   }
 
@@ -148,8 +213,8 @@ export function runAllChecks(html, macroData, expectedDate) {
     errors.push(`Rule 18: executive_summary[] has ${execSummary.length} entries (expected 5)`);
   }
 
-  // 19. Scenario probs
-  if (macroData.scenario_base_prob !== 0 || macroData.scenario_bull_prob !== 0 || macroData.scenario_bear_prob !== 0) {
+  // 19. Scenario probs (now under run.*)
+  if (run.scenario_base_prob !== 0 || run.scenario_bull_prob !== 0 || run.scenario_bear_prob !== 0) {
     errors.push('Rule 19: scenario_*_prob must all be 0');
   }
 
@@ -175,7 +240,164 @@ export function runAllChecks(html, macroData, expectedDate) {
     }
   }
 
-  // W3. Fetch errors
+  // ── LAYER 1: SOURCE HIERARCHY ──────────────────────────────────────
+  // Confidence must be valid; low-confidence indicators are flagged
+  let lowConfCount = 0;
+  for (const ind of indicators) {
+    const slug = ind.indicator_slug || 'unknown';
+    const conf = ind.confidence;
+    if (conf && !VALID_CONFIDENCES.has(conf)) {
+      warnings.push(`L1: indicator "${slug}" has unknown confidence "${conf}"`);
+    }
+    if (conf === 'low') {
+      lowConfCount++;
+    }
+  }
+  if (lowConfCount > 0) {
+    warnings.push(`L1: ${lowConfCount} indicator(s) with confidence=low`);
+  }
+
+  // ── LAYER 2: VINTAGE ENFORCEMENT ───────────────────────────────────
+  // Every indicator should have a data_vintage. No vintage in the future.
+  let missingVintageCount = 0;
+  for (const ind of indicators) {
+    const slug = ind.indicator_slug || 'unknown';
+    const vintage = ind.data_vintage;
+
+    if (!vintage || vintage === 'Awaited') {
+      missingVintageCount++;
+      continue;
+    }
+
+    if (isVintageInFuture(vintage, expectedDate)) {
+      errors.push(`L2: indicator "${slug}" vintage "${vintage}" is in the future (run_date=${expectedDate})`);
+    }
+  }
+  if (missingVintageCount > 10) {
+    errors.push(`L2: ${missingVintageCount} indicators have missing/Awaited vintage (max 10)`);
+  } else if (missingVintageCount > 0) {
+    warnings.push(`L2: ${missingVintageCount} indicator(s) with missing vintage`);
+  }
+
+  // ── LAYER 3: SCHEMA VALIDATION ─────────────────────────────────────
+  // Check required fields on each data contract element
+  for (const ind of indicators) {
+    const slug = ind.indicator_slug || 'unknown';
+    if (!ind.section || !ind.sub_section) {
+      errors.push(`L3: indicator "${slug}" missing section/sub_section`);
+    }
+    if (!ind.indicator_name) {
+      errors.push(`L3: indicator "${slug}" missing indicator_name`);
+    }
+    if (ind.latest_value === undefined || ind.latest_value === null) {
+      errors.push(`L3: indicator "${slug}" missing latest_value`);
+    }
+  }
+
+  for (const r of regime) {
+    if (!r.metric_summary || !r.signal_text || !r.badge_label) {
+      errors.push(`L3: regime "${r.dimension}" has empty metric_summary/signal_text/badge_label`);
+    }
+  }
+
+  for (const s of signals) {
+    if (!s.title || !s.data_text || !s.implication) {
+      errors.push(`L3: signal ${s.signal_num} has empty title/data_text/implication`);
+    }
+  }
+
+  for (const p of execSummary) {
+    if (!p.para_html || p.para_html.trim().length < 20) {
+      warnings.push(`L3: executive_summary para ${p.para_num} is too short or empty`);
+    }
+  }
+
+  // ── LAYER 4: CROSS-AGENT CONSISTENCY ───────────────────────────────
+  // Verify that key indicator values used in snap texts match the indicators array
+  const niftyInd = indicators.find(i => i.indicator_slug === 'nifty50');
+  if (niftyInd && run.snap_india) {
+    const niftyVal = niftyInd.latest_numeric;
+    // Check that snap_india references a Nifty value reasonably close
+    const snapNiftyMatch = run.snap_india.match(/Nifty\s+([\d,]+)/i);
+    if (snapNiftyMatch && niftyVal) {
+      const snapVal = parseFloat(snapNiftyMatch[1].replace(/,/g, ''));
+      if (Math.abs(snapVal - niftyVal) / niftyVal > 0.01) {
+        warnings.push(`L4: snap_india Nifty value (${snapVal}) differs from indicators array (${niftyVal}) by >1%`);
+      }
+    }
+  }
+
+  // Regime badge should match india_regime text
+  const growthRegime = regime.find(r => r.dimension === 'growth');
+  if (growthRegime && run.india_regime && growthRegime.badge_label !== run.india_regime) {
+    warnings.push(`L4: run.india_regime "${run.india_regime}" doesn't match growth regime badge_label "${growthRegime.badge_label}"`);
+  }
+
+  // ── LAYER 5: FABRICATION DETECTION ─────────────────────────────────
+  // Flag null values passed off as real and suspiciously round numbers
+  let nullAsReal = 0;
+  let roundCount = 0;
+  for (const ind of indicators) {
+    const slug = ind.indicator_slug || 'unknown';
+
+    // Check for fabrication: latest_numeric is null but latest_value looks like a real number
+    if (ind.latest_numeric === null && ind.latest_value && ind.latest_value !== 'Awaited') {
+      const parsed = parseFloat(ind.latest_value.replace(/[^0-9.\-]/g, ''));
+      if (!isNaN(parsed) && parsed !== 0) {
+        warnings.push(`L5: indicator "${slug}" has latest_value="${ind.latest_value}" but latest_numeric is null`);
+      }
+    }
+
+    // Flag suspiciously round numbers
+    if (isSuspiciouslyRound(ind.latest_numeric, slug)) {
+      roundCount++;
+    }
+  }
+  if (roundCount >= 5) {
+    warnings.push(`L5: ${roundCount} indicators have suspiciously round values — possible fabrication`);
+  }
+
+  // Check that no indicator_slug appears twice
+  const slugCounts = {};
+  for (const ind of indicators) {
+    const s = ind.indicator_slug;
+    slugCounts[s] = (slugCounts[s] || 0) + 1;
+  }
+  for (const [slug, count] of Object.entries(slugCounts)) {
+    if (count > 1) {
+      errors.push(`L5: indicator_slug "${slug}" appears ${count} times (must be unique)`);
+    }
+  }
+
+  // ── LAYER 6: HISTORICAL RANGE BOUNDS ───────────────────────────────
+  // If a value is outside the 10-year min/max, flag as error (likely fetch bug)
+  let outOfBoundsCount = 0;
+  for (const ind of indicators) {
+    const slug = ind.indicator_slug;
+    const val  = ind.latest_numeric;
+    if (val === null || val === undefined) continue;
+
+    const range = HISTORICAL_RANGES[slug];
+    if (!range) continue;
+
+    // Allow 20% buffer beyond historical extremes for genuinely new records
+    const buffer = Math.abs(range.max - range.min) * 0.20;
+    const loBound = range.min - buffer;
+    const hiBound = range.max + buffer;
+
+    if (val < loBound || val > hiBound) {
+      errors.push(
+        `L6: indicator "${slug}" value ${val} is outside historical range ` +
+        `[${range.min}, ${range.max}] with 20% buffer — likely fetch bug`
+      );
+      outOfBoundsCount++;
+    }
+  }
+  if (outOfBoundsCount > 5) {
+    errors.push(`L6: ${outOfBoundsCount} indicators out of historical bounds — data source may be corrupted`);
+  }
+
+  // ── WARNINGS ───────────────────────────────────────────────────────
   if (macroData._market_fetch_errors && macroData._market_fetch_errors.length > 0) {
     warnings.push(`W3: ${macroData._market_fetch_errors.length} market data fetch errors`);
   }

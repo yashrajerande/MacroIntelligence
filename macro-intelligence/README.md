@@ -80,10 +80,10 @@ SKIP_SUPABASE=true SKIP_GIT_PUSH=true node agents/CEO/orchestrate.js
 | 2 | **MarketDataAnalyst** | DataIntelligence | Fetches real-time market prices from Yahoo Finance & FRED APIs | Code only | — |
 | 3 | **MacroDataAnalyst** | DataIntelligence | 12 structured web searches for India & global macro indicators (CPI, GDP, PMI, GST, FII/DII, etc.) | LLM | Haiku |
 | 4 | **RealEstateAnalyst** | DataIntelligence | Indian residential & commercial real estate data (Anarock, Knight Frank, JLL, RBI) | LLM | Haiku |
-| 5 | **RegimeClassifier** | Analysis | Classifies macro regime across 6 dimensions (Growth, Inflation, Credit, Policy, Capex, Consumption) | LLM | Haiku |
-| 6 | **SignalDetector** | Analysis | Produces 7 signal cards with 10-year percentile scoring for capital allocators | LLM | Sonnet |
-| 7 | **ScenarioPlanner** | Analysis | Builds Base/Bull/Bear probability matrix with evocative scenario names | LLM | Haiku |
-| 8 | **NewsCurator** | Editorial | Curates top 5 news items across Geopolitics, AI, India, Fintech, India Financial Services | LLM | Haiku |
+| 5 | **RegimeClassifier** | Analysis | Classifies macro regime across 6 dimensions with template-based narratives | Code only | — |
+| 6 | **SignalDetector** | Analysis | Produces 7 signal cards with 10-year percentile scoring for capital allocators | LLM | Haiku |
+| 7 | **ScenarioPlanner** | Analysis | Builds Base/Bull/Bear probability matrix via deterministic decision tree | Code only | — |
+| 8 | **NewsCurator** | Editorial | RSS feeds (Reuters, ET, TechCrunch) + 1 Haiku call to refine headlines | LLM | Haiku |
 | 9 | **ExecSummaryWriter** | Editorial | Dense 5-paragraph investment commentary for capital allocators | LLM | Sonnet |
 | 10 | **DashboardRenderer** | Production | Assembles all data into the master HTML template via regex slot-filling | Code only | — |
 | 11 | **Validator** | Production | 22 deterministic checks + 6-layer reliability architecture (quality gate) | Code only | — |
@@ -96,16 +96,17 @@ SKIP_SUPABASE=true SKIP_GIT_PUSH=true node agents/CEO/orchestrate.js
 
 | Agent | Model | Cost/Run |
 |---|---|---|
-| MarketDataAnalyst | No LLM | $0.00 |
+| MarketDataAnalyst | No LLM (Yahoo/FRED APIs) | $0.00 |
 | MacroDataAnalyst | Haiku + web_search | ~$0.02-0.04 |
 | RealEstateAnalyst | Haiku + web_search | ~$0.01-0.02 |
-| RegimeClassifier | Haiku | ~$0.005 |
-| SignalDetector | Sonnet | ~$0.04-0.06 |
-| ScenarioPlanner | Haiku | ~$0.005 |
+| RegimeClassifier | No LLM (pure code) | $0.00 |
+| SignalDetector | Haiku | ~$0.01-0.02 |
+| ScenarioPlanner | No LLM (decision tree) | $0.00 |
 | ExecutiveSummaryWriter | Sonnet | ~$0.03-0.05 |
-| NewsCurator | Haiku + web_search | ~$0.01 |
-| **Total per run** | | **~$0.10-0.18** |
-| **Monthly (30 runs)** | | **~$3.00-$5.40** |
+| NewsCurator | RSS feeds + 1 Haiku call | ~$0.001 |
+| **Total per run** | | **~$0.07-0.13** |
+| **Monthly (30 runs)** | | **~$2.10-$3.90** |
+| **Weekend/holiday runs** | Cached data, no fetch | **~$0.03-0.05** |
 
 ## Supabase Schema
 

@@ -13,6 +13,7 @@
 import { getISTDate } from '../../src/utils/ist-date.js';
 import { RunLogger } from './run-log.js';
 import { checkBudget, recordRunCost, getCostSummary } from '../../src/utils/cost-ledger.js';
+import { shouldSkipDataIntelligence, getCachedIndicators, updateCache } from '../../src/utils/data-cache.js';
 
 import { MarketDataAnalyst }      from '../DataIntelligence/MarketDataAnalyst/fetch.js';
 import { MacroDataAnalyst }       from '../DataIntelligence/MacroDataAnalyst/fetch.js';
@@ -55,23 +56,52 @@ async function run() {
     // ── STEP 1: DATA INTELLIGENCE ──────────────────────────────────
     logger.phase('DataIntelligence');
 
-    const marketData = await withRetry(
-      () => new MarketDataAnalyst().fetch(),
-      'MarketDataAnalyst', logger
-    );
-    logger.agent('MarketDataAnalyst', marketData.meta);
+    let marketData, macroData, reData;
+    const skipDI = shouldSkipDataIntelligence(isoDate);
 
-    const macroData = await withRetry(
-      () => new MacroDataAnalyst().fetch(isoDate),
-      'MacroDataAnalyst', logger
-    );
-    logger.agent('MacroDataAnalyst', macroData.meta);
+    if (skipDI) {
+      console.log('  ⏭ Weekend/holiday — using cached data from last trading day');
+      const cached = getCachedIndicators(isoDate);
+      const cachedMeta = { model: 'none', latency_ms: 0, tokens: { input: 0, output: 0 } };
+      // Split cached data back into the 3 agent structures
+      const marketPrices = {}, macroInds = {}, reInds = {};
+      const MARKET_SLUGS = new Set(['nifty50','sensex','bank_nifty','india_vix','inr_usd','gold_usd','gold_inr_gram','brent_usd','sp500','nasdaq','us_vix','dxy','nat_gas','copper','iron_ore','nikkei225','hang_seng','euro_stoxx50','brent_usd_global','wti_usd','bdi','us_10y_treasury','gsec_10y','rbi_fx_reserves']);
+      const RE_SLUGS = new Set(['re_launches_units','re_sales_units','re_unsold_inventory','hpi_mumbai','hpi_delhi','hpi_bengaluru','hpi_hyderabad','affordability_index','home_loan_disbursements','avg_home_loan_rate','office_absorption','office_vacancy','rent_bengaluru','rent_mumbai','retail_mall_vacancy','embassy_reit','mindspace_reit','brookfield_reit']);
+      for (const [slug, val] of Object.entries(cached)) {
+        if (MARKET_SLUGS.has(slug)) marketPrices[slug] = val;
+        else if (RE_SLUGS.has(slug)) reInds[slug] = val;
+        else macroInds[slug] = val;
+      }
+      marketData = { data: { generated_at: new Date().toISOString(), run_date: isoDate, prices: marketPrices }, meta: cachedMeta };
+      macroData  = { data: { generated_at: new Date().toISOString(), run_date: isoDate, indicators: macroInds }, meta: cachedMeta };
+      reData     = { data: { generated_at: new Date().toISOString(), run_date: isoDate, indicators: reInds }, meta: cachedMeta };
+      logger.agent('MarketDataAnalyst', cachedMeta);
+      logger.agent('MacroDataAnalyst', cachedMeta);
+      logger.agent('RealEstateAnalyst', cachedMeta);
+    } else {
+      marketData = await withRetry(
+        () => new MarketDataAnalyst().fetch(),
+        'MarketDataAnalyst', logger
+      );
+      logger.agent('MarketDataAnalyst', marketData.meta);
 
-    const reData = await withRetry(
-      () => new RealEstateAnalyst().fetch(isoDate),
-      'RealEstateAnalyst', logger
-    );
-    logger.agent('RealEstateAnalyst', reData.meta);
+      macroData = await withRetry(
+        () => new MacroDataAnalyst().fetch(isoDate),
+        'MacroDataAnalyst', logger
+      );
+      logger.agent('MacroDataAnalyst', macroData.meta);
+
+      reData = await withRetry(
+        () => new RealEstateAnalyst().fetch(isoDate),
+        'RealEstateAnalyst', logger
+      );
+      logger.agent('RealEstateAnalyst', reData.meta);
+
+      // Update cache with fresh data
+      const allFresh = { ...marketData.data.prices, ...macroData.data.indicators, ...reData.data.indicators };
+      updateCache(allFresh, isoDate);
+      console.log(`  ✓ Cache updated: ${Object.keys(allFresh).length} indicators`);
+    }
 
     // ── STEP 2: ANALYSIS ────────────────────────────────────────────
     logger.phase('Analysis');

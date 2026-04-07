@@ -6,3 +6,4 @@ output/*.html
 !output/.gitkeep
 !output/index.html
 !output/cost-ledger.json
+!output/data-cache.json

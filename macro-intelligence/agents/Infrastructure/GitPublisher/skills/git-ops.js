@@ -23,6 +23,7 @@ export async function gitPublish(filePath, indexPath, commitMessage, ghPat, repo
     `git add -f ${filePath}`,
     ...(addIndex ? [addIndex] : []),
     `git add -f ${ledgerPath} 2>/dev/null || true`,
+    `git add -f ${filePath.replace(/output\/[^/]+$/, 'output/data-cache.json')} 2>/dev/null || true`,
     `git commit -m "${commitMessage}"`,
     'git push origin HEAD',
   ];

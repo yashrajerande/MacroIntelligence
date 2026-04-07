@@ -1,17 +1,81 @@
 /**
- * RegimeClassifier — Uses Haiku for signal_text narratives.
- * Classification rules are deterministic (regime-logic.js).
+ * RegimeClassifier — Pure deterministic classification with template-based narratives.
+ * No LLM calls. signal_text is generated from badge_type + indicator values.
  */
 
-import { readFileSync } from 'fs';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
-import Anthropic from '@anthropic-ai/sdk';
 import { classifyAll } from './skills/regime-logic.js';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const persona = readFileSync(join(__dirname, 'Persona.md'), 'utf-8');
-const client = new Anthropic();
+/**
+ * Template map: dimension -> badge_type -> signal_text template function.
+ * Each function receives the flat indicators map and returns a narrative string.
+ */
+const SIGNAL_TEMPLATES = {
+  growth: {
+    'b-exp': (i) =>
+      `GDP at ${v(i, 'india_gdp_yoy')}% with PMI Composite at ${v(i, 'pmi_composite')} signals strong expansion. Manufacturing and services both in growth territory.`,
+    'b-risk': (i) =>
+      `GDP slowing to ${v(i, 'india_gdp_yoy')}% while PMI Composite at ${v(i, 'pmi_composite')} flags contraction risk. Watch IIP and core sector for confirmation.`,
+    'b-slow': (i) =>
+      `GDP moderating at ${v(i, 'india_gdp_yoy')}% with PMI at ${v(i, 'pmi_composite')}. Growth is positive but losing momentum quarter-on-quarter.`,
+    'b-neu': (i) =>
+      `GDP steady at ${v(i, 'india_gdp_yoy')}% with PMI at ${v(i, 'pmi_composite')}. Economy in cruise control with no clear directional signals.`,
+  },
+  inflation: {
+    'b-risk': (i) =>
+      `CPI at ${v(i, 'cpi_headline')}% with fuel inflation at ${v(i, 'fuel_inflation')}% indicates overshoot beyond RBI's comfort zone. Price pressures broad-based.`,
+    'b-slow': (i) =>
+      `CPI rising to ${v(i, 'cpi_headline')}% with fuel at ${v(i, 'fuel_inflation')}%. Inflation trending up but still within tolerance band — bears monitoring.`,
+    'b-exp': (i) =>
+      `CPI at ${v(i, 'cpi_headline')}% with fuel at ${v(i, 'fuel_inflation')}% signals disinflationary trend. Benign price environment supports accommodative policy.`,
+    'b-neu': (i) =>
+      `CPI at ${v(i, 'cpi_headline')}% with fuel at ${v(i, 'fuel_inflation')}%. Inflation within RBI's 2-6% target band — no policy urgency.`,
+  },
+  credit: {
+    'b-exp': (i) =>
+      `Bank credit growing at ${v(i, 'bank_credit_growth')}% with CD ratio at ${v(i, 'cd_ratio')}% signals credit boom. Lending conditions highly expansionary.`,
+    'b-risk': (i) =>
+      `Bank credit at ${v(i, 'bank_credit_growth')}% with CD ratio at ${v(i, 'cd_ratio')}% flags credit stress. Deposit mobilisation lagging or loan demand weak.`,
+    'b-slow': (i) =>
+      `Bank credit growing at ${v(i, 'bank_credit_growth')}% with CD ratio at ${v(i, 'cd_ratio')}%. Credit expansion moderate — neither overheating nor contracting.`,
+    'b-neu': (i) =>
+      `Bank credit at ${v(i, 'bank_credit_growth')}% with CD ratio at ${v(i, 'cd_ratio')}%. Credit conditions stable with balanced deposit-lending dynamics.`,
+  },
+  policy: {
+    'b-exp': (i) =>
+      `Repo rate at ${v(i, 'rbi_repo_rate')}% with RBI in easing cycle. Rate cuts signal accommodative stance — supportive for duration and equities.`,
+    'b-risk': (i) =>
+      `Repo rate at ${v(i, 'rbi_repo_rate')}% under emergency tightening. Aggressive hikes indicate RBI prioritising inflation control over growth.`,
+    'b-slow': (i) =>
+      `Repo rate at ${v(i, 'rbi_repo_rate')}% with RBI in tightening mode. Incremental hikes aimed at anchoring inflation expectations.`,
+    'b-neu': (i) =>
+      `Repo rate steady at ${v(i, 'rbi_repo_rate')}%. RBI on extended pause — data-dependent stance with no near-term rate action expected.`,
+  },
+  capex: {
+    'b-exp': (i) =>
+      `IIP capital goods at ${v(i, 'iip_capgoods')}% with capacity utilisation at ${v(i, 'capacity_utilisation')}% signals capex upcycle. Investment cycle firmly underway.`,
+    'b-risk': (i) =>
+      `IIP capital goods at ${v(i, 'iip_capgoods')}% with capacity utilisation at ${v(i, 'capacity_utilisation')}% flags capex stall. Private investment cycle yet to materialise.`,
+    'b-slow': (i) =>
+      `IIP capital goods at ${v(i, 'iip_capgoods')}% with capacity utilisation at ${v(i, 'capacity_utilisation')}%. Capex growth moderate — government-led but private sector tentative.`,
+    'b-neu': (i) =>
+      `IIP capital goods at ${v(i, 'iip_capgoods')}% with capacity utilisation at ${v(i, 'capacity_utilisation')}%. Investment holding steady with no acceleration or deceleration.`,
+  },
+  consumption: {
+    'b-exp': (i) =>
+      `GST collections at ${v(i, 'gst_month')} YoY with PV sales at ${v(i, 'pv_sales')}% signals demand surge. Consumer spending broad-based across durables and non-durables.`,
+    'b-risk': (i) =>
+      `GST collections at ${v(i, 'gst_month')} YoY with PV sales at ${v(i, 'pv_sales')}% flags demand weakness. Urban and rural consumption both under pressure.`,
+    'b-slow': (i) =>
+      `GST collections at ${v(i, 'gst_month')} YoY with PV sales at ${v(i, 'pv_sales')}%. Demand tepid — consumers cautious amid mixed macro signals.`,
+    'b-neu': (i) =>
+      `GST collections at ${v(i, 'gst_month')} YoY with PV sales at ${v(i, 'pv_sales')}%. Consumption stable — neither accelerating nor fading.`,
+  },
+};
+
+/** Extract display value from indicators map; falls back to '~' if missing. */
+function v(indicators, slug) {
+  return indicators[slug]?.value ?? '~';
+}
 
 export class RegimeClassifier {
   async classify(allData) {
@@ -27,43 +91,12 @@ export class RegimeClassifier {
     // Step 1: Deterministic classification
     const regimeBase = classifyAll(indicators);
 
-    // Step 2: LLM generates signal_text narratives for each dimension
-    const prompt = `Given the following 6 regime classifications, write a 1-2 sentence signal_text for each. Use specific numbers from the data. Be dense and institutional.
-
-${regimeBase.map(r => `${r.dimension} [${r.badge_type}]: ${r.metric_summary}`).join('\n')}
-
-Return JSON array of 6 objects: [{ "dimension": "...", "signal_text": "..." }].
-Wrap in <<<JSON and >>> markers.`;
-
-    let tokens = { input: 0, output: 0 };
-    try {
-      const response = await client.messages.create({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 1024,
-        system: [{ type: 'text', text: persona, cache_control: { type: 'ephemeral' } }],
-        messages: [{ role: 'user', content: prompt }],
-      });
-
-      tokens = { input: response.usage?.input_tokens || 0, output: response.usage?.output_tokens || 0 };
-
-      const text = response.content.filter(b => b.type === 'text').map(b => b.text).join('');
-      const jsonMatch = text.match(/<<<JSON\s*([\s\S]*?)\s*>>>/) || text.match(/\[[\s\S]*\]/);
-      if (jsonMatch) {
-        const narratives = JSON.parse(jsonMatch[1] || jsonMatch[0]);
-        for (const n of narratives) {
-          const r = regimeBase.find(x => x.dimension === n.dimension);
-          if (r) r.signal_text = n.signal_text;
-        }
-      }
-    } catch (err) {
-      console.warn(`[RegimeClassifier] LLM narrative failed: ${err.message}. Using empty signal_text.`);
-    }
-
-    // Fill any empty signal_text with metric_summary fallback
+    // Step 2: Deterministic signal_text from templates
     for (const r of regimeBase) {
-      if (!r.signal_text) {
-        r.signal_text = `Current reading: ${r.metric_summary}.`;
-      }
+      const templateFn = SIGNAL_TEMPLATES[r.dimension]?.[r.badge_type];
+      r.signal_text = templateFn
+        ? templateFn(indicators)
+        : `Current reading: ${r.metric_summary}.`;
     }
 
     const latency = Date.now() - start;
@@ -73,9 +106,9 @@ Wrap in <<<JSON and >>> markers.`;
       data: regimeBase,
       meta: {
         agent: 'RegimeClassifier',
-        model: 'claude-haiku-4-5-20251001',
+        model: 'none',
         latency_ms: latency,
-        tokens,
+        tokens: { input: 0, output: 0 },
       },
     };
   }

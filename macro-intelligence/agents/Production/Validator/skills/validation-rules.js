@@ -79,8 +79,9 @@ function isVintageInFuture(vintage, runDate) {
       if (yearMatch) {
         const year = parseInt(yearMatch[0]);
         const month = i;
-        const vintageDate = new Date(year, month + 1, 0); // end of month
-        return vintageDate > new Date(runDate);
+        const vintageMonth = new Date(year, month, 1); // start of month
+        const runMonth = new Date(new Date(runDate).getFullYear(), new Date(runDate).getMonth(), 1);
+        return vintageMonth > runMonth; // allow current month
       }
     }
   }

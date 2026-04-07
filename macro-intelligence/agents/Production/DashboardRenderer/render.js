@@ -104,7 +104,8 @@ export class DashboardRenderer {
     const dxy     = allRaw.dxy || {};
 
     const snapVerdict = `${growthRegime.badge_label || 'Steady'} Growth | ${inflRegime.badge_label || 'Moderate'} Inflation`;
-    const snapIndia   = `Nifty ${nifty.value_str || nifty.value || '—'} | INR/USD ${inrUsd.value || '—'}`;
+    const inrVal = inrUsd.value && inrUsd.value < 1 ? (1 / inrUsd.value).toFixed(2) : inrUsd.value;
+    const snapIndia   = `Nifty ${nifty.value_str || nifty.value || '—'} | INR/USD ${inrVal || '—'}`;
     const snapGlobal  = `Brent $${brent.value || '—'} | DXY ${dxy.value || '—'}`;
     const snapRisk    = signals.data.find(s => s.status === 'risk')?.title || 'Monitoring';
 

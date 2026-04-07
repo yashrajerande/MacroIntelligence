@@ -46,7 +46,7 @@ export function fillId(html, id, content) {
     `(id="${id}"[^>]*>)[\\s\\S]*?(</)`,
     'i'
   );
-  return html.replace(regex, `$1${content}$2`);
+  return html.replace(regex, (_, open, close) => `${open}${content}${close}`);
 }
 
 /**

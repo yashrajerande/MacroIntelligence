@@ -1,0 +1,31 @@
+{
+  "name": "macro-intelligence-corp",
+  "version": "1.0.0",
+  "description": "MacroIntelligence Corp — Autonomous daily macro dashboard pipeline",
+  "type": "module",
+  "main": "agents/CEO/orchestrate.js",
+  "scripts": {
+    "start": "node agents/CEO/orchestrate.js",
+    "ceo": "node agents/CEO/orchestrate.js",
+    "market-data": "node agents/DataIntelligence/MarketDataAnalyst/fetch.js",
+    "macro-data": "node agents/DataIntelligence/MacroDataAnalyst/fetch.js",
+    "re-data": "node agents/DataIntelligence/RealEstateAnalyst/fetch.js",
+    "classify": "node agents/Analysis/RegimeClassifier/classify.js",
+    "signals": "node agents/Analysis/SignalDetector/detect.js",
+    "scenarios": "node agents/Analysis/ScenarioPlanner/plan.js",
+    "summary": "node agents/Editorial/ExecutiveSummaryWriter/write.js",
+    "news": "node agents/Editorial/NewsCurator/curate.js",
+    "render": "node agents/Production/DashboardRenderer/render.js",
+    "validate": "node agents/Production/Validator/validate.js",
+    "sync": "node agents/Infrastructure/SupabaseWriter/sync.js",
+    "publish": "node agents/Infrastructure/GitPublisher/publish.js",
+    "test:validate": "node agents/Production/Validator/validate.js --test",
+    "test:dry-run": "SKIP_SUPABASE=true SKIP_GIT_PUSH=true node agents/CEO/orchestrate.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

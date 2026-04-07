@@ -1,0 +1,54 @@
+{
+  "type": "object",
+  "required": ["generated_at", "run_date", "prices"],
+  "properties": {
+    "generated_at": { "type": "string", "format": "date-time" },
+    "run_date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "prices": {
+      "type": "object",
+      "properties": {
+        "nifty50":         { "$ref": "#/$defs/price_point" },
+        "sensex":          { "$ref": "#/$defs/price_point" },
+        "bank_nifty":      { "$ref": "#/$defs/price_point" },
+        "india_vix":       { "$ref": "#/$defs/price_point" },
+        "inr_usd":         { "$ref": "#/$defs/price_point" },
+        "brent_usd":       { "$ref": "#/$defs/price_point" },
+        "wti_usd":         { "$ref": "#/$defs/price_point" },
+        "gold_usd":        { "$ref": "#/$defs/price_point" },
+        "gold_inr_gram":   { "$ref": "#/$defs/price_point" },
+        "sp500":           { "$ref": "#/$defs/price_point" },
+        "nasdaq":          { "$ref": "#/$defs/price_point" },
+        "us_vix":          { "$ref": "#/$defs/price_point" },
+        "dxy":             { "$ref": "#/$defs/price_point" },
+        "us_10y_treasury": { "$ref": "#/$defs/price_point" },
+        "gsec_10y":        { "$ref": "#/$defs/price_point" },
+        "nat_gas":         { "$ref": "#/$defs/price_point" },
+        "copper":          { "$ref": "#/$defs/price_point" },
+        "iron_ore":        { "$ref": "#/$defs/price_point" },
+        "nikkei225":       { "$ref": "#/$defs/price_point" },
+        "hang_seng":       { "$ref": "#/$defs/price_point" },
+        "euro_stoxx50":    { "$ref": "#/$defs/price_point" },
+        "brent_usd_global":{ "$ref": "#/$defs/price_point" },
+        "bdi":             { "$ref": "#/$defs/price_point" },
+        "rbi_fx_reserves": { "$ref": "#/$defs/price_point" }
+      }
+    }
+  },
+  "$defs": {
+    "price_point": {
+      "type": "object",
+      "required": ["value", "previous", "change_pct", "direction", "source"],
+      "properties": {
+        "value":        { "type": "number" },
+        "value_str":    { "type": "string" },
+        "previous":     { "type": "number" },
+        "change_pct":   { "type": "number" },
+        "direction":    { "type": "string", "enum": ["up", "down", "flat"] },
+        "source":       { "type": "string" },
+        "vintage":      { "type": "string" },
+        "is_estimated": { "type": "boolean", "default": false },
+        "fetch_error":  { "type": "string" }
+      }
+    }
+  }
+}

@@ -14,6 +14,7 @@ export async function gitPublish(filePath, indexPath, commitMessage, ghPat, repo
   const remoteUrl = `https://x-access-token:${ghPat}@github.com/${repo}.git`;
 
   const addIndex = indexPath ? `git add -f ${indexPath}` : null;
+  const ledgerPath = filePath.replace(/output\/[^/]+$/, 'output/cost-ledger.json');
 
   const commands = [
     'git config user.name "MacroIntelligence Corp"',
@@ -21,6 +22,7 @@ export async function gitPublish(filePath, indexPath, commitMessage, ghPat, repo
     `git remote set-url origin ${remoteUrl}`,
     `git add -f ${filePath}`,
     ...(addIndex ? [addIndex] : []),
+    `git add -f ${ledgerPath} 2>/dev/null || true`,
     `git commit -m "${commitMessage}"`,
     'git push origin HEAD',
   ];

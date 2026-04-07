@@ -12,6 +12,7 @@
 
 import { getISTDate } from '../../src/utils/ist-date.js';
 import { RunLogger } from './run-log.js';
+import { checkBudget, recordRunCost, getCostSummary } from '../../src/utils/cost-ledger.js';
 
 import { MarketDataAnalyst }      from '../DataIntelligence/MarketDataAnalyst/fetch.js';
 import { MacroDataAnalyst }       from '../DataIntelligence/MacroDataAnalyst/fetch.js';
@@ -42,6 +43,15 @@ async function run() {
   logger.start(dateStr);
 
   try {
+    // ── BUDGET GUARD ────────────────────────────────────────────────
+    const budget = checkBudget(isoDate);
+    console.log(`  Budget: $${budget.month_spend_usd} spent / $${budget.budget_usd} cap · $${budget.remaining_usd} remaining`);
+    if (!budget.allowed) {
+      logger.error('Budget exceeded', `Monthly spend $${budget.month_spend_usd} exceeds $${budget.budget_usd} cap`);
+      logger.fail('Monthly budget cap reached');
+      process.exit(1);
+    }
+
     // ── STEP 1: DATA INTELLIGENCE ──────────────────────────────────
     logger.phase('DataIntelligence');
 
@@ -101,8 +111,11 @@ async function run() {
     // ── STEP 4: PRODUCTION ──────────────────────────────────────────
     logger.phase('Production');
 
+    const thisRunCost = logger.estimateCost();
+    const costSummary = getCostSummary(isoDate, thisRunCost);
+
     const { html, macroDataObj, outputPath, indexPath } = new DashboardRenderer().render({
-      ...allData, regime, signals, scenarios, news, execSummary,
+      ...allData, regime, signals, scenarios, news, execSummary, costSummary,
     });
     logger.agent('DashboardRenderer', { model: 'none', latency_ms: 0, tokens: { input: 0, output: 0 } });
 
@@ -141,7 +154,9 @@ async function run() {
     logger.agent('GitPublisher', { model: 'none', latency_ms: 0, tokens: { input: 0, output: 0 } });
 
     // ── DONE ────────────────────────────────────────────────────────
-    logger.complete({ totalCostUSD: logger.estimateCost() });
+    const finalCost = logger.estimateCost();
+    recordRunCost(isoDate, finalCost, logger.log.run_id);
+    logger.complete({ totalCostUSD: finalCost });
     process.exit(0);
 
   } catch (err) {

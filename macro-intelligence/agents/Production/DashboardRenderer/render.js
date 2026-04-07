@@ -316,6 +316,11 @@ export class DashboardRenderer {
     // ── Fill ticker strip ────────────────────────────────────────────
     html = fillTickerData(html, marketData.data.prices);
 
+    // ── Fill cost tag ─────────────────────────────────────────────────
+    if (allData.costSummary) {
+      html = fillId(html, 'cost-tag', allData.costSummary);
+    }
+
     // ── Strip unfilled FILL markers (best-effort) ────────────────────
     html = html.replace(/<!--\s*FILL[^>]*-->/g, '');
 

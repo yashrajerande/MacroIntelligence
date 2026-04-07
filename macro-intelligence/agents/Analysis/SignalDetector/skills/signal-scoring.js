@@ -39,7 +39,7 @@ const HISTORICAL_RANGES = {
   deposit_growth:       { min: 6.0,   max: 18.0,  p10: 8.0,  p25: 9.5,  p50: 11.5, p75: 13.5, p90: 15.0 },
   cd_ratio:             { min: 65.0,  max: 82.0,  p10: 68.0, p25: 72.0, p50: 76.0, p75: 78.5, p90: 80.0 },
   nbfc_credit_growth:   { min: -5.0,  max: 25.0,  p10: 2.0,  p25: 8.0,  p50: 14.0, p75: 18.0, p90: 22.0 },
-  corp_bond_issuance:   { min: 20000, max: 120000,p10: 30000,p25: 45000,p50: 65000,p75: 85000,p90: 100000 },
+  corp_bond_issuance:   { min: 20000, max: 1200000,p10: 30000,p25: 45000,p50: 65000,p75: 200000,p90: 800000 },
 
   // S6/flows
   fii_equity_net:       { min: -60000,max: 40000, p10: -25000,p25: -10000,p50: 2000, p75: 12000,p90: 25000 },
@@ -47,7 +47,7 @@ const HISTORICAL_RANGES = {
   sip_inflows:          { min: 1000,  max: 31500, p10: 5000, p25: 8000, p50: 12000,p75: 18000,p90: 25000 },
   sip_yoy_growth:       { min: -5.0,  max: 50.0,  p10: 5.0,  p25: 12.0, p50: 22.0, p75: 32.0, p90: 40.0 },
   mf_aum:               { min: 10,    max: 75,    p10: 15,   p25: 25,   p50: 40,   p75: 55,   p90: 65   },
-  mf_avg_aum:           { min: 8,     max: 70,    p10: 12,   p25: 22,   p50: 35,   p75: 50,   p90: 60   },
+  mf_avg_aum:           { min: 8,     max: 100,   p10: 12,   p25: 22,   p50: 40,   p75: 60,   p90: 85   },
   equity_mf_net:        { min: -5000, max: 40000, p10: 2000, p25: 5000, p50: 12000,p75: 20000,p90: 30000 },
   nfo_collections:      { min: 500,   max: 25000, p10: 1500, p25: 3000, p50: 6000, p75: 12000,p90: 18000 },
   sip_accounts:         { min: 10,    max: 100,   p10: 15,   p25: 25,   p50: 45,   p75: 70,   p90: 85   },
@@ -73,13 +73,13 @@ const HISTORICAL_RANGES = {
   hpi_bengaluru:        { min: 100,   max: 200,   p10: 110,  p25: 125,  p50: 150,  p75: 170,  p90: 190  },
   hpi_hyderabad:        { min: 100,   max: 220,   p10: 110,  p25: 130,  p50: 155,  p75: 180,  p90: 205  },
   affordability_index:  { min: 0.3,   max: 8.0,   p10: 3.5,  p25: 4.0,  p50: 5.0,  p75: 6.0,  p90: 7.0  },
-  home_loan_disbursements:{ min: 100,  max: 400000,p10: 120000,p25: 160000,p50: 230000,p75: 300000,p90: 360000 },
+  home_loan_disbursements:{ min: 100,  max: 600000,p10: 120000,p25: 160000,p50: 230000,p75: 400000,p90: 550000 },
   avg_home_loan_rate:   { min: 6.5,   max: 10.0,  p10: 6.8,  p25: 7.5,  p50: 8.2,  p75: 8.8,  p90: 9.5  },
 
   // S8/re_commercial
   office_absorption:    { min: 10,    max: 70,    p10: 15,   p25: 25,   p50: 40,   p75: 52,   p90: 60   },
   office_vacancy:       { min: 8,     max: 25,    p10: 10,   p25: 12,   p50: 16,   p75: 19,   p90: 22   },
-  rent_bengaluru:       { min: 50,    max: 120,   p10: 55,   p25: 65,   p50: 80,   p75: 95,   p90: 110  },
+  rent_bengaluru:       { min: 50,    max: 160,   p10: 55,   p25: 70,   p50: 85,   p75: 110,  p90: 145  },
   rent_mumbai:          { min: 80,    max: 200,   p10: 90,   p25: 110,  p50: 140,  p75: 165,  p90: 185  },
   retail_mall_vacancy:  { min: 5,     max: 25,    p10: 7,    p25: 10,   p50: 14,   p75: 18,   p90: 22   },
   embassy_reit:         { min: 250,   max: 450,   p10: 280,  p25: 310,  p50: 350,  p75: 390,  p90: 420  },

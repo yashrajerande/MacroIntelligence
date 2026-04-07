@@ -1,5 +1,5 @@
 /**
- * SignalDetector — Uses claude-sonnet-4-6 for synthesis.
+ * SignalDetector — Uses claude-haiku-4-5 for synthesis.
  * The highest-value analytical agent. Produces 7 signal cards.
  */
 
@@ -67,7 +67,7 @@ For each signal, provide:
 Return a JSON array of 7 objects wrapped in <<<JSON and >>> markers.`;
 
     const response = await client.messages.create({
-      model: 'claude-sonnet-4-6',
+      model: 'claude-haiku-4-5-20251001',
       max_tokens: 4096,
       temperature: 0,
       system: [{ type: 'text', text: persona, cache_control: { type: 'ephemeral' } }],
@@ -111,7 +111,7 @@ Return a JSON array of 7 objects wrapped in <<<JSON and >>> markers.`;
       data: signals,
       meta: {
         agent: 'SignalDetector',
-        model: 'claude-sonnet-4-6',
+        model: 'claude-haiku-4-5-20251001',
         latency_ms: latency,
         tokens,
       },

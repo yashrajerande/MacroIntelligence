@@ -5,14 +5,14 @@
 import { searchAndExtract } from '../../../DataIntelligence/MacroDataAnalyst/skills/web-search.js';
 
 const CATEGORY_QUERIES = {
-  geo:     'geopolitics oil war Middle East trade tariffs latest today',
-  ai:      'artificial intelligence AI breakthrough product launch latest today',
-  india:   'India economy policy RBI markets budget reform latest today',
-  fintech: 'global fintech banking digital payments Fed ECB latest today',
-  ifs:     'India financial services banking NBFC insurance IPO latest today',
+  geo:     'top geopolitics news today war trade sanctions tariffs oil Reuters AP',
+  ai:      'top artificial intelligence AI news today product launch funding Reuters',
+  india:   'India economy news today RBI GDP markets policy reform',
+  fintech: 'fintech news today digital payments crypto banking regulation global',
+  ifs:     'India financial services news today NBFC banking insurance SEBI IPO',
 };
 
-const EXTRACTION_PROMPT = `Return a JSON object with keys: headline (string, max 7 words, factual), url (real URL from search results, never "#"), source_name (publication name only), buzz_tag ("hot" if breaking, "viral" if widely shared, "watch" if emerging). Do NOT fabricate URLs.`;
+const EXTRACTION_PROMPT = `From the search results, pick the single most important story. Return ONLY a JSON object (no markdown, no explanation) with these exact keys: "headline" (max 7 words, factual), "url" (a real URL from the search results, never "#" or made up), "source_name" (publication name like "Reuters", "Bloomberg", etc.), "buzz_tag" (one of: "hot", "viral", "watch"). Example: {"headline":"Fed holds rates amid trade war","url":"https://reuters.com/...","source_name":"Reuters","buzz_tag":"hot"}`;
 
 export async function searchNewsByCategory(category) {
   const query = CATEGORY_QUERIES[category];

@@ -2,7 +2,7 @@ name: MacroIntelligence Corp - Daily Run
 
 on:
   schedule:
-    - cron: '30 0 * * *'   # 00:30 UTC = 06:00 IST
+    - cron: '30 21 * * *'   # 21:30 UTC = 03:00 IST
   workflow_dispatch:
     inputs:
       run_date_override:

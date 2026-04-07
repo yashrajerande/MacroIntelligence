@@ -72,6 +72,26 @@ Local dry run:
 SKIP_SUPABASE=true SKIP_GIT_PUSH=true node agents/CEO/orchestrate.js
 ```
 
+## Agent Registry
+
+| # | Agent | Department | Role | Type | Model |
+|---|---|---|---|---|---|
+| 1 | **CEO** | Executive | Pipeline Orchestrator — coordinates all departments, enforces contracts, handles retries | Code + LLM | — |
+| 2 | **MarketDataAnalyst** | DataIntelligence | Fetches real-time market prices from Yahoo Finance & FRED APIs | Code only | — |
+| 3 | **MacroDataAnalyst** | DataIntelligence | 12 structured web searches for India & global macro indicators (CPI, GDP, PMI, GST, FII/DII, etc.) | LLM | Haiku |
+| 4 | **RealEstateAnalyst** | DataIntelligence | Indian residential & commercial real estate data (Anarock, Knight Frank, JLL, RBI) | LLM | Haiku |
+| 5 | **RegimeClassifier** | Analysis | Classifies macro regime across 6 dimensions (Growth, Inflation, Credit, Policy, Capex, Consumption) | LLM | Haiku |
+| 6 | **SignalDetector** | Analysis | Produces 7 signal cards with 10-year percentile scoring for capital allocators | LLM | Sonnet |
+| 7 | **ScenarioPlanner** | Analysis | Builds Base/Bull/Bear probability matrix with evocative scenario names | LLM | Haiku |
+| 8 | **NewsCurator** | Editorial | Curates top 5 news items across Geopolitics, AI, India, Fintech, India Financial Services | LLM | Haiku |
+| 9 | **ExecSummaryWriter** | Editorial | Dense 5-paragraph investment commentary for capital allocators | LLM | Sonnet |
+| 10 | **DashboardRenderer** | Production | Assembles all data into the master HTML template via regex slot-filling | Code only | — |
+| 11 | **Validator** | Production | 22 deterministic checks + 6-layer reliability architecture (quality gate) | Code only | — |
+| 12 | **SupabaseWriter** | Infrastructure | Upserts `__MACRO_DATA__` to 7 Supabase tables with merge-duplicates strategy | Code only | — |
+| 13 | **GitPublisher** | Infrastructure | Commits & pushes validated dashboard HTML to GitHub (with `[skip ci]`) | Code only | — |
+
+**Execution order:** DataIntelligence → Analysis → Editorial → Production → Infrastructure
+
 ## Cost Estimate
 
 | Agent | Model | Cost/Run |

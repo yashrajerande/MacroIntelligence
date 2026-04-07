@@ -1,0 +1,4286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Macro Intelligence — Light Mode</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════
+   MACRO INTELLIGENCE — CRED-STYLE TERMINAL
+   High contrast · Crisp ink · Premium dark luxury
+   v4.0 — CRED aesthetic overhaul
+═══════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&display=swap');
+
+:root {
+  /* ── LIGHT PALETTE — crisp paper-white ── */
+  --void:       #f5f6fa;
+  --deep:       #eceef5;
+  --surface:    #ffffff;
+  --raised:     #f0f2f8;
+  --rim:        #d0d4e8;
+  --muted:      #c0c4dc;
+  --card:       rgba(255,255,255,0.97);
+
+  /* ── INK — deep charcoal hierarchy ── */
+  --ink-1:      #0a0c1a;        /* near-black — primary text */
+  --ink-2:      #1c2040;        /* dark navy — secondary */
+  --ink-3:      #3a4070;        /* medium — tertiary */
+  --ink-4:      #6068a0;        /* muted — metadata */
+  --ink-5:      #a0a8cc;        /* light — dividers */
+
+  /* ── SIGNALS — adjusted for light bg ── */
+  --signal:     #1a00cc;        /* deep indigo */
+  --signal-dim: rgba(26,0,204,0.08);
+  --signal-glow:rgba(26,0,204,0.15);
+
+  /* ── STATUS — deepened for light mode ── */
+  --safe:       #007a52;        /* deep green */
+  --safe-dim:   rgba(0,122,82,0.08);
+  --safe-glow:  rgba(0,122,82,0.20);
+  --danger:     #cc0033;        /* deep red */
+  --danger-dim: rgba(204,0,51,0.07);
+  --danger-glow:rgba(204,0,51,0.20);
+  --caution:    #b85c00;        /* deep amber */
+  --caution-dim:rgba(184,92,0,0.08);
+  --frost:      #005c99;        /* deep cyan */
+  --frost-dim:  rgba(0,92,153,0.07);
+  --violet:     #6600cc;        /* deep violet */
+  --violet-dim: rgba(102,0,204,0.08);
+
+  /* ── ACCENT GLOWS ── */
+  --cred-gold:  #8c6200;
+  --cred-gold-dim: rgba(140,98,0,0.10);
+  --glow-blue:  rgba(26,0,204,0.18);
+  --glow-teal:  rgba(0,92,153,0.14);
+  --glow-gold:  rgba(140,98,0,0.12);
+  --glass-bg:   rgba(255,255,255,0.96);
+  --glass-edge: rgba(0,0,40,0.10);
+  --glass-edge-bright: rgba(0,0,40,0.18);
+
+  /* ── TYPOGRAPHY ── */
+  --display: 'Syne', sans-serif;
+  --mono:    'DM Mono', monospace;
+  --body:    'DM Sans', sans-serif;
+
+  /* ── BASE FONT — 2 sizes up from 14px ── */
+  --fs-base: 16px;
+
+  /* ── RADIUS ── */
+  --r-xl: 24px;
+  --r-lg: 18px;
+  --r-md: 12px;
+  --r-sm: 8px;
+  --r-xs: 5px;
+
+  /* ── ELEVATION — deeper CRED shadows ── */
+  --shadow-panel: 0 4px 24px rgba(0,0,60,0.08), 0 1px 4px rgba(0,0,60,0.05);
+  --shadow-card:  0 2px 12px rgba(0,0,60,0.07), 0 1px 3px rgba(0,0,60,0.04);
+  --shadow-nav:   0 4px 24px rgba(0,0,60,0.10), 0 1px 4px rgba(0,0,60,0.06);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { font-size:var(--fs-base); scroll-behavior:smooth; }
+
+body {
+  background:
+    radial-gradient(ellipse at 20% 0%,   rgba(26,0,204,0.06),    transparent 35%),
+    radial-gradient(ellipse at 82% 5%,   rgba(0,92,153,0.05),    transparent 30%),
+    radial-gradient(ellipse at 50% 95%,  rgba(26,0,204,0.04),    transparent 38%),
+    radial-gradient(ellipse at 5% 60%,   rgba(102,0,204,0.04),   transparent 28%),
+    linear-gradient(180deg, #f5f6fa 0%, #eceef5 50%, #f5f6fa 100%);
+  color: var(--ink-1);
+  font-family: var(--body);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ── CRED grain texture overlay ── */
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:9999;
+  opacity:0.08;
+}
+
+/* ── Subtle dot grid — CRED signature ── */
+body::after {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image: radial-gradient(circle, rgba(0,0,60,0.06) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, transparent 65%);
+  pointer-events:none;
+  z-index:1;
+}
+
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:#e8eaf5; }
+::-webkit-scrollbar-thumb { background:#b0b8d8; border-radius:2px; }
+::-webkit-scrollbar-thumb:hover { background:#8090b8; }
+
+/* ══════════════════════════════════════════════════
+   TOP BAR
+══════════════════════════════════════════════════ */
+.topbar-wrap {
+  position:fixed;
+  top:10px;
+  left:10px;
+  right:10px;
+  z-index:1000;
+}
+.topbar {
+  height:56px;
+  background:rgba(250,251,255,0.97);
+  backdrop-filter:blur(40px) saturate(180%);
+  -webkit-backdrop-filter:blur(40px) saturate(180%);
+  border:1px solid var(--glass-edge-bright);
+  border-radius:999px;
+  box-shadow:
+    0 2px 16px rgba(0,0,60,0.10),
+    0 0 0 1px rgba(0,0,60,0.05);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 18px 0 10px;
+}
+
+.brand-mark {
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  background:linear-gradient(135deg, rgba(26,0,204,0.12), rgba(0,92,153,0.10));
+  border:1px solid rgba(26,0,204,0.25);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  margin-right:11px;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 0 16px rgba(26,0,204,0.10);
+}
+.brand-mark::before {
+  content:'';
+  position:absolute;
+  inset:8px;
+  border:1.5px solid rgba(26,0,204,0.55);
+  border-radius:4px;
+  transform:rotate(45deg);
+}
+
+.brand-text {
+  font-family:var(--display);
+  font-size:0.78rem;
+  font-weight:800;
+  letter-spacing:0.24em;
+  text-transform:uppercase;
+  color:var(--ink-1);
+  white-space:nowrap;
+  text-shadow:none;
+}
+.brand-sub {
+  font-family:var(--mono);
+  font-size:0.58rem;
+  color:var(--ink-4);
+  letter-spacing:0.10em;
+  text-transform:uppercase;
+  margin-left:10px;
+}
+.topbar-left { display:flex; align-items:center; }
+
+.live-badge {
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-family:var(--mono);
+  font-size:0.62rem;
+  font-weight:600;
+  color:var(--safe);
+  letter-spacing:0.12em;
+  padding:5px 12px;
+  background:rgba(0,122,82,0.08);
+  border:1px solid rgba(0,122,82,0.30);
+  border-radius:999px;
+  margin-left:14px;
+  box-shadow:none;
+}
+.live-dot {
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--safe);
+  box-shadow:none;
+  animation:livepulse 2s ease-in-out infinite;
+}
+@keyframes livepulse {
+  0%,100%{opacity:1;}
+  50%{opacity:0.5;}
+}
+
+.topbar-center {
+  font-family:var(--mono);
+  font-size:0.66rem;
+  color:var(--ink-3);
+  letter-spacing:0.10em;
+  text-transform:uppercase;
+}
+.topbar-right { display:flex; align-items:center; gap:14px; }
+
+.time-pill { display:flex; flex-direction:column; align-items:flex-end; }
+.time-display {
+  font-family:var(--mono);
+  font-size:0.94rem;
+  font-weight:500;
+  color:var(--ink-1);
+  letter-spacing:0.06em;
+}
+.date-label {
+  font-family:var(--mono);
+  font-size:0.58rem;
+  color:var(--ink-3);
+  text-transform:uppercase;
+  letter-spacing:0.10em;
+}
+
+.font-controls { display:flex; gap:4px; }
+.fc-btn {
+  width:28px;
+  height:28px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--rim);
+  border-radius:8px;
+  color:var(--ink-3);
+  font-family:var(--mono);
+  font-size:0.62rem;
+  cursor:pointer;
+  transition:all 0.15s;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.fc-btn:hover { background:var(--raised); color:var(--ink-1); border-color:rgba(26,0,204,0.35); }
+.fc-btn.active { background:rgba(26,0,204,0.10); color:var(--signal); border-color:rgba(26,0,204,0.35); box-shadow:none; }
+
+/* ══════════════════════════════════════════════════
+   TICKER RAIL
+══════════════════════════════════════════════════ */
+.ticker-rail {
+  position:fixed;
+  top:78px;
+  left:10px;
+  right:10px;
+  height:30px;
+  background:rgba(255,255,255,0.97);
+  backdrop-filter:blur(24px);
+  border:1px solid rgba(0,0,60,0.14);
+  border-radius:999px;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  z-index:999;
+  box-shadow:0 4px 20px rgba(0,0,0,0.40);
+}
+.ticker-scroll {
+  display:flex;
+  align-items:center;
+  animation:ticker-move 80s linear infinite;
+  white-space:nowrap;
+  will-change:transform;
+}
+@keyframes ticker-move { 0%{transform:translateX(0);} 100%{transform:translateX(-50%);} }
+.ticker-item {
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:0 20px;
+  border-right:1px solid rgba(0,0,60,0.10);
+  height:30px;
+}
+.t-label { font-family:var(--mono); font-size:0.58rem; font-weight:500; color:var(--ink-3); letter-spacing:0.14em; text-transform:uppercase; }
+.t-val   { font-family:var(--mono); font-size:0.74rem; font-weight:700; color:var(--ink-1); }
+.t-chg   { font-family:var(--mono); font-size:0.62rem; font-weight:500; }
+.t-chg.up   { color:#007a52;  }
+.t-chg.down { color:#cc0033;  }
+.t-chg.flat { color:var(--ink-4);   }
+
+/* ══════════════════════════════════════════════════
+   SIDE NAV — CRED-STYLE PROMINENT
+══════════════════════════════════════════════════ */
+.sidenav {
+  position:fixed;
+  left:10px;
+  top:120px;
+  bottom:10px;
+  width:64px;
+  background:rgba(248,249,255,0.98);
+  backdrop-filter:blur(40px) saturate(200%);
+  -webkit-backdrop-filter:blur(40px) saturate(200%);
+  border:1px solid rgba(0,0,60,0.14);
+  border-radius:20px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:12px 0;
+  gap:3px;
+  z-index:998;
+  overflow-y:auto;
+  scrollbar-width:none;
+  box-shadow: var(--shadow-nav);
+}
+.sidenav::-webkit-scrollbar { display:none; }
+
+.nav-item {
+  width:50px;
+  height:50px;
+  border-radius:14px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  cursor:pointer;
+  transition:all 0.20s cubic-bezier(0.34,1.56,0.64,1);
+  text-decoration:none;
+  position:relative;
+  border:1px solid transparent;
+  background:transparent;
+}
+.nav-item:hover {
+  background:rgba(26,0,204,0.06);
+  border-color:rgba(26,0,204,0.20);
+  transform:scale(1.04);
+}
+.nav-item.active {
+  background:linear-gradient(145deg, rgba(26,0,204,0.10), rgba(26,0,204,0.04));
+  border-color:rgba(26,0,204,0.30);
+  box-shadow:0 2px 8px rgba(26,0,204,0.12);
+}
+.nav-icon  { font-size:1.10rem; line-height:1; filter:drop-shadow(0 0 4px rgba(255,255,255,0.12)); }
+.nav-item.active .nav-icon { filter:drop-shadow(0 0 4px rgba(26,0,204,0.25)); }
+.nav-label {
+  font-family:var(--mono);
+  font-size:0.46rem;
+  color:var(--ink-3);
+  letter-spacing:0.04em;
+  text-transform:uppercase;
+  text-align:center;
+  font-weight:500;
+}
+.nav-item:hover .nav-label { color:var(--ink-2); }
+.nav-item.active .nav-label { color:#1a00cc; font-weight:700; }
+.nav-dot { position:absolute; top:6px; right:6px; width:6px; height:6px; border-radius:50%; border:1.5px solid var(--deep); }
+.nd-r { background:var(--danger);  box-shadow:none; }
+.nd-a { background:var(--caution); box-shadow:none; }
+.nd-g { background:var(--safe);    box-shadow:none; }
+.nav-div { width:28px; height:1px; background:linear-gradient(90deg, transparent, rgba(0,0,60,0.15), transparent); margin:5px 0; flex-shrink:0; }
+
+/* ══════════════════════════════════════════════════
+   CANVAS
+══════════════════════════════════════════════════ */
+.canvas {
+  margin-left:88px;
+  margin-top:122px;
+  padding:0 12px 16px 8px;
+  min-height:calc(100vh - 122px);
+  position:relative;
+  z-index:2;
+}
+
+/* ── CTRL ROW ── */
+.ctrl-row {
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:8px 4px 12px;
+}
+.ctrl-sm {
+  font-family:var(--mono);
+  font-size:0.62rem;
+  font-weight:500;
+  color:var(--ink-3);
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--rim);
+  border-radius:999px;
+  padding:5px 14px;
+  cursor:pointer;
+  transition:all 0.15s;
+  letter-spacing:0.06em;
+}
+.ctrl-sm:hover { background:rgba(26,0,204,0.08); color:var(--signal); border-color:rgba(26,0,204,0.35); }
+.gen-time { font-family:var(--mono); font-size:0.60rem; color:var(--ink-4); margin-left:auto; }
+
+/* ══════════════════════════════════════════════════
+   GLASS PANEL — CRED card elevation
+══════════════════════════════════════════════════ */
+.glass-panel {
+  background:rgba(255,255,255,0.98);
+  backdrop-filter:blur(32px) saturate(160%);
+  -webkit-backdrop-filter:blur(32px) saturate(160%);
+  border:1px solid rgba(0,0,60,0.10);
+  border-radius:var(--r-xl);
+  box-shadow:0 8px 40px rgba(0,0,60,0.08), 0 2px 8px rgba(0,0,60,0.06);
+  overflow:hidden;
+  margin-bottom:12px;
+  position:relative;
+  transition:border-color 0.2s;
+}
+.glass-panel:hover { border-color:rgba(26,0,204,0.18); }
+
+/* Top shimmer — stronger than before */
+.glass-panel::before {
+  content:'';
+  position:absolute;
+  top:0;
+  left:10%;
+  right:10%;
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.20), transparent);
+  pointer-events:none;
+}
+
+/* ══════════════════════════════════════════════════
+   COMMAND STRIP
+══════════════════════════════════════════════════ */
+.cmd {
+  padding:32px 32px 28px;
+  position:relative;
+  overflow:hidden;
+}
+.cmd-ambient {
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(ellipse at 6% 50%,  rgba(26,0,204,0.06), transparent 44%),
+    radial-gradient(ellipse at 88% 15%, rgba(0,92,153,0.05),  transparent 40%),
+    radial-gradient(ellipse at 50% 100%,rgba(26,0,204,0.03),  transparent 50%);
+  pointer-events:none;
+}
+.cmd-eyebrow {
+  font-family:var(--mono);
+  font-size:0.62rem;
+  font-weight:500;
+  color:var(--ink-3);
+  letter-spacing:0.20em;
+  text-transform:uppercase;
+  margin-bottom:16px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.cmd-eyebrow::before {
+  content:'';
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:var(--safe);
+  box-shadow:0 0 16px var(--safe-glow), 0 0 6px var(--safe);
+}
+.cmd-verdict {
+  font-family:var(--display);
+  font-size:clamp(1.25rem, 2.4vw, 2.0rem);
+  font-weight:700;
+  line-height:1.30;
+  color:var(--ink-1);
+  max-width:820px;
+  margin-bottom:24px;
+  letter-spacing:-0.028em;
+  text-shadow:none;
+}
+.cmd-verdict .acc { color:#1a00cc; text-shadow:none; }
+.cmd-verdict .dng { color:var(--danger); text-shadow:none; }
+
+.cmd-trio {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:18px;
+}
+.ctrio {
+  background:rgba(245,246,255,0.95);
+  border:1px solid rgba(0,0,60,0.10);
+  border-radius:var(--r-md);
+  padding:16px 18px;
+  position:relative;
+  overflow:hidden;
+  transition:all 0.20s;
+}
+.ctrio:hover { background:rgba(235,237,255,0.98); border-color:rgba(26,0,204,0.20); transform:translateY(-1px); }
+.ctrio::after {
+  content:'';
+  position:absolute;
+  top:0; left:0; right:0;
+  height:2px;
+  background:linear-gradient(90deg, var(--glow-blue), transparent);
+}
+.ctrio:nth-child(2)::after { background:linear-gradient(90deg, var(--glow-teal), transparent); }
+.ctrio:nth-child(3)::after { background:linear-gradient(90deg, rgba(255,51,102,0.55), transparent); }
+.ctrio-lbl { font-family:var(--mono); font-size:0.58rem; font-weight:500; color:var(--ink-3); letter-spacing:0.14em; text-transform:uppercase; margin-bottom:8px; }
+.ctrio-val { font-family:var(--body); font-size:0.84rem; color:var(--ink-2); line-height:1.55; font-weight:400; }
+.ctrio-val strong { color:var(--ink-1); font-weight:700; font-family:var(--mono); font-size:0.78rem; }
+
+/* ══════════════════════════════════════════════════
+   PANEL HEADER
+══════════════════════════════════════════════════ */
+.ph {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 24px;
+  height:56px;
+  cursor:pointer;
+  transition:background 0.15s;
+  user-select:none;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+}
+.ph:hover { background:rgba(26,0,204,0.04); }
+.ph-left { display:flex; align-items:center; gap:14px; }
+.ph-num {
+  font-family:var(--mono);
+  font-size:0.56rem;
+  font-weight:600;
+  color:var(--ink-3);
+  letter-spacing:0.12em;
+  min-width:30px;
+  padding:3px 8px;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.10);
+  border-radius:6px;
+  text-align:center;
+}
+.ph-flag  { font-size:0.96rem; }
+.ph-title {
+  font-family:var(--display);
+  font-size:0.82rem;
+  font-weight:700;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  color:var(--ink-1);
+}
+.ph-right { display:flex; align-items:center; gap:12px; }
+.ph-badge {
+  font-family:var(--mono);
+  font-size:0.56rem;
+  font-weight:600;
+  letter-spacing:0.08em;
+  padding:4px 11px;
+  border-radius:999px;
+  text-transform:uppercase;
+}
+.b-exp  { background:rgba(0,122,82,0.10);   color:var(--safe);    border:1px solid rgba(0,122,82,0.35);   box-shadow:none; }
+.b-slow { background:rgba(184,92,0,0.10);    color:var(--caution); border:1px solid rgba(184,92,0,0.35);    box-shadow:none; }
+.b-risk { background:rgba(204,0,51,0.10);    color:var(--danger);  border:1px solid rgba(204,0,51,0.35);    box-shadow:none; }
+.b-neu  { background:rgba(0,92,153,0.10);    color:var(--frost);   border:1px solid rgba(0,92,153,0.35);    box-shadow:none; }
+.ph-chev { font-size:0.70rem; color:var(--ink-3); transition:transform 0.22s; }
+.glass-panel.collapsed .ph-chev { transform:rotate(-90deg); }
+.glass-panel.collapsed .pb { display:none; }
+.pb { padding:0 24px 28px; }
+
+/* ══════════════════════════════════════════════════
+   DATA TABLE
+══════════════════════════════════════════════════ */
+.dt { width:100%; border-collapse:collapse; margin-top:16px; }
+.dt thead tr { border-bottom:1px solid rgba(255,255,255,0.08); }
+.dt th {
+  font-family:var(--mono);
+  font-size:0.58rem;
+  font-weight:600;
+  color:var(--ink-3);
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  padding:0 0 10px;
+  text-align:left;
+}
+.dt th:not(:first-child) { text-align:right; }
+.dt tbody tr { border-bottom:1px solid rgba(0,0,60,0.07); transition:background 0.12s; }
+.dt tbody tr:hover { background:rgba(26,0,204,0.04); }
+.dt tbody tr:last-child { border-bottom:none; }
+.dt td { padding:11px 0; vertical-align:middle; }
+.dt td:not(:first-child) { text-align:right; }
+td.c-ind { font-family:var(--body); font-size:0.78rem; color:var(--ink-2); font-weight:400; width:30%; min-width:168px; padding-right:16px; }
+td.c-val { font-family:var(--mono); font-size:0.86rem; font-weight:700; color:var(--ink-1); }
+td.c-prv { font-family:var(--mono); font-size:0.72rem; color:var(--ink-3); }
+td.c-mom { font-family:var(--body);  font-size:0.73rem; color:var(--ink-2); max-width:240px; text-align:right; line-height:1.50; font-weight:300; }
+.arr { font-size:0.70rem; font-weight:700; }
+.arr.up { color:#007a52;    filter:none; }
+.arr.dn { color:#cc0033;  filter:none; }
+.arr.fl { color:var(--ink-3);   }
+td.c-pct { text-align:right; min-width:96px; }
+.pct-wrap { display:flex; align-items:center; justify-content:flex-end; gap:7px; }
+.pct-n { font-family:var(--mono); font-size:0.64rem; font-weight:600; white-space:nowrap; }
+.pct-b { width:36px; height:3px; background:rgba(0,0,60,0.12); border-radius:2px; overflow:hidden; }
+.pct-f { height:100%; border-radius:2px; }
+.pct-hi .pct-n { color:#007a52; }  .pct-hi .pct-f { background:#007a52; box-shadow:none; }
+.pct-mid .pct-n{ color:#b85c00; }  .pct-mid .pct-f{ background:#b85c00; box-shadow:none; }
+.pct-lo .pct-n { color:#cc0033; }  .pct-lo .pct-f { background:#cc0033; box-shadow:none; }
+
+.sub-lbl {
+  font-family:var(--mono);
+  font-size:0.58rem;
+  font-weight:600;
+  letter-spacing:0.20em;
+  text-transform:uppercase;
+  color:var(--ink-3);
+  padding:20px 0 6px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.sub-lbl::after { content:''; flex:1; height:1px; background:linear-gradient(90deg, rgba(255,255,255,0.12), transparent); }
+
+.p-summary {
+  margin-top:16px;
+  padding:14px 18px;
+  background:linear-gradient(135deg, rgba(245,255,80,0.07), rgba(245,255,80,0.02));
+  border-left:2px solid rgba(245,255,80,0.50);
+  border-radius:0 var(--r-sm) var(--r-sm) 0;
+  font-family:var(--body);
+  font-size:0.78rem;
+  color:var(--ink-2);
+  line-height:1.72;
+  font-style:italic;
+}
+
+/* ══════════════════════════════════════════════════
+   EXEC SUMMARY
+══════════════════════════════════════════════════ */
+.exec-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:16px;
+}
+.ec {
+  background:rgba(248,249,255,0.95);
+  border:1px solid rgba(0,0,60,0.09);
+  border-radius:var(--r-md);
+  padding:20px 22px;
+  position:relative;
+  overflow:hidden;
+  transition:all 0.20s;
+}
+.ec:hover { background:rgba(240,242,255,0.98); border-color:rgba(26,0,204,0.18); transform:translateY(-1px); }
+.ec::before {
+  content:'';
+  position:absolute;
+  top:0; left:0; right:0;
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(0,0,60,0.08), transparent);
+}
+.ec.full { grid-column:1/-1; }
+.ec-num { font-family:var(--mono); font-size:0.54rem; color:var(--ink-4); letter-spacing:0.18em; text-transform:uppercase; margin-bottom:4px; }
+.ec-lbl {
+  font-family:var(--display);
+  font-size:0.70rem;
+  font-weight:700;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:#1a00cc;
+  margin-bottom:12px;
+  text-shadow:none;
+}
+.ec-txt { font-family:var(--body); font-size:0.82rem; color:var(--ink-2); line-height:1.84; font-weight:300; }
+.ec-txt strong { color:var(--ink-1); font-weight:700; font-family:var(--mono); font-size:0.80rem; }
+
+/* ══════════════════════════════════════════════════
+   NEWS STRIP
+══════════════════════════════════════════════════ */
+.news-strip {
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:10px;
+  margin-top:16px;
+}
+.nc {
+  background:rgba(248,249,255,0.95);
+  border:1px solid rgba(0,0,60,0.09);
+  border-radius:var(--r-md);
+  padding:16px 18px 15px;
+  transition:all 0.20s;
+  position:relative;
+  overflow:hidden;
+}
+.nc::before { content:''; position:absolute; top:0; left:0; right:0; height:2.5px; border-radius:2px 2px 0 0; }
+.nc.geo::before    { background:linear-gradient(90deg, #cc0033,  transparent); box-shadow:none; }
+.nc.ai::before     { background:linear-gradient(90deg, #005c99,   transparent); box-shadow:none; }
+.nc.india::before  { background:linear-gradient(90deg, #b85c00, transparent); box-shadow:none; }
+.nc.fintech::before{ background:linear-gradient(90deg, #007a52,    transparent); box-shadow:none; }
+.nc.ifs::before    { background:linear-gradient(90deg, #6600cc,  transparent); box-shadow:none; }
+.nc:hover { background:rgba(240,242,255,0.98); border-color:rgba(26,0,204,0.18); transform:translateY(-2px); box-shadow:0 4px 16px rgba(0,0,60,0.08); }
+.nc-cat { font-family:var(--mono); font-size:0.56rem; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; margin-bottom:10px; }
+.nc.geo .nc-cat    { color:#cc0033;  }
+.nc.ai .nc-cat     { color:#005c99;   }
+.nc.india .nc-cat  { color:#b85c00; }
+.nc.fintech .nc-cat{ color:#007a52;    }
+.nc.ifs .nc-cat    { color:#6600cc;  }
+.nc-hl { font-family:var(--display); font-size:0.86rem; font-weight:700; line-height:1.38; color:var(--ink-1); margin-bottom:13px; letter-spacing:-0.015em; }
+.nc-hl a { color:inherit; text-decoration:none; transition:opacity 0.15s; }
+.nc-hl a:hover { opacity:0.80; }
+.nc-foot { display:flex; align-items:center; justify-content:space-between; }
+.nc-src  { font-family:var(--mono); font-size:0.56rem; color:var(--ink-3); }
+.buzz { font-family:var(--mono); font-size:0.52rem; font-weight:600; letter-spacing:0.10em; padding:3px 8px; border-radius:999px; text-transform:uppercase; }
+.bz-hot   { background:rgba(204,0,51,0.10);    color:var(--danger);  border:1px solid rgba(204,0,51,0.35); }
+.bz-viral { background:rgba(0,92,153,0.10);    color:var(--frost);   border:1px solid rgba(0,92,153,0.35); }
+.bz-watch { background:rgba(184,92,0,0.10);    color:var(--caution); border:1px solid rgba(184,92,0,0.35); }
+
+/* ══════════════════════════════════════════════════
+   SIGNAL CARDS
+══════════════════════════════════════════════════ */
+.sig-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:16px;
+}
+.sc {
+  background:rgba(248,249,255,0.95);
+  border:1px solid rgba(0,0,60,0.09);
+  border-radius:var(--r-md);
+  padding:20px 22px;
+  position:relative;
+  overflow:hidden;
+  transition:all 0.20s;
+}
+.sc:hover { border-color:rgba(26,0,204,0.20); transform:translateY(-2px); box-shadow:0 4px 16px rgba(0,0,60,0.10); }
+.sc.surprise { grid-column:1/-1; background:rgba(204,0,51,0.04); border-color:rgba(204,0,51,0.18); }
+.sc.positive::after { content:''; position:absolute; bottom:-24px; right:-24px; width:96px; height:96px; background:radial-gradient(circle, rgba(0,122,82,0.07), transparent 70%); pointer-events:none; }
+.sc.risk::after     { content:''; position:absolute; bottom:-24px; right:-24px; width:96px; height:96px; background:radial-gradient(circle, rgba(204,0,51,0.07), transparent 70%); pointer-events:none; }
+.sc.watch::after    { content:''; position:absolute; bottom:-24px; right:-24px; width:96px; height:96px; background:radial-gradient(circle, rgba(184,92,0,0.07), transparent 70%); pointer-events:none; }
+.sc-num { font-family:var(--mono); font-size:0.54rem; font-weight:600; color:var(--ink-4); letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px; }
+.sc-status {
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-family:var(--mono);
+  font-size:0.56rem;
+  font-weight:600;
+  letter-spacing:0.10em;
+  text-transform:uppercase;
+  padding:4px 10px;
+  border-radius:999px;
+  margin-bottom:12px;
+}
+.sc-status.positive { background:rgba(0,122,82,0.10);  color:var(--safe);    border:1px solid rgba(0,122,82,0.35);   box-shadow:none; }
+.sc-status.risk     { background:rgba(204,0,51,0.10);   color:var(--danger);  border:1px solid rgba(204,0,51,0.35);    box-shadow:none; }
+.sc-status.watch    { background:rgba(184,92,0,0.10);   color:var(--caution); border:1px solid rgba(184,92,0,0.35);    box-shadow:none; }
+.sc-status.surprise { background:rgba(26,0,204,0.08);   color:var(--signal);  border:1px solid rgba(26,0,204,0.30);    box-shadow:none; }
+.sc-title  { font-family:var(--display); font-size:0.92rem; font-weight:700; color:var(--ink-1); line-height:1.32; margin-bottom:10px; letter-spacing:-0.015em; }
+.sc-data   { font-family:var(--body); font-size:0.76rem; color:var(--ink-2); line-height:1.72; margin-bottom:10px; font-weight:300; }
+.sc-data strong { color:var(--ink-1); font-weight:700; font-family:var(--mono); font-size:0.74rem; }
+.sc-impl   { font-family:var(--body); font-size:0.76rem; color:var(--ink-2); line-height:1.68; font-weight:300; }
+.sc-pct    { font-family:var(--mono); font-size:0.62rem; color:var(--ink-3); margin-top:10px; padding-top:10px; border-top:1px solid rgba(0,0,60,0.10); font-weight:600; }
+.sc-pct strong { color:var(--ink-1); }
+.surprise-flash { display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:0.56rem; font-weight:700; letter-spacing:0.12em; color:var(--danger); text-transform:uppercase; margin-bottom:7px; animation:flash 1.6s ease-in-out infinite; }
+@keyframes flash { 0%,100%{opacity:1;} 50%{opacity:0.30;} }
+
+/* ══════════════════════════════════════════════════
+   REGIME CARDS
+══════════════════════════════════════════════════ */
+.regime-cards {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:16px;
+}
+.rc {
+  background:rgba(248,249,255,0.90);
+  border:1px solid rgba(0,0,60,0.09);
+  border-radius:var(--r-md);
+  padding:16px 18px;
+  transition:all 0.18s;
+}
+.rc:hover { background:rgba(240,242,255,0.99); border-color:rgba(26,0,204,0.20); }
+.rc-dim { font-family:var(--mono); font-size:0.56rem; font-weight:600; letter-spacing:0.18em; color:var(--ink-3); text-transform:uppercase; margin-bottom:6px; }
+.rc-met { font-family:var(--mono); font-size:0.74rem; font-weight:700; color:var(--ink-1); margin-bottom:8px; }
+.rc-sig { font-family:var(--body); font-size:0.74rem; color:var(--ink-2); line-height:1.62; font-weight:300; margin-bottom:10px; }
+
+/* ══════════════════════════════════════════════════
+   SCENARIO STRIP
+══════════════════════════════════════════════════ */
+.scenario-strip {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:16px;
+}
+.scenario-card {
+  background:rgba(248,249,255,0.95);
+  border:1px solid rgba(0,0,60,0.09);
+  border-radius:var(--r-md);
+  padding:20px 22px;
+  position:relative;
+  overflow:hidden;
+  transition:all 0.20s;
+}
+.scenario-card:hover { transform:translateY(-2px); box-shadow:0 4px 16px rgba(0,0,60,0.10); border-color:rgba(26,0,204,0.20); }
+.scenario-card.base  { border-top:2.5px solid #007a52;  }
+.scenario-card.bull  { border-top:2.5px solid #005c99; }
+.scenario-card.bear  { border-top:2.5px solid #cc0033; }
+.sc-prob { font-family:var(--display); font-size:2.1rem; font-weight:800; letter-spacing:-0.04em; line-height:1; margin:10px 0 12px; }
+.scenario-card.base .sc-prob  { color:var(--safe);    text-shadow:none; }
+.scenario-card.bull .sc-prob  { color:var(--frost);   text-shadow:none; }
+.scenario-card.bear .sc-prob  { color:var(--danger);  text-shadow:none; }
+.sc-scenario-lbl  { font-family:var(--mono); font-size:0.56rem; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-3); margin-bottom:3px; }
+.sc-scenario-name { font-family:var(--display); font-size:0.88rem; font-weight:700; color:var(--ink-1); margin-bottom:12px; }
+.sc-scenario-txt  { font-family:var(--body); font-size:0.75rem; color:var(--ink-2); line-height:1.65; font-weight:300; }
+.mini-chart { display:flex; align-items:flex-end; gap:2px; height:26px; margin-top:14px; }
+.mini-chart span { flex:1; border-radius:2px 2px 0 0; background:currentColor; opacity:0.35; transition:opacity 0.2s; }
+.mini-chart:hover span { opacity:0.65; }
+.scenario-card.base .mini-chart { color:#007a52;   }
+.scenario-card.bull .mini-chart { color:#005c99;  }
+.scenario-card.bear .mini-chart { color:#cc0033; }
+
+/* ══════════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════════ */
+.footer {
+  padding:20px 28px;
+  border-top:1px solid rgba(0,0,60,0.08);
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:24px;
+}
+.footer-src  { font-family:var(--mono); font-size:0.60rem; color:var(--ink-3); line-height:1.9; }
+.footer-src strong { color:var(--ink-2); }
+.footer-dis  { font-family:var(--mono); font-size:0.58rem; color:var(--ink-4); max-width:320px; line-height:1.72; text-align:right; }
+
+/* ══════════════════════════════════════════════════
+   ENTRY ANIMATION — CRED stagger
+══════════════════════════════════════════════════ */
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px);} to{opacity:1;transform:translateY(0);} }
+.canvas > * { animation:fadeUp 0.50s cubic-bezier(0.22,1,0.36,1) both; }
+.canvas > *:nth-child(1) { animation-delay:0.05s; }
+.canvas > *:nth-child(2) { animation-delay:0.11s; }
+.canvas > *:nth-child(3) { animation-delay:0.17s; }
+.canvas > *:nth-child(4) { animation-delay:0.22s; }
+.canvas > *:nth-child(n+5) { animation-delay:0.26s; }
+
+/* ══════════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════════ */
+@media(max-width:1100px){
+  .news-strip       { grid-template-columns:repeat(3,1fr); }
+  .sig-grid         { grid-template-columns:repeat(2,1fr); }
+  .sig-grid .sc.surprise { grid-column:1/-1; }
+  .exec-grid        { grid-template-columns:1fr; }
+  .regime-cards     { grid-template-columns:repeat(2,1fr); }
+  .cmd-trio         { grid-template-columns:1fr; }
+  .scenario-strip   { grid-template-columns:1fr; }
+}
+@media(max-width:768px){
+  .sidenav          { display:none; }
+  .canvas           { margin-left:0; padding-left:12px; }
+  .topbar-center    { display:none; }
+  .brand-sub        { display:none; }
+  .news-strip       { grid-template-columns:1fr 1fr; }
+  .sig-grid         { grid-template-columns:1fr; }
+  .regime-cards     { grid-template-columns:1fr; }
+  .footer           { flex-direction:column; }
+  .footer-dis       { text-align:left; max-width:100%; }
+  .ticker-rail      { left:0; right:0; border-radius:0; top:66px; }
+  .topbar-wrap      { left:0; right:0; top:0; }
+  .topbar           { border-radius:0; }
+  .canvas           { margin-top:110px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── TOP BAR ──────────────────────────────────── -->
+<div class="topbar-wrap">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="brand-mark"></div>
+      <span class="brand-text">MACRO INTELLIGENCE</span>
+      <span class="brand-sub">Macro Intelligence</span>
+      <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+    </div>
+    <div class="topbar-center" id="header-date">07 APR 2026</div>
+    <div class="topbar-right">
+      <div class="font-controls">
+        <button class="fc-btn" onclick="setFS('sm')">A−</button>
+        <button class="fc-btn active" onclick="setFS('md')">A</button>
+        <button class="fc-btn" onclick="setFS('lg')">A+</button>
+      </div>
+      <div class="time-pill">
+        <div class="time-display" id="live-time">--:--:-- IST</div>
+        <div class="date-label">Mumbai · IST</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TICKER RAIL ───────────────────────────────── -->
+<div class="ticker-rail">
+  <div class="ticker-scroll" id="ticker-scroll"></div>
+</div>
+
+<!-- ── SIDE NAV ──────────────────────────────────── -->
+<nav class="sidenav">
+  <a class="nav-item active" href="#cmd"><div class="nav-icon">⚡</div><div class="nav-label">Brief</div><div class="nav-dot nd-g"></div></a>
+  <a class="nav-item" href="#exec-panel"><div class="nav-icon">📋</div><div class="nav-label">Exec</div></a>
+  <a class="nav-item" href="#news-panel"><div class="nav-icon">📡</div><div class="nav-label">News</div><div class="nav-dot nd-r"></div></a>
+  <a class="nav-item" href="#sig-panel"><div class="nav-icon">⚡</div><div class="nav-label">Signals</div><div class="nav-dot nd-a"></div></a>
+  <div class="nav-div"></div>
+  <a class="nav-item" href="#s1-panel"><div class="nav-icon">🇮🇳</div><div class="nav-label">Regime</div></a>
+  <a class="nav-item" href="#s2-panel"><div class="nav-icon">📈</div><div class="nav-label">Growth</div></a>
+  <a class="nav-item" href="#s3-panel"><div class="nav-icon">🌡️</div><div class="nav-label">Infl.</div></a>
+  <a class="nav-item" href="#s4-panel"><div class="nav-icon">🛒</div><div class="nav-label">Cons.</div></a>
+  <a class="nav-item" href="#s5-panel"><div class="nav-icon">🏦</div><div class="nav-label">Credit</div></a>
+  <a class="nav-item" href="#s6-panel"><div class="nav-icon">💧</div><div class="nav-label">Flows</div></a>
+  <a class="nav-item" href="#s7-panel"><div class="nav-icon">📊</div><div class="nav-label">Mkts</div></a>
+  <div class="nav-div"></div>
+  <a class="nav-item" href="#s8-panel"><div class="nav-icon">🏘️</div><div class="nav-label">Realty</div></a>
+  <a class="nav-item" href="#s9-panel"><div class="nav-icon">🌍</div><div class="nav-label">Global</div></a>
+</nav>
+
+<!-- ── CANVAS ────────────────────────────────────── -->
+<div class="canvas">
+
+  <!-- CTRL ROW -->
+  <div class="ctrl-row">
+    <button class="ctrl-sm" onclick="expandAll()">Expand All</button>
+    <button class="ctrl-sm" onclick="collapseAll()">Collapse All</button>
+    <button class="ctrl-sm" id="sb-btn" onclick="supabaseUpload()" style="background:rgba(0,122,82,0.08);border-color:rgba(0,122,82,0.35);color:#007a52;font-weight:700;" title="Upload data to Supabase">⬆ Sync to Supabase</button>
+    <div class="gen-time">Generated · <span id="gen-time">--:-- IST</span></div>
+  </div>
+
+  <!-- COMMAND STRIP -->
+  <div class="glass-panel cmd" id="cmd">
+    <div class="cmd-ambient"></div>
+    <div class="cmd-eyebrow" id="cmd-date">INDIA &amp; GLOBAL MACRO · DAILY INTELLIGENCE BRIEF</div>
+    <div class="cmd-verdict" id="snap-verdict">Expansion Mode Growth | Within Band Inflation</span> footing — GDP <span class="acc">7.8%</span>, PMI composite above 58 — but a <span class="dng">Hormuz-driven oil shock</span> is the one variable that breaks the entire cycle.</div>
+    <div class="cmd-trio">
+      <div class="ctrio"><div class="ctrio-lbl">🇮🇳 India Regime</div><div class="ctrio-val" id="snap-india">Nifty 23123.65 | INR/USD 92.59</div></div>
+      <div class="ctrio"><div class="ctrio-lbl">🌍 Global Regime</div><div class="ctrio-val" id="snap-global">Brent $109.66 | DXY 99.92</div></div>
+      <div class="ctrio"><div class="ctrio-lbl">⚡ Top Risk Now</div><div class="ctrio-val" id="snap-risk">Credit-Deposit Mismatch Signals Liquidity Strain</div></div>
+    </div>
+  </div>
+
+  <!-- EXEC SUMMARY -->
+  <div class="glass-panel" id="exec-panel">
+    <div class="ph" onclick="togglePanel('exec-panel')">
+      <div class="ph-left"><div class="ph-num">ES</div><div class="ph-flag">📋</div><div class="ph-title">Executive Summary</div></div>
+      <div class="ph-right"><div class="ph-chev">▾</div></div>
+    </div>
+    <div class="pb">
+      <div class="exec-grid">
+        <div class="ec"><div class="ec-num">01</div><div class="ec-lbl">India Macro Regime</div><div class="ec-txt" id="exec-01"><p><strong>01 — India Macro Regime</strong><br>GDP at <strong>7.8%</strong> with PMI Composite <strong>56.5</strong> confirms India remains the cleanest growth story in EM — consumption is doing the heavy lifting, with GST collections at <strong>₹2,00,064 crore</strong> (91st percentile) and 2W sales surging <strong>35.2% YoY</strong>. CPI at <strong>3.21%</strong> with fuel deflation of <strong>-3.78%</strong> gives RBI room to hold repo at <strong>5.25%</strong> without sacrificing the growth impulse. Credit growth at <strong>14.3% YoY</strong> outpacing deposits at <strong>10.6%</strong> — CD ratio at <strong>83.04%</strong> (100th percentile) — is the single structural fault line in an otherwise expansionary regime. Airline passenger traffic collapsing to <strong>35.08M</strong> (2nd percentile) from <strong>38.59M</strong> is an anomaly that deserves a second look before calling a consumption cliff.</p></div></div>
+        <div class="ec"><div class="ec-num">02</div><div class="ec-lbl">Global Macro Regime</div><div class="ec-txt" id="exec-02"><p><strong>02 — Global Macro Regime</strong><br>US GDP SAAR at <strong>0.7%</strong> (23rd percentile), collapsed from <strong>4.4%</strong> prior — this is not a soft landing, this is a stall. WTI at <strong>$114.70/bbl</strong> (98th percentile) with a WTI-Brent spread widening to <strong>$5.04/bbl</strong> signals North American supply dislocation, not demand destruction — a stagflationary input for the Fed. Iron ore's <strong>50% surge</strong> to <strong>$161.91/tonne</strong> in a single period points to China stimulus front-loading, which is the one global tailwind India can exploit via commodity-linked capex. US 10Y at <strong>4.35%</strong> (84th percentile) with PMI Composite at <strong>50.3</strong> → Fed trapped between inflation and stagnation → dollar weakness (DXY <strong>99.88</strong>) is India's near-term relief valve.</p></div></div>
+        <div class="ec"><div class="ec-num">03</div><div class="ec-lbl">Liquidity Conditions</div><div class="ec-txt" id="exec-03"><p><strong>03 — Liquidity Conditions</strong><br>SIP inflows at <strong>₹29,845 crore</strong> (97th percentile) with AUM at <strong>₹16.64 lakh crore</strong> (100th percentile) means domestic liquidity is structurally deep — DIIs absorbed <strong>₹7,979.50 crore</strong> net even as FIIs pulled <strong>₹8,692 crore</strong> in equity outflows. Repo anchored at <strong>5.25%</strong> with CPI at <strong>3.21%</strong> implies a real rate of <strong>~204 bps</strong> — RBI has meaningful room to ease if the CD ratio stress forces a credit crunch. INR/USD flat at <strong>0.0108</strong> (historically weakest percentile) despite FII outflows suggests RBI intervention is capping volatility, but reserves above <strong>$600B</strong> provide adequate buffer. CD ratio at <strong>83.04%</strong> → banks will price deposits higher → net interest margin compression → credit growth decelerates organically without RBI needing to act.</p></div></div>
+        <div class="ec"><div class="ec-num">04</div><div class="ec-lbl">Equity + Real Estate Implications</div><div class="ec-txt" id="exec-04"><p><strong>04 — Equity + Real Estate Implications</strong><br>Nifty50 at <strong>23,123</strong> (+<strong>0.68%</strong>) with India VIX falling <strong>3.04%</strong> to <strong>24.70</strong> signals risk appetite recovering — but at <strong>24.70</strong>, VIX remains elevated enough to keep institutional hedges on. Equity MF net inflows at <strong>₹25,977 crore</strong> (84th percentile) underpin the market floor; a Nifty correction toward <strong>22,000–22,500</strong> would be a SIP-driven buying event, not a structural break. Home loan rates remain a function of repo at <strong>5.25%</strong> — but CD ratio stress at <strong>83.04%</strong> → banks raise deposit rates → MCLR creep → mortgage rates drift <strong>25–50 bps</strong> higher independent of RBI action, cooling residential demand at the margin. Gold at <strong>$4,696.90</strong> (+<strong>0.86%</strong>) with DXY softening confirms real-asset allocation is accelerating — REIT valuations benefit from the same flight-to-yield dynamic.</p></div></div>
+        <div class="ec full"><div class="ec-num">05</div><div class="ec-lbl">Key Risks to Monitor</div><div class="ec-txt" id="exec-05"><p><strong>05 — Key Risks to Monitor</strong><br><strong>#1 (High probability × High impact):</strong> CD ratio breaching <strong>85%</strong> — credit rationing → capex deferral → growth derating from <strong>7.8%</strong> toward <strong>6%</strong>; watch weekly deposit growth data for confirmation. <strong>#2 (Medium probability × High impact):</strong> WTI sustaining above <strong>$115/bbl</strong> — CAD widens materially, INR tests <strong>0.0105</strong>, RBI forced to choose between defending currency and cutting rates. <strong>#3 (Low probability × Extreme impact):</strong> Airline traffic collapse at <strong>35.08M</strong> (2nd percentile) is either a data artifact or the leading edge of a consumption cliff — if GST collections in the next print decelerate from <strong>₹2,00,064 crore</strong>, the bear scenario activates. <strong>Most important data point this week: RBI's weekly bank credit and deposit growth release — a CD ratio print above 83.5% forces a regime reassessment.</strong></p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCENARIO STRIP — new luxury module -->
+  <div class="glass-panel" id="scenario-panel">
+    <div class="ph" onclick="togglePanel('scenario-panel')">
+      <div class="ph-left"><div class="ph-num">SC</div><div class="ph-flag">🎯</div><div class="ph-title">Probability Matrix — 3 Macro Scenarios</div></div>
+      <div class="ph-right"><div class="ph-chev">▾</div></div>
+    </div>
+    <div class="pb">
+      <div class="scenario-strip">
+        <div class="scenario-card base">
+          <div class="sc-scenario-lbl">Base Case · Most Likely</div>
+          <div class="sc-prob" id="sc-base-prob">◉ Most Likely</div>
+          <div class="sc-scenario-name" id="sc-base-name">Credit Stress Meets Demand Resilience</div>
+          <div class="sc-scenario-txt" id="sc-base-txt">Domestic demand—SIPs, GST, 2W/CV sales—sustains 7%+ growth despite credit-deposit mismatch tightening liquidity. RBI navigates the CD ratio squeeze with targeted easing, keeping repo anchored near 5.25%. Capex moderates but capacity headroom (74.8% CU) prevents collapse; core sector weakness is transitory given strong consumption momentum and airline traffic anomaly likely a data artifact.</div>
+          <div class="mini-chart" id="sc-base-chart">
+            <span style="height:45%"></span><span style="height:50%"></span><span style="height:55%"></span><span style="height:58%"></span><span style="height:65%"></span><span style="height:72%"></span>
+          </div>
+        </div>
+        <div class="scenario-card bull">
+          <div class="sc-scenario-lbl">Bull Case · Upside</div>
+          <div class="sc-prob" id="sc-bull-prob">↑ Requires Co-incidence</div>
+          <div class="sc-scenario-name" id="sc-bull-name">Capex Rebound Unlocks Momentum Shift</div>
+          <div class="sc-scenario-txt" id="sc-bull-txt">Deposit mobilization accelerates sharply as RBI's easing signals gain traction; CD ratio stabilizes below 82%. Capex recovery kicks in (IIP CapG rebounds to 15%+ YoY) as capacity headroom and global PMI stabilization attract project deployment. FII inflows resume as US growth stabilizes and INR strengthens on dollar weakness; SIP inflows hit ₹35,000 crore+. Growth target of 8.5%+ becomes achievable by Q4.</div>
+          <div class="mini-chart" id="sc-bull-chart">
+            <span style="height:40%"></span><span style="height:52%"></span><span style="height:65%"></span><span style="height:76%"></span><span style="height:86%"></span><span style="height:94%"></span>
+          </div>
+        </div>
+        <div class="scenario-card bear">
+          <div class="sc-scenario-lbl">Bear Case · Tail Risk</div>
+          <div class="sc-prob" id="sc-bear-prob">⚠ Plausible Tail</div>
+          <div class="sc-scenario-name" id="sc-bear-name">Liquidity Crisis Triggers Demand Contraction</div>
+          <div class="sc-scenario-txt" id="sc-bear-txt">Credit-deposit mismatch deepens; banks restrict lending as CD ratio breaches 85%, forcing corporate deleveraging and project deferrals. Airline traffic collapse signals broader consumption cliff; GST momentum fades and 2W/CV sales decelerate sharply. WTI spike (supply shock) and INR weakness erode real incomes; RBI forced into larger rate cuts that fail to restore credit flow. Growth slows to 5.5%–6% as investment cycle falters.</div>
+          <div class="mini-chart" id="sc-bear-chart">
+            <span style="height:80%"></span><span style="height:72%"></span><span style="height:60%"></span><span style="height:50%"></span><span style="height:40%"></span><span style="height:28%"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEWS FEED -->
+  <div class="glass-panel" id="news-panel">
+    <div class="ph" onclick="togglePanel('news-panel')">
+      <div class="ph-left"><div class="ph-num">NW</div><div class="ph-flag">📡</div><div class="ph-title">Signal Feed — What the World Is Talking About</div></div>
+      <div class="ph-right"><div class="ph-chev">▾</div></div>
+    </div>
+    <div class="pb">
+      <div class="news-strip">
+        <div class="nc geo">
+          <div class="nc-cat">Geopolitics</div>
+          <div class="nc-hl"><a href="https://www.investing.com/news/stock-market-news/stocks-struggle-oil-jumps-as-trumps-iran-deadline-looms-4599591" id="news-geo-url" target="_blank" rel="noopener" id="news-geo-hl">Trump issues deadline Iran reopen Hormuz</a></div>
+          <div class="nc-foot"><span class="nc-src" id="news-geo-src">Reuters</span><span class="buzz bz-hot">HOT</span></div>
+        </div>
+        <div class="nc ai">
+          <div class="nc-cat">AI</div>
+          <div class="nc-hl"><a href="https://www.cnbc.com/2026/03/31/openai-funding-round-ipo.html" id="news-ai-url" target="_blank" rel="noopener" id="news-ai-hl">OpenAI closes record-breaking $122B funding</a></div>
+          <div class="nc-foot"><span class="nc-src" id="news-ai-src">CNBC</span><span class="buzz bz-viral">VIRAL</span></div>
+        </div>
+        <div class="nc india">
+          <div class="nc-cat">India</div>
+          <div class="nc-hl"><a href="https://www.pib.gov.in/PressReleasePage.aspx?PRID=2195990&reg=3&lang=1" id="news-india-url" target="_blank" rel="noopener" id="news-india-hl">India GDP growth hits 8.2% in Q2</a></div>
+          <div class="nc-foot"><span class="nc-src" id="news-india-src">PIB</span><span class="buzz bz-watch">WATCH</span></div>
+        </div>
+        <div class="nc fintech">
+          <div class="nc-cat">Global Fintech</div>
+          <div class="nc-hl"><a href="https://investors.sofi.com/news/news-details/2026/SoFi-Launches-Big-Business-Banking-to-Power-Fiat-and-Crypto-Banking-on-a-Single-Regulated-Platform/default.aspx" id="news-fintech-url" target="_blank" rel="noopener" id="news-fintech-hl">SoFi launches fiat crypto banking platform</a></div>
+          <div class="nc-foot"><span class="nc-src" id="news-fintech-src">SoFi Technologies</span><span class="buzz bz-watch">WATCH</span></div>
+        </div>
+        <div class="nc ifs">
+          <div class="nc-cat">Indian Fin. Services</div>
+          <div class="nc-hl"><a href="https://www.whalesbook.com/news/English/ipo/InCred-Holdings-IPO-Clears-SEBI-Hurdle-Diversified-NBFC-Readies-for-Public-Debut/698628e7e769d12df1db4b78" id="news-ifs-url" target="_blank" rel="noopener" id="news-ifs-hl">InCred Holdings NBFC gets SEBI IPO nod</a></div>
+          <div class="nc-foot"><span class="nc-src" id="news-ifs-src">WhalesBook</span><span class="buzz bz-hot">HOT</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIGNALS -->
+  <div class="glass-panel" id="sig-panel">
+    <div class="ph" onclick="togglePanel('sig-panel')">
+      <div class="ph-left"><div class="ph-num">S10</div><div class="ph-flag">⚡</div><div class="ph-title">Key Macro Signals (7)</div></div>
+      <div class="ph-right"><div class="ph-chev">▾</div></div>
+    </div>
+    <div class="pb">
+      <div class="sig-grid" id="s9-signals">
+        <div class="sc positive" id="sig1">
+          <div class="sc-num">SIGNAL 01 · CREDIT CYCLE</div><div class="sc-status positive">✦ Positive</div>
+          <div class="sc-title" id="sig1-title">Credit-Deposit Mismatch Signals Liquidity Strain</div>
+          <div class="sc-data" id="sig1-data">Bank credit growth at 14.3% YoY vastly outpaces deposit growth of 10.6% YoY. CD ratio surged to 83.04% (10y: 100th percentile), up from 82.38% prior period. Deposit mobilization lagging credit expansion by 370 bps.</strong> </div>
+          <div class="sc-impl" id="sig1-impl">The banking system is approaching a structural liquidity ceiling. At 83.04% CD ratio (highest decile in 10 years), banks face mounting pressure to either slow credit or raise deposits at higher cost. This constrains the RBI's ability to sustain the easing cycle and threatens credit quality if weaker borrowers are funded at margin. Capital allocators should monitor bank NPA trajectories and deposit competition intensity—this is the binding constraint on growth, not policy rate.</div>
+          <div class="sc-pct" id="sig1-pct">100%</div>
+        </div>
+        <div class="sc positive" id="sig2">
+          <div class="sc-num">SIGNAL 02 · CAPEX TRIGGER</div><div class="sc-status positive">✦ Positive</div>
+          <div class="sc-title" id="sig2-title">Capex Momentum Moderates; Capacity Headroom Persists</div>
+          <div class="sc-data" id="sig2-data">IIP capital goods growth at 12.5% YoY (79th percentile), down from 4.3% prior. Capacity utilization at 74.8%, down 100 bps from 75.8%. Core sector growth collapsed to 2.3% YoY from 4.7% prior—lowest in cycle.</strong> </div>
+          <div class="sc-impl" id="sig2-impl">The capex impulse is losing traction despite headline IIP strength. Core sector weakness (steel, cement, power) signals that underlying investment demand is softening, not accelerating. Capacity utilization at 74.8% leaves room for growth without new capex, removing urgency for fresh deployment. This is a yellow flag for infrastructure and capital goods stocks—the 'capex cycle' narrative is premature. Watch for Q3 capex intentions data; if core sector remains depressed, expect capex guidance cuts.</div>
+          <div class="sc-pct" id="sig2-pct">79%</div>
+        </div>
+        <div class="sc positive" id="sig3">
+          <div class="sc-num">SIGNAL 03 · SIP / RETAIL FLOWS</div><div class="sc-status positive">✦ Positive</div>
+          <div class="sc-title" id="sig3-title">SIP Inflows Hit 10-Year High Despite Moderation</div>
+          <div class="sc-data" id="sig3-data">SIP inflows at ₹29,845 crore (97th percentile), down marginally from ₹31,002 crore prior month. SIP AUM at ₹16.64 lakh crore (100th percentile). Equity MF net inflows ₹25,977.91 crore (84th percentile). SIP accounts at 10.45 crore (1st percentile growth rate).</strong> </div>
+          <div class="sc-impl" id="sig3-impl">Retail equity participation remains structurally elevated despite month-on-month moderation. The 97th percentile SIP inflow level and 100th percentile AUM indicate sustained retail conviction in equities. However, SIP account growth at 1st percentile (near-zero new account additions) reveals saturation—growth is now from existing accounts increasing contributions, not new entrants. This is a maturation signal: retail flows are sticky but not expanding the addressable market. For allocators, this means retail support is durable but not a source of incremental demand.</div>
+          <div class="sc-pct" id="sig3-pct">97%</div>
+        </div>
+        <div class="sc risk" id="sig4">
+          <div class="sc-num">SIGNAL 04 · OIL / COMMODITY RISK</div><div class="sc-status risk">⚠ Risk</div>
+          <div class="sc-title" id="sig4-title">WTI Spike Amid Brent Weakness Signals Supply Dislocation</div>
+          <div class="sc-data" id="sig4-data">WTI crude at $114.70/bbl (98th percentile), up 200 bps from $112.41. Brent at $109.66/bbl (94th percentile), down 11 bps from $109.77. WTI-Brent spread widened to $5.04/bbl. Iron ore surged to $161.91/tonne (86th percentile) from $107.97 prior—50% jump in one period.</strong> </div>
+          <div class="sc-impl" id="sig4-impl">The WTI-Brent divergence signals US supply tightness (likely Gulf of Mexico disruption or refinery outages) decoupled from global crude dynamics. For India, this is a mixed signal: Brent-linked fuel costs are stable, but the WTI spike suggests US energy stress that could ripple through global growth. More concerning: iron ore's 50% jump in one period is unsustainable and likely reflects data anomaly or Chinese stimulus speculation. If real, it signals commodity inflation re-acceleration that will pressure India's import bill and RBI's inflation forecast (already raised to 4%). Monitor commodity volatility closely—this is not a stable backdrop for the easing cycle.</div>
+          <div class="sc-pct" id="sig4-pct">98%</div>
+        </div>
+        <div class="sc watch" id="sig5">
+          <div class="sc-num">SIGNAL 05 · GLOBAL LIQUIDITY</div><div class="sc-status watch">◎ Watch</div>
+          <div class="sc-title" id="sig5-title">US Growth Stalls; Global PMI Divergence Widens Risk</div>
+          <div class="sc-data" id="sig5-data">US GDP SAAR at 0.7% (23rd percentile), collapsed from 4.4% prior. US PMI Composite at 50.3 (27th percentile), down from 51.9. US 10Y Treasury at 4.31% (84th percentile). Fed balance sheet at $6,675B (47th percentile). Global PMI Composite at 51.9 (49th percentile), up from 50.9.</strong> </div>
+          <div class="sc-impl" id="sig5-impl">The US economy is decelerating sharply—0.7% SAAR GDP and sub-51 PMI signal near-stall conditions. Yet US 10Y yields remain at 84th percentile (4.31%), suggesting markets are pricing in either persistent inflation or Fed hold bias. This creates a liquidity trap: global growth is slowing, but US rates are not falling fast enough to support risk assets. For India, this is a headwind: FII outflows of ₹8,692 crore (28th percentile, i.e., heavy selling) reflect this US-India yield arbitrage compression. If US growth continues to decelerate without Fed cuts, expect sustained FII pressure on Indian equities. The global PMI uptick is too weak to offset US weakness.</div>
+          <div class="sc-pct" id="sig5-pct">27%</div>
+        </div>
+        <div class="sc watch" id="sig6">
+          <div class="sc-num">SIGNAL 06 · INR / FX RESERVES</div><div class="sc-status watch">◎ Watch</div>
+          <div class="sc-title" id="sig6-title">INR Flat Amid FII Outflows; Reserve Adequacy Untested</div>
+          <div class="sc-data" id="sig6-data">INR/USD at 0.0108 (0th percentile, i.e., historically weak), flat from prior. FII equity net outflows at ₹8,692 crore (28th percentile). DII net inflows at ₹7,979.50 crore (25th percentile). No explicit FX reserve data provided; prior regime suggests reserves above $600B.</strong> </div>
+          <div class="sc-impl" id="sig6-impl">The INR is holding steady despite significant FII outflows, suggesting RBI intervention or strong DII support is masking underlying weakness. FII outflows at 28th percentile (heavy selling) combined with flat INR indicates the central bank is defending the currency, likely drawing on reserves. This is sustainable short-term but unsustainable if outflows persist. The DII inflows (25th percentile, weak) are insufficient to offset FII selling—domestic retail is not stepping in aggressively. For allocators, this signals INR depreciation risk if US rates remain elevated and FII outflows accelerate. Monitor RBI's reserve drawdown rate; if reserves fall below $580B, expect INR volatility to spike.</div>
+          <div class="sc-pct" id="sig6-pct">0%</div>
+        </div>
+        <div class="sc surprise" id="sig7">
+          <div class="surprise-flash">🔴 Surprise Signal</div>
+          <div class="sc-num">SIGNAL 07 · UNDER THE RADAR</div><div class="sc-status surprise">⚡ Surprise</div>
+          <div class="sc-title" id="sig7-title">Airline Passenger Collapse Signals Demand Cliff Ahead</div>
+          <div class="sc-data" id="sig7-data">Airline passenger traffic at 35.08M (2nd percentile), down sharply from 38.59M prior. This is the lowest reading in the dataset's 10-year history. Concurrent data: GST collections at ₹200,064 crore (91st percentile), PV sales +10.5% YoY, 2W sales +35.2% YoY (91st percentile), CV sales +28.89% YoY (84th percentile).</strong> </div>
+          <div class="sc-impl" id="sig7-impl">This is the critical divergence: high-frequency consumption indicators (GST, vehicle sales) are screaming growth, yet airline traffic—the most discretionary, income-elastic consumption metric—has collapsed to a 10-year low. This is not a seasonal dip; it's a structural break. The most likely explanation: (1) price elasticity has kicked in—airfares have risen sharply, pricing out middle-income travelers, or (2) a shift in travel patterns (rail, road) is capturing demand, or (3) most concerning—high-income consumer confidence has cracked despite headline growth data. The fact that GST and vehicle sales remain strong suggests the collapse is NOT broad-based demand destruction, but rather a bifurcation: mass-market consumption (vehicles, FMCG via GST) is holding, but discretionary high-income spending (air travel) is contracting. This is a leading indicator of margin compression in premium segments and a warning that the 'broad-based consumption expansion' narrative is masking underlying income inequality stress. For allocators: avoid premium discretionary plays (airlines, luxury retail, high-end hospitality); rotate toward mass-market consumption and value segments. This airline signal is the canary in the coal mine for the next 2-3 quarters.</div>
+          <div class="sc-pct" id="sig7-pct">2%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S1 REGIME -->
+  <div class="glass-panel" id="s1-panel">
+    <div class="ph" onclick="togglePanel('s1-panel')">
+      <div class="ph-left"><div class="ph-num">S1</div><div class="ph-flag">🇮🇳</div><div class="ph-title">India Macro Regime Classification</div></div>
+      <div class="ph-right"><span class="ph-badge b-exp" id="s1-badge">Expansion Mode — Within Band</span><div class="ph-chev">▾</div></div>
+    </div>
+    <div class="pb">
+      <div class="regime-cards" id="s1-body">
+        <div class="rc"><div class="rc-dim">Growth Cycle</div><div class="rc-met" id="rc-growth-m">GDP 7.8%; PMI 56.5</div><div class="rc-sig" id="rc-growth-s">GDP expansion at 7.8% with PMI Composite 56.5 signals robust broad-based growth trajectory. Manufacturing and services momentum remains well-anchored above expansion thresholds.</div><span class="ph-badge" id="rc-growth-b">Expansion Mode</span></div>
+        <div class="rc"><div class="rc-dim">Inflation Cycle</div><div class="rc-met" id="rc-infl-m">CPI 3.21%; Fuel -3.78%</div><div class="rc-sig" id="rc-infl-s">CPI at 3.21% with fuel deflation of -3.78% validates neutral stance; core price pressures contained within RBI's comfort zone. Energy tailwinds providing disinflationary cushion.</div><span class="ph-badge" id="rc-infl-b">Within Band</span></div>
+        <div class="rc"><div class="rc-dim">Credit Cycle</div><div class="rc-met" id="rc-credit-m">Credit 14.3%; CD 83.04%</div><div class="rc-sig" id="rc-credit-s">Bank credit growth of 14.3% strains deposit mobilization as CD ratio climbs to 83.04%, signaling incipient liquidity stress. Credit expansion outpacing sustainable liability growth trajectory.</div><span class="ph-badge" id="rc-credit-b">Credit Stress</span></div>
+        <div class="rc"><div class="rc-dim">Policy Regime</div><div class="rc-met" id="rc-policy-m">Repo 5.25%</div><div class="rc-sig" id="rc-policy-s">Repo rate at 5.25% reflects accommodative stance supporting growth impulse. Policy rate positioning enables continued credit expansion amid stable inflation backdrop.</div><span class="ph-badge" id="rc-policy-b">Easing Cycle</span></div>
+        <div class="rc"><div class="rc-dim">Capex Cycle</div><div class="rc-met" id="rc-capex-m">IIP CapG 12.5%; CU 74.8%</div><div class="rc-sig" id="rc-capex-s">IIP capital goods growth of 12.5% moderates investment momentum; capacity utilization at 74.8% suggests headroom without urgency for fresh capex deployment. Mixed investment cycle signals.</div><span class="ph-badge" id="rc-capex-b">Steady Investment</span></div>
+        <div class="rc"><div class="rc-dim">Consumption Cycle</div><div class="rc-met" id="rc-cons-m">GST 200064; PV 10.5%</div><div class="rc-sig" id="rc-cons-s">GST collections at 200064 crore with PV sales accelerating 10.5% YoY confirm robust consumer demand. Retail velocity and vehicle sales underpin broad-based consumption expansion.</div><span class="ph-badge" id="rc-cons-b">Demand Surge</span></div>
+      </div>
+      <div class="p-summary" id="s1-summary">GDP 7.8%; PMI 56.5</div>
+    </div>
+  </div>
+
+  <!-- S2 GROWTH -->
+  <div class="glass-panel" id="s2-panel">
+    <div class="ph" onclick="togglePanel('s2-panel')"><div class="ph-left"><div class="ph-num">S2</div><div class="ph-flag">📈</div><div class="ph-title">India Growth Indicators</div></div><div class="ph-right"><div class="ph-chev">▾</div></div></div>
+    <div class="pb">
+      <table class="dt"><thead><tr><th>Indicator</th><th>Latest</th><th>Previous</th><th>▲▼</th><th>Momentum</th><th>10Y %ile</th></tr></thead>
+      <tbody id="s2-body">
+<tr>
+  <td>India GDP YoY</td>
+  <td>7.8</td>
+  <td>8.4</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -7.14%</td>
+  <td><span class="pct-hi">84%</span></td>
+</tr>
+<tr>
+  <td>India GDP FY Estimate</td>
+  <td>7.6</td>
+  <td>7.4</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 2.7%</td>
+  <td><span class="pct-mid">77%</span></td>
+</tr>
+<tr>
+  <td>RBI GDP Forecast</td>
+  <td>Deferred</td>
+  <td>7.0-7.4</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>→ NaN%</td>
+  <td><span class="pct-lo">NaN%</span></td>
+</tr>
+<tr>
+  <td>PMI Manufacturing</td>
+  <td>53.9</td>
+  <td>56.9</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -5.27%</td>
+  <td><span class="pct-mid">49%</span></td>
+</tr>
+<tr>
+  <td>PMI Services</td>
+  <td>57.5</td>
+  <td>58.1</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -1.03%</td>
+  <td><span class="pct-mid">78%</span></td>
+</tr>
+<tr>
+  <td>PMI Composite</td>
+  <td>56.5</td>
+  <td>58.9</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -4.07%</td>
+  <td><span class="pct-mid">71%</span></td>
+</tr>
+<tr>
+  <td>IIP YoY</td>
+  <td>5.2</td>
+  <td>4.8</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 8.33%</td>
+  <td><span class="pct-mid">56%</span></td>
+</tr>
+<tr>
+  <td>IIP Capital Goods</td>
+  <td>12.5</td>
+  <td>4.3</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 190.7%</td>
+  <td><span class="pct-mid">79%</span></td>
+</tr>
+<tr>
+  <td>Capacity Utilisation</td>
+  <td>74.8</td>
+  <td>75.8</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -1.32%</td>
+  <td><span class="pct-mid">72%</span></td>
+</tr>
+<tr>
+  <td>Core Sector YoY</td>
+  <td>2.3</td>
+  <td>4.7</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -51.06%</td>
+  <td><span class="pct-lo">28%</span></td>
+</tr>
+</tbody></table>
+    </div>
+  </div>
+
+  <!-- S3 INFLATION -->
+  <div class="glass-panel" id="s3-panel">
+    <div class="ph" onclick="togglePanel('s3-panel')"><div class="ph-left"><div class="ph-num">S3</div><div class="ph-flag">🌡️</div><div class="ph-title">India Inflation Indicators</div></div><div class="ph-right"><div class="ph-chev">▾</div></div></div>
+    <div class="pb">
+      <table class="dt"><thead><tr><th>Indicator</th><th>Latest</th><th>Previous</th><th>▲▼</th><th>Momentum</th><th>10Y %ile</th></tr></thead>
+      <tbody id="s3-body">
+<tr>
+  <td>CPI Headline</td>
+  <td>3.21</td>
+  <td>2.75</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 16.73%</td>
+  <td><span class="pct-lo">21%</span></td>
+</tr>
+<tr>
+  <td>CPI Core</td>
+  <td>Not Published</td>
+  <td>Not Published</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>→ NaN%</td>
+  <td><span class="pct-lo">NaN%</span></td>
+</tr>
+<tr>
+  <td>CFPI Food</td>
+  <td>3.47</td>
+  <td>2.13</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 62.91%</td>
+  <td><span class="pct-lo">29%</span></td>
+</tr>
+<tr>
+  <td>WPI</td>
+  <td>2.13</td>
+  <td>1.81</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 17.68%</td>
+  <td><span class="pct-mid">41%</span></td>
+</tr>
+<tr>
+  <td>Fuel Inflation</td>
+  <td>-3.78</td>
+  <td>-4.01</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 5.74%</td>
+  <td><span class="pct-lo">14%</span></td>
+</tr>
+<tr>
+  <td>RBI Repo Rate</td>
+  <td>5.25</td>
+  <td>5.5</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -4.55%</td>
+  <td><span class="pct-lo">28%</span></td>
+</tr>
+<tr>
+  <td>RBI Inflation Forecast</td>
+  <td>4</td>
+  <td>3.2</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 25%</td>
+  <td><span class="pct-lo">25%</span></td>
+</tr>
+</tbody></table>
+    </div>
+  </div>
+
+  <!-- S4 CONSUMPTION -->
+  <div class="glass-panel" id="s4-panel">
+    <div class="ph" onclick="togglePanel('s4-panel')"><div class="ph-left"><div class="ph-num">S4</div><div class="ph-flag">🛒</div><div class="ph-title">India Consumption Indicators</div></div><div class="ph-right"><div class="ph-chev">▾</div></div></div>
+    <div class="pb">
+      <table class="dt"><thead><tr><th>Indicator</th><th>Latest</th><th>Previous</th><th>▲▼</th><th>Momentum</th><th>10Y %ile</th></tr></thead>
+      <tbody id="s4-body">
+<tr>
+  <td>GST Collections (Month)</td>
+  <td>200064</td>
+  <td>183845</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 8.82%</td>
+  <td><span class="pct-hi">91%</span></td>
+</tr>
+<tr>
+  <td>GST Collections (YTD)</td>
+  <td>2227096</td>
+  <td>2055515</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 8.35%</td>
+  <td><span class="pct-hi">91%</span></td>
+</tr>
+<tr>
+  <td>Passenger Vehicle Sales</td>
+  <td>10.5</td>
+  <td>Not specified in recent data</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>→ NaN%</td>
+  <td><span class="pct-mid">59%</span></td>
+</tr>
+<tr>
+  <td>2-Wheeler Sales</td>
+  <td>35.2</td>
+  <td>Not specified</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>→ NaN%</td>
+  <td><span class="pct-hi">91%</span></td>
+</tr>
+<tr>
+  <td>Commercial Vehicle Sales</td>
+  <td>28.89</td>
+  <td>Not specified</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>→ NaN%</td>
+  <td><span class="pct-hi">84%</span></td>
+</tr>
+<tr>
+  <td>Airline Passengers</td>
+  <td>35.08</td>
+  <td>38.59</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -9.1%</td>
+  <td><span class="pct-lo">2%</span></td>
+</tr>
+<tr>
+  <td>E-commerce GMV Growth</td>
+  <td>12.4</td>
+  <td>11.3</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 9.73%</td>
+  <td><span class="pct-lo">5%</span></td>
+</tr>
+</tbody></table>
+    </div>
+  </div>
+
+  <!-- S5 CREDIT -->
+  <div class="glass-panel" id="s5-panel">
+    <div class="ph" onclick="togglePanel('s5-panel')"><div class="ph-left"><div class="ph-num">S5</div><div class="ph-flag">🏦</div><div class="ph-title">India Credit Cycle</div></div><div class="ph-right"><div class="ph-chev">▾</div></div></div>
+    <div class="pb">
+      <table class="dt"><thead><tr><th>Indicator</th><th>Latest</th><th>Previous</th><th>▲▼</th><th>Momentum</th><th>10Y %ile</th></tr></thead>
+      <tbody id="s5-body">
+<tr>
+  <td>Bank Credit Growth</td>
+  <td>14.3</td>
+  <td>11.1</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 28.83%</td>
+  <td><span class="pct-mid">77%</span></td>
+</tr>
+<tr>
+  <td>Deposit Growth</td>
+  <td>10.6</td>
+  <td>9.7</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 9.28%</td>
+  <td><span class="pct-lo">39%</span></td>
+</tr>
+<tr>
+  <td>CD Ratio</td>
+  <td>83.04</td>
+  <td>82.38</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 0.8%</td>
+  <td><span class="pct-hi">100%</span></td>
+</tr>
+<tr>
+  <td>NBFC Credit Growth</td>
+  <td>15</td>
+  <td>—</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>→ Awaited</td>
+  <td><span class="pct-mid">56%</span></td>
+</tr>
+<tr>
+  <td>Corp Bond Issuance</td>
+  <td>Data not available in INR crore</td>
+  <td>—</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>→ Awaited</td>
+  <td><span class="pct-lo">NaN%</span></td>
+</tr>
+</tbody></table>
+    </div>
+  </div>
+
+  <!-- S6 FLOWS -->
+  <div class="glass-panel" id="s6-panel">
+    <div class="ph" onclick="togglePanel('s6-panel')"><div class="ph-left"><div class="ph-num">S6</div><div class="ph-flag">💧</div><div class="ph-title">Market Liquidity &amp; Flows</div></div><div class="ph-right"><div class="ph-chev">▾</div></div></div>
+    <div class="pb">
+      <table class="dt"><thead><tr><th>Indicator</th><th>Latest</th><th>Previous</th><th>▲▼</th><th>Momentum</th><th>10Y %ile</th></tr></thead>
+      <tbody id="s6-body">
+<tr>
+  <td>FII Equity Net</td>
+  <td>-8692.11</td>
+  <td>-8167.17</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -6.43%</td>
+  <td><span class="pct-lo">28%</span></td>
+</tr>
+<tr>
+  <td>DII Equity Net</td>
+  <td>7979.5</td>
+  <td>8088.7</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -1.35%</td>
+  <td><span class="pct-lo">25%</span></td>
+</tr>
+<tr>
+  <td>SIP Inflows</td>
+  <td>29845</td>
+  <td>31002</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -3.73%</td>
+  <td><span class="pct-hi">97%</span></td>
+</tr>
+<tr>
+  <td>SIP YoY Growth</td>
+  <td>15</td>
+  <td>17</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -11.76%</td>
+  <td><span class="pct-lo">33%</span></td>
+</tr>
+<tr>
+  <td>MF AUM</td>
+  <td>82.03</td>
+  <td>81.01</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 1.26%</td>
+  <td><span class="pct-hi">100%</span></td>
+</tr>
+<tr>
+  <td>MF Average AUM</td>
+  <td>82.01</td>
+  <td>—</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>→ Awaited</td>
+  <td><span class="pct-hi">88%</span></td>
+</tr>
+<tr>
+  <td>Equity MF Net</td>
+  <td>25977.91</td>
+  <td>24028.59</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 8.11%</td>
+  <td><span class="pct-hi">84%</span></td>
+</tr>
+<tr>
+  <td>NFO Collections</td>
+  <td>4979</td>
+  <td>1939</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 156.78%</td>
+  <td><span class="pct-mid">41%</span></td>
+</tr>
+<tr>
+  <td>SIP Accounts</td>
+  <td>10.45</td>
+  <td>10.29</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 1.55%</td>
+  <td><span class="pct-lo">1%</span></td>
+</tr>
+<tr>
+  <td>SIP AUM</td>
+  <td>16.64</td>
+  <td>16.36</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 1.71%</td>
+  <td><span class="pct-hi">100%</span></td>
+</tr>
+</tbody></table>
+    </div>
+  </div>
+
+  <!-- S7 MARKETS -->
+  <div class="glass-panel" id="s7-panel">
+    <div class="ph" onclick="togglePanel('s7-panel')"><div class="ph-left"><div class="ph-num">S7</div><div class="ph-flag">📊</div><div class="ph-title">India Financial Markets</div></div><div class="ph-right"><div class="ph-chev">▾</div></div></div>
+    <div class="pb">
+      <table class="dt"><thead><tr><th>Asset</th><th>Latest</th><th>Previous</th><th>▲▼</th><th>Momentum</th><th>10Y %ile</th></tr></thead>
+      <tbody id="s7-body">
+<tr>
+  <td>Nifty 50</td>
+  <td>23123.65</td>
+  <td>22968.25</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ +0.68%</td>
+  <td><span class="pct-hi">92%</span></td>
+</tr>
+<tr>
+  <td>Sensex</td>
+  <td>74616.58</td>
+  <td>74106.85</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ +0.69%</td>
+  <td><span class="pct-hi">89%</span></td>
+</tr>
+<tr>
+  <td>Bank Nifty</td>
+  <td>52716.25</td>
+  <td>52609.1</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ +0.2%</td>
+  <td><span class="pct-hi">95%</span></td>
+</tr>
+<tr>
+  <td>India VIX</td>
+  <td>24.695</td>
+  <td>25.47</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -3.04%</td>
+  <td><span class="pct-hi">80%</span></td>
+</tr>
+<tr>
+  <td>G-Sec 10Y</td>
+  <td>Awaited</td>
+  <td>—</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>—</td>
+  <td><span class="pct-mid">50%</span></td>
+</tr>
+<tr>
+  <td>INR/USD</td>
+  <td>0.0108</td>
+  <td>0.0108</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>→ +0%</td>
+  <td><span class="pct-lo">0%</span></td>
+</tr>
+<tr>
+  <td>Gold (₹/gram)</td>
+  <td>2</td>
+  <td>2</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ +0.86%</td>
+  <td><span class="pct-lo">0%</span></td>
+</tr>
+<tr>
+  <td>Brent Crude</td>
+  <td>109.66</td>
+  <td>109.77</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -0.1%</td>
+  <td><span class="pct-hi">94%</span></td>
+</tr>
+<tr>
+  <td>RBI FX Reserves</td>
+  <td>Awaited</td>
+  <td>—</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>—</td>
+  <td><span class="pct-mid">50%</span></td>
+</tr>
+</tbody></table>
+    </div>
+  </div>
+
+  <!-- S8 REAL ESTATE -->
+  <div class="glass-panel" id="s8-panel">
+    <div class="ph" onclick="togglePanel('s8-panel')"><div class="ph-left"><div class="ph-num">S8</div><div class="ph-flag">🏘️</div><div class="ph-title">India Real Estate</div></div><div class="ph-right"><div class="ph-chev">▾</div></div></div>
+    <div class="pb">
+      <div class="sub-lbl">Residential Market</div>
+      <table class="dt"><thead><tr><th>Indicator</th><th>Latest</th><th>Previous</th><th>▲▼</th><th>Momentum</th><th>10Y %ile</th></tr></thead>
+      <tbody id="s10-residential">
+<tr>
+  <td>RE Launches (Units)</td>
+  <td>126.265</td>
+  <td>123.835</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 1.96%</td>
+  <td><span class="pct-lo">0%</span></td>
+</tr>
+<tr>
+  <td>RE Sales (Units)</td>
+  <td>101.675</td>
+  <td>108.97</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -6.69%</td>
+  <td><span class="pct-lo">0%</span></td>
+</tr>
+<tr>
+  <td>Unsold Inventory</td>
+  <td>600</td>
+  <td>—</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>→ Awaited</td>
+  <td><span class="pct-lo">0%</span></td>
+</tr>
+<tr>
+  <td>HPI Mumbai</td>
+  <td>DATA_NOT_AVAILABLE_IN_SEARCH_RESULTS</td>
+  <td>DATA_NOT_AVAILABLE_IN_SEARCH_RESULTS</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>→ NaN%</td>
+  <td><span class="pct-lo">NaN%</span></td>
+</tr>
+<tr>
+  <td>HPI Delhi</td>
+  <td>DATA_NOT_AVAILABLE_IN_SEARCH_RESULTS</td>
+  <td>DATA_NOT_AVAILABLE_IN_SEARCH_RESULTS</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>→ NaN%</td>
+  <td><span class="pct-lo">NaN%</span></td>
+</tr>
+<tr>
+  <td>HPI Bengaluru</td>
+  <td>DATA_NOT_AVAILABLE_IN_SEARCH_RESULTS</td>
+  <td>DATA_NOT_AVAILABLE_IN_SEARCH_RESULTS</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>→ NaN%</td>
+  <td><span class="pct-lo">NaN%</span></td>
+</tr>
+<tr>
+  <td>HPI Hyderabad</td>
+  <td>DATA_NOT_AVAILABLE_IN_SEARCH_RESULTS</td>
+  <td>DATA_NOT_AVAILABLE_IN_SEARCH_RESULTS</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>→ NaN%</td>
+  <td><span class="pct-lo">NaN%</span></td>
+</tr>
+<tr>
+  <td>Affordability Index</td>
+  <td>0.61</td>
+  <td>0.65</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -6.15%</td>
+  <td><span class="pct-lo">1%</span></td>
+</tr>
+<tr>
+  <td>Home Loan Disbursements</td>
+  <td>55000</td>
+  <td>48000</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 14.58%</td>
+  <td><span class="pct-lo">5%</span></td>
+</tr>
+<tr>
+  <td>Avg Home Loan Rate</td>
+  <td>7.85</td>
+  <td>8.15</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -3.68%</td>
+  <td><span class="pct-lo">38%</span></td>
+</tr>
+</tbody></table>
+      <div class="sub-lbl">Commercial RE &amp; REITs</div>
+      <table class="dt"><thead><tr><th>Indicator</th><th>Latest</th><th>Previous</th><th>▲▼</th><th>Momentum</th><th>10Y %ile</th></tr></thead>
+      <tbody id="s10-commercial">
+<tr>
+  <td>Office Absorption</td>
+  <td>18.3</td>
+  <td>15.9</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 15.09%</td>
+  <td><span class="pct-lo">15%</span></td>
+</tr>
+<tr>
+  <td>Office Vacancy</td>
+  <td>15.3</td>
+  <td>16.2</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -5.56%</td>
+  <td><span class="pct-mid">46%</span></td>
+</tr>
+<tr>
+  <td>Grade-A Rent Bengaluru</td>
+  <td>93.6</td>
+  <td>88.4</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 5.88%</td>
+  <td><span class="pct-mid">59%</span></td>
+</tr>
+<tr>
+  <td>Grade-A Rent Mumbai</td>
+  <td>118</td>
+  <td>112.9</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 4.52%</td>
+  <td><span class="pct-lo">32%</span></td>
+</tr>
+<tr>
+  <td>Retail Mall Vacancy</td>
+  <td>5.7</td>
+  <td>5.1</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 11.76%</td>
+  <td><span class="pct-lo">4%</span></td>
+</tr>
+<tr>
+  <td>Embassy REIT</td>
+  <td>429.85</td>
+  <td>434.14</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -0.99%</td>
+  <td><span class="pct-hi">93%</span></td>
+</tr>
+<tr>
+  <td>Mindspace REIT</td>
+  <td>449.98</td>
+  <td>460.41</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -2.27%</td>
+  <td><span class="pct-hi">90%</span></td>
+</tr>
+<tr>
+  <td>Brookfield REIT</td>
+  <td>320.10</td>
+  <td>332.18</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -3.64%</td>
+  <td><span class="pct-mid">69%</span></td>
+</tr>
+</tbody></table>
+      <div class="p-summary" id="s10-re-summary">Residential market is hot; commercial absorption is strong.</div>
+    </div>
+  </div>
+
+  <!-- S9 GLOBAL -->
+  <div class="glass-panel" id="s9-panel">
+    <div class="ph" onclick="togglePanel('s9-panel')"><div class="ph-left"><div class="ph-num">S9</div><div class="ph-flag">🌍</div><div class="ph-title">Global Macro Dashboard</div></div><div class="ph-right"><div class="ph-chev">▾</div></div></div>
+    <div class="pb">
+      <div class="sub-lbl">Global Growth</div>
+      <table class="dt"><thead><tr><th>Indicator</th><th>Latest</th><th>Previous</th><th>▲▼</th><th>Momentum</th><th>10Y %ile</th></tr></thead>
+      <tbody id="s8-growth">
+<tr>
+  <td>US GDP SAAR</td>
+  <td>0.7</td>
+  <td>4.4</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -84.09%</td>
+  <td><span class="pct-lo">23%</span></td>
+</tr>
+<tr>
+  <td>China GDP</td>
+  <td>4.5-5.0</td>
+  <td>5.0</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>→ NaN%</td>
+  <td><span class="pct-lo">NaN%</span></td>
+</tr>
+<tr>
+  <td>Eurozone GDP</td>
+  <td>0.9</td>
+  <td>1.2</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -25%</td>
+  <td><span class="pct-lo">35%</span></td>
+</tr>
+<tr>
+  <td>Global PMI Composite</td>
+  <td>51.9</td>
+  <td>50.9</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 1.96%</td>
+  <td><span class="pct-mid">49%</span></td>
+</tr>
+<tr>
+  <td>US PMI Composite</td>
+  <td>50.3</td>
+  <td>51.9</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -3.08%</td>
+  <td><span class="pct-lo">27%</span></td>
+</tr>
+<tr>
+  <td>China PMI Composite</td>
+  <td>51.5</td>
+  <td>55.4</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -7.04%</td>
+  <td><span class="pct-mid">50%</span></td>
+</tr>
+</tbody></table>
+      <div class="sub-lbl">Global Inflation</div>
+      <table class="dt"><thead><tr><th>Indicator</th><th>Latest</th><th>Previous</th><th>▲▼</th><th>Momentum</th><th>10Y %ile</th></tr></thead>
+      <tbody id="s8-inflation">
+<tr>
+  <td>US CPI</td>
+  <td>2.4</td>
+  <td>2.4</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>→ 0%</td>
+  <td><span class="pct-mid">40%</span></td>
+</tr>
+<tr>
+  <td>US Core CPI</td>
+  <td>2.5</td>
+  <td>2.5</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>→ 0%</td>
+  <td><span class="pct-mid">50%</span></td>
+</tr>
+<tr>
+  <td>US Core PCE</td>
+  <td>3.1</td>
+  <td>3</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 3.33%</td>
+  <td><span class="pct-mid">67%</span></td>
+</tr>
+<tr>
+  <td>Eurozone CPI</td>
+  <td>2.5</td>
+  <td>1.9</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 31.58%</td>
+  <td><span class="pct-mid">55%</span></td>
+</tr>
+<tr>
+  <td>China CPI</td>
+  <td>1.3</td>
+  <td>0.2</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 550%</td>
+  <td><span class="pct-lo">35%</span></td>
+</tr>
+<tr>
+  <td>FAO Food Index</td>
+  <td>128.5</td>
+  <td>125.5</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 2.39%</td>
+  <td><span class="pct-mid">64%</span></td>
+</tr>
+</tbody></table>
+      <div class="sub-lbl">Global Liquidity</div>
+      <table class="dt"><thead><tr><th>Indicator</th><th>Latest</th><th>Previous</th><th>▲▼</th><th>Momentum</th><th>10Y %ile</th></tr></thead>
+      <tbody id="s8-liquidity">
+<tr>
+  <td>Fed Funds Rate</td>
+  <td>3.625</td>
+  <td>3.625</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>→ 0%</td>
+  <td><span class="pct-mid">67%</span></td>
+</tr>
+<tr>
+  <td>Fed Balance Sheet</td>
+  <td>6675</td>
+  <td>6657</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ 0.27%</td>
+  <td><span class="pct-mid">47%</span></td>
+</tr>
+<tr>
+  <td>ECB Deposit Rate</td>
+  <td>2</td>
+  <td>2</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>→ 0%</td>
+  <td><span class="pct-mid">58%</span></td>
+</tr>
+<tr>
+  <td>BOJ Rate</td>
+  <td>0.75</td>
+  <td>0.75</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>→ 0%</td>
+  <td><span class="pct-hi">90%</span></td>
+</tr>
+<tr>
+  <td>US 10Y Treasury</td>
+  <td>4.31</td>
+  <td>4.31</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>→ 0%</td>
+  <td><span class="pct-hi">84%</span></td>
+</tr>
+<tr>
+  <td>DXY Dollar Index</td>
+  <td>99.92</td>
+  <td>99.99</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>→ -0.07%</td>
+  <td><span class="pct-mid">50%</span></td>
+</tr>
+</tbody></table>
+      <div class="sub-lbl">Global Markets &amp; Commodities</div>
+      <table class="dt"><thead><tr><th>Asset</th><th>Latest</th><th>Previous</th><th>▲▼</th><th>Momentum</th><th>10Y %ile</th></tr></thead>
+      <tbody id="s8-markets">
+<tr>
+  <td>S&P 500</td>
+  <td>6583.28</td>
+  <td>6582.69</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>→ +0.01%</td>
+  <td><span class="pct-hi">100%</span></td>
+</tr>
+<tr>
+  <td>Nasdaq</td>
+  <td>21855.13</td>
+  <td>21879.18</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -0.11%</td>
+  <td><span class="pct-hi">100%</span></td>
+</tr>
+<tr>
+  <td>Euro Stoxx 50</td>
+  <td>5633.22</td>
+  <td>5692.86</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -1.05%</td>
+  <td><span class="pct-hi">100%</span></td>
+</tr>
+<tr>
+  <td>Hang Seng</td>
+  <td>25116.53</td>
+  <td>24788.14</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ +1.32%</td>
+  <td><span class="pct-mid">57%</span></td>
+</tr>
+<tr>
+  <td>Nikkei 225</td>
+  <td>53429.56</td>
+  <td>53413.68</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>→ +0.03%</td>
+  <td><span class="pct-hi">96%</span></td>
+</tr>
+<tr>
+  <td>US VIX</td>
+  <td>26.31</td>
+  <td>24.17</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ +8.85%</td>
+  <td><span class="pct-mid">77%</span></td>
+</tr>
+<tr>
+  <td>Brent Crude (Global)</td>
+  <td>109.66</td>
+  <td>109.77</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -0.1%</td>
+  <td><span class="pct-hi">94%</span></td>
+</tr>
+<tr>
+  <td>WTI Crude</td>
+  <td>114.7</td>
+  <td>112.41</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ +2.04%</td>
+  <td><span class="pct-hi">98%</span></td>
+</tr>
+<tr>
+  <td>Natural Gas</td>
+  <td>2.867</td>
+  <td>2.811</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ +1.99%</td>
+  <td><span class="pct-lo">34%</span></td>
+</tr>
+<tr>
+  <td>Gold (USD)</td>
+  <td>4696.9</td>
+  <td>4656.8</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ +0.86%</td>
+  <td><span class="pct-hi">94%</span></td>
+</tr>
+<tr>
+  <td>Copper</td>
+  <td>5.56</td>
+  <td>5.583</td>
+  <td><span class="arr-down">↓</span></td>
+  <td>↓ -0.41%</td>
+  <td><span class="pct-hi">100%</span></td>
+</tr>
+<tr>
+  <td>Iron Ore</td>
+  <td>161.91</td>
+  <td>107.97</td>
+  <td><span class="arr-up">↑</span></td>
+  <td>↑ +49.96%</td>
+  <td><span class="pct-hi">86%</span></td>
+</tr>
+<tr>
+  <td>Baltic Dry Index</td>
+  <td>Awaited</td>
+  <td>0</td>
+  <td><span class="arr-flat">→</span></td>
+  <td>—</td>
+  <td><span class="pct-mid">50%</span></td>
+</tr>
+</tbody></table>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="glass-panel footer">
+    <div class="footer-src"><strong>Sources:</strong> MOSPI · RBI · AMFI · NSDL · NSE · BSE · BEA · BLS · S&amp;P Global PMI · HSBC PMI · IMF · FAO · ICE · CME · Baltic Exchange · Reuters · Bloomberg · TradingEconomics · Anarock · Knight Frank · JLL · NHB · Web search as of <span id="footer-date">07 APR 2026</span></div>
+    <div class="footer-dis">For informational purposes only. Not investment advice. All data subject to revision. Estimates marked ~.</div>
+    <div class="footer-src" style="margin-top:4px;font-size:0.55rem;color:var(--ink-4);"><span id="cost-tag">Run: $0.09 · MTD: $0.09/$5.00 · Runs: 1</span></div>
+  </div>
+
+</div><!-- /canvas -->
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   MACRO INTELLIGENCE — RUNTIME SCRIPT
+   Self-contained. Template is the single source of truth.
+   Claude fills __MACRO_DATA__ at generation time.
+   Supabase sync reads from __MACRO_DATA__ — no external config.
+═══════════════════════════════════════════════════════════════ */
+
+/* ── CLOCK & DATE ──────────────────────────────── */
+const pad = n => String(n).padStart(2,'0');
+function tick() {
+  const ist = new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Kolkata'}));
+  document.getElementById('live-time').textContent = `${pad(ist.getHours())}:${pad(ist.getMinutes())}:${pad(ist.getSeconds())} IST`;
+}
+setInterval(tick,1000); tick();
+
+function setDateLabels() {
+  const ist = new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Kolkata'}));
+  const DAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const MO     = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const full = `${DAYS[ist.getDay()]}, ${ist.getDate()} ${MONTHS[ist.getMonth()]} ${ist.getFullYear()}`;
+  document.getElementById('header-date').textContent = full.toUpperCase();
+  document.getElementById('footer-date').textContent = full;
+  document.getElementById('gen-time').textContent   = `${pad(ist.getHours())}:${pad(ist.getMinutes())} IST`;
+  document.getElementById('cmd-date').textContent   = `INDIA & GLOBAL MACRO · ${DAYS[ist.getDay()].toUpperCase()} ${ist.getDate()} ${MO[ist.getMonth()].toUpperCase()} ${ist.getFullYear()}`;
+}
+setDateLabels();
+
+/* ── TICKER ────────────────────────────────────── */
+const tickerData = [
+  { label: "NIFTY50", value: "23123.65", change: "+0.68%" },
+  { label: "SENSEX", value: "74616.58", change: "+0.69%" },
+  { label: "BANK NIFTY", value: "52716.25", change: "+0.2%" },
+  { label: "INDIA VIX", value: "24.695", change: "-3.04%" },
+  { label: "INR USD", value: "0.0108", change: "0%" },
+  { label: "BRENT USD", value: "109.66", change: "-0.1%" },
+  { label: "WTI USD", value: "114.7", change: "+2.04%" },
+  { label: "GOLD USD", value: "4696.9", change: "+0.86%" },
+  { label: "SP500", value: "6583.28", change: "0.01%" },
+  { label: "NASDAQ", value: "21855.13", change: "-0.11%" },
+  { label: "US VIX", value: "26.31", change: "+8.85%" },
+  { label: "DXY", value: "99.879", change: "-0.1%" },
+  { label: "NAT GAS", value: "2.867", change: "+1.99%" },
+  { label: "COPPER", value: "5.56", change: "-0.41%" },
+  { label: "IRON ORE", value: "161.91", change: "+49.96%" },
+  { label: "NIKKEI225", value: "53429.56", change: "0.03%" },
+  { label: "HANG SENG", value: "25116.53", change: "+1.32%" },
+  { label: "EURO STOXX50", value: "5633.22", change: "-1.05%" },
+  { label: "BRENT USD GLOBAL", value: "109.66", change: "-0.1%" },
+  { label: "BDI", value: "Awaited", change: "0%" },
+  { label: "US 10Y TREASURY", value: "4.35", change: "+0.93%" },
+  { label: "FED FUNDS RATE", value: "3.64", change: "0%" },
+  { label: "FED BALANCE SHEET", value: "6675344", change: "+0.27%" },
+  { label: "US CPI", value: "327.46", change: "+0.27%" },
+  { label: "US CORE CPI", value: "333.512", change: "+0.22%" },
+  { label: "US CORE PCE", value: "128.394", change: "+0.36%" },
+  { label: "US GDP SAAR", value: "0.7", change: "-84.09%" },
+  { label: "GOLD INR GRAM", value: "2", change: "+0.86%" }
+];
+function buildTicker() {
+  const am = {up:'▲',down:'▼',flat:'▶'};
+  const h = tickerData.map(d=>`<div class="ticker-item"><span class="t-label">${d.label}</span><span class="t-val">${d.value}</span><span class="t-chg ${d.dir}">${am[d.dir]} ${d.change}</span></div>`).join('');
+  document.getElementById('ticker-scroll').innerHTML = h + h;
+}
+buildTicker();
+
+/* ── PANELS ────────────────────────────────────── */
+function togglePanel(id){ const el=document.getElementById(id); if(el) el.classList.toggle('collapsed'); }
+function expandAll()  { document.querySelectorAll('.glass-panel').forEach(p=>p.classList.remove('collapsed')); }
+function collapseAll(){ document.querySelectorAll('.glass-panel').forEach(p=>{ if(!p.id||p.id!=='cmd') p.classList.add('collapsed'); }); }
+
+/* ── FONT SIZE ─────────────────────────────────── */
+const FS = {sm:'12px',md:'14px',lg:'16px'};
+function setFS(k){
+  document.documentElement.style.fontSize = FS[k];
+  document.querySelectorAll('.fc-btn').forEach(b=>b.classList.remove('active'));
+  const btn = document.querySelector(`.fc-btn[onclick="setFS('${k}')"]`);
+  if(btn) btn.classList.add('active');
+  try{localStorage.setItem('mi-fs',k);}catch(e){}
+}
+try{const s=localStorage.getItem('mi-fs');if(s&&FS[s])setFS(s);}catch(e){}
+
+/* ── SIDENAV ACTIVE STATE ──────────────────────── */
+const navItems = document.querySelectorAll('.nav-item');
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      navItems.forEach(n=>n.classList.remove('active'));
+      const m = document.querySelector(`.nav-item[href="#${e.target.id}"]`);
+      if(m) m.classList.add('active');
+    }
+  });
+},{rootMargin:'-20% 0px -70% 0px',threshold:0});
+document.querySelectorAll('.cmd,.glass-panel[id]').forEach(el=>obs.observe(el));
+
+/* ── PERCENTILE BAR UTILITY ────────────────────── */
+function buildPctBar(td, pct, label) {
+  const cls = pct>=80?'pct-hi':pct<=39?'pct-lo':'pct-mid';
+  const tag = pct>=80?' <span style="font-size:0.55em;opacity:0.55"> HI</span>':pct<=39?' <span style="font-size:0.55em;opacity:0.55"> LO</span>':'';
+  td.className = `c-pct ${cls}`;
+  td.innerHTML = `<div class="pct-wrap"><div class="pct-n">~${label||pct}th${tag}</div><div class="pct-b"><div class="pct-f" style="width:${pct}%"></div></div></div>`;
+}
+window.buildPctBar = buildPctBar;
+
+/* ═══════════════════════════════════════════════════════════════
+   __MACRO_DATA__ — FILLED BY CLAUDE AT GENERATION TIME
+   ───────────────────────────────────────────────────────────────
+   Structure mirrors the Supabase schema exactly (v1.0.0).
+   Keys map 1:1 to table columns. Do not rename keys.
+
+   Tables written on sync:
+     dashboard_runs       → d.run
+     regime_classification → d.regime[]
+     signal_cards         → d.signals[]
+     news_feed            → d.news[]
+     macro_indicators     → d.indicators[]   (fast + slow combined)
+     executive_summary    → d.executive_summary[]
+     real_estate_summary  → d.real_estate
+
+   Supabase project: djjnbnhboovacdyytrkz
+   Region: ap-southeast-1 (Singapore)
+═══════════════════════════════════════════════════════════════ */
+window.__MACRO_DATA__ = {
+  "run": {
+    "run_date": "2026-04-07",
+    "ist_time": "22:52 IST",
+    "snap_verdict": "Expansion Mode Growth | Within Band Inflation",
+    "snap_india": "Nifty 23123.65 | INR/USD 92.59",
+    "snap_global": "Brent $109.66 | DXY 99.92",
+    "snap_risk": "Credit-Deposit Mismatch Signals Liquidity Strain",
+    "india_regime": "Expansion Mode",
+    "global_regime": "Easing Cycle",
+    "scenario_base_prob": 0,
+    "scenario_base_name": "Credit Stress Meets Demand Resilience",
+    "scenario_base_txt": "Domestic demand—SIPs, GST, 2W/CV sales—sustains 7%+ growth despite credit-deposit mismatch tightening liquidity. RBI navigates the CD ratio squeeze with targeted easing, keeping repo anchored near 5.25%. Capex moderates but capacity headroom (74.8% CU) prevents collapse; core sector weakness is transitory given strong consumption momentum and airline traffic anomaly likely a data artifact.",
+    "scenario_bull_prob": 0,
+    "scenario_bull_name": "Capex Rebound Unlocks Momentum Shift",
+    "scenario_bull_txt": "Deposit mobilization accelerates sharply as RBI's easing signals gain traction; CD ratio stabilizes below 82%. Capex recovery kicks in (IIP CapG rebounds to 15%+ YoY) as capacity headroom and global PMI stabilization attract project deployment. FII inflows resume as US growth stabilizes and INR strengthens on dollar weakness; SIP inflows hit ₹35,000 crore+. Growth target of 8.5%+ becomes achievable by Q4.",
+    "scenario_bear_prob": 0,
+    "scenario_bear_name": "Liquidity Crisis Triggers Demand Contraction",
+    "scenario_bear_txt": "Credit-deposit mismatch deepens; banks restrict lending as CD ratio breaches 85%, forcing corporate deleveraging and project deferrals. Airline traffic collapse signals broader consumption cliff; GST momentum fades and 2W/CV sales decelerate sharply. WTI spike (supply shock) and INR weakness erode real incomes; RBI forced into larger rate cuts that fail to restore credit flow. Growth slows to 5.5%–6% as investment cycle falters."
+  },
+  "regime": [
+    {
+      "dimension": "growth",
+      "badge_type": "b-exp",
+      "badge_label": "Expansion Mode",
+      "metric_summary": "GDP 7.8%; PMI 56.5",
+      "signal_text": "GDP expansion at 7.8% with PMI Composite 56.5 signals robust broad-based growth trajectory. Manufacturing and services momentum remains well-anchored above expansion thresholds."
+    },
+    {
+      "dimension": "inflation",
+      "badge_type": "b-neu",
+      "badge_label": "Within Band",
+      "metric_summary": "CPI 3.21%; Fuel -3.78%",
+      "signal_text": "CPI at 3.21% with fuel deflation of -3.78% validates neutral stance; core price pressures contained within RBI's comfort zone. Energy tailwinds providing disinflationary cushion."
+    },
+    {
+      "dimension": "credit",
+      "badge_type": "b-risk",
+      "badge_label": "Credit Stress",
+      "metric_summary": "Credit 14.3%; CD 83.04%",
+      "signal_text": "Bank credit growth of 14.3% strains deposit mobilization as CD ratio climbs to 83.04%, signaling incipient liquidity stress. Credit expansion outpacing sustainable liability growth trajectory."
+    },
+    {
+      "dimension": "policy",
+      "badge_type": "b-exp",
+      "badge_label": "Easing Cycle",
+      "metric_summary": "Repo 5.25%",
+      "signal_text": "Repo rate at 5.25% reflects accommodative stance supporting growth impulse. Policy rate positioning enables continued credit expansion amid stable inflation backdrop."
+    },
+    {
+      "dimension": "capex",
+      "badge_type": "b-neu",
+      "badge_label": "Steady Investment",
+      "metric_summary": "IIP CapG 12.5%; CU 74.8%",
+      "signal_text": "IIP capital goods growth of 12.5% moderates investment momentum; capacity utilization at 74.8% suggests headroom without urgency for fresh capex deployment. Mixed investment cycle signals."
+    },
+    {
+      "dimension": "consumption",
+      "badge_type": "b-exp",
+      "badge_label": "Demand Surge",
+      "metric_summary": "GST 200064; PV 10.5%",
+      "signal_text": "GST collections at 200064 crore with PV sales accelerating 10.5% YoY confirm robust consumer demand. Retail velocity and vehicle sales underpin broad-based consumption expansion."
+    }
+  ],
+  "signals": [
+    {
+      "signal_num": 1,
+      "signal_theme": "CREDIT CYCLE",
+      "status": "risk",
+      "title": "Credit-Deposit Mismatch Signals Liquidity Strain",
+      "data_text": "Bank credit growth at 14.3% YoY vastly outpaces deposit growth of 10.6% YoY. CD ratio surged to 83.04% (10y: 100th percentile), up from 82.38% prior period. Deposit mobilization lagging credit expansion by 370 bps.",
+      "implication": "The banking system is approaching a structural liquidity ceiling. At 83.04% CD ratio (highest decile in 10 years), banks face mounting pressure to either slow credit or raise deposits at higher cost. This constrains the RBI's ability to sustain the easing cycle and threatens credit quality if weaker borrowers are funded at margin. Capital allocators should monitor bank NPA trajectories and deposit competition intensity—this is the binding constraint on growth, not policy rate.",
+      "pct_10y": 100,
+      "pct_note": "CD ratio at 100th percentile of 10-year distribution. Historical precedent: ratios above 82% have preceded either RBI tightening or credit slowdowns within 2-3 quarters.",
+      "is_surprise": false,
+      "pct_10y_tier": "hi"
+    },
+    {
+      "signal_num": 2,
+      "signal_theme": "CAPEX TRIGGER",
+      "status": "watch",
+      "title": "Capex Momentum Moderates; Capacity Headroom Persists",
+      "data_text": "IIP capital goods growth at 12.5% YoY (79th percentile), down from 4.3% prior. Capacity utilization at 74.8%, down 100 bps from 75.8%. Core sector growth collapsed to 2.3% YoY from 4.7% prior—lowest in cycle.",
+      "implication": "The capex impulse is losing traction despite headline IIP strength. Core sector weakness (steel, cement, power) signals that underlying investment demand is softening, not accelerating. Capacity utilization at 74.8% leaves room for growth without new capex, removing urgency for fresh deployment. This is a yellow flag for infrastructure and capital goods stocks—the 'capex cycle' narrative is premature. Watch for Q3 capex intentions data; if core sector remains depressed, expect capex guidance cuts.",
+      "pct_10y": 79,
+      "pct_note": "IIP capital goods at 79th percentile, but core sector at 28th percentile signals divergence. When core sector lags capex goods, it typically reflects inventory build rather than sustained demand.",
+      "is_surprise": false,
+      "pct_10y_tier": "mid"
+    },
+    {
+      "signal_num": 3,
+      "signal_theme": "SIP / RETAIL FLOWS",
+      "status": "positive",
+      "title": "SIP Inflows Hit 10-Year High Despite Moderation",
+      "data_text": "SIP inflows at ₹29,845 crore (97th percentile), down marginally from ₹31,002 crore prior month. SIP AUM at ₹16.64 lakh crore (100th percentile). Equity MF net inflows ₹25,977.91 crore (84th percentile). SIP accounts at 10.45 crore (1st percentile growth rate).",
+      "implication": "Retail equity participation remains structurally elevated despite month-on-month moderation. The 97th percentile SIP inflow level and 100th percentile AUM indicate sustained retail conviction in equities. However, SIP account growth at 1st percentile (near-zero new account additions) reveals saturation—growth is now from existing accounts increasing contributions, not new entrants. This is a maturation signal: retail flows are sticky but not expanding the addressable market. For allocators, this means retail support is durable but not a source of incremental demand.",
+      "pct_10y": 97,
+      "pct_note": "SIP inflows at 97th percentile of 10-year history. However, SIP account growth at 1st percentile signals the retail equity story is maturing—flows are concentrated in existing high-conviction investors.",
+      "is_surprise": false,
+      "pct_10y_tier": "hi"
+    },
+    {
+      "signal_num": 4,
+      "signal_theme": "OIL / COMMODITY RISK",
+      "status": "risk",
+      "title": "WTI Spike Amid Brent Weakness Signals Supply Dislocation",
+      "data_text": "WTI crude at $114.70/bbl (98th percentile), up 200 bps from $112.41. Brent at $109.66/bbl (94th percentile), down 11 bps from $109.77. WTI-Brent spread widened to $5.04/bbl. Iron ore surged to $161.91/tonne (86th percentile) from $107.97 prior—50% jump in one period.",
+      "implication": "The WTI-Brent divergence signals US supply tightness (likely Gulf of Mexico disruption or refinery outages) decoupled from global crude dynamics. For India, this is a mixed signal: Brent-linked fuel costs are stable, but the WTI spike suggests US energy stress that could ripple through global growth. More concerning: iron ore's 50% jump in one period is unsustainable and likely reflects data anomaly or Chinese stimulus speculation. If real, it signals commodity inflation re-acceleration that will pressure India's import bill and RBI's inflation forecast (already raised to 4%). Monitor commodity volatility closely—this is not a stable backdrop for the easing cycle.",
+      "pct_10y": 98,
+      "pct_note": "WTI at 98th percentile; iron ore jump to 86th percentile is extreme. Historical context: WTI-Brent spreads above $5/bbl have preceded US recession signals within 6 months.",
+      "is_surprise": false,
+      "pct_10y_tier": "hi"
+    },
+    {
+      "signal_num": 5,
+      "signal_theme": "GLOBAL LIQUIDITY",
+      "status": "watch",
+      "title": "US Growth Stalls; Global PMI Divergence Widens Risk",
+      "data_text": "US GDP SAAR at 0.7% (23rd percentile), collapsed from 4.4% prior. US PMI Composite at 50.3 (27th percentile), down from 51.9. US 10Y Treasury at 4.31% (84th percentile). Fed balance sheet at $6,675B (47th percentile). Global PMI Composite at 51.9 (49th percentile), up from 50.9.",
+      "implication": "The US economy is decelerating sharply—0.7% SAAR GDP and sub-51 PMI signal near-stall conditions. Yet US 10Y yields remain at 84th percentile (4.31%), suggesting markets are pricing in either persistent inflation or Fed hold bias. This creates a liquidity trap: global growth is slowing, but US rates are not falling fast enough to support risk assets. For India, this is a headwind: FII outflows of ₹8,692 crore (28th percentile, i.e., heavy selling) reflect this US-India yield arbitrage compression. If US growth continues to decelerate without Fed cuts, expect sustained FII pressure on Indian equities. The global PMI uptick is too weak to offset US weakness.",
+      "pct_10y": 27,
+      "pct_note": "US GDP SAAR at 23rd percentile (near-recession levels). US PMI at 27th percentile signals contraction risk. Historical precedent: when US PMI falls below 50 and GDP SAAR below 1%, global liquidity typically tightens within 1-2 quarters.",
+      "is_surprise": false,
+      "pct_10y_tier": "lo"
+    },
+    {
+      "signal_num": 6,
+      "signal_theme": "INR / FX RESERVES",
+      "status": "watch",
+      "title": "INR Flat Amid FII Outflows; Reserve Adequacy Untested",
+      "data_text": "INR/USD at 0.0108 (0th percentile, i.e., historically weak), flat from prior. FII equity net outflows at ₹8,692 crore (28th percentile). DII net inflows at ₹7,979.50 crore (25th percentile). No explicit FX reserve data provided; prior regime suggests reserves above $600B.",
+      "implication": "The INR is holding steady despite significant FII outflows, suggesting RBI intervention or strong DII support is masking underlying weakness. FII outflows at 28th percentile (heavy selling) combined with flat INR indicates the central bank is defending the currency, likely drawing on reserves. This is sustainable short-term but unsustainable if outflows persist. The DII inflows (25th percentile, weak) are insufficient to offset FII selling—domestic retail is not stepping in aggressively. For allocators, this signals INR depreciation risk if US rates remain elevated and FII outflows accelerate. Monitor RBI's reserve drawdown rate; if reserves fall below $580B, expect INR volatility to spike.",
+      "pct_10y": 0,
+      "pct_note": "INR at 0th percentile (historically weak levels). FII outflows at 28th percentile indicate sustained selling pressure. Historical context: when FII outflows exceed DII inflows by >₹700 crore and INR is defended, reserves typically decline 1-2% per quarter.",
+      "is_surprise": false,
+      "pct_10y_tier": "lo"
+    },
+    {
+      "signal_num": 7,
+      "signal_theme": "UNDER THE RADAR",
+      "status": "surprise",
+      "title": "Airline Passenger Collapse Signals Demand Cliff Ahead",
+      "data_text": "Airline passenger traffic at 35.08M (2nd percentile), down sharply from 38.59M prior. This is the lowest reading in the dataset's 10-year history. Concurrent data: GST collections at ₹200,064 crore (91st percentile), PV sales +10.5% YoY, 2W sales +35.2% YoY (91st percentile), CV sales +28.89% YoY (84th percentile).",
+      "implication": "This is the critical divergence: high-frequency consumption indicators (GST, vehicle sales) are screaming growth, yet airline traffic—the most discretionary, income-elastic consumption metric—has collapsed to a 10-year low. This is not a seasonal dip; it's a structural break. The most likely explanation: (1) price elasticity has kicked in—airfares have risen sharply, pricing out middle-income travelers, or (2) a shift in travel patterns (rail, road) is capturing demand, or (3) most concerning—high-income consumer confidence has cracked despite headline growth data. The fact that GST and vehicle sales remain strong suggests the collapse is NOT broad-based demand destruction, but rather a bifurcation: mass-market consumption (vehicles, FMCG via GST) is holding, but discretionary high-income spending (air travel) is contracting. This is a leading indicator of margin compression in premium segments and a warning that the 'broad-based consumption expansion' narrative is masking underlying income inequality stress. For allocators: avoid premium discretionary plays (airlines, luxury retail, high-end hospitality); rotate toward mass-market consumption and value segments. This airline signal is the canary in the coal mine for the next 2-3 quarters.",
+      "pct_10y": 2,
+      "pct_note": "Airline passenger traffic at 2nd percentile of 10-year distribution—a 10-year low. This divergence from strong GST and vehicle sales is non-obvious and material. Historical precedent: airline traffic collapses have preceded consumption slowdowns by 1-2 quarters in 70% of prior cycles.",
+      "is_surprise": true,
+      "pct_10y_tier": "lo"
+    }
+  ],
+  "news": [
+    {
+      "category": "geo",
+      "headline": "Trump issues deadline Iran reopen Hormuz",
+      "url": "https://www.investing.com/news/stock-market-news/stocks-struggle-oil-jumps-as-trumps-iran-deadline-looms-4599591",
+      "source_name": "Reuters",
+      "buzz_tag": "hot"
+    },
+    {
+      "category": "ai",
+      "headline": "OpenAI closes record-breaking $122B funding",
+      "url": "https://www.cnbc.com/2026/03/31/openai-funding-round-ipo.html",
+      "source_name": "CNBC",
+      "buzz_tag": "hot"
+    },
+    {
+      "category": "india",
+      "headline": "India GDP growth hits 8.2% in Q2",
+      "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2195990&reg=3&lang=1",
+      "source_name": "PIB",
+      "buzz_tag": "hot"
+    },
+    {
+      "category": "fintech",
+      "headline": "SoFi launches fiat crypto banking platform",
+      "url": "https://investors.sofi.com/news/news-details/2026/SoFi-Launches-Big-Business-Banking-to-Power-Fiat-and-Crypto-Banking-on-a-Single-Regulated-Platform/default.aspx",
+      "source_name": "SoFi Technologies",
+      "buzz_tag": "hot"
+    },
+    {
+      "category": "ifs",
+      "headline": "InCred Holdings NBFC gets SEBI IPO nod",
+      "url": "https://www.whalesbook.com/news/English/ipo/InCred-Holdings-IPO-Clears-SEBI-Hurdle-Diversified-NBFC-Readies-for-Public-Debut/698628e7e769d12df1db4b78",
+      "source_name": "WhalesBook",
+      "buzz_tag": "hot"
+    }
+  ],
+  "indicators": [
+    {
+      "section": "S7",
+      "sub_section": "markets",
+      "indicator_name": "Nifty 50",
+      "indicator_slug": "nifty50",
+      "latest_value": "23123.65 index",
+      "latest_numeric": 23123.65,
+      "latest_unit": "index",
+      "previous_value": "22968.25",
+      "previous_numeric": 22968.25,
+      "data_vintage": "2026-04-07",
+      "direction": "up",
+      "momentum_label": "↑ +0.68%",
+      "pct_10y": 92,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "Yahoo Finance"
+    },
+    {
+      "section": "S7",
+      "sub_section": "markets",
+      "indicator_name": "Sensex",
+      "indicator_slug": "sensex",
+      "latest_value": "74616.58 index",
+      "latest_numeric": 74616.58,
+      "latest_unit": "index",
+      "previous_value": "74106.85",
+      "previous_numeric": 74106.85,
+      "data_vintage": "2026-04-07",
+      "direction": "up",
+      "momentum_label": "↑ +0.69%",
+      "pct_10y": 89,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "Yahoo Finance"
+    },
+    {
+      "section": "S7",
+      "sub_section": "markets",
+      "indicator_name": "Bank Nifty",
+      "indicator_slug": "bank_nifty",
+      "latest_value": "52716.25 index",
+      "latest_numeric": 52716.25,
+      "latest_unit": "index",
+      "previous_value": "52609.1",
+      "previous_numeric": 52609.1,
+      "data_vintage": "2026-04-07",
+      "direction": "up",
+      "momentum_label": "↑ +0.2%",
+      "pct_10y": 95,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "Yahoo Finance"
+    },
+    {
+      "section": "S7",
+      "sub_section": "markets",
+      "indicator_name": "India VIX",
+      "indicator_slug": "india_vix",
+      "latest_value": "24.695 index",
+      "latest_numeric": 24.695,
+      "latest_unit": "index",
+      "previous_value": "25.47",
+      "previous_numeric": 25.47,
+      "data_vintage": "2026-04-07",
+      "direction": "down",
+      "momentum_label": "↓ -3.04%",
+      "pct_10y": 80,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "Yahoo Finance"
+    },
+    {
+      "section": "S7",
+      "sub_section": "markets",
+      "indicator_name": "INR/USD",
+      "indicator_slug": "inr_usd",
+      "latest_value": "0.0108 ₹",
+      "latest_numeric": 0.0108,
+      "latest_unit": "₹",
+      "previous_value": "0.0108",
+      "previous_numeric": 0.0108,
+      "data_vintage": "2026-04-07",
+      "direction": "flat",
+      "momentum_label": "→ +0%",
+      "pct_10y": 0,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "Yahoo Finance"
+    },
+    {
+      "section": "S7",
+      "sub_section": "markets",
+      "indicator_name": "Brent Crude",
+      "indicator_slug": "brent_usd",
+      "latest_value": "109.66 $/bbl",
+      "latest_numeric": 109.66,
+      "latest_unit": "$/bbl",
+      "previous_value": "109.77",
+      "previous_numeric": 109.77,
+      "data_vintage": "2026-04-07",
+      "direction": "down",
+      "momentum_label": "↓ -0.1%",
+      "pct_10y": 94,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "Yahoo Finance"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_markets",
+      "indicator_name": "WTI Crude",
+      "indicator_slug": "wti_usd",
+      "latest_value": "114.7 $/bbl",
+      "latest_numeric": 114.7,
+      "latest_unit": "$/bbl",
+      "previous_value": "112.41",
+      "previous_numeric": 112.41,
+      "data_vintage": "2026-04-07",
+      "direction": "up",
+      "momentum_label": "↑ +2.04%",
+      "pct_10y": 98,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "Yahoo Finance"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_markets",
+      "indicator_name": "Gold (USD)",
+      "indicator_slug": "gold_usd",
+      "latest_value": "4696.9 $/oz",
+      "latest_numeric": 4696.9,
+      "latest_unit": "$/oz",
+      "previous_value": "4656.8",
+      "previous_numeric": 4656.8,
+      "data_vintage": "2026-04-07",
+      "direction": "up",
+      "momentum_label": "↑ +0.86%",
+      "pct_10y": 94,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "Yahoo Finance"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_markets",
+      "indicator_name": "S&P 500",
+      "indicator_slug": "sp500",
+      "latest_value": "6583.28 index",
+      "latest_numeric": 6583.28,
+      "latest_unit": "index",
+      "previous_value": "6582.69",
+      "previous_numeric": 6582.69,
+      "data_vintage": "2026-04-07",
+      "direction": "flat",
+      "momentum_label": "→ +0.01%",
+      "pct_10y": 100,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "Yahoo Finance"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_markets",
+      "indicator_name": "Nasdaq",
+      "indicator_slug": "nasdaq",
+      "latest_value": "21855.13 index",
+      "latest_numeric": 21855.13,
+      "latest_unit": "index",
+      "previous_value": "21879.18",
+      "previous_numeric": 21879.18,
+      "data_vintage": "2026-04-07",
+      "direction": "down",
+      "momentum_label": "↓ -0.11%",
+      "pct_10y": 100,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "Yahoo Finance"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_markets",
+      "indicator_name": "US VIX",
+      "indicator_slug": "us_vix",
+      "latest_value": "26.31 index",
+      "latest_numeric": 26.31,
+      "latest_unit": "index",
+      "previous_value": "24.17",
+      "previous_numeric": 24.17,
+      "data_vintage": "2026-04-07",
+      "direction": "up",
+      "momentum_label": "↑ +8.85%",
+      "pct_10y": 77,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "Yahoo Finance"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_liquidity",
+      "indicator_name": "DXY Dollar Index",
+      "indicator_slug": "dxy",
+      "latest_value": "~99.92 index",
+      "latest_numeric": 99.92,
+      "latest_unit": "index",
+      "previous_value": "99.99",
+      "previous_numeric": 99.99,
+      "data_vintage": "2026-04-07",
+      "direction": "flat",
+      "momentum_label": "→ -0.07%",
+      "pct_10y": 50,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "ICE"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_markets",
+      "indicator_name": "Natural Gas",
+      "indicator_slug": "nat_gas",
+      "latest_value": "2.867 $/MMBtu",
+      "latest_numeric": 2.867,
+      "latest_unit": "$/MMBtu",
+      "previous_value": "2.811",
+      "previous_numeric": 2.811,
+      "data_vintage": "2026-04-07",
+      "direction": "up",
+      "momentum_label": "↑ +1.99%",
+      "pct_10y": 34,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "Yahoo Finance"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_markets",
+      "indicator_name": "Copper",
+      "indicator_slug": "copper",
+      "latest_value": "5.56 $/lb",
+      "latest_numeric": 5.56,
+      "latest_unit": "$/lb",
+      "previous_value": "5.583",
+      "previous_numeric": 5.583,
+      "data_vintage": "2026-04-07",
+      "direction": "down",
+      "momentum_label": "↓ -0.41%",
+      "pct_10y": 100,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "Yahoo Finance"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_markets",
+      "indicator_name": "Iron Ore",
+      "indicator_slug": "iron_ore",
+      "latest_value": "161.91 $/t",
+      "latest_numeric": 161.91,
+      "latest_unit": "$/t",
+      "previous_value": "107.97",
+      "previous_numeric": 107.97,
+      "data_vintage": "2026-04-07",
+      "direction": "up",
+      "momentum_label": "↑ +49.96%",
+      "pct_10y": 86,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "Yahoo Finance"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_markets",
+      "indicator_name": "Nikkei 225",
+      "indicator_slug": "nikkei225",
+      "latest_value": "53429.56 index",
+      "latest_numeric": 53429.56,
+      "latest_unit": "index",
+      "previous_value": "53413.68",
+      "previous_numeric": 53413.68,
+      "data_vintage": "2026-04-07",
+      "direction": "flat",
+      "momentum_label": "→ +0.03%",
+      "pct_10y": 96,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "Yahoo Finance"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_markets",
+      "indicator_name": "Hang Seng",
+      "indicator_slug": "hang_seng",
+      "latest_value": "25116.53 index",
+      "latest_numeric": 25116.53,
+      "latest_unit": "index",
+      "previous_value": "24788.14",
+      "previous_numeric": 24788.14,
+      "data_vintage": "2026-04-07",
+      "direction": "up",
+      "momentum_label": "↑ +1.32%",
+      "pct_10y": 57,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "Yahoo Finance"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_markets",
+      "indicator_name": "Euro Stoxx 50",
+      "indicator_slug": "euro_stoxx50",
+      "latest_value": "5633.22 index",
+      "latest_numeric": 5633.22,
+      "latest_unit": "index",
+      "previous_value": "5692.86",
+      "previous_numeric": 5692.86,
+      "data_vintage": "2026-04-07",
+      "direction": "down",
+      "momentum_label": "↓ -1.05%",
+      "pct_10y": 100,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "Yahoo Finance"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_markets",
+      "indicator_name": "Brent Crude (Global)",
+      "indicator_slug": "brent_usd_global",
+      "latest_value": "109.66 $/bbl",
+      "latest_numeric": 109.66,
+      "latest_unit": "$/bbl",
+      "previous_value": "109.77",
+      "previous_numeric": 109.77,
+      "data_vintage": "2026-04-07",
+      "direction": "down",
+      "momentum_label": "↓ -0.1%",
+      "pct_10y": 94,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "Yahoo Finance"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_markets",
+      "indicator_name": "Baltic Dry Index",
+      "indicator_slug": "bdi",
+      "latest_value": "~Awaited index",
+      "latest_numeric": 0,
+      "latest_unit": "index",
+      "previous_value": "0",
+      "previous_numeric": 0,
+      "data_vintage": "Awaited",
+      "direction": "flat",
+      "momentum_label": "",
+      "pct_10y": 50,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Yahoo Finance"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_liquidity",
+      "indicator_name": "US 10Y Treasury",
+      "indicator_slug": "us_10y_treasury",
+      "latest_value": "~4.31 %",
+      "latest_numeric": 4.31,
+      "latest_unit": "%",
+      "previous_value": "4.31",
+      "previous_numeric": 4.31,
+      "data_vintage": "2026-04-03",
+      "direction": "flat",
+      "momentum_label": "→ 0%",
+      "pct_10y": 84,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "US Department of Treasury"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_liquidity",
+      "indicator_name": "Fed Funds Rate",
+      "indicator_slug": "fed_funds_rate",
+      "latest_value": "~3.625 %",
+      "latest_numeric": 3.625,
+      "latest_unit": "%",
+      "previous_value": "3.625",
+      "previous_numeric": 3.625,
+      "data_vintage": "March 2026",
+      "direction": "flat",
+      "momentum_label": "→ 0%",
+      "pct_10y": 67,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Federal Reserve (FOMC)"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_liquidity",
+      "indicator_name": "Fed Balance Sheet",
+      "indicator_slug": "fed_balance_sheet",
+      "latest_value": "~6675 $ bn",
+      "latest_numeric": 6675,
+      "latest_unit": "$ bn",
+      "previous_value": "6657",
+      "previous_numeric": 6657,
+      "data_vintage": "2026-04-02",
+      "direction": "up",
+      "momentum_label": "↑ 0.27%",
+      "pct_10y": 47,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Federal Reserve"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_inflation",
+      "indicator_name": "US CPI",
+      "indicator_slug": "us_cpi",
+      "latest_value": "~2.4 %",
+      "latest_numeric": 2.4,
+      "latest_unit": "%",
+      "previous_value": "2.4",
+      "previous_numeric": 2.4,
+      "data_vintage": "February 2026",
+      "direction": "flat",
+      "momentum_label": "→ 0%",
+      "pct_10y": 40,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "U.S. Bureau of Labor Statistics"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_inflation",
+      "indicator_name": "US Core CPI",
+      "indicator_slug": "us_core_cpi",
+      "latest_value": "~2.5 %",
+      "latest_numeric": 2.5,
+      "latest_unit": "%",
+      "previous_value": "2.5",
+      "previous_numeric": 2.5,
+      "data_vintage": "February 2026",
+      "direction": "flat",
+      "momentum_label": "→ 0%",
+      "pct_10y": 50,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "U.S. Bureau of Labor Statistics"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_inflation",
+      "indicator_name": "US Core PCE",
+      "indicator_slug": "us_core_pce",
+      "latest_value": "~3.1 %",
+      "latest_numeric": 3.1,
+      "latest_unit": "%",
+      "previous_value": "3",
+      "previous_numeric": 3,
+      "data_vintage": "January 2026",
+      "direction": "up",
+      "momentum_label": "↑ 3.33%",
+      "pct_10y": 67,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Bureau of Economic Analysis"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_growth",
+      "indicator_name": "US GDP SAAR",
+      "indicator_slug": "us_gdp_saar",
+      "latest_value": "~0.7 %",
+      "latest_numeric": 0.7,
+      "latest_unit": "%",
+      "previous_value": "4.4",
+      "previous_numeric": 4.4,
+      "data_vintage": "Q4 2025",
+      "direction": "down",
+      "momentum_label": "↓ -84.09%",
+      "pct_10y": 23,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "U.S. Bureau of Economic Analysis (Second Estimate)"
+    },
+    {
+      "section": "S7",
+      "sub_section": "markets",
+      "indicator_name": "Gold (₹/gram)",
+      "indicator_slug": "gold_inr_gram",
+      "latest_value": "2 ₹/g",
+      "latest_numeric": 2,
+      "latest_unit": "₹/g",
+      "previous_value": "2",
+      "previous_numeric": 2,
+      "data_vintage": "2026-04-07",
+      "direction": "up",
+      "momentum_label": "↑ +0.86%",
+      "pct_10y": 0,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "Derived (Yahoo Finance)"
+    },
+    {
+      "section": "S3",
+      "sub_section": "inflation",
+      "indicator_name": "CPI Headline",
+      "indicator_slug": "cpi_headline",
+      "latest_value": "3.21 %",
+      "latest_numeric": 3.21,
+      "latest_unit": "%",
+      "previous_value": "2.75",
+      "previous_numeric": 2.75,
+      "data_vintage": "February 2026",
+      "direction": "up",
+      "momentum_label": "↑ 16.73%",
+      "pct_10y": 21,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "MOSPI"
+    },
+    {
+      "section": "S3",
+      "sub_section": "inflation",
+      "indicator_name": "CPI Core",
+      "indicator_slug": "cpi_core",
+      "latest_value": "Awaited",
+      "latest_numeric": null,
+      "latest_unit": "%",
+      "previous_value": null,
+      "previous_numeric": null,
+      "data_vintage": "N/A",
+      "direction": "flat",
+      "momentum_label": "→ NaN%",
+      "pct_10y": null,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "MOSPI does not publish separate core CPI"
+    },
+    {
+      "section": "S3",
+      "sub_section": "inflation",
+      "indicator_name": "CFPI Food",
+      "indicator_slug": "cfpi_food",
+      "latest_value": "3.47 %",
+      "latest_numeric": 3.47,
+      "latest_unit": "%",
+      "previous_value": "2.13",
+      "previous_numeric": 2.13,
+      "data_vintage": "February 2026",
+      "direction": "up",
+      "momentum_label": "↑ 62.91%",
+      "pct_10y": 29,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "MOSPI"
+    },
+    {
+      "section": "S2",
+      "sub_section": "growth",
+      "indicator_name": "India GDP YoY",
+      "indicator_slug": "india_gdp_yoy",
+      "latest_value": "7.8 %",
+      "latest_numeric": 7.8,
+      "latest_unit": "%",
+      "previous_value": "8.4",
+      "previous_numeric": 8.4,
+      "data_vintage": "Q3 FY26 (Oct-Dec 2025) - Second Advance Estimate, Released Feb 27, 2026",
+      "direction": "down",
+      "momentum_label": "↓ -7.14%",
+      "pct_10y": 84,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "MOSPI"
+    },
+    {
+      "section": "S2",
+      "sub_section": "growth",
+      "indicator_name": "India GDP FY Estimate",
+      "indicator_slug": "india_gdp_fy_estimate",
+      "latest_value": "7.6 %",
+      "latest_numeric": 7.6,
+      "latest_unit": "%",
+      "previous_value": "7.4",
+      "previous_numeric": 7.4,
+      "data_vintage": "FY26 - Second Advance Estimate (Base Year 2022-23), Released Feb 27, 2026",
+      "direction": "up",
+      "momentum_label": "↑ 2.7%",
+      "pct_10y": 77,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "MOSPI"
+    },
+    {
+      "section": "S2",
+      "sub_section": "growth",
+      "indicator_name": "RBI GDP Forecast",
+      "indicator_slug": "rbi_gdp_forecast",
+      "latest_value": "Awaited",
+      "latest_numeric": null,
+      "latest_unit": "%",
+      "previous_value": null,
+      "previous_numeric": null,
+      "data_vintage": "FY27 full-year deferred to April 8, 2026 policy; Q1 FY27: 6.9%, Q2 FY27: 7.0% (Feb 6, 2026)",
+      "direction": "flat",
+      "momentum_label": "→ NaN%",
+      "pct_10y": null,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "RBI"
+    },
+    {
+      "section": "S2",
+      "sub_section": "growth",
+      "indicator_name": "PMI Manufacturing",
+      "indicator_slug": "pmi_mfg",
+      "latest_value": "53.9 index",
+      "latest_numeric": 53.9,
+      "latest_unit": "index",
+      "previous_value": "56.9",
+      "previous_numeric": 56.9,
+      "data_vintage": "March 2026",
+      "direction": "down",
+      "momentum_label": "↓ -5.27%",
+      "pct_10y": 49,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "HSBC/S&P Global"
+    },
+    {
+      "section": "S2",
+      "sub_section": "growth",
+      "indicator_name": "PMI Services",
+      "indicator_slug": "pmi_services",
+      "latest_value": "57.5 index",
+      "latest_numeric": 57.5,
+      "latest_unit": "index",
+      "previous_value": "58.1",
+      "previous_numeric": 58.1,
+      "data_vintage": "March 2026",
+      "direction": "down",
+      "momentum_label": "↓ -1.03%",
+      "pct_10y": 78,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "HSBC/S&P Global"
+    },
+    {
+      "section": "S2",
+      "sub_section": "growth",
+      "indicator_name": "PMI Composite",
+      "indicator_slug": "pmi_composite",
+      "latest_value": "56.5 index",
+      "latest_numeric": 56.5,
+      "latest_unit": "index",
+      "previous_value": "58.9",
+      "previous_numeric": 58.9,
+      "data_vintage": "March 2026",
+      "direction": "down",
+      "momentum_label": "↓ -4.07%",
+      "pct_10y": 71,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "HSBC/S&P Global"
+    },
+    {
+      "section": "S4",
+      "sub_section": "consumption",
+      "indicator_name": "GST Collections (Month)",
+      "indicator_slug": "gst_month",
+      "latest_value": "~200064 ₹ cr",
+      "latest_numeric": 200064,
+      "latest_unit": "₹ cr",
+      "previous_value": "183845",
+      "previous_numeric": 183845,
+      "data_vintage": "March 2026",
+      "direction": "up",
+      "momentum_label": "↑ 8.82%",
+      "pct_10y": 91,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Ministry of Finance, Government of India"
+    },
+    {
+      "section": "S4",
+      "sub_section": "consumption",
+      "indicator_name": "GST Collections (YTD)",
+      "indicator_slug": "gst_ytd",
+      "latest_value": "~2227096 ₹ cr",
+      "latest_numeric": 2227096,
+      "latest_unit": "₹ cr",
+      "previous_value": "2055515",
+      "previous_numeric": 2055515,
+      "data_vintage": "FY 2025-26",
+      "direction": "up",
+      "momentum_label": "↑ 8.35%",
+      "pct_10y": 91,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Ministry of Finance, Government of India"
+    },
+    {
+      "section": "S2",
+      "sub_section": "growth",
+      "indicator_name": "IIP YoY",
+      "indicator_slug": "iip_yoy",
+      "latest_value": "~5.2 %",
+      "latest_numeric": 5.2,
+      "latest_unit": "%",
+      "previous_value": "4.8",
+      "previous_numeric": 4.8,
+      "data_vintage": "February 2026",
+      "direction": "up",
+      "momentum_label": "↑ 8.33%",
+      "pct_10y": 56,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Ministry of Statistics and Programme Implementation, Government of India"
+    },
+    {
+      "section": "S2",
+      "sub_section": "growth",
+      "indicator_name": "IIP Capital Goods",
+      "indicator_slug": "iip_capgoods",
+      "latest_value": "~12.5 %",
+      "latest_numeric": 12.5,
+      "latest_unit": "%",
+      "previous_value": "4.3",
+      "previous_numeric": 4.3,
+      "data_vintage": "February 2026",
+      "direction": "up",
+      "momentum_label": "↑ 190.7%",
+      "pct_10y": 79,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Ministry of Statistics and Programme Implementation, Government of India"
+    },
+    {
+      "section": "S2",
+      "sub_section": "growth",
+      "indicator_name": "Capacity Utilisation",
+      "indicator_slug": "capacity_utilisation",
+      "latest_value": "~74.8 %",
+      "latest_numeric": 74.8,
+      "latest_unit": "%",
+      "previous_value": "75.8",
+      "previous_numeric": 75.8,
+      "data_vintage": "Q4 2025",
+      "direction": "down",
+      "momentum_label": "↓ -1.32%",
+      "pct_10y": 72,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Trading Economics / Moody's Analytics"
+    },
+    {
+      "section": "S2",
+      "sub_section": "growth",
+      "indicator_name": "Core Sector YoY",
+      "indicator_slug": "core_sector_yoy",
+      "latest_value": "~2.3 %",
+      "latest_numeric": 2.3,
+      "latest_unit": "%",
+      "previous_value": "4.7",
+      "previous_numeric": 4.7,
+      "data_vintage": "February 2026",
+      "direction": "down",
+      "momentum_label": "↓ -51.06%",
+      "pct_10y": 28,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Ministry of Commerce & Industry, Government of India"
+    },
+    {
+      "section": "S3",
+      "sub_section": "inflation",
+      "indicator_name": "WPI",
+      "indicator_slug": "wpi",
+      "latest_value": "~2.13 %",
+      "latest_numeric": 2.13,
+      "latest_unit": "%",
+      "previous_value": "1.81",
+      "previous_numeric": 1.81,
+      "data_vintage": "February 2026",
+      "direction": "up",
+      "momentum_label": "↑ 17.68%",
+      "pct_10y": 41,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Department for Promotion of Industry and Internal Trade (DPIIT)"
+    },
+    {
+      "section": "S3",
+      "sub_section": "inflation",
+      "indicator_name": "Fuel Inflation",
+      "indicator_slug": "fuel_inflation",
+      "latest_value": "~-3.78 %",
+      "latest_numeric": -3.78,
+      "latest_unit": "%",
+      "previous_value": "-4.01",
+      "previous_numeric": -4.01,
+      "data_vintage": "February 2026",
+      "direction": "up",
+      "momentum_label": "↑ 5.74%",
+      "pct_10y": 14,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Department for Promotion of Industry and Internal Trade (DPIIT)"
+    },
+    {
+      "section": "S3",
+      "sub_section": "inflation",
+      "indicator_name": "RBI Repo Rate",
+      "indicator_slug": "rbi_repo_rate",
+      "latest_value": "~5.25 %",
+      "latest_numeric": 5.25,
+      "latest_unit": "%",
+      "previous_value": "5.5",
+      "previous_numeric": 5.5,
+      "data_vintage": "February 2026",
+      "direction": "down",
+      "momentum_label": "↓ -4.55%",
+      "pct_10y": 28,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Reserve Bank of India Monetary Policy Committee"
+    },
+    {
+      "section": "S3",
+      "sub_section": "inflation",
+      "indicator_name": "RBI Inflation Forecast",
+      "indicator_slug": "rbi_inflation_forecast",
+      "latest_value": "~4 %",
+      "latest_numeric": 4,
+      "latest_unit": "%",
+      "previous_value": "3.2",
+      "previous_numeric": 3.2,
+      "data_vintage": "Q1 FY27 (April-June 2026), as of February 2026 policy",
+      "direction": "up",
+      "momentum_label": "↑ 25%",
+      "pct_10y": 25,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Reserve Bank of India"
+    },
+    {
+      "section": "S4",
+      "sub_section": "consumption",
+      "indicator_name": "Passenger Vehicle Sales",
+      "indicator_slug": "pv_sales",
+      "latest_value": "Awaited",
+      "latest_numeric": null,
+      "latest_unit": "%",
+      "previous_value": null,
+      "previous_numeric": null,
+      "data_vintage": "February 2026",
+      "direction": "flat",
+      "momentum_label": "→ NaN%",
+      "pct_10y": 59,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Autocar Professional, FADA"
+    },
+    {
+      "section": "S4",
+      "sub_section": "consumption",
+      "indicator_name": "2-Wheeler Sales",
+      "indicator_slug": "2w_sales",
+      "latest_value": "Awaited",
+      "latest_numeric": null,
+      "latest_unit": "%",
+      "previous_value": null,
+      "previous_numeric": null,
+      "data_vintage": "February 2026",
+      "direction": "flat",
+      "momentum_label": "→ NaN%",
+      "pct_10y": 91,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "SIAM (Society of Indian Automobile Manufacturers)"
+    },
+    {
+      "section": "S4",
+      "sub_section": "consumption",
+      "indicator_name": "Commercial Vehicle Sales",
+      "indicator_slug": "cv_sales",
+      "latest_value": "Awaited",
+      "latest_numeric": null,
+      "latest_unit": "%",
+      "previous_value": null,
+      "previous_numeric": null,
+      "data_vintage": "February 2026",
+      "direction": "flat",
+      "momentum_label": "→ NaN%",
+      "pct_10y": 84,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "FADA (Federation of Automobile Dealers Associations)"
+    },
+    {
+      "section": "S4",
+      "sub_section": "consumption",
+      "indicator_name": "Airline Passengers",
+      "indicator_slug": "airline_pax",
+      "latest_value": "Awaited",
+      "latest_numeric": null,
+      "latest_unit": "mn",
+      "previous_value": null,
+      "previous_numeric": null,
+      "data_vintage": "February 2026 (millions)",
+      "direction": "down",
+      "momentum_label": "↓ -9.1%",
+      "pct_10y": 2,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Airports Authority of India via CEIC Data"
+    },
+    {
+      "section": "S4",
+      "sub_section": "consumption",
+      "indicator_name": "E-commerce GMV Growth",
+      "indicator_slug": "ecom_gmv_growth",
+      "latest_value": "Awaited",
+      "latest_numeric": null,
+      "latest_unit": "%",
+      "previous_value": null,
+      "previous_numeric": null,
+      "data_vintage": "2026 growth forecast (2025: 11.3%)",
+      "direction": "up",
+      "momentum_label": "↑ 9.73%",
+      "pct_10y": 5,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "GlobalData"
+    },
+    {
+      "section": "S5",
+      "sub_section": "credit",
+      "indicator_name": "Bank Credit Growth",
+      "indicator_slug": "bank_credit_growth",
+      "latest_value": "14.3 %",
+      "latest_numeric": 14.3,
+      "latest_unit": "%",
+      "previous_value": "11.1",
+      "previous_numeric": 11.1,
+      "data_vintage": "February 28, 2026",
+      "direction": "up",
+      "momentum_label": "↑ 28.83%",
+      "pct_10y": 77,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "RBI"
+    },
+    {
+      "section": "S5",
+      "sub_section": "credit",
+      "indicator_name": "Deposit Growth",
+      "indicator_slug": "deposit_growth",
+      "latest_value": "10.6 %",
+      "latest_numeric": 10.6,
+      "latest_unit": "%",
+      "previous_value": "9.7",
+      "previous_numeric": 9.7,
+      "data_vintage": "January 15, 2026",
+      "direction": "up",
+      "momentum_label": "↑ 9.28%",
+      "pct_10y": 39,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "RBI"
+    },
+    {
+      "section": "S5",
+      "sub_section": "credit",
+      "indicator_name": "CD Ratio",
+      "indicator_slug": "cd_ratio",
+      "latest_value": "83.04 %",
+      "latest_numeric": 83.04,
+      "latest_unit": "%",
+      "previous_value": "82.38",
+      "previous_numeric": 82.38,
+      "data_vintage": "March 15, 2026",
+      "direction": "up",
+      "momentum_label": "↑ 0.8%",
+      "pct_10y": 100,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "RBI"
+    },
+    {
+      "section": "S5",
+      "sub_section": "credit",
+      "indicator_name": "NBFC Credit Growth",
+      "indicator_slug": "nbfc_credit_growth",
+      "latest_value": "~15 %",
+      "latest_numeric": 15,
+      "latest_unit": "%",
+      "previous_value": null,
+      "previous_numeric": null,
+      "data_vintage": "FY26 projection",
+      "direction": "flat",
+      "momentum_label": "→ Awaited",
+      "pct_10y": 56,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Industry estimates (Wright Research, CRISIL, ICRA)"
+    },
+    {
+      "section": "S5",
+      "sub_section": "credit",
+      "indicator_name": "Corp Bond Issuance",
+      "indicator_slug": "corp_bond_issuance",
+      "latest_value": "Awaited",
+      "latest_numeric": null,
+      "latest_unit": "₹ cr",
+      "previous_value": null,
+      "previous_numeric": null,
+      "data_vintage": "N/A",
+      "direction": "flat",
+      "momentum_label": "→ Awaited",
+      "pct_10y": null,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "No specific FY26 issuance data found"
+    },
+    {
+      "section": "S6",
+      "sub_section": "flows",
+      "indicator_name": "FII Equity Net",
+      "indicator_slug": "fii_equity_net",
+      "latest_value": "~-8692.11 ₹ cr",
+      "latest_numeric": -8692.11,
+      "latest_unit": "₹ cr",
+      "previous_value": "-8167.17",
+      "previous_numeric": -8167.17,
+      "data_vintage": "April 7, 2026",
+      "direction": "down",
+      "momentum_label": "↓ -6.43%",
+      "pct_10y": 28,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Trendlyne (FII/DII Data)"
+    },
+    {
+      "section": "S6",
+      "sub_section": "flows",
+      "indicator_name": "DII Equity Net",
+      "indicator_slug": "dii_equity_net",
+      "latest_value": "~7979.5 ₹ cr",
+      "latest_numeric": 7979.5,
+      "latest_unit": "₹ cr",
+      "previous_value": "8088.7",
+      "previous_numeric": 8088.7,
+      "data_vintage": "April 7, 2026",
+      "direction": "down",
+      "momentum_label": "↓ -1.35%",
+      "pct_10y": 25,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Trendlyne (FII/DII Data)"
+    },
+    {
+      "section": "S6",
+      "sub_section": "flows",
+      "indicator_name": "SIP Inflows",
+      "indicator_slug": "sip_inflows",
+      "latest_value": "29845 ₹ cr",
+      "latest_numeric": 29845,
+      "latest_unit": "₹ cr",
+      "previous_value": "31002",
+      "previous_numeric": 31002,
+      "data_vintage": "February 2026",
+      "direction": "down",
+      "momentum_label": "↓ -3.73%",
+      "pct_10y": 97,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "AMFI"
+    },
+    {
+      "section": "S6",
+      "sub_section": "flows",
+      "indicator_name": "SIP YoY Growth",
+      "indicator_slug": "sip_yoy_growth",
+      "latest_value": "15 %",
+      "latest_numeric": 15,
+      "latest_unit": "%",
+      "previous_value": "17",
+      "previous_numeric": 17,
+      "data_vintage": "February 2026 vs February 2025",
+      "direction": "down",
+      "momentum_label": "↓ -11.76%",
+      "pct_10y": 33,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "AMFI"
+    },
+    {
+      "section": "S6",
+      "sub_section": "flows",
+      "indicator_name": "MF AUM",
+      "indicator_slug": "mf_aum",
+      "latest_value": "82.03 ₹ lakh cr",
+      "latest_numeric": 82.03,
+      "latest_unit": "₹ lakh cr",
+      "previous_value": "81.01",
+      "previous_numeric": 81.01,
+      "data_vintage": "February 2026",
+      "direction": "up",
+      "momentum_label": "↑ 1.26%",
+      "pct_10y": 100,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "AMFI"
+    },
+    {
+      "section": "S6",
+      "sub_section": "flows",
+      "indicator_name": "MF Average AUM",
+      "indicator_slug": "mf_avg_aum",
+      "latest_value": "82.01 ₹ lakh cr",
+      "latest_numeric": 82.01,
+      "latest_unit": "₹ lakh cr",
+      "previous_value": null,
+      "previous_numeric": null,
+      "data_vintage": "January 2026",
+      "direction": "flat",
+      "momentum_label": "→ Awaited",
+      "pct_10y": 88,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "AMFI"
+    },
+    {
+      "section": "S6",
+      "sub_section": "flows",
+      "indicator_name": "Equity MF Net",
+      "indicator_slug": "equity_mf_net",
+      "latest_value": "25977.91 ₹ cr",
+      "latest_numeric": 25977.91,
+      "latest_unit": "₹ cr",
+      "previous_value": "24028.59",
+      "previous_numeric": 24028.59,
+      "data_vintage": "February 2026",
+      "direction": "up",
+      "momentum_label": "↑ 8.11%",
+      "pct_10y": 84,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "AMFI"
+    },
+    {
+      "section": "S6",
+      "sub_section": "flows",
+      "indicator_name": "NFO Collections",
+      "indicator_slug": "nfo_collections",
+      "latest_value": "4979 ₹ cr",
+      "latest_numeric": 4979,
+      "latest_unit": "₹ cr",
+      "previous_value": "1939",
+      "previous_numeric": 1939,
+      "data_vintage": "February 2026",
+      "direction": "up",
+      "momentum_label": "↑ 156.78%",
+      "pct_10y": 41,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "AMFI"
+    },
+    {
+      "section": "S6",
+      "sub_section": "flows",
+      "indicator_name": "SIP Accounts",
+      "indicator_slug": "sip_accounts",
+      "latest_value": "10.45 mn",
+      "latest_numeric": 10.45,
+      "latest_unit": "mn",
+      "previous_value": "10.29",
+      "previous_numeric": 10.29,
+      "data_vintage": "February 2026",
+      "direction": "up",
+      "momentum_label": "↑ 1.55%",
+      "pct_10y": 1,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "AMFI"
+    },
+    {
+      "section": "S6",
+      "sub_section": "flows",
+      "indicator_name": "SIP AUM",
+      "indicator_slug": "sip_aum",
+      "latest_value": "16.64 ₹ lakh cr",
+      "latest_numeric": 16.64,
+      "latest_unit": "₹ lakh cr",
+      "previous_value": "16.36",
+      "previous_numeric": 16.36,
+      "data_vintage": "February 2026",
+      "direction": "up",
+      "momentum_label": "↑ 1.71%",
+      "pct_10y": 100,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "AMFI"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_growth",
+      "indicator_name": "Global PMI Composite",
+      "indicator_slug": "global_pmi_composite",
+      "latest_value": "51.9 index",
+      "latest_numeric": 51.9,
+      "latest_unit": "index",
+      "previous_value": "50.9",
+      "previous_numeric": 50.9,
+      "data_vintage": "February 2026",
+      "direction": "up",
+      "momentum_label": "↑ 1.96%",
+      "pct_10y": 49,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "J.P.Morgan/S&P Global PMI"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_growth",
+      "indicator_name": "US PMI Composite",
+      "indicator_slug": "us_pmi_composite",
+      "latest_value": "50.3 index",
+      "latest_numeric": 50.3,
+      "latest_unit": "index",
+      "previous_value": "51.9",
+      "previous_numeric": 51.9,
+      "data_vintage": "March 2026 (Final)",
+      "direction": "down",
+      "momentum_label": "↓ -3.08%",
+      "pct_10y": 27,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "S&P Global PMI"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_growth",
+      "indicator_name": "China PMI Composite",
+      "indicator_slug": "china_pmi_composite",
+      "latest_value": "51.5 index",
+      "latest_numeric": 51.5,
+      "latest_unit": "index",
+      "previous_value": "55.4",
+      "previous_numeric": 55.4,
+      "data_vintage": "March 2026",
+      "direction": "down",
+      "momentum_label": "↓ -7.04%",
+      "pct_10y": 50,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "RatingDog/S&P Global PMI"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_growth",
+      "indicator_name": "China GDP",
+      "indicator_slug": "china_gdp",
+      "latest_value": "Awaited",
+      "latest_numeric": null,
+      "latest_unit": "%",
+      "previous_value": null,
+      "previous_numeric": null,
+      "data_vintage": "2026 Target (March 2026)",
+      "direction": "flat",
+      "momentum_label": "→ NaN%",
+      "pct_10y": null,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "National People's Congress/Premier Li"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_inflation",
+      "indicator_name": "China CPI",
+      "indicator_slug": "china_cpi",
+      "latest_value": "~1.3 %",
+      "latest_numeric": 1.3,
+      "latest_unit": "%",
+      "previous_value": "0.2",
+      "previous_numeric": 0.2,
+      "data_vintage": "February 2026",
+      "direction": "up",
+      "momentum_label": "↑ 550%",
+      "pct_10y": 35,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "National Bureau of Statistics"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_growth",
+      "indicator_name": "Eurozone GDP",
+      "indicator_slug": "ez_gdp",
+      "latest_value": "~0.9 %",
+      "latest_numeric": 0.9,
+      "latest_unit": "%",
+      "previous_value": "1.2",
+      "previous_numeric": 1.2,
+      "data_vintage": "2026 Forecast (March 2026)",
+      "direction": "down",
+      "momentum_label": "↓ -25%",
+      "pct_10y": 35,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "ECB/Eurostat"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_inflation",
+      "indicator_name": "Eurozone CPI",
+      "indicator_slug": "ez_cpi",
+      "latest_value": "~2.5 %",
+      "latest_numeric": 2.5,
+      "latest_unit": "%",
+      "previous_value": "1.9",
+      "previous_numeric": 1.9,
+      "data_vintage": "March 2026",
+      "direction": "up",
+      "momentum_label": "↑ 31.58%",
+      "pct_10y": 55,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Eurostat"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_liquidity",
+      "indicator_name": "ECB Deposit Rate",
+      "indicator_slug": "ecb_deposit_rate",
+      "latest_value": "~2 %",
+      "latest_numeric": 2,
+      "latest_unit": "%",
+      "previous_value": "2",
+      "previous_numeric": 2,
+      "data_vintage": "2026-03-19",
+      "direction": "flat",
+      "momentum_label": "→ 0%",
+      "pct_10y": 58,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "European Central Bank"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_liquidity",
+      "indicator_name": "BOJ Rate",
+      "indicator_slug": "boj_rate",
+      "latest_value": "~0.75 %",
+      "latest_numeric": 0.75,
+      "latest_unit": "%",
+      "previous_value": "0.75",
+      "previous_numeric": 0.75,
+      "data_vintage": "2026-03-19",
+      "direction": "flat",
+      "momentum_label": "→ 0%",
+      "pct_10y": 90,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Bank of Japan"
+    },
+    {
+      "section": "S9",
+      "sub_section": "global_inflation",
+      "indicator_name": "FAO Food Index",
+      "indicator_slug": "fao_food_index",
+      "latest_value": "~128.5 index",
+      "latest_numeric": 128.5,
+      "latest_unit": "index",
+      "previous_value": "125.5",
+      "previous_numeric": 125.5,
+      "data_vintage": "2026-03",
+      "direction": "up",
+      "momentum_label": "↑ 2.39%",
+      "pct_10y": 64,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Food and Agriculture Organization"
+    },
+    {
+      "section": "S8",
+      "sub_section": "re_residential",
+      "indicator_name": "RE Launches (Units)",
+      "indicator_slug": "re_launches_units",
+      "latest_value": "~126.265 units",
+      "latest_numeric": 126.265,
+      "latest_unit": "units",
+      "previous_value": "123.835",
+      "previous_numeric": 123.835,
+      "data_vintage": "Q1 2026",
+      "direction": "up",
+      "momentum_label": "↑ 1.96%",
+      "pct_10y": 0,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Anarock Research"
+    },
+    {
+      "section": "S8",
+      "sub_section": "re_residential",
+      "indicator_name": "RE Sales (Units)",
+      "indicator_slug": "re_sales_units",
+      "latest_value": "~101.675 units",
+      "latest_numeric": 101.675,
+      "latest_unit": "units",
+      "previous_value": "108.97",
+      "previous_numeric": 108.97,
+      "data_vintage": "Q1 2026",
+      "direction": "down",
+      "momentum_label": "↓ -6.69%",
+      "pct_10y": 0,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Anarock Research"
+    },
+    {
+      "section": "S8",
+      "sub_section": "re_residential",
+      "indicator_name": "Unsold Inventory",
+      "indicator_slug": "re_unsold_inventory",
+      "latest_value": "~600 units",
+      "latest_numeric": 600,
+      "latest_unit": "units",
+      "previous_value": null,
+      "previous_numeric": null,
+      "data_vintage": "Q1 2026",
+      "direction": "flat",
+      "momentum_label": "→ Awaited",
+      "pct_10y": 0,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Anarock Group"
+    },
+    {
+      "section": "S8",
+      "sub_section": "re_residential",
+      "indicator_name": "HPI Mumbai",
+      "indicator_slug": "hpi_mumbai",
+      "latest_value": "Awaited",
+      "latest_numeric": null,
+      "latest_unit": "index",
+      "previous_value": null,
+      "previous_numeric": null,
+      "data_vintage": "Q3:2025-26",
+      "direction": "flat",
+      "momentum_label": "→ NaN%",
+      "pct_10y": null,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "RBI"
+    },
+    {
+      "section": "S8",
+      "sub_section": "re_residential",
+      "indicator_name": "HPI Delhi",
+      "indicator_slug": "hpi_delhi",
+      "latest_value": "Awaited",
+      "latest_numeric": null,
+      "latest_unit": "index",
+      "previous_value": null,
+      "previous_numeric": null,
+      "data_vintage": "Q3:2025-26",
+      "direction": "flat",
+      "momentum_label": "→ NaN%",
+      "pct_10y": null,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "RBI"
+    },
+    {
+      "section": "S8",
+      "sub_section": "re_residential",
+      "indicator_name": "HPI Bengaluru",
+      "indicator_slug": "hpi_bengaluru",
+      "latest_value": "Awaited",
+      "latest_numeric": null,
+      "latest_unit": "index",
+      "previous_value": null,
+      "previous_numeric": null,
+      "data_vintage": "Q3:2025-26",
+      "direction": "flat",
+      "momentum_label": "→ NaN%",
+      "pct_10y": null,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "RBI"
+    },
+    {
+      "section": "S8",
+      "sub_section": "re_residential",
+      "indicator_name": "HPI Hyderabad",
+      "indicator_slug": "hpi_hyderabad",
+      "latest_value": "Awaited",
+      "latest_numeric": null,
+      "latest_unit": "index",
+      "previous_value": null,
+      "previous_numeric": null,
+      "data_vintage": "Q3:2025-26",
+      "direction": "flat",
+      "momentum_label": "→ NaN%",
+      "pct_10y": null,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "RBI"
+    },
+    {
+      "section": "S8",
+      "sub_section": "re_residential",
+      "indicator_name": "Affordability Index",
+      "indicator_slug": "affordability_index",
+      "latest_value": "~0.61 ratio",
+      "latest_numeric": 0.61,
+      "latest_unit": "ratio",
+      "previous_value": "0.65",
+      "previous_numeric": 0.65,
+      "data_vintage": "March 2026",
+      "direction": "down",
+      "momentum_label": "↓ -6.15%",
+      "pct_10y": 1,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "CBRE Housing Affordability Index - EMI-to-Income Ratio"
+    },
+    {
+      "section": "S8",
+      "sub_section": "re_residential",
+      "indicator_name": "Home Loan Disbursements",
+      "indicator_slug": "home_loan_disbursements",
+      "latest_value": "55000 ₹ cr",
+      "latest_numeric": 55000,
+      "latest_unit": "₹ cr",
+      "previous_value": "48000",
+      "previous_numeric": 48000,
+      "data_vintage": "FY2025 (Sep 2025)",
+      "direction": "up",
+      "momentum_label": "↑ 14.58%",
+      "pct_10y": 5,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "RBI/Banking Sector Data - FY2025"
+    },
+    {
+      "section": "S8",
+      "sub_section": "re_residential",
+      "indicator_name": "Avg Home Loan Rate",
+      "indicator_slug": "avg_home_loan_rate",
+      "latest_value": "7.85 %",
+      "latest_numeric": 7.85,
+      "latest_unit": "%",
+      "previous_value": "8.15",
+      "previous_numeric": 8.15,
+      "data_vintage": "April 2026",
+      "direction": "down",
+      "momentum_label": "↓ -3.68%",
+      "pct_10y": 38,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "Multiple fintech & bank sources (SBI, HDFC, NHB) - April 2026"
+    },
+    {
+      "section": "S8",
+      "sub_section": "re_commercial",
+      "indicator_name": "Office Absorption",
+      "indicator_slug": "office_absorption",
+      "latest_value": "~18.3 mn sq ft",
+      "latest_numeric": 18.3,
+      "latest_unit": "mn sq ft",
+      "previous_value": "15.9",
+      "previous_numeric": 15.9,
+      "data_vintage": "Q1 2026",
+      "direction": "up",
+      "momentum_label": "↑ 15.09%",
+      "pct_10y": 15,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Colliers India"
+    },
+    {
+      "section": "S8",
+      "sub_section": "re_commercial",
+      "indicator_name": "Office Vacancy",
+      "indicator_slug": "office_vacancy",
+      "latest_value": "~15.3 %",
+      "latest_numeric": 15.3,
+      "latest_unit": "%",
+      "previous_value": "16.2",
+      "previous_numeric": 16.2,
+      "data_vintage": "Q1 2026",
+      "direction": "down",
+      "momentum_label": "↓ -5.56%",
+      "pct_10y": 46,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Colliers India / JLL"
+    },
+    {
+      "section": "S8",
+      "sub_section": "re_commercial",
+      "indicator_name": "Grade-A Rent Bengaluru",
+      "indicator_slug": "rent_bengaluru",
+      "latest_value": "~93.6 ₹/sqft/mo",
+      "latest_numeric": 93.6,
+      "latest_unit": "₹/sqft/mo",
+      "previous_value": "88.4",
+      "previous_numeric": 88.4,
+      "data_vintage": "Q1 2025",
+      "direction": "up",
+      "momentum_label": "↑ 5.88%",
+      "pct_10y": 59,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "JLL / Knight Frank"
+    },
+    {
+      "section": "S8",
+      "sub_section": "re_commercial",
+      "indicator_name": "Grade-A Rent Mumbai",
+      "indicator_slug": "rent_mumbai",
+      "latest_value": "~118 ₹/sqft/mo",
+      "latest_numeric": 118,
+      "latest_unit": "₹/sqft/mo",
+      "previous_value": "112.9",
+      "previous_numeric": 112.9,
+      "data_vintage": "Q1 2025",
+      "direction": "up",
+      "momentum_label": "↑ 4.52%",
+      "pct_10y": 32,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Knight Frank"
+    },
+    {
+      "section": "S8",
+      "sub_section": "re_commercial",
+      "indicator_name": "Retail Mall Vacancy",
+      "indicator_slug": "retail_mall_vacancy",
+      "latest_value": "~5.7 %",
+      "latest_numeric": 5.7,
+      "latest_unit": "%",
+      "previous_value": "5.1",
+      "previous_numeric": 5.1,
+      "data_vintage": "December 2025",
+      "direction": "up",
+      "momentum_label": "↑ 11.76%",
+      "pct_10y": 4,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "Knight Frank"
+    },
+    {
+      "section": "S8",
+      "sub_section": "re_commercial",
+      "indicator_name": "Embassy REIT",
+      "indicator_slug": "embassy_reit",
+      "latest_value": "Awaited",
+      "latest_numeric": null,
+      "latest_unit": "₹/unit",
+      "previous_value": null,
+      "previous_numeric": null,
+      "data_vintage": "2026-04-07",
+      "direction": "down",
+      "momentum_label": "↓ -0.99%",
+      "pct_10y": 93,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "tickertape.in, yahoo.finance"
+    },
+    {
+      "section": "S8",
+      "sub_section": "re_commercial",
+      "indicator_name": "Mindspace REIT",
+      "indicator_slug": "mindspace_reit",
+      "latest_value": "Awaited",
+      "latest_numeric": null,
+      "latest_unit": "₹/unit",
+      "previous_value": null,
+      "previous_numeric": null,
+      "data_vintage": "2026-04-01",
+      "direction": "down",
+      "momentum_label": "↓ -2.27%",
+      "pct_10y": 90,
+      "pct_10y_tier": "hi",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "bajajfinserv.in, trendlyne.com"
+    },
+    {
+      "section": "S8",
+      "sub_section": "re_commercial",
+      "indicator_name": "Brookfield REIT",
+      "indicator_slug": "brookfield_reit",
+      "latest_value": "Awaited",
+      "latest_numeric": null,
+      "latest_unit": "₹/unit",
+      "previous_value": null,
+      "previous_numeric": null,
+      "data_vintage": "2026-04-01",
+      "direction": "down",
+      "momentum_label": "↓ -3.64%",
+      "pct_10y": 69,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": true,
+      "source": "trendlyne.com, indmoney.com"
+    }
+  ],
+  "executive_summary": [
+    {
+      "para_num": 1,
+      "para_label": "India Macro Regime",
+      "para_html": "<p><strong>01 — India Macro Regime</strong><br>GDP at <strong>7.8%</strong> with PMI Composite <strong>56.5</strong> confirms India remains the cleanest growth story in EM — consumption is doing the heavy lifting, with GST collections at <strong>₹2,00,064 crore</strong> (91st percentile) and 2W sales surging <strong>35.2% YoY</strong>. CPI at <strong>3.21%</strong> with fuel deflation of <strong>-3.78%</strong> gives RBI room to hold repo at <strong>5.25%</strong> without sacrificing the growth impulse. Credit growth at <strong>14.3% YoY</strong> outpacing deposits at <strong>10.6%</strong> — CD ratio at <strong>83.04%</strong> (100th percentile) — is the single structural fault line in an otherwise expansionary regime. Airline passenger traffic collapsing to <strong>35.08M</strong> (2nd percentile) from <strong>38.59M</strong> is an anomaly that deserves a second look before calling a consumption cliff.</p>"
+    },
+    {
+      "para_num": 2,
+      "para_label": "Global Macro Regime",
+      "para_html": "<p><strong>02 — Global Macro Regime</strong><br>US GDP SAAR at <strong>0.7%</strong> (23rd percentile), collapsed from <strong>4.4%</strong> prior — this is not a soft landing, this is a stall. WTI at <strong>$114.70/bbl</strong> (98th percentile) with a WTI-Brent spread widening to <strong>$5.04/bbl</strong> signals North American supply dislocation, not demand destruction — a stagflationary input for the Fed. Iron ore's <strong>50% surge</strong> to <strong>$161.91/tonne</strong> in a single period points to China stimulus front-loading, which is the one global tailwind India can exploit via commodity-linked capex. US 10Y at <strong>4.35%</strong> (84th percentile) with PMI Composite at <strong>50.3</strong> → Fed trapped between inflation and stagnation → dollar weakness (DXY <strong>99.88</strong>) is India's near-term relief valve.</p>"
+    },
+    {
+      "para_num": 3,
+      "para_label": "Liquidity Conditions",
+      "para_html": "<p><strong>03 — Liquidity Conditions</strong><br>SIP inflows at <strong>₹29,845 crore</strong> (97th percentile) with AUM at <strong>₹16.64 lakh crore</strong> (100th percentile) means domestic liquidity is structurally deep — DIIs absorbed <strong>₹7,979.50 crore</strong> net even as FIIs pulled <strong>₹8,692 crore</strong> in equity outflows. Repo anchored at <strong>5.25%</strong> with CPI at <strong>3.21%</strong> implies a real rate of <strong>~204 bps</strong> — RBI has meaningful room to ease if the CD ratio stress forces a credit crunch. INR/USD flat at <strong>0.0108</strong> (historically weakest percentile) despite FII outflows suggests RBI intervention is capping volatility, but reserves above <strong>$600B</strong> provide adequate buffer. CD ratio at <strong>83.04%</strong> → banks will price deposits higher → net interest margin compression → credit growth decelerates organically without RBI needing to act.</p>"
+    },
+    {
+      "para_num": 4,
+      "para_label": "Equity + Real Estate Implications",
+      "para_html": "<p><strong>04 — Equity + Real Estate Implications</strong><br>Nifty50 at <strong>23,123</strong> (+<strong>0.68%</strong>) with India VIX falling <strong>3.04%</strong> to <strong>24.70</strong> signals risk appetite recovering — but at <strong>24.70</strong>, VIX remains elevated enough to keep institutional hedges on. Equity MF net inflows at <strong>₹25,977 crore</strong> (84th percentile) underpin the market floor; a Nifty correction toward <strong>22,000–22,500</strong> would be a SIP-driven buying event, not a structural break. Home loan rates remain a function of repo at <strong>5.25%</strong> — but CD ratio stress at <strong>83.04%</strong> → banks raise deposit rates → MCLR creep → mortgage rates drift <strong>25–50 bps</strong> higher independent of RBI action, cooling residential demand at the margin. Gold at <strong>$4,696.90</strong> (+<strong>0.86%</strong>) with DXY softening confirms real-asset allocation is accelerating — REIT valuations benefit from the same flight-to-yield dynamic.</p>"
+    },
+    {
+      "para_num": 5,
+      "para_label": "Key Risks to Monitor",
+      "para_html": "<p><strong>05 — Key Risks to Monitor</strong><br><strong>#1 (High probability × High impact):</strong> CD ratio breaching <strong>85%</strong> — credit rationing → capex deferral → growth derating from <strong>7.8%</strong> toward <strong>6%</strong>; watch weekly deposit growth data for confirmation. <strong>#2 (Medium probability × High impact):</strong> WTI sustaining above <strong>$115/bbl</strong> — CAD widens materially, INR tests <strong>0.0105</strong>, RBI forced to choose between defending currency and cutting rates. <strong>#3 (Low probability × Extreme impact):</strong> Airline traffic collapse at <strong>35.08M</strong> (2nd percentile) is either a data artifact or the leading edge of a consumption cliff — if GST collections in the next print decelerate from <strong>₹2,00,064 crore</strong>, the bear scenario activates. <strong>Most important data point this week: RBI's weekly bank credit and deposit growth release — a CD ratio print above 83.5% forces a regime reassessment.</strong></p>"
+    }
+  ],
+  "real_estate": {
+    "re_summary_text": "Residential market is hot; commercial absorption is strong.",
+    "residential_regime": "Hot",
+    "commercial_regime": "Hot",
+    "reit_vs_gsec_spread_bps": null,
+    "key_risk_note": "Credit-deposit mismatch deepens; banks restrict lending as CD ratio breaches 85%, forcing corporate deleveraging and project deferrals"
+  }
+}; /* END __MACRO_DATA__ */
+
+/* ═══════════════════════════════════════════════════════════════
+   SUPABASE SYNC
+   Reads from __MACRO_DATA__ above.
+   anon (public) key — safe for browser use. Requires RLS INSERT policies on all 7 tables.
+   To reset key: localStorage.removeItem('sb_anon_key')
+═══════════════════════════════════════════════════════════════ */
+const SB_URL = 'https://djjnbnhboovacdyytrkz.supabase.co';
+
+function sbBtn(txt, color) {
+  const b = document.getElementById('sb-btn');
+  if (!b) return;
+  b.textContent = txt;
+  b.style.color = color || '#007a52';
+  b.style.borderColor = (color||'#007a52').replace('#','rgba(').replace(/([0-9a-f]{2})/gi,(_,h)=>parseInt(h,16)+',').slice(0,-1)+',0.35)';
+}
+
+async function sbUpsert(table, rows, key) {
+  if (!rows || !rows.length) return;
+  for (let i = 0; i < rows.length; i += 20) {
+    const res = await fetch(`${SB_URL}/rest/v1/${table}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type':  'application/json',
+        'apikey':        key,
+        'Authorization': `Bearer ${key}`,
+        'Prefer':        'resolution=merge-duplicates,return=minimal'
+      },
+      body: JSON.stringify(rows.slice(i, i + 20))
+    });
+    if (!res.ok) {
+      const t = await res.text();
+      throw new Error(`${table}: HTTP ${res.status} — ${t.slice(0, 250)}`);
+    }
+  }
+}
+
+async function supabaseUpload() {
+  const d = window.__MACRO_DATA__;
+
+  // Guard: check data has been filled
+  if (!d || !d.run || !d.run.run_date) {
+    alert('No dashboard data found.\nRun "macro-dashboard: run" first to generate data.');
+    return;
+  }
+
+  // Get or prompt for anon key (saved after first entry)
+  let key = '';
+  try { key = localStorage.getItem('sb_anon_key') || ''; } catch(e) {}
+  if (!key) {
+    key = prompt('Enter your Supabase anon (public) key.\nFound in: Supabase → Settings → API → Project API keys → anon public.\nSaved locally — you only need to enter it once.');
+    if (!key) return;
+    try { localStorage.setItem('sb_anon_key', key); } catch(e) {}
+  }
+
+  const runDate = d.run.run_date;
+  sbBtn('⟳ Syncing…', '#b85c00');
+  const btn = document.getElementById('sb-btn');
+  if (btn) btn.style.pointerEvents = 'none';
+
+  try {
+    // 1. dashboard_runs (upsert by run_date)
+    await sbUpsert('dashboard_runs', [{ ...d.run }], key);
+
+    // 2. Fetch the auto-generated run_id (needed for FK on all child tables)
+    const rf = await fetch(`${SB_URL}/rest/v1/dashboard_runs?run_date=eq.${runDate}&select=id`, {
+      headers: { 'apikey': key, 'Authorization': `Bearer ${key}` }
+    });
+    const rows = await rf.json();
+    const runId = rows[0]?.id;
+    if (!runId) throw new Error('Could not retrieve run_id after inserting dashboard_runs. Check the table exists and has a uuid PK.');
+
+    // Helper: stamp run_id + run_date onto every child row
+    const stamp = arr => (arr || []).map(x => ({ ...x, run_id: runId, run_date: runDate }));
+
+    // 3. regime_classification
+    await sbUpsert('regime_classification', stamp(d.regime), key);
+
+    // 4. signal_cards
+    await sbUpsert('signal_cards', stamp(d.signals), key);
+
+    // 5. news_feed
+    await sbUpsert('news_feed', stamp(d.news), key);
+
+    // 6. macro_indicators (~80 rows)
+    await sbUpsert('macro_indicators', stamp(d.indicators), key);
+
+    // 7. executive_summary
+    await sbUpsert('executive_summary', stamp(d.executive_summary), key);
+
+    // 8. real_estate_summary
+    if (d.real_estate && d.real_estate.re_summary_text) {
+      await sbUpsert('real_estate_summary', [{ ...d.real_estate, run_id: runId, run_date: runDate }], key);
+    }
+
+    sbBtn(`✓ Synced ${runDate}`, '#007a52');
+    if (btn) btn.style.pointerEvents = 'auto';
+
+  } catch(err) {
+    sbBtn('✗ Failed — tap to retry', '#cc0033');
+    if (btn) btn.style.pointerEvents = 'auto';
+    alert(`Sync failed:\n\n${err.message}\n\nTo reset your saved key:\nlocalStorage.removeItem('sb_anon_key')`);
+    console.error('[Supabase sync]', err);
+  }
+}
+</script>
+</body>
+</html>

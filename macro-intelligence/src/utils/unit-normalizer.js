@@ -68,6 +68,27 @@ const HARD_RULES = {
     fix:    (v) => v * 100,
     note:   'Corp bond issuance scaled from hundreds of crore to crore',
   },
+  // HPI — LLM sometimes returns YoY growth % instead of index value (base=100)
+  hpi_mumbai: {
+    detect: (v) => v > -20 && v < 50,
+    fix:    (v) => null,  // Can't convert % to index — mark as unusable
+    note:   'HPI Mumbai: got YoY % instead of index — discarded',
+  },
+  hpi_delhi: {
+    detect: (v) => v > -20 && v < 50,
+    fix:    (v) => null,
+    note:   'HPI Delhi: got YoY % instead of index — discarded',
+  },
+  hpi_bengaluru: {
+    detect: (v) => v > -20 && v < 50,
+    fix:    (v) => null,
+    note:   'HPI Bengaluru: got YoY % instead of index — discarded',
+  },
+  hpi_hyderabad: {
+    detect: (v) => v > -20 && v < 50,
+    fix:    (v) => null,
+    note:   'HPI Hyderabad: got YoY % instead of index — discarded',
+  },
 };
 
 /**
@@ -118,6 +139,10 @@ export function normalizeValue(slug, value) {
   const hard = HARD_RULES[slug];
   if (hard && hard.detect(value)) {
     const fixed = hard.fix(value);
+    if (fixed === null) {
+      // Value is wrong metric entirely — discard
+      return { value: null, corrected: true, correction_note: hard.note };
+    }
     if (isInRange(slug, fixed)) {
       return { value: fixed, corrected: true, correction_note: hard.note };
     }
@@ -164,11 +189,15 @@ export function normalizeAllIndicators(indicators) {
     if (result.corrected) {
       const from = ind.value;
       ind.value = result.value;
-      ind.value_str = String(result.value);
+      ind.value_str = result.value !== null ? String(result.value) : 'Awaited';
+      if (result.value === null) {
+        ind.is_estimated = true;
+        ind.direction = 'flat';
+      }
       corrections.push({
         slug,
         from,
-        to: result.value,
+        to: result.value ?? 'discarded',
         note: result.correction_note,
       });
     }

@@ -103,7 +103,9 @@ export class DashboardRenderer {
     const brent   = allRaw.brent_usd || {};
     const dxy     = allRaw.dxy || {};
 
-    const snapVerdict = `${growthRegime.badge_label || 'Steady'} Growth | ${inflRegime.badge_label || 'Moderate'} Inflation`;
+    // Use the ExecSummaryWriter's verdict_line if available, fall back to regime labels
+    const snapVerdict = allData.execSummary?.verdict_line
+      || `${growthRegime.badge_label || 'Steady'} Growth | ${inflRegime.badge_label || 'Moderate'} Inflation`;
     const inrVal = inrUsd.value && inrUsd.value < 1 ? (1 / inrUsd.value).toFixed(2) : inrUsd.value;
     const snapIndia   = `Nifty ${nifty.value_str || nifty.value || '—'} | INR/USD ${inrVal || '—'}`;
     const snapGlobal  = `Brent $${brent.value || '—'} | DXY ${dxy.value || '—'}`;

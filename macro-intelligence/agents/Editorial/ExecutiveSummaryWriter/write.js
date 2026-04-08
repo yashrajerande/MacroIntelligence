@@ -41,7 +41,7 @@ Bear: ${allData.scenarios.data.bear.name} — ${allData.scenarios.data.bear.desc
       .map(([slug, p]) => `${slug}: ${p.value} (${p.direction} ${p.change_pct}%)`)
       .join('\n');
 
-    const prompt = `Write the 5-paragraph executive summary for today's macro dashboard.
+    const prompt = `Write the executive summary for today's macro dashboard.
 
 STYLE GUIDE:
 ${styleGuide}
@@ -60,8 +60,17 @@ ${keyPrices}
 
 DATE: ${allData.dateStr}
 
-Return JSON array of 5 objects wrapped in <<<JSON and >>> markers:
-[{ "para_num": 1, "para_label": "India Macro Regime", "para_html": "<p>...</p>" }, ...]
+Return JSON wrapped in <<<JSON and >>> markers with this exact structure:
+{
+  "verdict_line": "One sentence. The sharpest possible summary of today's macro state. Must contain the single most important tension or insight. Reference specific numbers. Think like a CIO opening a morning call — what is the ONE thing that matters today? No more than 25 words. No generic phrases like 'expansion mode' or 'steady growth'. Be specific, be bold, be provocative.",
+  "paragraphs": [
+    { "para_num": 1, "para_label": "India Macro Regime", "para_html": "<p>...</p>" },
+    { "para_num": 2, "para_label": "Global Macro Regime", "para_html": "<p>...</p>" },
+    { "para_num": 3, "para_label": "Liquidity Conditions", "para_html": "<p>...</p>" },
+    { "para_num": 4, "para_label": "Equity + Real Estate Implications", "para_html": "<p>...</p>" },
+    { "para_num": 5, "para_label": "Key Risks to Monitor", "para_html": "<p>...</p>" }
+  ]
+}
 
 Use <strong> tags for key figures. Maximum 4 sentences per paragraph. Open each with the most important number. Never start a sentence with "The".`;
 
@@ -76,12 +85,22 @@ Use <strong> tags for key figures. Maximum 4 sentences per paragraph. Open each 
     const tokens = { input: response.usage?.input_tokens || 0, output: response.usage?.output_tokens || 0 };
     const text = response.content.filter(b => b.type === 'text').map(b => b.text).join('');
 
-    let paragraphs;
-    const jsonMatch = text.match(/<<<JSON\s*([\s\S]*?)\s*>>>/) || text.match(/\[[\s\S]*\]/);
+    let parsed;
+    const jsonMatch = text.match(/<<<JSON\s*([\s\S]*?)\s*>>>/) || text.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
-      paragraphs = JSON.parse(jsonMatch[1] || jsonMatch[0]);
+      parsed = JSON.parse(jsonMatch[1] || jsonMatch[0]);
     } else {
       throw new Error('[ExecutiveSummaryWriter] Failed to extract JSON from response');
+    }
+
+    // Handle both old format (array) and new format (object with verdict_line)
+    let verdictLine = '';
+    let paragraphs;
+    if (Array.isArray(parsed)) {
+      paragraphs = parsed;
+    } else {
+      verdictLine = parsed.verdict_line || '';
+      paragraphs = parsed.paragraphs || [];
     }
 
     // Enforce structure
@@ -93,9 +112,11 @@ Use <strong> tags for key figures. Maximum 4 sentences per paragraph. Open each 
 
     const latency = Date.now() - start;
     console.log(`[ExecutiveSummaryWriter] Done in ${latency}ms. 5 paragraphs.`);
+    if (verdictLine) console.log(`[ExecutiveSummaryWriter] Verdict: ${verdictLine}`);
 
     return {
       data: paragraphs,
+      verdict_line: verdictLine,
       meta: {
         agent: 'ExecutiveSummaryWriter',
         model: 'claude-sonnet-4-6',

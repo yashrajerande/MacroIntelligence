@@ -25,6 +25,7 @@ import { ScenarioPlanner }        from '../Analysis/ScenarioPlanner/plan.js';
 import { ExecutiveSummaryWriter } from '../Editorial/ExecutiveSummaryWriter/write.js';
 import { NewsCurator }            from '../Editorial/NewsCurator/curate.js';
 import { DashboardRenderer }      from '../Production/DashboardRenderer/render.js';
+import { VoiceBroadcaster }      from '../Production/VoiceBroadcaster/broadcast.js';
 import { Validator }              from '../Production/Validator/validate.js';
 import { SupabaseWriter }         from '../Infrastructure/SupabaseWriter/sync.js';
 import { GitPublisher }           from '../Infrastructure/GitPublisher/publish.js';
@@ -164,6 +165,21 @@ async function run() {
       ...allData, regime, signals, scenarios, news, execSummary, costSummary,
     });
     logger.agent('DashboardRenderer', { model: 'none', latency_ms: 0, tokens: { input: 0, output: 0 } });
+
+    // Voice briefing (non-blocking — pipeline continues even if TTS fails)
+    let voiceResult = { audioPath: null, latestAudioPath: null };
+    try {
+      voiceResult = await new VoiceBroadcaster().generate({
+        verdictLine: execSummary.verdict_line || macroDataObj.run.snap_verdict,
+        macroDataObj,
+        dateStr,
+        isoDate,
+      });
+      logger.agent('VoiceBroadcaster', voiceResult.meta);
+    } catch (err) {
+      console.warn(`  ⚠ VoiceBroadcaster failed (non-fatal): ${err.message}`);
+      logger.warn('VoiceBroadcaster failed', err.message);
+    }
 
     const validation = new Validator().validate(html, macroDataObj, isoDate);
     logger.validation(validation);

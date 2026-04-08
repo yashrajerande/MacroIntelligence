@@ -7,3 +7,4 @@ output/*.html
 !output/index.html
 !output/cost-ledger.json
 !output/data-cache.json
+!output/daily-broadcast.mp3

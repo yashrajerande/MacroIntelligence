@@ -334,6 +334,39 @@ const quarterlyCount = Object.values(INDICATOR_FRESHNESS).filter(f => f === 'qua
 assert(dailyCount + monthlyCount + quarterlyCount === 97, `Frequency counts should sum to 97, got ${dailyCount + monthlyCount + quarterlyCount}`);
 
 // ═══════════════════════════════════════════════════════════════════
+// 9. VOICE BROADCASTER
+// ═══════════════════════════════════════════════════════════════════
+describe('Voice Broadcaster');
+
+// Persona file exists
+import { existsSync } from 'fs';
+const voicePersonaPath = join(__dirname, 'agents', 'Production', 'VoiceBroadcaster', 'Persona.md');
+assert(existsSync(voicePersonaPath), 'VoiceBroadcaster Persona.md must exist');
+
+const voicePersona = readFileSync(voicePersonaPath, 'utf-8');
+assert(voicePersona.includes('60-second'), 'Voice persona must mention 60-second format');
+assert(voicePersona.includes('Act 1') && voicePersona.includes('Act 2') && voicePersona.includes('Act 3'), 'Voice persona must define 3 acts');
+assert(voicePersona.includes('Good morning from MacroIntelligence'), 'Voice persona must define opening line');
+assert(voicePersona.includes('sixty-second macro'), 'Voice persona must define closing line');
+
+// broadcast.js exists and exports VoiceBroadcaster
+const broadcastPath = join(__dirname, 'agents', 'Production', 'VoiceBroadcaster', 'broadcast.js');
+assert(existsSync(broadcastPath), 'broadcast.js must exist');
+
+// TTS skill exists
+const ttsPath = join(__dirname, 'agents', 'Production', 'VoiceBroadcaster', 'skills', 'tts-api.js');
+assert(existsSync(ttsPath), 'tts-api.js must exist');
+
+// Template has audio player
+if (template) {
+  assert(template.includes('id="audio-panel"'), 'Template must have audio panel');
+  assert(template.includes('id="macro-audio"'), 'Template must have audio element');
+  assert(template.includes('60-SECOND MACRO'), 'Template must have 60-SECOND MACRO button text');
+  assert(template.includes('toggleAudio'), 'Template must have toggleAudio function');
+  assert(template.includes('daily-broadcast.mp3'), 'Template must reference daily-broadcast.mp3');
+}
+
+// ═══════════════════════════════════════════════════════════════════
 // RESULTS
 // ═══════════════════════════════════════════════════════════════════
 console.log(`\n═══════════════════════════════════════════════════════════`);

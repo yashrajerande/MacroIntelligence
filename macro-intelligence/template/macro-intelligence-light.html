@@ -966,6 +966,20 @@ td.c-pct { text-align:right; min-width:96px; }
     </div>
   </div>
 
+  <!-- 60-SECOND MACRO AUDIO -->
+  <div class="glass-panel" id="audio-panel" style="display:none;padding:12px 20px;margin-top:8px;">
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+      <button id="audio-play-btn" onclick="toggleAudio()" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;border-radius:24px;padding:10px 22px;font-family:var(--mono);font-size:0.72rem;font-weight:700;letter-spacing:0.06em;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 2px 12px rgba(99,102,241,0.25);transition:all 0.2s;">
+        <span id="audio-icon">&#9654;</span> 60-SECOND MACRO
+      </button>
+      <div id="audio-time" style="font-family:var(--mono);font-size:0.65rem;color:var(--ink-3);">0:00 / 1:00</div>
+      <div id="audio-bar-wrap" style="flex:1;min-width:120px;height:4px;background:var(--glass-border);border-radius:2px;cursor:pointer;position:relative;" onclick="seekAudio(event)">
+        <div id="audio-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#6366f1,#8b5cf6);border-radius:2px;transition:width 0.1s;"></div>
+      </div>
+    </div>
+    <audio id="macro-audio" preload="auto"></audio>
+  </div>
+
   <!-- EXEC SUMMARY -->
   <div class="glass-panel" id="exec-panel">
     <div class="ph" onclick="togglePanel('exec-panel')">
@@ -1352,6 +1366,61 @@ td.c-pct { text-align:right; min-width:96px; }
    Claude fills __MACRO_DATA__ at generation time.
    Supabase sync reads from __MACRO_DATA__ — no external config.
 ═══════════════════════════════════════════════════════════════ */
+
+/* ── 60-SECOND MACRO AUDIO PLAYER ──────────────── */
+(function() {
+  const audio = document.getElementById('macro-audio');
+  const panel = document.getElementById('audio-panel');
+  const btn = document.getElementById('audio-play-btn');
+  const icon = document.getElementById('audio-icon');
+  const timeEl = document.getElementById('audio-time');
+  const bar = document.getElementById('audio-bar');
+
+  // Check if audio file exists
+  const audioSrc = 'daily-broadcast.mp3';
+  fetch(audioSrc, { method: 'HEAD' }).then(r => {
+    if (r.ok) {
+      audio.src = audioSrc;
+      panel.style.display = 'block';
+    }
+  }).catch(() => {});
+
+  window.toggleAudio = function() {
+    if (!audio.src) return;
+    if (audio.paused) {
+      audio.play();
+      icon.innerHTML = '&#9646;&#9646;';
+      btn.style.background = 'linear-gradient(135deg,#8b5cf6,#6366f1)';
+    } else {
+      audio.pause();
+      icon.innerHTML = '&#9654;';
+      btn.style.background = 'linear-gradient(135deg,#6366f1,#8b5cf6)';
+    }
+  };
+
+  window.seekAudio = function(e) {
+    if (!audio.duration) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const pct = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = pct * audio.duration;
+  };
+
+  audio.addEventListener('timeupdate', () => {
+    const cur = audio.currentTime;
+    const dur = audio.duration || 60;
+    const pct = (cur / dur) * 100;
+    bar.style.width = pct + '%';
+    const cm = Math.floor(cur / 60), cs = Math.floor(cur % 60);
+    const dm = Math.floor(dur / 60), ds = Math.floor(dur % 60);
+    timeEl.textContent = `${cm}:${String(cs).padStart(2,'0')} / ${dm}:${String(ds).padStart(2,'0')}`;
+  });
+
+  audio.addEventListener('ended', () => {
+    icon.innerHTML = '&#9654;';
+    btn.style.background = 'linear-gradient(135deg,#6366f1,#8b5cf6)';
+    bar.style.width = '0%';
+  });
+})();
 
 /* ── CLOCK & DATE ──────────────────────────────── */
 const pad = n => String(n).padStart(2,'0');

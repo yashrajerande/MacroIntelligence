@@ -86,9 +86,10 @@ SKIP_SUPABASE=true SKIP_GIT_PUSH=true node agents/CEO/orchestrate.js
 | 8 | **NewsCurator** | Editorial | RSS feeds (Reuters, ET, TechCrunch) + 1 Haiku call to refine headlines | LLM | Haiku |
 | 9 | **ExecSummaryWriter** | Editorial | Dense 5-paragraph investment commentary for capital allocators | LLM | Sonnet |
 | 10 | **DashboardRenderer** | Production | Assembles all data into the master HTML template via regex slot-filling | Code only | — |
-| 11 | **Validator** | Production | 22 deterministic checks + 6-layer reliability architecture (quality gate) | Code only | — |
-| 12 | **SupabaseWriter** | Infrastructure | Upserts `__MACRO_DATA__` to 7 Supabase tables with merge-duplicates strategy | Code only | — |
-| 13 | **GitPublisher** | Infrastructure | Commits & pushes validated dashboard HTML to GitHub (with `[skip ci]`) | Code only | — |
+| 11 | **VoiceBroadcaster** | Production | 60-second MP3 audio briefing: Haiku script + OpenAI TTS (onyx voice) | LLM + TTS | Haiku + OpenAI |
+| 12 | **Validator** | Production | 22 deterministic checks + 6-layer reliability architecture (quality gate) | Code only | — |
+| 13 | **SupabaseWriter** | Infrastructure | Upserts `__MACRO_DATA__` to 7 Supabase tables with merge-duplicates strategy | Code only | — |
+| 14 | **GitPublisher** | Infrastructure | Commits & pushes validated dashboard HTML + MP3 to GitHub (with `[skip ci]`) | Code only | — |
 
 **Execution order:** DataIntelligence → Analysis → Editorial → Production → Infrastructure
 

@@ -145,6 +145,15 @@ async function run() {
     logger.agent('NewsCurator', news.meta);
     logger.agent('ExecutiveSummaryWriter', execSummary.meta);
 
+    // Apply Sonnet-generated regime narratives back to regime data
+    if (execSummary.regime_narratives) {
+      for (const r of regime.data) {
+        const narrative = execSummary.regime_narratives[r.dimension];
+        if (narrative) r.signal_text = narrative;
+      }
+      console.log('  ✓ Regime narratives upgraded by Sonnet');
+    }
+
     // ── STEP 4: PRODUCTION ──────────────────────────────────────────
     logger.phase('Production');
 

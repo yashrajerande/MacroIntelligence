@@ -36,47 +36,68 @@ export class ExecutiveSummaryWriter {
 Bull: ${allData.scenarios.data.bull.name} — ${allData.scenarios.data.bull.description}
 Bear: ${allData.scenarios.data.bear.name} — ${allData.scenarios.data.bear.description}`;
 
-    const keyPrices = Object.entries(allData.marketData.data.prices)
-      .filter(([slug]) => ['nifty50', 'sensex', 'inr_usd', 'brent_usd', 'gold_usd', 'us_10y_treasury', 'india_vix', 'dxy'].includes(slug))
-      .map(([slug, p]) => `${slug}: ${p.value} (${p.direction} ${p.change_pct}%)`)
+    // Build comprehensive indicator context for richer analysis
+    const allIndicators = {
+      ...allData.marketData.data.prices,
+      ...allData.macroData.data.indicators,
+      ...(allData.reData?.data?.indicators || {}),
+    };
+    const indicatorSummary = Object.entries(allIndicators)
+      .filter(([, v]) => v.value !== null && v.value !== undefined && v.value_str !== 'Awaited')
+      .map(([slug, v]) => `${slug}: ${v.value_str || v.value} (prev: ${v.previous ?? '—'}, ${v.direction || 'flat'}, 10y pct: ${v.pct_10y ?? '—'}%)`)
       .join('\n');
 
-    const prompt = `Write the executive summary for today's macro dashboard.
+    const prompt = `You are the Chief Investment Strategist writing the morning macro brief. Your audience is India's most demanding capital allocators — CIOs, fund managers, family offices. They will judge every sentence. Generic language is a firing offence.
 
 STYLE GUIDE:
 ${styleGuide}
 
-REGIME:
+TODAY'S REGIME CLASSIFICATION:
 ${regimeSummary}
 
-SIGNALS:
+SIGNAL CARDS:
 ${signalSummary}
 
 SCENARIOS:
 ${scenarioSummary}
 
-KEY PRICES:
-${keyPrices}
+ALL INDICATORS (${Object.keys(allIndicators).length} total — use these numbers):
+${indicatorSummary}
 
 DATE: ${allData.dateStr}
 
 Return JSON wrapped in <<<JSON and >>> markers with this exact structure:
 {
-  "verdict_line": "One sentence. The sharpest possible summary of today's macro state. Must contain the single most important tension or insight. Reference specific numbers. Think like a CIO opening a morning call — what is the ONE thing that matters today? No more than 25 words. No generic phrases like 'expansion mode' or 'steady growth'. Be specific, be bold, be provocative.",
+  "verdict_line": "THE single most important macro insight today in one sentence. Max 25 words. Must name specific numbers and the tension between them. Think: what would Ray Dalio or Raghuram Rajan say first in a morning call? Not 'growth is strong' — WHY it matters, what contradiction it reveals, what breaks next.",
+
+  "regime_narratives": {
+    "growth": "2-3 sentences. Not just 'GDP is 7.8%' — what does 7.8% GDP MEAN when IIP capital goods is declining? What's the quality of this growth? Where are the cracks? Cross-reference with PMI sub-components, core sector, capacity utilisation.",
+    "inflation": "2-3 sentences. The story behind the CPI number. Food vs core vs fuel decomposition. What does the RBI see that the headline doesn't show? Where is inflation pressure building or receding?",
+    "credit": "2-3 sentences. The CD ratio story is critical. How does credit growth vs deposit growth create systemic risk? What happens to NBFCs? Is the banking system lending beyond its deposit base?",
+    "policy": "2-3 sentences. RBI's actual stance vs market expectations. Rate trajectory. What the repo rate level signals for mortgage markets, corporate borrowing, and FX management.",
+    "capex": "2-3 sentences. IIP capital goods + capacity utilisation = is India actually investing or just consuming? Public vs private capex story. Order book evidence.",
+    "consumption": "2-3 sentences. GST collections + vehicle sales + airline passengers = demand pulse. Urban vs rural divergence. Discretionary vs staple spending split."
+  },
+
   "paragraphs": [
-    { "para_num": 1, "para_label": "India Macro Regime", "para_html": "<p>...</p>" },
-    { "para_num": 2, "para_label": "Global Macro Regime", "para_html": "<p>...</p>" },
-    { "para_num": 3, "para_label": "Liquidity Conditions", "para_html": "<p>...</p>" },
-    { "para_num": 4, "para_label": "Equity + Real Estate Implications", "para_html": "<p>...</p>" },
-    { "para_num": 5, "para_label": "Key Risks to Monitor", "para_html": "<p>...</p>" }
+    { "para_num": 1, "para_label": "India Macro Regime", "para_html": "<p>DENSE paragraph. Lead with the most important number. Use <strong> tags. Every sentence must have a specific number. Connect dots that aren't obvious from the data tables.</p>" },
+    { "para_num": 2, "para_label": "Global Macro Regime", "para_html": "<p>Fed, ECB, BOJ policy divergence. US growth vs inflation stickiness. China's trajectory. What global macro means for Indian flows and FX.</p>" },
+    { "para_num": 3, "para_label": "Liquidity Conditions", "para_html": "<p>FII/DII balance. SIP flows. Deposit mobilisation. CD ratio stress. System liquidity.</p>" },
+    { "para_num": 4, "para_label": "Equity + Real Estate Implications", "para_html": "<p>Nifty valuation vs earnings. Sectoral rotation signals. RE absorption, launches, pricing. REIT yields vs G-Sec spread.</p>" },
+    { "para_num": 5, "para_label": "Key Risks to Monitor", "para_html": "<p>Rank by probability × impact. Final sentence: the single most important data point this week.</p>" }
   ]
 }
 
-Use <strong> tags for key figures. Maximum 4 sentences per paragraph. Open each with the most important number. Never start a sentence with "The".`;
+CRITICAL RULES:
+- Every sentence must contain at least one specific number from the indicators above.
+- Never use generic phrases: "remains robust", "steady growth", "moderate pace", "continues to", "it is worth noting".
+- Regime narratives must identify TENSIONS and CONTRADICTIONS — not just describe levels.
+- Use em-dashes for causation: "CD ratio 83% — deposits growing 10.8% vs credit 14.3% — a 350bps gap that compounds quarterly".
+- Be opinionated. Take a position. What matters and what doesn't.`;
 
     const response = await client.messages.create({
       model: 'claude-sonnet-4-6',
-      max_tokens: 3000,
+      max_tokens: 4096,
       temperature: 0,
       system: [{ type: 'text', text: persona, cache_control: { type: 'ephemeral' } }],
       messages: [{ role: 'user', content: prompt }],
@@ -93,13 +114,15 @@ Use <strong> tags for key figures. Maximum 4 sentences per paragraph. Open each 
       throw new Error('[ExecutiveSummaryWriter] Failed to extract JSON from response');
     }
 
-    // Handle both old format (array) and new format (object with verdict_line)
+    // Handle both old format (array) and new format (object with verdict_line + regime_narratives)
     let verdictLine = '';
+    let regimeNarratives = {};
     let paragraphs;
     if (Array.isArray(parsed)) {
       paragraphs = parsed;
     } else {
       verdictLine = parsed.verdict_line || '';
+      regimeNarratives = parsed.regime_narratives || {};
       paragraphs = parsed.paragraphs || [];
     }
 
@@ -117,6 +140,7 @@ Use <strong> tags for key figures. Maximum 4 sentences per paragraph. Open each 
     return {
       data: paragraphs,
       verdict_line: verdictLine,
+      regime_narratives: regimeNarratives,
       meta: {
         agent: 'ExecutiveSummaryWriter',
         model: 'claude-sonnet-4-6',

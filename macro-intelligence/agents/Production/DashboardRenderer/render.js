@@ -193,13 +193,30 @@ export class DashboardRenderer {
       html = fillId(html, `rc-${id}-b`, r.badge_label    || '');
     }
 
-    // Signal cards (7 signals)
+    // Signal cards (7 signals) — update status class + label dynamically
+    const STATUS_LABELS = {
+      positive: '✦ Positive',
+      risk:     '⚠ Risk',
+      watch:    '◎ Watch',
+      surprise: '⚡ Surprise',
+    };
     for (const s of signals.data) {
       const n = s.signal_num;
+      const status = s.status || 'watch';
       html = fillId(html, `sig${n}-title`, s.title      || '');
       html = fillId(html, `sig${n}-data`,  s.data_text  || '');
       html = fillId(html, `sig${n}-impl`,  s.implication|| '');
       html = fillId(html, `sig${n}-pct`,   `${s.pct_10y ?? 0}%`);
+
+      // Update the signal card's CSS class and status badge together
+      // Match: <div class="sc OLDSTATUS" id="sigN">...<div class="sc-status OLDSTATUS">OLD LABEL</div>
+      const sigBlockRegex = new RegExp(
+        `(<div class="sc )\\w+(" id="sig${n}">[\\s\\S]*?<div class="sc-status )\\w+(">)[^<]*(</div>)`,
+        'i'
+      );
+      html = html.replace(sigBlockRegex, (_, p1, p2, p3, p4) =>
+        `${p1}${status}${p2}${status}${p3}${STATUS_LABELS[status] || STATUS_LABELS.watch}${p4}`
+      );
     }
 
     // Executive summary (5 paragraphs)
@@ -250,6 +267,7 @@ export class DashboardRenderer {
         ind.momentum_label || '',
         ind.pct_10y      ?? 50,
         ind.pct_10y_tier || 'mid',
+        slug,
       );
     }).join('\n');
 

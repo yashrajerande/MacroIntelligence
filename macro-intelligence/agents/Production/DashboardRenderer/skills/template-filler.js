@@ -4,12 +4,43 @@
  */
 
 /**
- * Generate a table row HTML string.
+ * Indicators where higher values = worse/risk.
+ * For these, "up" arrows should be red and "pct-hi" should be red.
  */
-export function row(label, value, previous, direction, momentum, pct10y, tier) {
-  const arrClass = direction === 'up' ? 'arr-up' : direction === 'down' ? 'arr-down' : 'arr-flat';
-  const arrChar = direction === 'up' ? '↑' : direction === 'down' ? '↓' : '→';
-  const tierClass = tier === 'hi' ? 'pct-hi' : tier === 'lo' ? 'pct-lo' : 'pct-mid';
+const INVERSE_INDICATORS = new Set([
+  'cd_ratio', 'india_vix', 'us_vix',
+  'cpi_headline', 'cpi_core', 'cfpi_food', 'wpi', 'fuel_inflation',
+  'us_cpi', 'us_core_cpi', 'us_core_pce', 'ez_cpi', 'china_cpi',
+  're_unsold_inventory', 'office_vacancy', 'retail_mall_vacancy',
+  'rbi_repo_rate', 'avg_home_loan_rate',
+  'fed_funds_rate', 'ecb_deposit_rate', 'boj_rate', 'us_10y_treasury',
+  'dxy', 'brent_usd', 'brent_usd_global', 'wti_usd', 'nat_gas',
+  'fao_food_index',
+]);
+
+/**
+ * Generate a table row HTML string.
+ * For inverse indicators, arrow colors are flipped (up=red, down=green).
+ */
+export function row(label, value, previous, direction, momentum, pct10y, tier, slug) {
+  const inverse = slug ? INVERSE_INDICATORS.has(slug) : false;
+
+  // Flip arrow semantics for inverse indicators
+  let arrClass, arrChar;
+  if (inverse) {
+    arrClass = direction === 'up' ? 'arr dn' : direction === 'down' ? 'arr up' : 'arr fl';
+  } else {
+    arrClass = direction === 'up' ? 'arr up' : direction === 'down' ? 'arr dn' : 'arr fl';
+  }
+  arrChar = direction === 'up' ? '↑' : direction === 'down' ? '↓' : '→';
+
+  // Flip tier colors for inverse indicators (hi=bad for inverse)
+  let tierClass;
+  if (inverse) {
+    tierClass = tier === 'hi' ? 'pct-lo' : tier === 'lo' ? 'pct-hi' : 'pct-mid';
+  } else {
+    tierClass = tier === 'hi' ? 'pct-hi' : tier === 'lo' ? 'pct-lo' : 'pct-mid';
+  }
 
   return `<tr>
   <td>${label}</td>

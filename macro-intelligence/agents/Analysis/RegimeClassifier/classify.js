@@ -34,9 +34,9 @@ const SIGNAL_TEMPLATES = {
     'b-exp': (i) =>
       `Bank credit growing at ${v(i, 'bank_credit_growth')}% with CD ratio at ${v(i, 'cd_ratio')}% signals credit boom. Lending conditions highly expansionary.`,
     'b-risk': (i) =>
-      `Bank credit at ${v(i, 'bank_credit_growth')}% with CD ratio at ${v(i, 'cd_ratio')}% flags credit stress. Deposit mobilisation lagging or loan demand weak.`,
+      `CD ratio at ${v(i, 'cd_ratio')}% with credit growth at ${v(i, 'bank_credit_growth')}% — deposits not keeping pace with lending. Funding stress risk for NBFCs and smaller banks unless alternative sources emerge.`,
     'b-slow': (i) =>
-      `Bank credit growing at ${v(i, 'bank_credit_growth')}% with CD ratio at ${v(i, 'cd_ratio')}%. Credit expansion moderate — neither overheating nor contracting.`,
+      `Bank credit at ${v(i, 'bank_credit_growth')}% with CD ratio elevated at ${v(i, 'cd_ratio')}%. Credit-deposit divergence warrants monitoring — system liquidity thinning.`,
     'b-neu': (i) =>
       `Bank credit at ${v(i, 'bank_credit_growth')}% with CD ratio at ${v(i, 'cd_ratio')}%. Credit conditions stable with balanced deposit-lending dynamics.`,
   },

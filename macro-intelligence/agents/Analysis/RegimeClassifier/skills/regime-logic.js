@@ -30,11 +30,18 @@ export function classifyInflation(cpi, fuelInflation) {
 }
 
 export function classifyCredit(bankCreditGrowth, cdRatio) {
+  // CD ratio > 80 is a liquidity warning regardless of credit growth
+  if (cdRatio > 80) {
+    return { badge_type: 'b-risk', badge_label: 'Deposit Gap Stress' };
+  }
   if (bankCreditGrowth > 13 && cdRatio < 78) {
     return { badge_type: 'b-exp', badge_label: 'Credit Boom' };
   }
-  if (bankCreditGrowth < 8 || cdRatio > 82) {
-    return { badge_type: 'b-risk', badge_label: 'Credit Stress' };
+  if (bankCreditGrowth < 8) {
+    return { badge_type: 'b-risk', badge_label: 'Credit Slowdown' };
+  }
+  if (bankCreditGrowth >= 8 && bankCreditGrowth <= 13 && cdRatio >= 78) {
+    return { badge_type: 'b-slow', badge_label: 'Credit-Deposit Divergence' };
   }
   if (bankCreditGrowth >= 8 && bankCreditGrowth <= 13) {
     return { badge_type: 'b-slow', badge_label: 'Moderate Growth' };
@@ -47,11 +54,11 @@ export function classifyPolicy(repoRate, previousRepoRate) {
   if (trend < -0.1) {
     return { badge_type: 'b-exp', badge_label: 'Easing Cycle' };
   }
-  if (trend > 0.1) {
-    return { badge_type: 'b-slow', badge_label: 'Tightening' };
-  }
   if (trend > 0.5) {
     return { badge_type: 'b-risk', badge_label: 'Emergency Tightening' };
+  }
+  if (trend > 0.1) {
+    return { badge_type: 'b-slow', badge_label: 'Tightening' };
   }
   return { badge_type: 'b-neu', badge_label: 'Rate Pause' };
 }

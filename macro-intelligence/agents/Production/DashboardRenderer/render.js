@@ -7,7 +7,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { SLUG_MAP } from '../../../src/utils/slug-map.js';
+import { SLUG_MAP } from '../../../src/utils/indicator-schema.js';
 import { row, fillId, fillTbody, fillMacroData, fillTickerData } from './skills/template-filler.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));

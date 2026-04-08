@@ -4,38 +4,7 @@
  * Returns { valid, errors, warnings }.
  */
 
-import { HISTORICAL_RANGES } from '../../../Analysis/SignalDetector/skills/signal-scoring.js';
-
-const VALID_SLUGS = [
-  'india_gdp_yoy','india_gdp_fy_estimate','rbi_gdp_forecast',
-  'pmi_mfg','pmi_services','pmi_composite','iip_yoy','iip_capgoods',
-  'capacity_utilisation','core_sector_yoy',
-  'cpi_headline','cpi_core','cfpi_food','wpi','fuel_inflation',
-  'rbi_repo_rate','rbi_inflation_forecast',
-  'gst_month','gst_ytd','pv_sales','2w_sales','cv_sales',
-  'airline_pax','ecom_gmv_growth',
-  'bank_credit_growth','deposit_growth','cd_ratio',
-  'nbfc_credit_growth','corp_bond_issuance',
-  'fii_equity_net','dii_equity_net','sip_inflows','sip_yoy_growth',
-  'mf_aum','mf_avg_aum','equity_mf_net','nfo_collections',
-  'sip_accounts','sip_aum',
-  'nifty50','sensex','bank_nifty','india_vix','gsec_10y','inr_usd',
-  'gold_inr_gram','brent_usd','rbi_fx_reserves',
-  're_launches_units','re_sales_units','re_unsold_inventory',
-  'hpi_mumbai','hpi_delhi','hpi_bengaluru','hpi_hyderabad',
-  'affordability_index','home_loan_disbursements','avg_home_loan_rate',
-  'office_absorption','office_vacancy','rent_bengaluru','rent_mumbai',
-  'retail_mall_vacancy','embassy_reit','mindspace_reit','brookfield_reit',
-  'us_gdp_saar','china_gdp','ez_gdp','global_pmi_composite',
-  'us_pmi_composite','china_pmi_composite',
-  'us_cpi','us_core_cpi','us_core_pce','ez_cpi','china_cpi',
-  'fao_food_index',
-  'fed_funds_rate','fed_balance_sheet','ecb_deposit_rate','boj_rate',
-  'us_10y_treasury','dxy',
-  'sp500','nasdaq','euro_stoxx50','hang_seng','nikkei225',
-  'us_vix','brent_usd_global','wti_usd','nat_gas','gold_usd',
-  'copper','iron_ore','bdi',
-];
+import { HISTORICAL_RANGES, VALID_SLUGS } from '../../../../src/utils/indicator-schema.js';
 
 const VALID_DIRECTIONS = new Set(['up', 'down', 'flat']);
 const VALID_TIERS = new Set(['hi', 'mid', 'lo']);

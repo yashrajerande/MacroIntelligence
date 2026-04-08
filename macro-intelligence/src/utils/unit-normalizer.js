@@ -9,7 +9,7 @@
  * Shared skill — importable by any agent that handles numeric indicator data.
  */
 
-import { HISTORICAL_RANGES } from '../../agents/Analysis/SignalDetector/skills/signal-scoring.js';
+import { HISTORICAL_RANGES } from './indicator-schema.js';
 
 /**
  * Common scale factors to try when a value is outside the expected range.

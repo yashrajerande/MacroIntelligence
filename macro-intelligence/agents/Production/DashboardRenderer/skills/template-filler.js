@@ -3,20 +3,7 @@
  * No LLM. Pure regex + string replacement.
  */
 
-/**
- * Indicators where higher values = worse/risk.
- * For these, "up" arrows should be red and "pct-hi" should be red.
- */
-const INVERSE_INDICATORS = new Set([
-  'cd_ratio', 'india_vix', 'us_vix',
-  'cpi_headline', 'cpi_core', 'cfpi_food', 'wpi', 'fuel_inflation',
-  'us_cpi', 'us_core_cpi', 'us_core_pce', 'ez_cpi', 'china_cpi',
-  're_unsold_inventory', 'office_vacancy', 'retail_mall_vacancy',
-  'rbi_repo_rate', 'avg_home_loan_rate',
-  'fed_funds_rate', 'ecb_deposit_rate', 'boj_rate', 'us_10y_treasury',
-  'dxy', 'brent_usd', 'brent_usd_global', 'wti_usd', 'nat_gas',
-  'fao_food_index',
-]);
+import { INVERSE_INDICATORS } from '../../../../src/utils/indicator-schema.js';
 
 /**
  * Generate a table row HTML string.

@@ -47,12 +47,11 @@ Bear: ${allData.scenarios.data.bear.name} — ${allData.scenarios.data.bear.desc
       .map(([slug, v]) => `${slug}: ${v.value_str || v.value} (prev: ${v.previous ?? '—'}, ${v.direction || 'flat'}, 10y pct: ${v.pct_10y ?? '—'}%)`)
       .join('\n');
 
-    const prompt = `You are the Chief Investment Strategist writing the morning macro brief. Your audience is India's most demanding capital allocators — CIOs, fund managers, family offices. They will judge every sentence. Generic language is a firing offence.
+    const prompt = `DATE: ${allData.dateStr}
 
-STYLE GUIDE:
-${styleGuide}
+HERE IS TODAY'S COMPLETE DATA SET. Use these numbers — do not invent any.
 
-TODAY'S REGIME CLASSIFICATION:
+REGIME CLASSIFICATION (deterministic — your job is to EXPLAIN why, not repeat):
 ${regimeSummary}
 
 SIGNAL CARDS:
@@ -61,44 +60,41 @@ ${signalSummary}
 SCENARIOS:
 ${scenarioSummary}
 
-ALL INDICATORS (${Object.keys(allIndicators).length} total — use these numbers):
+ALL ${Object.keys(allIndicators).length} INDICATORS:
 ${indicatorSummary}
 
-DATE: ${allData.dateStr}
+───────────────────────────────────────────
 
-Return JSON wrapped in <<<JSON and >>> markers with this exact structure:
+Write the morning brief. Your Persona.md and summary-style.md define your voice and rules. Follow them precisely.
+
+Return JSON wrapped in <<<JSON and >>> markers:
 {
-  "verdict_line": "THE single most important macro insight today in one sentence. Max 25 words. Must name specific numbers and the tension between them. Think: what would Ray Dalio or Raghuram Rajan say first in a morning call? Not 'growth is strong' — WHY it matters, what contradiction it reveals, what breaks next.",
+  "verdict_line": "Max 25 words. The single most important tension in today's data. Apply the Munger test: invert it. Apply the Mishra test: what do proxies say vs the headline? This sentence decides if the CIO keeps reading.",
 
   "regime_narratives": {
-    "growth": "2-3 sentences. Not just 'GDP is 7.8%' — what does 7.8% GDP MEAN when IIP capital goods is declining? What's the quality of this growth? Where are the cracks? Cross-reference with PMI sub-components, core sector, capacity utilisation.",
-    "inflation": "2-3 sentences. The story behind the CPI number. Food vs core vs fuel decomposition. What does the RBI see that the headline doesn't show? Where is inflation pressure building or receding?",
-    "credit": "2-3 sentences. The CD ratio story is critical. How does credit growth vs deposit growth create systemic risk? What happens to NBFCs? Is the banking system lending beyond its deposit base?",
-    "policy": "2-3 sentences. RBI's actual stance vs market expectations. Rate trajectory. What the repo rate level signals for mortgage markets, corporate borrowing, and FX management.",
-    "capex": "2-3 sentences. IIP capital goods + capacity utilisation = is India actually investing or just consuming? Public vs private capex story. Order book evidence.",
-    "consumption": "2-3 sentences. GST collections + vehicle sales + airline passengers = demand pulse. Urban vs rural divergence. Discretionary vs staple spending split."
+    "growth": "2-3 sentences. Apply Mishra: triangulate GDP with IIP, PMI sub-components, core sector, capacity utilisation. Apply Munger: what's the quality of this growth? What breaks?",
+    "inflation": "2-3 sentences. Decompose: food vs core vs fuel. What does the gap between headline CPI and core tell you? Apply Munger: if RBI is cutting while food inflation is sticky, what's the second-order effect?",
+    "credit": "2-3 sentences. THE most important story today if CD ratio is elevated. Credit-deposit divergence → NBFC funding stress → macro-prudential tightening risk. Apply Munger: what happened last time this ratio was here?",
+    "policy": "2-3 sentences. RBI stance vs curve pricing. Real rate trajectory. Apply Mishra: what does the rate signal for housing affordability, corporate capex IRRs, and FX management?",
+    "capex": "2-3 sentences. IIP capital goods + capacity utilisation + cement/steel dispatch = actual investment, not press releases. Apply Munger: if capacity utilisation is below 75%, why would private capex accelerate?",
+    "consumption": "2-3 sentences. GST as formalization proxy (Mishra insight). Vehicle sales by segment. Apply Munger: is urban discretionary strong while rural staples are weak? What does that divergence predict?"
   },
 
   "paragraphs": [
-    { "para_num": 1, "para_label": "India Macro Regime", "para_html": "<p>DENSE paragraph. Lead with the most important number. Use <strong> tags. Every sentence must have a specific number. Connect dots that aren't obvious from the data tables.</p>" },
-    { "para_num": 2, "para_label": "Global Macro Regime", "para_html": "<p>Fed, ECB, BOJ policy divergence. US growth vs inflation stickiness. China's trajectory. What global macro means for Indian flows and FX.</p>" },
-    { "para_num": 3, "para_label": "Liquidity Conditions", "para_html": "<p>FII/DII balance. SIP flows. Deposit mobilisation. CD ratio stress. System liquidity.</p>" },
-    { "para_num": 4, "para_label": "Equity + Real Estate Implications", "para_html": "<p>Nifty valuation vs earnings. Sectoral rotation signals. RE absorption, launches, pricing. REIT yields vs G-Sec spread.</p>" },
-    { "para_num": 5, "para_label": "Key Risks to Monitor", "para_html": "<p>Rank by probability × impact. Final sentence: the single most important data point this week.</p>" }
+    { "para_num": 1, "para_label": "India Macro Regime", "para_html": "<p>...</p>" },
+    { "para_num": 2, "para_label": "Global Macro Regime", "para_html": "<p>...</p>" },
+    { "para_num": 3, "para_label": "Liquidity Conditions", "para_html": "<p>...</p>" },
+    { "para_num": 4, "para_label": "Equity + Real Estate Implications", "para_html": "<p>...</p>" },
+    { "para_num": 5, "para_label": "Key Risks to Monitor", "para_html": "<p>...</p>" }
   ]
 }
 
-CRITICAL RULES:
-- Every sentence must contain at least one specific number from the indicators above.
-- Never use generic phrases: "remains robust", "steady growth", "moderate pace", "continues to", "it is worth noting".
-- Regime narratives must identify TENSIONS and CONTRADICTIONS — not just describe levels.
-- Use em-dashes for causation: "CD ratio 83% — deposits growing 10.8% vs credit 14.3% — a 350bps gap that compounds quarterly".
-- Be opinionated. Take a position. What matters and what doesn't.`;
+REMEMBER: Your persona defines three voices (Mishra, Munger, Economist). USE THEM. Every regime narrative must show at least one inversion (Munger), one proxy-vs-headline tension (Mishra), and zero banned phrases (Economist test).`;
 
     const response = await client.messages.create({
       model: 'claude-sonnet-4-6',
       max_tokens: 4096,
-      temperature: 0,
+      temperature: 0.3,
       system: [{ type: 'text', text: persona, cache_control: { type: 'ephemeral' } }],
       messages: [{ role: 'user', content: prompt }],
     });

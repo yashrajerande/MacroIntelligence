@@ -77,7 +77,7 @@ const HISTORICAL_RANGES = {
   avg_home_loan_rate:   { min: 6.5,   max: 10.0,  p10: 6.8,  p25: 7.5,  p50: 8.2,  p75: 8.8,  p90: 9.5  },
 
   // S8/re_commercial
-  office_absorption:    { min: 10,    max: 70,    p10: 15,   p25: 25,   p50: 40,   p75: 52,   p90: 60   },
+  office_absorption:    { min: 10,    max: 100,   p10: 15,   p25: 25,   p50: 40,   p75: 60,   p90: 85   },
   office_vacancy:       { min: 8,     max: 25,    p10: 10,   p25: 12,   p50: 16,   p75: 19,   p90: 22   },
   rent_bengaluru:       { min: 50,    max: 160,   p10: 55,   p25: 70,   p50: 85,   p75: 110,  p90: 145  },
   rent_mumbai:          { min: 80,    max: 200,   p10: 90,   p25: 110,  p50: 140,  p75: 165,  p90: 185  },

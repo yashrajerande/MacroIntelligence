@@ -121,12 +121,20 @@ export function normalizeValue(slug, value) {
     return { value, corrected: false, correction_note: '' };
   }
 
-  // Already in range — no correction needed
-  if (isInRange(slug, value)) {
-    return { value, corrected: false, correction_note: '' };
+  // 1. ALWAYS check hard rules first — they detect known unit confusions
+  //    even when the value accidentally falls within the (wide) range.
+  const hard = HARD_RULES[slug];
+  if (hard && hard.detect(value)) {
+    const fixed = hard.fix(value);
+    if (fixed === null) {
+      return { value: null, corrected: true, correction_note: hard.note };
+    }
+    if (isInRange(slug, fixed)) {
+      return { value: fixed, corrected: true, correction_note: hard.note };
+    }
   }
 
-  // 1. Check inversion rules (e.g., INR/USD)
+  // 2. ALWAYS check inversion rules — e.g., INR/USD inverted
   const inv = INVERSION_RULES[slug];
   if (inv && inv.detect(value)) {
     const fixed = inv.fix(value);
@@ -135,17 +143,9 @@ export function normalizeValue(slug, value) {
     }
   }
 
-  // 2. Check hard rules for known unit confusion
-  const hard = HARD_RULES[slug];
-  if (hard && hard.detect(value)) {
-    const fixed = hard.fix(value);
-    if (fixed === null) {
-      // Value is wrong metric entirely — discard
-      return { value: null, corrected: true, correction_note: hard.note };
-    }
-    if (isInRange(slug, fixed)) {
-      return { value: fixed, corrected: true, correction_note: hard.note };
-    }
+  // 3. If already in range after hard/inversion checks, no correction needed
+  if (isInRange(slug, value)) {
+    return { value, corrected: false, correction_note: '' };
   }
 
   // 3. Generic scale-factor detection using p50 as anchor

@@ -5,24 +5,44 @@
 
 const RSS_FEEDS = {
   geo: {
-    url: 'https://feeds.reuters.com/reuters/worldNews',
-    source_name: 'Reuters',
+    urls: [
+      'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',
+      'https://feeds.bbci.co.uk/news/world/rss.xml',
+      'https://feeds.reuters.com/reuters/worldNews',
+    ],
+    source_name: 'World News',
   },
   ai: {
-    url: 'https://feeds.feedburner.com/TechCrunch',
-    source_name: 'TechCrunch',
+    urls: [
+      'https://techcrunch.com/feed/',
+      'https://feeds.feedburner.com/TechCrunch',
+      'https://www.theverge.com/rss/index.xml',
+    ],
+    source_name: 'Tech',
   },
   india: {
-    url: 'https://economictimes.indiatimes.com/rssfeedstopstories.cms',
-    source_name: 'Economic Times',
+    urls: [
+      'https://economictimes.indiatimes.com/rssfeedstopstories.cms',
+      'https://timesofindia.indiatimes.com/rssfeedstopstories.cms',
+      'https://www.livemint.com/rss/news',
+    ],
+    source_name: 'India News',
   },
   fintech: {
-    url: 'https://feeds.reuters.com/reuters/businessNews',
-    source_name: 'Reuters',
+    urls: [
+      'https://rss.nytimes.com/services/xml/rss/nyt/Business.xml',
+      'https://feeds.bbci.co.uk/news/business/rss.xml',
+      'https://feeds.reuters.com/reuters/businessNews',
+    ],
+    source_name: 'Business',
   },
   ifs: {
-    url: 'https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms',
-    source_name: 'ET Markets',
+    urls: [
+      'https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms',
+      'https://www.moneycontrol.com/rss/latestnews.xml',
+      'https://www.livemint.com/rss/markets',
+    ],
+    source_name: 'Markets',
   },
 };
 
@@ -77,21 +97,31 @@ export async function fetchRSSFeed(url) {
  * Fetch all 5 RSS feeds in parallel.
  * Returns object keyed by category: { geo: [{title, url, pubDate}...], ai: [...], ... }
  */
+/**
+ * Try multiple RSS URLs for a category, return first that works.
+ */
+async function fetchWithFallback(urls) {
+  for (const url of urls) {
+    try {
+      const items = await fetchRSSFeed(url);
+      if (items.length > 0) return items;
+    } catch {
+      // Try next URL
+    }
+  }
+  return [];
+}
+
 export async function fetchAllFeeds() {
   const categories = Object.keys(RSS_FEEDS);
   const results = await Promise.allSettled(
-    categories.map(cat => fetchRSSFeed(RSS_FEEDS[cat].url))
+    categories.map(cat => fetchWithFallback(RSS_FEEDS[cat].urls))
   );
 
   const feeds = {};
   for (let i = 0; i < categories.length; i++) {
     const cat = categories[i];
-    if (results[i].status === 'fulfilled' && results[i].value.length > 0) {
-      feeds[cat] = results[i].value;
-    } else {
-      // Feed failed or returned nothing — use empty array (handled later as fallback)
-      feeds[cat] = [];
-    }
+    feeds[cat] = results[i].status === 'fulfilled' ? results[i].value : [];
   }
 
   return feeds;

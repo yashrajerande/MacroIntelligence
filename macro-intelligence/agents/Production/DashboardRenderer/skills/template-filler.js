@@ -58,13 +58,33 @@ export function arrHtml(direction) {
 
 /**
  * Replace the inner content of an element by its id attribute.
+ * Handles elements that contain child tags (e.g., <span> inside <div>).
  */
 export function fillId(html, id, content) {
-  const regex = new RegExp(
-    `(id="${id}"[^>]*>)[\\s\\S]*?(</)`,
-    'i'
-  );
-  return html.replace(regex, (_, open, close) => `${open}${content}${close}`);
+  // Match from id="..." opening through ALL content to the closing tag.
+  // We extract the tag name first, then match to its specific closing tag.
+  const openRegex = new RegExp(`(<(\\w+)[^>]*\\bid="${id}"[^>]*>)`, 'i');
+  const openMatch = html.match(openRegex);
+  if (!openMatch) {
+    // Try alternate order: id might come before other attributes
+    const altRegex = new RegExp(`(<(\\w+)\\s+id="${id}"[^>]*>)`, 'i');
+    const altMatch = html.match(altRegex);
+    if (!altMatch) return html;
+    const [, openTag, tagName] = altMatch;
+    const closeTag = `</${tagName}>`;
+    const startIdx = html.indexOf(openTag);
+    const contentStart = startIdx + openTag.length;
+    const closeIdx = html.indexOf(closeTag, contentStart);
+    if (closeIdx === -1) return html;
+    return html.slice(0, contentStart) + content + html.slice(closeIdx);
+  }
+  const [, openTag, tagName] = openMatch;
+  const closeTag = `</${tagName}>`;
+  const startIdx = html.indexOf(openTag);
+  const contentStart = startIdx + openTag.length;
+  const closeIdx = html.indexOf(closeTag, contentStart);
+  if (closeIdx === -1) return html;
+  return html.slice(0, contentStart) + content + html.slice(closeIdx);
 }
 
 /**

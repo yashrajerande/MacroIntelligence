@@ -14,6 +14,7 @@ import { getISTDate } from '../../src/utils/ist-date.js';
 import { RunLogger } from './run-log.js';
 import { checkBudget, recordRunCost, getCostSummary } from '../../src/utils/cost-ledger.js';
 import { shouldSkipDataIntelligence, getCachedIndicators, updateCache } from '../../src/utils/data-cache.js';
+import { normalizeAllIndicators } from '../../src/utils/unit-normalizer.js';
 
 import { MarketDataAnalyst }      from '../DataIntelligence/MarketDataAnalyst/fetch.js';
 import { MacroDataAnalyst }       from '../DataIntelligence/MacroDataAnalyst/fetch.js';
@@ -97,7 +98,13 @@ async function run() {
       );
       logger.agent('RealEstateAnalyst', reData.meta);
 
-      // Update cache with fresh data
+      // Normalize units before caching or using data
+      console.log('\n  ── Unit Normalization ──');
+      normalizeAllIndicators(marketData.data.prices);
+      normalizeAllIndicators(macroData.data.indicators);
+      normalizeAllIndicators(reData.data.indicators);
+
+      // Update cache with normalized data
       const allFresh = { ...marketData.data.prices, ...macroData.data.indicators, ...reData.data.indicators };
       updateCache(allFresh, isoDate);
       console.log(`  ✓ Cache updated: ${Object.keys(allFresh).length} indicators`);

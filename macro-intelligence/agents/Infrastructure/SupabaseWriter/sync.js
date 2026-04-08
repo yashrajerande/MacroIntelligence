@@ -4,6 +4,7 @@
  */
 
 import { upsert, fetchOne } from './skills/upsert.js';
+import { filterChangedRows, recordSnapshot } from '../../../src/utils/data-cache.js';
 
 /** Fallback IST time when run.ist_time is missing */
 function getISTTime() {
@@ -81,7 +82,15 @@ export class SupabaseWriter {
       badge_label:    r.badge_label,
       badge_type:     r.badge_type,
     }));
-    results.regime = await upsert('regime_classification', regimeRows, supabaseUrl, serviceKey, 'run_date,dimension');
+    const regimeKey = (r) => `${r.run_date}:${r.dimension}`;
+    const { changed: changedRegime, skipped: skippedRegime } = filterChangedRows('regime_classification', regimeRows, regimeKey);
+    if (changedRegime.length > 0) {
+      results.regime = await upsert('regime_classification', changedRegime, supabaseUrl, serviceKey, 'run_date,dimension');
+      recordSnapshot('regime_classification', changedRegime, regimeKey);
+    } else {
+      results.regime = { table: 'regime_classification', totalRows: 0, chunks: 0, allSuccess: true };
+    }
+    console.log(`[SupabaseWriter] regime: ${changedRegime.length} changed, ${skippedRegime} skipped`);
 
     // ── 4. signal_cards ──────────────────────────────────────────────
     console.log('[SupabaseWriter] 4/8: signal_cards');
@@ -98,7 +107,15 @@ export class SupabaseWriter {
       pct_note:     s.pct_note,
       is_surprise:  s.is_surprise,
     }));
-    results.signals = await upsert('signal_cards', signalRows, supabaseUrl, serviceKey, 'run_date,signal_num');
+    const sigKey = (r) => `${r.run_date}:${r.signal_num}`;
+    const { changed: changedSigs, skipped: skippedSigs } = filterChangedRows('signal_cards', signalRows, sigKey);
+    if (changedSigs.length > 0) {
+      results.signals = await upsert('signal_cards', changedSigs, supabaseUrl, serviceKey, 'run_date,signal_num');
+      recordSnapshot('signal_cards', changedSigs, sigKey);
+    } else {
+      results.signals = { table: 'signal_cards', totalRows: 0, chunks: 0, allSuccess: true };
+    }
+    console.log(`[SupabaseWriter] signals: ${changedSigs.length} changed, ${skippedSigs} skipped`);
 
     // ── 5. news_feed ─────────────────────────────────────────────────
     console.log('[SupabaseWriter] 5/8: news_feed');
@@ -111,11 +128,18 @@ export class SupabaseWriter {
       source_name: n.source_name,
       buzz_tag:    n.buzz_tag,
     }));
-    results.news = await upsert('news_feed', newsRows, supabaseUrl, serviceKey, 'run_date,category');
+    const newsKey = (r) => `${r.run_date}:${r.category}`;
+    const { changed: changedNews, skipped: skippedNews } = filterChangedRows('news_feed', newsRows, newsKey);
+    if (changedNews.length > 0) {
+      results.news = await upsert('news_feed', changedNews, supabaseUrl, serviceKey, 'run_date,category');
+      recordSnapshot('news_feed', changedNews, newsKey);
+    } else {
+      results.news = { table: 'news_feed', totalRows: 0, chunks: 0, allSuccess: true };
+    }
+    console.log(`[SupabaseWriter] news: ${changedNews.length} changed, ${skippedNews} skipped`);
 
-    // ── 6. macro_indicators (chunked at 20) ──────────────────────────
+    // ── 6. macro_indicators (deduped + chunked) ───────────────────────
     console.log('[SupabaseWriter] 6/8: macro_indicators');
-    // indicators array is already in template format from DashboardRenderer
     const indicatorRows = (macroData.indicators || []).map(ind => ({
       run_id:           runId,
       run_date:         runDate,
@@ -137,7 +161,15 @@ export class SupabaseWriter {
       is_estimated:     ind.is_estimated    || false,
       source:           ind.source          || '',
     }));
-    results.indicators = await upsert('macro_indicators', indicatorRows, supabaseUrl, serviceKey, 'run_date,indicator_slug');
+    const indKey = (r) => `${r.run_date}:${r.indicator_slug}`;
+    const { changed: changedInds, skipped: skippedInds } = filterChangedRows('macro_indicators', indicatorRows, indKey);
+    if (changedInds.length > 0) {
+      results.indicators = await upsert('macro_indicators', changedInds, supabaseUrl, serviceKey, 'run_date,indicator_slug');
+      recordSnapshot('macro_indicators', changedInds, indKey);
+    } else {
+      results.indicators = { table: 'macro_indicators', totalRows: 0, chunks: 0, allSuccess: true };
+    }
+    console.log(`[SupabaseWriter] macro_indicators: ${changedInds.length} changed, ${skippedInds} unchanged (skipped)`);
 
     // ── 7. executive_summary ─────────────────────────────────────────
     console.log('[SupabaseWriter] 7/8: executive_summary');
@@ -148,13 +180,21 @@ export class SupabaseWriter {
       para_label: p.para_label,
       para_html:  p.para_html,
     }));
-    results.exec_summary = await upsert('executive_summary', execRows, supabaseUrl, serviceKey, 'run_date,para_num');
+    const execKey = (r) => `${r.run_date}:${r.para_num}`;
+    const { changed: changedExec, skipped: skippedExec } = filterChangedRows('executive_summary', execRows, execKey);
+    if (changedExec.length > 0) {
+      results.exec_summary = await upsert('executive_summary', changedExec, supabaseUrl, serviceKey, 'run_date,para_num');
+      recordSnapshot('executive_summary', changedExec, execKey);
+    } else {
+      results.exec_summary = { table: 'executive_summary', totalRows: 0, chunks: 0, allSuccess: true };
+    }
+    console.log(`[SupabaseWriter] exec_summary: ${changedExec.length} changed, ${skippedExec} skipped`);
 
     // ── 8. real_estate_summary ───────────────────────────────────────
     console.log('[SupabaseWriter] 8/8: real_estate_summary');
     if (macroData.real_estate) {
       const re = macroData.real_estate;
-      results.real_estate = await upsert('real_estate_summary', {
+      const reRow = {
         run_id:                  runId,
         run_date:                runDate,
         re_summary_text:         re.re_summary_text         || '',
@@ -162,11 +202,23 @@ export class SupabaseWriter {
         commercial_regime:       re.commercial_regime       || '',
         reit_vs_gsec_spread_bps: re.reit_vs_gsec_spread_bps ?? null,
         key_risk_note:           re.key_risk_note           || '',
-      }, supabaseUrl, serviceKey, 'run_date');
+      };
+      const reKey = (r) => r.run_date;
+      const { changed: changedRE } = filterChangedRows('real_estate_summary', [reRow], reKey);
+      if (changedRE.length > 0) {
+        results.real_estate = await upsert('real_estate_summary', reRow, supabaseUrl, serviceKey, 'run_date');
+        recordSnapshot('real_estate_summary', [reRow], reKey);
+      } else {
+        results.real_estate = { table: 'real_estate_summary', totalRows: 0, chunks: 0, allSuccess: true };
+        console.log(`[SupabaseWriter] real_estate: unchanged, skipped`);
+      }
     }
 
+    // ── Summary ─────────────────────────────────────────────────────
+    const totalPushed = [changedRegime, changedSigs, changedNews, changedInds, changedExec].reduce((s, a) => s + a.length, 0);
+    const totalSkipped = skippedRegime + skippedSigs + skippedNews + skippedInds + skippedExec;
     const latency = Date.now() - start;
-    console.log(`[SupabaseWriter] All 8 tables written in ${latency}ms.`);
+    console.log(`[SupabaseWriter] Done in ${latency}ms — ${totalPushed} rows pushed, ${totalSkipped} unchanged rows skipped.`);
     return results;
   }
 }

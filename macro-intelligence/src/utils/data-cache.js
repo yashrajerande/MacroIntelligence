@@ -85,20 +85,21 @@ export function shouldSkipDataIntelligence(isoDate) {
 
 /**
  * Read the cache file. Returns a default structure if missing or corrupt.
- * @returns {{ indicators: Record<string,any>, last_updated: Record<string,string> }}
+ * @returns {{ indicators: Record<string,any>, last_updated: Record<string,string>, supabase_snapshot: Record<string,any> }}
  */
 export function readCache() {
   if (!existsSync(CACHE_PATH)) {
-    return { indicators: {}, last_updated: {} };
+    return { indicators: {}, last_updated: {}, supabase_snapshot: {} };
   }
   try {
     const raw = JSON.parse(readFileSync(CACHE_PATH, 'utf-8'));
     return {
-      indicators:   raw.indicators   || {},
-      last_updated: raw.last_updated || {},
+      indicators:        raw.indicators        || {},
+      last_updated:      raw.last_updated      || {},
+      supabase_snapshot: raw.supabase_snapshot  || {},
     };
   } catch {
-    return { indicators: {}, last_updated: {} };
+    return { indicators: {}, last_updated: {}, supabase_snapshot: {} };
   }
 }
 
@@ -152,4 +153,59 @@ export function getStaleSlugs(currentDate) {
   return Object.keys(INDICATOR_FRESHNESS).filter(slug =>
     isStale(slug, cache.last_updated[slug], currentDate)
   );
+}
+
+// ── Supabase dedup helpers ─────────────────────────────────────────
+
+/**
+ * Hash a row object into a short string for comparison.
+ * Strips run_id (changes every run) and compares data fields only.
+ */
+function hashRow(row) {
+  const { run_id, ...data } = row;
+  return JSON.stringify(data);
+}
+
+/**
+ * Filter rows to only those that changed since last push.
+ * Returns { changed: [...rows that differ], skipped: count }.
+ * @param {string} table — table name used as snapshot key
+ * @param {Array} rows — rows to potentially push
+ * @param {string} keyFn — function(row) => unique key for dedup
+ */
+export function filterChangedRows(table, rows, keyFn) {
+  const cache = readCache();
+  const snapshot = cache.supabase_snapshot[table] || {};
+  const changed = [];
+  let skipped = 0;
+
+  for (const row of rows) {
+    const key = keyFn(row);
+    const hash = hashRow(row);
+    if (snapshot[key] === hash) {
+      skipped++;
+    } else {
+      changed.push(row);
+    }
+  }
+
+  return { changed, skipped };
+}
+
+/**
+ * Record what was pushed to Supabase for future dedup.
+ * @param {string} table — table name
+ * @param {Array} rows — rows that were pushed
+ * @param {string} keyFn — function(row) => unique key
+ */
+export function recordSnapshot(table, rows, keyFn) {
+  const cache = readCache();
+  if (!cache.supabase_snapshot[table]) {
+    cache.supabase_snapshot[table] = {};
+  }
+  for (const row of rows) {
+    const key = keyFn(row);
+    cache.supabase_snapshot[table][key] = hashRow(row);
+  }
+  writeCache(cache);
 }

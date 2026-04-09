@@ -56,14 +56,36 @@ function pickSurprisingStrengths(indicators) {
 }
 
 /**
- * Generate the percentile badge HTML.
+ * Format a number with proper commas and units for display on the card.
+ */
+function formatValue(value) {
+  if (value === null || value === undefined) return '—';
+  const str = String(value).trim();
+  // Already formatted with units — just add commas to the numeric part
+  const numMatch = str.match(/^([~]?)([₹$]?)(\d[\d.]*)(.*)/);
+  if (!numMatch) return str;
+  const [, prefix, currency, numStr, suffix] = numMatch;
+  const num = parseFloat(numStr);
+  if (isNaN(num)) return str;
+  // Format with commas (Indian style for ₹, international otherwise)
+  let formatted;
+  if (currency === '₹' || suffix.includes('cr') || suffix.includes('lakh')) {
+    formatted = num.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+  } else {
+    formatted = num.toLocaleString('en-US', { maximumFractionDigits: 2 });
+  }
+  return `${prefix}${currency}${formatted}${suffix}`;
+}
+
+/**
+ * Generate the percentile badge HTML — bigger for the dark card.
  */
 function pctBadge(pct, isRisk) {
   const color = isRisk ? '#ff453a' : '#30d158';
-  const bgColor = isRisk ? 'rgba(255,69,58,0.15)' : 'rgba(48,209,88,0.15)';
-  return `<div style="display:inline-flex;align-items:center;gap:4px;background:${bgColor};border-radius:6px;padding:3px 8px;">
-    <div style="width:${Math.max(pct * 0.4, 4)}px;height:4px;background:${color};border-radius:2px;"></div>
-    <span style="font-size:12px;font-weight:600;color:${color};">${pct}%</span>
+  const bgColor = isRisk ? 'rgba(255,69,58,0.18)' : 'rgba(48,209,88,0.18)';
+  return `<div style="display:inline-flex;align-items:center;gap:5px;background:${bgColor};border-radius:8px;padding:4px 10px;">
+    <div style="width:${Math.max(pct * 0.5, 5)}px;height:5px;background:${color};border-radius:3px;"></div>
+    <span style="font-size:15px;font-weight:700;color:${color};">${pct}%</span>
   </div>`;
 }
 
@@ -83,27 +105,25 @@ export function generateCardHTML({ verdictLine, macroDataObj, dateStr, dashboard
     else if (r.badge_type === 'b-risk') { color = '#ff453a'; bg = 'rgba(255,69,58,0.12)'; border = 'rgba(255,69,58,0.30)'; }
     else if (r.badge_type === 'b-slow') { color = '#ff9f0a'; bg = 'rgba(255,159,10,0.12)'; border = 'rgba(255,159,10,0.30)'; }
     else { color = '#0a84ff'; bg = 'rgba(10,132,255,0.10)'; border = 'rgba(10,132,255,0.25)'; }
-    return `<div style="background:${bg};border:1px solid ${border};border-radius:20px;padding:7px 14px;font-size:12px;font-weight:600;color:${color};white-space:nowrap;">${dim} ${arrow}</div>`;
+    return `<div style="background:${bg};border:1px solid ${border};border-radius:24px;padding:9px 18px;font-size:15px;font-weight:700;color:${color};white-space:nowrap;">${dim} ${arrow}</div>`;
   }).join('');
 
   const riskCards = risks.map(n => `
-    <div style="background:rgba(255,255,255,0.04);border-radius:14px;padding:18px 16px;border-left:3px solid #ff453a;">
-      <div style="font-size:12px;color:rgba(255,255,255,0.45);font-weight:500;margin-bottom:6px;">${n.name}</div>
-      <div style="font-size:28px;font-weight:700;color:#ffffff;letter-spacing:-0.02em;">${n.value}</div>
-      <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
+    <div style="background:rgba(255,255,255,0.05);border-radius:16px;padding:20px 18px;border-left:4px solid #ff453a;">
+      <div style="font-size:16px;color:rgba(255,255,255,0.65);font-weight:500;margin-bottom:6px;">${n.name}</div>
+      <div style="font-size:40px;font-weight:800;color:#ffffff;letter-spacing:-0.03em;line-height:1.1;">${formatValue(n.value)}</div>
+      <div style="margin-top:10px;">
         ${pctBadge(n.pct, true)}
-        <span style="font-size:11px;color:rgba(255,255,255,0.35);">10Y percentile</span>
       </div>
     </div>
   `).join('');
 
   const strengthCards = strengths.map(n => `
-    <div style="background:rgba(255,255,255,0.04);border-radius:14px;padding:18px 16px;border-left:3px solid #30d158;">
-      <div style="font-size:12px;color:rgba(255,255,255,0.45);font-weight:500;margin-bottom:6px;">${n.name}</div>
-      <div style="font-size:28px;font-weight:700;color:#ffffff;letter-spacing:-0.02em;">${n.value}</div>
-      <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
+    <div style="background:rgba(255,255,255,0.05);border-radius:16px;padding:20px 18px;border-left:4px solid #30d158;">
+      <div style="font-size:16px;color:rgba(255,255,255,0.65);font-weight:500;margin-bottom:6px;">${n.name}</div>
+      <div style="font-size:40px;font-weight:800;color:#ffffff;letter-spacing:-0.03em;line-height:1.1;">${formatValue(n.value)}</div>
+      <div style="margin-top:10px;">
         ${pctBadge(n.pct, false)}
-        <span style="font-size:11px;color:rgba(255,255,255,0.35);">10Y percentile</span>
       </div>
     </div>
   `).join('');
@@ -149,24 +169,23 @@ export function generateCardHTML({ verdictLine, macroDataObj, dateStr, dashboard
 <body>
 
   <!-- Header -->
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;position:relative;z-index:1;">
-    <div style="display:flex;align-items:center;gap:12px;">
-      <div style="width:42px;height:42px;background:linear-gradient(135deg,#0a84ff,#bf5af2);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px;box-shadow:0 4px 20px rgba(10,132,255,0.3);">M</div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;position:relative;z-index:1;">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div style="width:48px;height:48px;background:linear-gradient(135deg,#0a84ff,#bf5af2);border-radius:14px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:22px;box-shadow:0 4px 24px rgba(10,132,255,0.35);">M</div>
       <div>
-        <div style="font-size:14px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#ffffff;">Macro Intelligence</div>
-        <div style="font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:0.06em;">Daily Brief</div>
+        <div style="font-size:18px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#ffffff;">Macro Intelligence</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.45);letter-spacing:0.04em;">${dateStr}</div>
       </div>
     </div>
-    <div style="font-size:13px;color:rgba(255,255,255,0.4);font-weight:500;">${dateStr}</div>
   </div>
 
   <!-- Thin divider -->
-  <div style="height:1px;background:rgba(255,255,255,0.06);margin-bottom:32px;position:relative;z-index:1;"></div>
+  <div style="height:1px;background:rgba(255,255,255,0.08);margin-bottom:28px;position:relative;z-index:1;"></div>
 
   <!-- HERO VERDICT -->
-  <div style="margin-bottom:32px;position:relative;z-index:1;">
-    <div style="font-size:11px;font-weight:600;color:#0a84ff;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:14px;">TODAY'S VERDICT</div>
-    <div style="font-size:30px;font-weight:700;line-height:1.25;letter-spacing:-0.02em;color:#ffffff;">${verdictLine || 'Dashboard generated — see full report.'}</div>
+  <div style="margin-bottom:30px;position:relative;z-index:1;">
+    <div style="font-size:13px;font-weight:700;color:#0a84ff;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:14px;">TODAY'S VERDICT</div>
+    <div style="font-size:34px;font-weight:700;line-height:1.22;letter-spacing:-0.02em;color:#ffffff;">${verdictLine || 'Dashboard generated — see full report.'}</div>
   </div>
 
   <!-- REGIME STRIP -->
@@ -176,7 +195,7 @@ export function generateCardHTML({ verdictLine, macroDataObj, dateStr, dashboard
 
   <!-- SURPRISING RISKS -->
   <div style="margin-bottom:22px;position:relative;z-index:1;">
-    <div style="font-size:11px;font-weight:700;color:#ff453a;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:12px;">⚠ SURPRISING RISKS</div>
+    <div style="font-size:14px;font-weight:700;color:#ff453a;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:14px;">⚠ SURPRISING RISKS</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
       ${riskCards || '<div style="color:rgba(255,255,255,0.3);font-size:13px;grid-column:span 2;">No extreme risk signals today.</div>'}
     </div>
@@ -184,19 +203,19 @@ export function generateCardHTML({ verdictLine, macroDataObj, dateStr, dashboard
 
   <!-- SURPRISING STRENGTHS -->
   <div style="margin-bottom:auto;position:relative;z-index:1;">
-    <div style="font-size:11px;font-weight:700;color:#30d158;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:12px;">✦ SURPRISING STRENGTHS</div>
+    <div style="font-size:14px;font-weight:700;color:#30d158;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:14px;">✦ SURPRISING STRENGTHS</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
       ${strengthCards || '<div style="color:rgba(255,255,255,0.3);font-size:13px;grid-column:span 2;">No extreme strength signals today.</div>'}
     </div>
   </div>
 
   <!-- CTA -->
-  <a href="${dashboardUrl}" style="display:block;text-align:center;padding:18px;background:linear-gradient(135deg,#0a84ff,#5e5ce6);color:#ffffff;border-radius:14px;font-size:15px;font-weight:600;text-decoration:none;letter-spacing:0.01em;margin-top:20px;position:relative;z-index:1;box-shadow:0 4px 20px rgba(10,132,255,0.25);">
-    Explore the Full Dashboard →
+  <a href="${dashboardUrl}" style="display:block;text-align:center;padding:20px;background:linear-gradient(135deg,#0a84ff,#5e5ce6);color:#ffffff;border-radius:16px;font-size:18px;font-weight:700;text-decoration:none;letter-spacing:0.02em;margin-top:20px;position:relative;z-index:1;box-shadow:0 4px 24px rgba(10,132,255,0.30);">
+    Explore Full Dashboard →
   </a>
 
   <!-- Footer -->
-  <div style="text-align:center;margin-top:14px;font-size:10px;color:rgba(255,255,255,0.25);position:relative;z-index:1;">
+  <div style="text-align:center;margin-top:14px;font-size:11px;color:rgba(255,255,255,0.3);position:relative;z-index:1;">
     macrointelligence.corp · Not investment advice
   </div>
 

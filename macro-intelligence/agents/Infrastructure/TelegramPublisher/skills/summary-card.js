@@ -1,83 +1,112 @@
 /**
- * Summary Card Skill — Generates a mobile-friendly HTML card for screenshot.
- * 1080×1350px, Jony Ive aesthetic, 4 key numbers + verdict + CTA.
+ * Summary Card Skill — Dark vibrant mobile-friendly card for Telegram/WhatsApp.
+ * 1080×1350px. Hero verdict, regime badges, 4 risks, 4 strengths, CTA.
  */
+
+import { INDICATOR_SCHEMA, INVERSE_INDICATORS } from '../../../../src/utils/indicator-schema.js';
 
 /**
- * Pick the 4 most interesting indicators for the card.
- * Prioritizes extreme percentiles and key market movers.
+ * Pick the 4 most surprising RISK indicators (high percentile on inverse, or high pctl on non-inverse going wrong).
  */
-function pickKeyNumbers(macroDataObj) {
-  const indicators = macroDataObj.indicators || [];
-  const priority = ['nifty50', 'inr_usd', 'cpi_headline', 'brent_usd', 'gold_usd', 'cd_ratio', 'india_gdp_yoy', 'pmi_composite', 'fed_funds_rate', 'sip_inflows'];
-
-  // Pick from priority list first, then fill with extreme percentiles
-  const picked = [];
-  const used = new Set();
-
-  for (const slug of priority) {
-    if (picked.length >= 4) break;
-    const ind = indicators.find(i => i.indicator_slug === slug && i.latest_numeric !== null);
-    if (ind) {
-      picked.push(ind);
-      used.add(slug);
-    }
-  }
-
-  // Fill remaining slots with most extreme percentile indicators
-  if (picked.length < 4) {
-    const remaining = indicators
-      .filter(i => !used.has(i.indicator_slug) && i.latest_numeric !== null && i.pct_10y !== undefined)
-      .sort((a, b) => Math.abs(b.pct_10y - 50) - Math.abs(a.pct_10y - 50));
-    for (const ind of remaining) {
-      if (picked.length >= 4) break;
-      picked.push(ind);
-    }
-  }
-
-  return picked.map(ind => ({
-    name: ind.indicator_name,
-    value: ind.latest_value,
-    direction: ind.direction,
-    pct: ind.pct_10y,
-  }));
+function pickSurprisingRisks(indicators) {
+  return indicators
+    .filter(i => i.latest_numeric !== null && i.pct_10y !== undefined)
+    .filter(i => {
+      const inv = INVERSE_INDICATORS.has(i.indicator_slug);
+      // Risk = inverse indicator at high percentile, OR non-inverse at very low percentile
+      return (inv && i.pct_10y >= 70) || (!inv && i.pct_10y <= 20);
+    })
+    .sort((a, b) => {
+      const aScore = INVERSE_INDICATORS.has(a.indicator_slug) ? a.pct_10y : (100 - a.pct_10y);
+      const bScore = INVERSE_INDICATORS.has(b.indicator_slug) ? b.pct_10y : (100 - b.pct_10y);
+      return bScore - aScore;
+    })
+    .slice(0, 4)
+    .map(ind => ({
+      name: ind.indicator_name,
+      value: ind.latest_value,
+      pct: ind.pct_10y,
+      direction: ind.direction,
+    }));
 }
 
 /**
- * Generate the HTML for the summary card.
+ * Pick the 4 most surprising POSITIVE indicators (high pctl on non-inverse, or low pctl on inverse = good).
+ */
+function pickSurprisingStrengths(indicators) {
+  return indicators
+    .filter(i => i.latest_numeric !== null && i.pct_10y !== undefined)
+    .filter(i => {
+      const inv = INVERSE_INDICATORS.has(i.indicator_slug);
+      // Strength = non-inverse at high percentile, OR inverse at very low percentile (good)
+      return (!inv && i.pct_10y >= 75) || (inv && i.pct_10y <= 20);
+    })
+    .sort((a, b) => {
+      const aScore = INVERSE_INDICATORS.has(a.indicator_slug) ? (100 - a.pct_10y) : a.pct_10y;
+      const bScore = INVERSE_INDICATORS.has(b.indicator_slug) ? (100 - b.pct_10y) : b.pct_10y;
+      return bScore - aScore;
+    })
+    .slice(0, 4)
+    .map(ind => ({
+      name: ind.indicator_name,
+      value: ind.latest_value,
+      pct: ind.pct_10y,
+      direction: ind.direction,
+    }));
+}
+
+/**
+ * Generate the percentile badge HTML.
+ */
+function pctBadge(pct, isRisk) {
+  const color = isRisk ? '#ff453a' : '#30d158';
+  const bgColor = isRisk ? 'rgba(255,69,58,0.15)' : 'rgba(48,209,88,0.15)';
+  return `<div style="display:inline-flex;align-items:center;gap:4px;background:${bgColor};border-radius:6px;padding:3px 8px;">
+    <div style="width:${Math.max(pct * 0.4, 4)}px;height:4px;background:${color};border-radius:2px;"></div>
+    <span style="font-size:12px;font-weight:600;color:${color};">${pct}%</span>
+  </div>`;
+}
+
+/**
+ * Generate the HTML for the dark vibrant summary card.
  */
 export function generateCardHTML({ verdictLine, macroDataObj, dateStr, dashboardUrl }) {
-  const keyNumbers = pickKeyNumbers(macroDataObj);
-  const regimes = (macroDataObj.regime || []).map(r => ({
-    dim: r.dimension.charAt(0).toUpperCase() + r.dimension.slice(1),
-    badge: r.badge_label,
-    type: r.badge_type,
-  }));
+  const indicators = macroDataObj.indicators || [];
+  const risks = pickSurprisingRisks(indicators);
+  const strengths = pickSurprisingStrengths(indicators);
 
-  const dirArrow = (d) => d === 'up' ? '↑' : d === 'down' ? '↓' : '→';
-  const dirColor = (d) => d === 'up' ? '#34c759' : d === 'down' ? '#ff3b30' : '#86868b';
-  const badgeColor = (t) => {
-    if (t === 'b-exp') return { bg: 'rgba(52,199,89,0.1)', text: '#34c759', border: 'rgba(52,199,89,0.3)' };
-    if (t === 'b-risk') return { bg: 'rgba(255,59,48,0.08)', text: '#ff3b30', border: 'rgba(255,59,48,0.25)' };
-    if (t === 'b-slow') return { bg: 'rgba(255,149,0,0.08)', text: '#ff9500', border: 'rgba(255,149,0,0.25)' };
-    return { bg: 'rgba(0,113,227,0.06)', text: '#0071e3', border: 'rgba(0,113,227,0.2)' };
-  };
+  const regimes = (macroDataObj.regime || []).map(r => {
+    const dim = r.dimension.charAt(0).toUpperCase() + r.dimension.slice(1);
+    const arrow = r.badge_type === 'b-exp' ? '↑' : r.badge_type === 'b-risk' ? '⚠' : r.badge_type === 'b-slow' ? '→' : '—';
+    let color, bg, border;
+    if (r.badge_type === 'b-exp') { color = '#30d158'; bg = 'rgba(48,209,88,0.12)'; border = 'rgba(48,209,88,0.30)'; }
+    else if (r.badge_type === 'b-risk') { color = '#ff453a'; bg = 'rgba(255,69,58,0.12)'; border = 'rgba(255,69,58,0.30)'; }
+    else if (r.badge_type === 'b-slow') { color = '#ff9f0a'; bg = 'rgba(255,159,10,0.12)'; border = 'rgba(255,159,10,0.30)'; }
+    else { color = '#0a84ff'; bg = 'rgba(10,132,255,0.10)'; border = 'rgba(10,132,255,0.25)'; }
+    return `<div style="background:${bg};border:1px solid ${border};border-radius:20px;padding:7px 14px;font-size:12px;font-weight:600;color:${color};white-space:nowrap;">${dim} ${arrow}</div>`;
+  }).join('');
 
-  const numbersHTML = keyNumbers.map(n => `
-    <div style="background:#fafafa;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:6px;">
-      <div style="font-size:13px;color:#86868b;font-weight:500;letter-spacing:0.02em;">${n.name}</div>
-      <div style="font-size:28px;font-weight:700;color:#1d1d1f;letter-spacing:-0.02em;">${n.value}</div>
-      <div style="display:flex;align-items:center;gap:6px;">
-        <span style="font-size:16px;font-weight:600;color:${dirColor(n.direction)};">${dirArrow(n.direction)}</span>
-        <span style="font-size:12px;color:#86868b;">10Y: ${n.pct ?? '—'}%</span>
+  const riskCards = risks.map(n => `
+    <div style="background:rgba(255,255,255,0.04);border-radius:14px;padding:18px 16px;border-left:3px solid #ff453a;">
+      <div style="font-size:12px;color:rgba(255,255,255,0.45);font-weight:500;margin-bottom:6px;">${n.name}</div>
+      <div style="font-size:28px;font-weight:700;color:#ffffff;letter-spacing:-0.02em;">${n.value}</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
+        ${pctBadge(n.pct, true)}
+        <span style="font-size:11px;color:rgba(255,255,255,0.35);">10Y percentile</span>
       </div>
     </div>
   `).join('');
 
-  const badgesHTML = regimes.map(r => {
-    const c = badgeColor(r.type);
-    return `<div style="background:${c.bg};border:1px solid ${c.border};border-radius:20px;padding:6px 14px;font-size:11px;font-weight:600;color:${c.text};white-space:nowrap;">${r.dim}</div>`;
-  }).join('');
+  const strengthCards = strengths.map(n => `
+    <div style="background:rgba(255,255,255,0.04);border-radius:14px;padding:18px 16px;border-left:3px solid #30d158;">
+      <div style="font-size:12px;color:rgba(255,255,255,0.45);font-weight:500;margin-bottom:6px;">${n.name}</div>
+      <div style="font-size:28px;font-weight:700;color:#ffffff;letter-spacing:-0.02em;">${n.value}</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
+        ${pctBadge(n.pct, false)}
+        <span style="font-size:11px;color:rgba(255,255,255,0.35);">10Y percentile</span>
+      </div>
+    </div>
+  `).join('');
 
   return `<!DOCTYPE html>
 <html>
@@ -89,62 +118,88 @@ export function generateCardHTML({ verdictLine, macroDataObj, dateStr, dashboard
   body {
     width:1080px; height:1350px;
     font-family:'Inter',-apple-system,sans-serif;
-    background:#ffffff;
-    color:#1d1d1f;
+    background: linear-gradient(170deg, #0c0c1d 0%, #111128 40%, #0a0a1a 100%);
+    color:#ffffff;
     display:flex;
     flex-direction:column;
-    padding:60px 56px;
+    padding:52px 48px;
     -webkit-font-smoothing:antialiased;
+    position:relative;
+    overflow:hidden;
+  }
+  /* Subtle gradient orbs */
+  body::before {
+    content:'';
+    position:absolute;
+    top:-120px; right:-80px;
+    width:400px; height:400px;
+    background:radial-gradient(circle, rgba(10,132,255,0.12), transparent 70%);
+    pointer-events:none;
+  }
+  body::after {
+    content:'';
+    position:absolute;
+    bottom:-100px; left:-60px;
+    width:350px; height:350px;
+    background:radial-gradient(circle, rgba(191,90,242,0.10), transparent 70%);
+    pointer-events:none;
   }
 </style>
 </head>
 <body>
+
   <!-- Header -->
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:40px;">
-    <div style="display:flex;align-items:center;gap:14px;">
-      <div style="width:44px;height:44px;background:linear-gradient(135deg,#0071e3,#5856d6);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px;">M</div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;position:relative;z-index:1;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="width:42px;height:42px;background:linear-gradient(135deg,#0a84ff,#bf5af2);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px;box-shadow:0 4px 20px rgba(10,132,255,0.3);">M</div>
       <div>
-        <div style="font-size:15px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;">Macro Intelligence</div>
-        <div style="font-size:12px;color:#86868b;letter-spacing:0.06em;">Daily Macro Brief</div>
+        <div style="font-size:14px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#ffffff;">Macro Intelligence</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:0.06em;">Daily Brief</div>
       </div>
     </div>
-    <div style="font-size:14px;color:#86868b;font-weight:500;">${dateStr}</div>
+    <div style="font-size:13px;color:rgba(255,255,255,0.4);font-weight:500;">${dateStr}</div>
   </div>
 
-  <!-- Verdict -->
-  <div style="margin-bottom:44px;">
-    <div style="font-size:11px;font-weight:600;color:#0071e3;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:14px;">TODAY'S VERDICT</div>
-    <div style="font-size:32px;font-weight:700;line-height:1.28;letter-spacing:-0.02em;color:#1d1d1f;">${verdictLine || 'Dashboard generated — see full report for details.'}</div>
+  <!-- Thin divider -->
+  <div style="height:1px;background:rgba(255,255,255,0.06);margin-bottom:32px;position:relative;z-index:1;"></div>
+
+  <!-- HERO VERDICT -->
+  <div style="margin-bottom:32px;position:relative;z-index:1;">
+    <div style="font-size:11px;font-weight:600;color:#0a84ff;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:14px;">TODAY'S VERDICT</div>
+    <div style="font-size:30px;font-weight:700;line-height:1.25;letter-spacing:-0.02em;color:#ffffff;">${verdictLine || 'Dashboard generated — see full report.'}</div>
   </div>
 
-  <!-- Regime Badges -->
-  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:44px;">
-    ${badgesHTML}
+  <!-- REGIME STRIP -->
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:30px;position:relative;z-index:1;">
+    ${regimes}
   </div>
 
-  <!-- Key Numbers Grid -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:auto;">
-    ${numbersHTML}
+  <!-- SURPRISING RISKS -->
+  <div style="margin-bottom:22px;position:relative;z-index:1;">
+    <div style="font-size:11px;font-weight:700;color:#ff453a;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:12px;">⚠ SURPRISING RISKS</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      ${riskCards || '<div style="color:rgba(255,255,255,0.3);font-size:13px;grid-column:span 2;">No extreme risk signals today.</div>'}
+    </div>
   </div>
 
-  <!-- Audio mention -->
-  <div style="display:flex;align-items:center;gap:10px;padding:18px 22px;background:#fafafa;border-radius:14px;margin-bottom:32px;">
-    <div style="width:40px;height:40px;background:#1d1d1f;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;flex-shrink:0;">&#9654;</div>
-    <div>
-      <div style="font-size:14px;font-weight:600;">60-Second Macro</div>
-      <div style="font-size:12px;color:#86868b;">Listen to today's audio briefing</div>
+  <!-- SURPRISING STRENGTHS -->
+  <div style="margin-bottom:auto;position:relative;z-index:1;">
+    <div style="font-size:11px;font-weight:700;color:#30d158;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:12px;">✦ SURPRISING STRENGTHS</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      ${strengthCards || '<div style="color:rgba(255,255,255,0.3);font-size:13px;grid-column:span 2;">No extreme strength signals today.</div>'}
     </div>
   </div>
 
   <!-- CTA -->
-  <a href="${dashboardUrl}" style="display:block;text-align:center;padding:20px;background:#1d1d1f;color:#ffffff;border-radius:14px;font-size:16px;font-weight:600;text-decoration:none;letter-spacing:0.01em;">
+  <a href="${dashboardUrl}" style="display:block;text-align:center;padding:18px;background:linear-gradient(135deg,#0a84ff,#5e5ce6);color:#ffffff;border-radius:14px;font-size:15px;font-weight:600;text-decoration:none;letter-spacing:0.01em;margin-top:20px;position:relative;z-index:1;box-shadow:0 4px 20px rgba(10,132,255,0.25);">
     Explore the Full Dashboard →
   </a>
 
   <!-- Footer -->
-  <div style="text-align:center;margin-top:20px;font-size:11px;color:#aeaeb2;">
+  <div style="text-align:center;margin-top:14px;font-size:10px;color:rgba(255,255,255,0.25);position:relative;z-index:1;">
     macrointelligence.corp · Not investment advice
   </div>
+
 </body>
 </html>`;
 }

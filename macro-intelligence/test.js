@@ -408,12 +408,13 @@ const mockCardData = {
 };
 const cardHTML = generateCardHTML(mockCardData);
 assert(cardHTML.includes('Test verdict line'), 'Card HTML must contain verdict line');
-assert(cardHTML.includes('Nifty 50'), 'Card HTML must contain Nifty');
+assert(cardHTML.includes('SURPRISING RISKS'), 'Card HTML must contain risks section');
+assert(cardHTML.includes('SURPRISING STRENGTHS'), 'Card HTML must contain strengths section');
 assert(cardHTML.includes('Explore the Full Dashboard'), 'Card HTML must contain CTA');
 assert(cardHTML.includes('https://example.com'), 'Card HTML must contain dashboard URL');
 assert(cardHTML.includes('1080px'), 'Card HTML must be 1080px wide');
 assert(cardHTML.includes('1350px'), 'Card HTML must be 1350px tall');
-assert(cardHTML.includes('60-Second Macro'), 'Card HTML must mention audio briefing');
+assert(cardHTML.includes('percentile'), 'Card HTML must show percentile badges');
 
 // ═══════════════════════════════════════════════════════════════════
 // RESULTS

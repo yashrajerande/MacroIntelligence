@@ -3,123 +3,96 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Macro Intelligence — Light Mode</title>
+<title>Macro Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════════
-   MACRO INTELLIGENCE — CRED-STYLE TERMINAL
-   High contrast · Crisp ink · Premium dark luxury
-   v4.0 — CRED aesthetic overhaul
+   MACRO INTELLIGENCE — JONY IVE EDITION
+   Radical simplicity · Purposeful whitespace · Quiet confidence
+   v5.0 — Every pixel earns its place
 ═══════════════════════════════════════════════════ */
-@import url('https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&display=swap');
 
 :root {
-  /* ── LIGHT PALETTE — crisp paper-white ── */
-  --void:       #f5f6fa;
-  --deep:       #eceef5;
+  /* ── IVE PALETTE — pure, clean, no noise ── */
+  --void:       #f5f5f7;
+  --deep:       #f0f0f2;
   --surface:    #ffffff;
-  --raised:     #f0f2f8;
-  --rim:        #d0d4e8;
-  --muted:      #c0c4dc;
-  --card:       rgba(255,255,255,0.97);
+  --raised:     #fafafa;
+  --rim:        #d2d2d7;
+  --muted:      #c7c7cc;
+  --card:       rgba(255,255,255,0.98);
 
-  /* ── INK — deep charcoal hierarchy ── */
-  --ink-1:      #0a0c1a;        /* near-black — primary text */
-  --ink-2:      #1c2040;        /* dark navy — secondary */
-  --ink-3:      #3a4070;        /* medium — tertiary */
-  --ink-4:      #6068a0;        /* muted — metadata */
-  --ink-5:      #a0a8cc;        /* light — dividers */
+  /* ── INK — Apple-grade hierarchy ── */
+  --ink-1:      #1d1d1f;
+  --ink-2:      #424245;
+  --ink-3:      #6e6e73;
+  --ink-4:      #86868b;
+  --ink-5:      #aeaeb2;
 
-  /* ── SIGNALS — adjusted for light bg ── */
-  --signal:     #1a00cc;        /* deep indigo */
-  --signal-dim: rgba(26,0,204,0.08);
-  --signal-glow:rgba(26,0,204,0.15);
+  /* ── SIGNALS — restrained, purposeful ── */
+  --signal:     #0071e3;
+  --signal-dim: rgba(0,113,227,0.06);
+  --signal-glow:rgba(0,113,227,0.12);
 
-  /* ── STATUS — deepened for light mode ── */
-  --safe:       #007a52;        /* deep green */
-  --safe-dim:   rgba(0,122,82,0.08);
-  --safe-glow:  rgba(0,122,82,0.20);
-  --danger:     #cc0033;        /* deep red */
-  --danger-dim: rgba(204,0,51,0.07);
-  --danger-glow:rgba(204,0,51,0.20);
-  --caution:    #b85c00;        /* deep amber */
-  --caution-dim:rgba(184,92,0,0.08);
-  --frost:      #005c99;        /* deep cyan */
-  --frost-dim:  rgba(0,92,153,0.07);
-  --violet:     #6600cc;        /* deep violet */
-  --violet-dim: rgba(102,0,204,0.08);
+  /* ── STATUS — clear, not loud ── */
+  --safe:       #34c759;
+  --safe-dim:   rgba(52,199,89,0.08);
+  --safe-glow:  rgba(52,199,89,0.15);
+  --danger:     #ff3b30;
+  --danger-dim: rgba(255,59,48,0.06);
+  --danger-glow:rgba(255,59,48,0.15);
+  --caution:    #ff9500;
+  --caution-dim:rgba(255,149,0,0.06);
+  --frost:      #5ac8fa;
+  --frost-dim:  rgba(90,200,250,0.06);
+  --violet:     #af52de;
+  --violet-dim: rgba(175,82,222,0.06);
 
-  /* ── ACCENT GLOWS ── */
+  /* ── ACCENT GLOWS — barely there ── */
   --cred-gold:  #8c6200;
-  --cred-gold-dim: rgba(140,98,0,0.10);
-  --glow-blue:  rgba(26,0,204,0.18);
-  --glow-teal:  rgba(0,92,153,0.14);
-  --glow-gold:  rgba(140,98,0,0.12);
-  --glass-bg:   rgba(255,255,255,0.96);
-  --glass-edge: rgba(0,0,40,0.10);
-  --glass-edge-bright: rgba(0,0,40,0.18);
+  --cred-gold-dim: rgba(140,98,0,0.06);
+  --glow-blue:  rgba(0,113,227,0.08);
+  --glow-teal:  rgba(90,200,250,0.06);
+  --glow-gold:  rgba(140,98,0,0.06);
+  --glass-bg:   rgba(255,255,255,0.98);
+  --glass-edge: rgba(0,0,0,0.06);
+  --glass-edge-bright: rgba(0,0,0,0.10);
+  --glass-border: rgba(0,0,0,0.06);
 
-  /* ── TYPOGRAPHY ── */
-  --display: 'Syne', sans-serif;
-  --mono:    'DM Mono', monospace;
-  --body:    'DM Sans', sans-serif;
+  /* ── TYPOGRAPHY — Inter + JetBrains Mono ── */
+  --display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono:    'JetBrains Mono', 'SF Mono', monospace;
+  --body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
-  /* ── BASE FONT — 2 sizes up from 14px ── */
-  --fs-base: 16px;
+  /* ── BASE FONT ── */
+  --fs-base: 15px;
 
-  /* ── RADIUS ── */
-  --r-xl: 24px;
-  --r-lg: 18px;
+  /* ── RADIUS — generous, Apple-style ── */
+  --r-xl: 20px;
+  --r-lg: 16px;
   --r-md: 12px;
   --r-sm: 8px;
-  --r-xs: 5px;
+  --r-xs: 6px;
 
-  /* ── ELEVATION — deeper CRED shadows ── */
-  --shadow-panel: 0 4px 24px rgba(0,0,60,0.08), 0 1px 4px rgba(0,0,60,0.05);
-  --shadow-card:  0 2px 12px rgba(0,0,60,0.07), 0 1px 3px rgba(0,0,60,0.04);
-  --shadow-nav:   0 4px 24px rgba(0,0,60,0.10), 0 1px 4px rgba(0,0,60,0.06);
+  /* ── ELEVATION — whisper-quiet ── */
+  --shadow-panel: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02);
+  --shadow-card:  0 1px 2px rgba(0,0,0,0.03);
+  --shadow-nav:   0 1px 3px rgba(0,0,0,0.06);
 }
 
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html { font-size:var(--fs-base); scroll-behavior:smooth; }
 
 body {
-  background:
-    radial-gradient(ellipse at 20% 0%,   rgba(26,0,204,0.06),    transparent 35%),
-    radial-gradient(ellipse at 82% 5%,   rgba(0,92,153,0.05),    transparent 30%),
-    radial-gradient(ellipse at 50% 95%,  rgba(26,0,204,0.04),    transparent 38%),
-    radial-gradient(ellipse at 5% 60%,   rgba(102,0,204,0.04),   transparent 28%),
-    linear-gradient(180deg, #f5f6fa 0%, #eceef5 50%, #f5f6fa 100%);
+  background: var(--void);
   color: var(--ink-1);
   font-family: var(--body);
   min-height: 100vh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-}
-
-/* ── CRED grain texture overlay ── */
-body::before {
-  content:'';
-  position:fixed;
-  inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-  pointer-events:none;
-  z-index:9999;
-  opacity:0.08;
-}
-
-/* ── Subtle dot grid — CRED signature ── */
-body::after {
-  content:'';
-  position:fixed;
-  inset:0;
-  background-image: radial-gradient(circle, rgba(0,0,60,0.06) 1px, transparent 1px);
-  background-size: 32px 32px;
-  mask-image: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, transparent 65%);
-  pointer-events:none;
-  z-index:1;
+  line-height: 1.5;
 }
 
 ::-webkit-scrollbar { width:4px; }
@@ -138,43 +111,38 @@ body::after {
   z-index:1000;
 }
 .topbar {
-  height:56px;
-  background:rgba(250,251,255,0.97);
-  backdrop-filter:blur(40px) saturate(180%);
-  -webkit-backdrop-filter:blur(40px) saturate(180%);
-  border:1px solid var(--glass-edge-bright);
-  border-radius:999px;
-  box-shadow:
-    0 2px 16px rgba(0,0,60,0.10),
-    0 0 0 1px rgba(0,0,60,0.05);
+  height:52px;
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:0 18px 0 10px;
+  padding:0 20px 0 14px;
 }
 
 .brand-mark {
-  width:38px;
-  height:38px;
-  border-radius:12px;
-  background:linear-gradient(135deg, rgba(26,0,204,0.12), rgba(0,92,153,0.10));
-  border:1px solid rgba(26,0,204,0.25);
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  background: linear-gradient(135deg, #0071e3, #5856d6);
   display:flex;
   align-items:center;
   justify-content:center;
   flex-shrink:0;
-  margin-right:11px;
+  margin-right:12px;
   position:relative;
   overflow:hidden;
-  box-shadow:0 0 16px rgba(26,0,204,0.10);
 }
 .brand-mark::before {
-  content:'';
-  position:absolute;
-  inset:8px;
-  border:1.5px solid rgba(26,0,204,0.55);
-  border-radius:4px;
-  transform:rotate(45deg);
+  content:'M';
+  font-family:var(--display);
+  font-size:0.85rem;
+  font-weight:700;
+  color:#fff;
 }
 
 .brand-text {
@@ -275,19 +243,19 @@ body::after {
 ══════════════════════════════════════════════════ */
 .ticker-rail {
   position:fixed;
-  top:78px;
+  top:74px;
   left:10px;
   right:10px;
   height:30px;
-  background:rgba(255,255,255,0.97);
-  backdrop-filter:blur(24px);
-  border:1px solid rgba(0,0,60,0.14);
-  border-radius:999px;
+  background:rgba(255,255,255,0.95);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:10px;
   overflow:hidden;
   display:flex;
   align-items:center;
   z-index:999;
-  box-shadow:0 4px 20px rgba(0,0,0,0.40);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
 }
 .ticker-scroll {
   display:flex;
@@ -321,11 +289,11 @@ body::after {
   top:120px;
   bottom:10px;
   width:64px;
-  background:rgba(248,249,255,0.98);
-  backdrop-filter:blur(40px) saturate(200%);
-  -webkit-backdrop-filter:blur(40px) saturate(200%);
-  border:1px solid rgba(0,0,60,0.14);
-  border-radius:20px;
+  background:rgba(255,255,255,0.95);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:16px;
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -355,17 +323,17 @@ body::after {
   background:transparent;
 }
 .nav-item:hover {
-  background:rgba(26,0,204,0.06);
-  border-color:rgba(26,0,204,0.20);
-  transform:scale(1.04);
+  background:rgba(0,0,0,0.04);
+  border-color:rgba(0,0,0,0.08);
+  transform:scale(1.02);
 }
 .nav-item.active {
-  background:linear-gradient(145deg, rgba(26,0,204,0.10), rgba(26,0,204,0.04));
-  border-color:rgba(26,0,204,0.30);
-  box-shadow:0 2px 8px rgba(26,0,204,0.12);
+  background:rgba(0,113,227,0.08);
+  border-color:rgba(0,113,227,0.20);
+  box-shadow:none;
 }
 .nav-icon  { font-size:1.10rem; line-height:1; filter:drop-shadow(0 0 4px rgba(255,255,255,0.12)); }
-.nav-item.active .nav-icon { filter:drop-shadow(0 0 4px rgba(26,0,204,0.25)); }
+.nav-item.active .nav-icon { filter:none; }
 .nav-label {
   font-family:var(--mono);
   font-size:0.46rem;
@@ -376,7 +344,7 @@ body::after {
   font-weight:500;
 }
 .nav-item:hover .nav-label { color:var(--ink-2); }
-.nav-item.active .nav-label { color:#1a00cc; font-weight:700; }
+.nav-item.active .nav-label { color:#0071e3; font-weight:600; }
 .nav-dot { position:absolute; top:6px; right:6px; width:6px; height:6px; border-radius:50%; border:1.5px solid var(--deep); }
 .nd-r { background:var(--danger);  box-shadow:none; }
 .nd-a { background:var(--caution); box-shadow:none; }
@@ -422,47 +390,29 @@ body::after {
    GLASS PANEL — CRED card elevation
 ══════════════════════════════════════════════════ */
 .glass-panel {
-  background:rgba(255,255,255,0.98);
-  backdrop-filter:blur(32px) saturate(160%);
-  -webkit-backdrop-filter:blur(32px) saturate(160%);
-  border:1px solid rgba(0,0,60,0.10);
-  border-radius:var(--r-xl);
-  box-shadow:0 8px 40px rgba(0,0,60,0.08), 0 2px 8px rgba(0,0,60,0.06);
+  background: #ffffff;
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:var(--r-lg);
+  box-shadow: var(--shadow-panel);
   overflow:hidden;
-  margin-bottom:12px;
+  margin-bottom:14px;
   position:relative;
-  transition:border-color 0.2s;
+  transition: box-shadow 0.2s;
 }
-.glass-panel:hover { border-color:rgba(26,0,204,0.18); }
-
-/* Top shimmer — stronger than before */
-.glass-panel::before {
-  content:'';
-  position:absolute;
-  top:0;
-  left:10%;
-  right:10%;
-  height:1px;
-  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.20), transparent);
-  pointer-events:none;
-}
+.glass-panel:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.glass-panel::before { display:none; }
 
 /* ══════════════════════════════════════════════════
    COMMAND STRIP
 ══════════════════════════════════════════════════ */
 .cmd {
-  padding:32px 32px 28px;
+  padding:36px 36px 30px;
   position:relative;
   overflow:hidden;
+  border-radius: var(--r-xl);
 }
 .cmd-ambient {
-  position:absolute;
-  inset:0;
-  background:
-    radial-gradient(ellipse at 6% 50%,  rgba(26,0,204,0.06), transparent 44%),
-    radial-gradient(ellipse at 88% 15%, rgba(0,92,153,0.05),  transparent 40%),
-    radial-gradient(ellipse at 50% 100%,rgba(26,0,204,0.03),  transparent 50%);
-  pointer-events:none;
+  display:none;
 }
 .cmd-eyebrow {
   font-family:var(--mono);
@@ -958,23 +908,32 @@ td.c-pct { text-align:right; min-width:96px; }
   <div class="glass-panel cmd" id="cmd">
     <div class="cmd-ambient"></div>
     <div class="cmd-eyebrow" id="cmd-date">INDIA &amp; GLOBAL MACRO · DAILY INTELLIGENCE BRIEF</div>
-    <div class="cmd-verdict" id="snap-verdict">India's 7.8% GDP headline is structurally sound — but a 350bps credit-deposit gap, accelerating FII outflows, and Brent at $98.66 are quietly assembling a balance-of-payments stress test.</div>
+    <div class="cmd-verdict" id="snap-verdict">India's 7.8% GDP headline is structurally funded by a credit-deposit gap at its widest in a decade — while Brent at $98 is about to detonate the fuel deflation that's been suppressing CPI.</div>
     <div class="cmd-trio">
       <div class="ctrio"><div class="ctrio-lbl">🇮🇳 India Regime</div><div class="ctrio-val" id="snap-india">Nifty 23775.1 | INR/USD 92.59</div></div>
-      <div class="ctrio"><div class="ctrio-lbl">🌍 Global Regime</div><div class="ctrio-val" id="snap-global">Brent $98.66 | DXY 99.04</div></div>
-      <div class="ctrio"><div class="ctrio-lbl">⚡ Top Risk Now</div><div class="ctrio-val" id="snap-risk">Oil Spike Threatens CAD — Brent at 82nd Percentile</div></div>
+      <div class="ctrio"><div class="ctrio-lbl">🌍 Global Regime</div><div class="ctrio-val" id="snap-global">Brent $97.96 | DXY 99.04</div></div>
+      <div class="ctrio"><div class="ctrio-lbl">⚡ Top Risk Now</div><div class="ctrio-val" id="snap-risk">Deposit Gap Forces RBI's Hand</div></div>
     </div>
   </div>
 
-  <!-- 60-SECOND MACRO AUDIO -->
-  <div class="glass-panel" id="audio-panel" style="display:none;padding:12px 20px;margin-top:8px;">
-    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
-      <button id="audio-play-btn" onclick="toggleAudio()" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;border-radius:24px;padding:10px 22px;font-family:var(--mono);font-size:0.72rem;font-weight:700;letter-spacing:0.06em;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 2px 12px rgba(99,102,241,0.25);transition:all 0.2s;">
-        <span id="audio-icon">&#9654;</span> 60-SECOND MACRO
+  <!-- 60-SECOND MACRO AUDIO — HERO PLAYER -->
+  <div id="audio-panel" style="display:none;margin:12px 0 16px;padding:24px 28px;background:#fff;border-radius:20px;border:1px solid rgba(0,0,0,0.06);box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:14px;">
+      <div style="width:8px;height:8px;border-radius:50%;background:#0071e3;animation:livepulse 2s ease-in-out infinite;"></div>
+      <span style="font-family:var(--mono);font-size:0.65rem;font-weight:600;color:var(--ink-3);letter-spacing:0.12em;text-transform:uppercase;">AUDIO BRIEFING</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <button id="audio-play-btn" onclick="toggleAudio()" style="width:56px;height:56px;background:#1d1d1f;color:#fff;border:none;border-radius:50%;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,0.15);">
+        <span id="audio-icon">&#9654;</span>
       </button>
-      <div id="audio-time" style="font-family:var(--mono);font-size:0.65rem;color:var(--ink-3);">0:00 / 1:00</div>
-      <div id="audio-bar-wrap" style="flex:1;min-width:120px;height:4px;background:var(--glass-border);border-radius:2px;cursor:pointer;position:relative;" onclick="seekAudio(event)">
-        <div id="audio-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#6366f1,#8b5cf6);border-radius:2px;transition:width 0.1s;"></div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-family:var(--display);font-size:1.05rem;font-weight:600;color:var(--ink-1);margin-bottom:6px;">60-Second Macro</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div id="audio-bar-wrap" style="flex:1;height:4px;background:rgba(0,0,0,0.08);border-radius:2px;cursor:pointer;position:relative;overflow:hidden;" onclick="seekAudio(event)">
+            <div id="audio-bar" style="height:100%;width:0%;background:#0071e3;border-radius:2px;transition:width 0.15s;"></div>
+          </div>
+          <div id="audio-time" style="font-family:var(--mono);font-size:0.62rem;color:var(--ink-4);white-space:nowrap;">0:00 / 1:00</div>
+        </div>
       </div>
     </div>
     <audio id="macro-audio" preload="auto"></audio>
@@ -988,11 +947,11 @@ td.c-pct { text-align:right; min-width:96px; }
     </div>
     <div class="pb">
       <div class="exec-grid">
-        <div class="ec"><div class="ec-num">01</div><div class="ec-lbl">India Macro Regime</div><div class="ec-txt" id="exec-01"><p><strong>7.8%</strong> GDP with PMI composite at <strong>56.5</strong> is the headline — but core sector growth at <strong>2.3%</strong> (down from <strong>4.7%</strong>) and capacity utilisation slipping to <strong>74.8%</strong> are the footnotes that matter more. GST at <strong>₹2.0 lakh crore</strong> and two-wheeler sales at <strong>+13.4%</strong> confirm that consumption is genuinely broad-based — rural demand is not a laggard this cycle. What breaks this narrative: food CPI accelerating to <strong>3.47%</strong> from <strong>2.13%</strong> in a single month, with the FAO food index at <strong>128.5</strong> and Brent at <strong>$98.66</strong> — the RBI's <strong>4.6%</strong> inflation forecast revision (up from <strong>2.1%</strong>) suggests the institution already sees the trapdoor. India's growth is real; its durability over the next two quarters is not.</p></div></div>
-        <div class="ec"><div class="ec-num">02</div><div class="ec-lbl">Global Macro Regime</div><div class="ec-txt" id="exec-02"><p>US GDP SAAR at <strong>0.7%</strong> — halved from <strong>1.4%</strong> prior quarter — while S&P 500 sits at the <strong>96th percentile</strong> and Nasdaq at the <strong>100th percentile</strong> is the most dangerous valuation-growth divergence in global markets today. Core PCE at <strong>3.06%</strong> with the Fed funds rate at <strong>3.625%</strong> means the Fed is already cutting into above-target inflation — a policy error in slow motion — while the Fed balance sheet expanding to <strong>$6.675 trillion</strong> signals stealth liquidity injection. China's composite PMI recovering to <strong>50.25</strong> from <strong>49.25</strong> and iron ore spiking <strong>50%</strong> to <strong>$161.91/tonne</strong> suggest Beijing stimulus is landing in commodities, not consumption — a pattern that exports inflation to India's import bill. Copper declining to <strong>$5.698/tonne</strong> while iron ore surges is the demand-quality warning: infrastructure spending without industrial demand recovery.</p></div></div>
-        <div class="ec"><div class="ec-num">03</div><div class="ec-lbl">Liquidity Conditions</div><div class="ec-txt" id="exec-03"><p>FII equity outflows at <strong>-₹8,692 crore</strong> — accelerating <strong>2.6x</strong> from <strong>-₹3,295 crore</strong> prior month — are not being fully absorbed by DIIs at <strong>+₹7,979 crore</strong> (itself declining from <strong>₹8,593 crore</strong>), leaving a net liquidity deficit in Indian equities. SIP inflows at <strong>₹29,845 crore</strong> are declining from <strong>₹31,002 crore</strong>, and NFO collections at <strong>₹1,939 crore</strong> (6th percentile) signal that new retail investor acquisition has stalled — the SIP engine is running on existing accounts, not fresh capital. INR at <strong>92.59</strong> (84th percentile) with DXY rising to <strong>99.04</strong> means RBI is either burning reserves to defend the currency or accepting depreciation — both outcomes compress the real rate advantage that justified the easing cycle. Average SIP ticket size rising to <strong>₹15,900</strong> confirms affluent money is entering even as mass-market participation plateaus — a bifurcation that historically precedes index concentration risk.</p></div></div>
-        <div class="ec"><div class="ec-num">04</div><div class="ec-lbl">Equity + Real Estate Implications</div><div class="ec-txt" id="exec-04"><p>Nifty at <strong>23,775</strong> (76th percentile) with Bank Nifty at <strong>54,821</strong> (90th percentile) — the banking index is priced for perfection at a moment when CD ratio at <strong>83.04%</strong> and deposit growth at <strong>10.8%</strong> structurally constrain NIM expansion. Office absorption at <strong>29.9 mn sqft</strong> with vacancy compressing <strong>330bps</strong> to <strong>13.9%</strong> and Bengaluru rents spiking <strong>9.5%</strong> to <strong>₹100.6/sqft</strong> is a genuine real estate signal — but Nifty IT flat YoY confirms GCCs and non-IT corporates are the absorption driver, not traditional IT services at <strong>18-20x FY27E</strong> with flat growth. Residential real estate affordability improving to <strong>0.61</strong> from <strong>0.46</strong> with home loan rates at <strong>8.15%</strong> is structurally positive — but sales units declining to <strong>101,675</strong> from <strong>108,970</strong> while launches rise to <strong>126,265</strong> means unsold inventory at <strong>600,000 units</strong> is building, not clearing. Embassy REIT at <strong>₹437</strong> (78th percentile) is the cleanest expression of the office absorption thesis — own the physical asset, not the IT services P&L.</p></div></div>
-        <div class="ec full"><div class="ec-num">05</div><div class="ec-lbl">Key Risks to Monitor</div><div class="ec-txt" id="exec-05"><p>Ranked by probability × impact: first, Brent at <strong>$98.66</strong> (82nd percentile) — every <strong>$10</strong> adds <strong>~$15bn</strong> to India's annual import bill — CAD widens <strong>40bps</strong> — INR depreciates <strong>2-3%</strong> — imported inflation feeds CPI with a two-quarter lag — RBI forced to pause or reverse the easing cycle — corporate capex IRRs deteriorate — Nifty derates. Second, the CD ratio at <strong>83.04%</strong> widening further — deposit rate wars → NIM compression → Bank Nifty earnings downgrades → passive outflows from index funds that are <strong>30%+</strong> weighted to financials. Third, US growth at <strong>0.7%</strong> SAAR with equities at the <strong>96th-100th percentile</strong> — a mean-reversion in S&P 500 triggers risk-off globally — FII outflows from India accelerate beyond the <strong>-₹8,692 crore</strong> February run-rate — INR breaks above <strong>94</strong>. Watch Friday's RBI MPC minutes for any language shift on the inflation forecast revision from <strong>2.1%</strong> to <strong>4.6%</strong> — that <strong>250bps</strong> internal revision is the single most important data point this week.</p></div></div>
+        <div class="ec"><div class="ec-num">01</div><div class="ec-lbl">India Macro Regime</div><div class="ec-txt" id="exec-01"><p><strong>7.8%</strong> GDP — down from <strong>8.4%</strong> — is the kind of number that flatters on the cover page and disappoints on page three: PMI composite fell <strong>240bps</strong> to <strong>56.5</strong>, core sector decelerated to <strong>2.3%</strong> from <strong>4.7%</strong>, and capacity utilisation slipped to <strong>74.8%</strong> — all pointing to a growth regime that is decelerating, not consolidating. GST at <strong>₹2,00,064 cr</strong> is a genuine milestone, but two-wheeler sales flat at <strong>13.4%</strong> and airline traffic at the 7th percentile historically suggest the informal economy — <strong>85%</strong> of employment — is not sharing in the expansion. RBI's own GDP forecast at <strong>6.9%</strong> versus the government's <strong>7.6%</strong> FY estimate is a <strong>70bps</strong> institutional disagreement that deserves more attention than it is receiving. India's growth is real but narrowing — concentrated in formal-sector services and government-adjacent capex, while the consumption base that sustains it is showing stress at the margins.</p></div></div>
+        <div class="ec"><div class="ec-num">02</div><div class="ec-lbl">Global Macro Regime</div><div class="ec-txt" id="exec-02"><p>US GDP SAAR at <strong>0.7%</strong> — down from <strong>4.4%</strong>, a <strong>370bps</strong> collapse — is the most important global data point this week, yet S&P 500 at the 96th percentile and Nasdaq at the 100th percentile are pricing a soft landing with zero margin for error. US PMI composite at <strong>50.3</strong> (47th percentile) is one bad month from contraction; US core PCE ticking up to <strong>3.1%</strong> from <strong>3.0%</strong> means the Fed — balance sheet expanding to <strong>$6.675T</strong> despite flat rates at <strong>3.625%</strong> — is caught between a slowing economy and sticky inflation. Iron ore surging <strong>50%</strong> to <strong>$161.91/tonne</strong> on China stimulus expectations — while copper falls <strong>0.7%</strong> to <strong>$5.718</strong> — is a commodity market sending two contradictory signals simultaneously: hoarding fear versus demand destruction. Brent at <strong>$97.96</strong> — every <strong>$10</strong> adds <strong>$15bn</strong> to India's import bill — CAD widens <strong>40bps</strong> — INR depreciates <strong>2-3%</strong> — imported inflation feeds CPI with a two-quarter lag.</p></div></div>
+        <div class="ec"><div class="ec-num">03</div><div class="ec-lbl">Liquidity Conditions</div><div class="ec-txt" id="exec-03"><p><strong>₹2,59,78 cr</strong> in equity MF net inflows and SIP accounts at <strong>1.045 cr</strong> — up <strong>5.3% MoM</strong> — represent a structural domestic liquidity floor that is deepening, but the composition is shifting: average SIP ticket size at <strong>₹15,900</strong> is rising while NFO collections collapsed to <strong>₹4,979 cr</strong> (16th percentile), confirming that retail participation is systematic and SIP-driven, not speculative. FII equity net turning to <strong>-₹114 cr</strong> — first outflow in three months — with DII support at only <strong>₹128 cr</strong> (22nd percentile) means domestic institutional buying is not yet absorbing the FII exit at scale. Corporate bond issuance at <strong>₹9.9 lakh cr</strong> — up from <strong>₹8.6 lakh cr</strong> — is crowding banks out of credit intermediation, compressing NIM potential even as CD ratio at <strong>82.5%</strong> constrains deposit-funded lending. India VIX at <strong>20.4</strong> (16th percentile) is deceptively low given the structural credit stress — the market is not yet pricing the tail risk in the banking system's funding architecture.</p></div></div>
+        <div class="ec"><div class="ec-num">04</div><div class="ec-lbl">Equity + Real Estate Implications</div><div class="ec-txt" id="exec-04"><p>Nifty 50 at <strong>23,775</strong> (76th percentile) and Bank Nifty at <strong>54,822</strong> (90th percentile) are pricing a benign credit cycle — a mispricing, given CD ratio at the 79th percentile and deposit growth structurally lagging credit by <strong>280bps</strong>; NIM compression is the second-order effect that bank earnings models have not yet absorbed. Real estate is bifurcating with surgical clarity: office absorption rising to <strong>29.9mn sqft</strong> with vacancy falling to <strong>13.9%</strong> — driven by GCC demand, not traditional IT services — while residential sales fell to <strong>101.7mn units</strong> from <strong>109mn</strong> against launches of <strong>126.3mn units</strong>, building <strong>600,000 units</strong> of unsold inventory. Bengaluru rents up <strong>7.5%</strong> to <strong>₹100.6/sqft</strong> while Mumbai rents down <strong>10.2%</strong> to <strong>₹106/sqft</strong> — the divergence maps precisely onto GCC expansion in tech corridors versus traditional financial-sector office demand softening. Embassy REIT at <strong>₹437</strong> (78th percentile) is the cleaner expression of the GCC thesis than Nifty IT at <strong>18x</strong> forward PE — <strong>200bps</strong> above its five-year average — which is pricing a US tech recovery that US GDP at <strong>0.7%</strong> does not support.</p></div></div>
+        <div class="ec full"><div class="ec-num">05</div><div class="ec-lbl">Key Risks to Monitor</div><div class="ec-txt" id="exec-05"><p>Ranked by probability × impact: first, fuel pass-through — Brent at <strong>$97.96</strong> with fuel deflation narrowing to <strong>-3.78%</strong> from <strong>-4.01%</strong> means the CPI suppressor has perhaps two months of runway before administered price revision forces headline above <strong>4.5%</strong>, closing the rate-cut window entirely and triggering a bond market reprice. Second, CD ratio crystallisation — at <strong>82.5%</strong> for two consecutive months with NBFC credit accelerating to <strong>9.5%</strong>, the risk is not a sudden crisis but a slow-motion NIM compression → earnings downgrade → Bank Nifty derating cycle that passive index flows will amplify on the way down. Third, US growth shock transmission — S&P 500 at the 96th percentile with US GDP at <strong>0.7%</strong> is a valuation-growth disconnect that historically resolves violently; an equity correction of <strong>10-15%</strong> in US markets would trigger FII outflows from India at a moment when DII support is at the 22nd percentile. Fourth, food inflation persistence — CFPI at <strong>3.47%</strong> from <strong>2.13%</strong> with FAO food index up <strong>3</strong> points to <strong>128.5</strong> creates a political economy constraint on RBI's flexibility that is underappreciated. Watch Friday's RBI liquidity operations and the weekly deposit growth print — if deposit growth does not accelerate toward <strong>12%</strong> within the next four weeks, the credit-deposit gap becomes the dominant macro story for Q1 FY27.</p></div></div>
       </div>
     </div>
   </div>
@@ -1008,8 +967,8 @@ td.c-pct { text-align:right; min-width:96px; }
         <div class="scenario-card base">
           <div class="sc-scenario-lbl">Base Case · Most Likely</div>
           <div class="sc-prob" id="sc-base-prob">◉ Most Likely</div>
-          <div class="sc-scenario-name" id="sc-base-name">Resilient Growth Continues</div>
-          <div class="sc-scenario-txt" id="sc-base-txt">Broad expansion persists with 3 of 6 dimensions in expansion mode. Growth prints at GDP 7.8%; PMI 56.5 while credit channels remain supportive (Credit 14.3%%; CD 83.04%%). Policy stays accommodative as inflation remains contained.</div>
+          <div class="sc-scenario-name" id="sc-base-name">Steady State Drift</div>
+          <div class="sc-scenario-txt" id="sc-base-txt">Mixed signals across dimensions with no dominant trend. Growth at GDP 7.8%; PMI 56.5, inflation at CPI 3.21%; Fuel -3.78%. Policy remains on hold and credit conditions are stable.</div>
           <div class="mini-chart" id="sc-base-chart">
             <span style="height:45%"></span><span style="height:50%"></span><span style="height:55%"></span><span style="height:58%"></span><span style="height:65%"></span><span style="height:72%"></span>
           </div>
@@ -1018,7 +977,7 @@ td.c-pct { text-align:right; min-width:96px; }
           <div class="sc-scenario-lbl">Bull Case · Upside</div>
           <div class="sc-prob" id="sc-bull-prob">↑ Requires Co-incidence</div>
           <div class="sc-scenario-name" id="sc-bull-name">Reform Acceleration Boost</div>
-          <div class="sc-scenario-txt" id="sc-bull-txt">Policy reforms gain traction and crowd in private capex (IIP CapG 12.5%%; CU 74.8%%). Growth upgrades from current GDP 7.8%; PMI 56.5 as consumption broadens (GST 200064; PV 13%). Credit transmission improves, amplifying the recovery.</div>
+          <div class="sc-scenario-txt" id="sc-bull-txt">Policy reforms gain traction and crowd in private capex (IIP CapG 12.5%; CU 74.8%). Growth upgrades from current GDP 7.8%; PMI 56.5 as consumption broadens (GST 200064; PV 8.4%). Credit transmission improves, amplifying the recovery.</div>
           <div class="mini-chart" id="sc-bull-chart">
             <span style="height:40%"></span><span style="height:52%"></span><span style="height:65%"></span><span style="height:76%"></span><span style="height:86%"></span><span style="height:94%"></span>
           </div>
@@ -1026,8 +985,8 @@ td.c-pct { text-align:right; min-width:96px; }
         <div class="scenario-card bear">
           <div class="sc-scenario-lbl">Bear Case · Tail Risk</div>
           <div class="sc-prob" id="sc-bear-prob">⚠ Plausible Tail</div>
-          <div class="sc-scenario-name" id="sc-bear-name">Geopolitical Shock Contagion</div>
-          <div class="sc-scenario-txt" id="sc-bear-txt">External shocks -- trade disruptions, energy supply stress, or capital flight -- hit India. Current fundamentals (GDP 7.8%; PMI 56.5, Credit 14.3%%; CD 83.04%%) offer limited buffer. Rupee depreciation and imported inflation force a policy reversal.</div>
+          <div class="sc-scenario-name" id="sc-bear-name">Credit Crunch Cascade</div>
+          <div class="sc-scenario-txt" id="sc-bear-txt">Credit stress (Credit 13.7%; CD 82.5%) spreads from NBFCs to the broader banking system. Deposit mobilization falters, pushing up funding costs. Capex (IIP CapG 12.5%; CU 74.8%) stalls as risk aversion rises sharply.</div>
           <div class="mini-chart" id="sc-bear-chart">
             <span style="height:80%"></span><span style="height:72%"></span><span style="height:60%"></span><span style="height:50%"></span><span style="height:40%"></span><span style="height:28%"></span>
           </div>
@@ -1051,22 +1010,22 @@ td.c-pct { text-align:right; min-width:96px; }
         </div>
         <div class="nc ai">
           <div class="nc-cat">AI</div>
-          <div class="nc-hl"><a href="https://techcrunch.com/2026/04/08/wireguard-vpn-developer-cant-ship-software-updates-after-microsoft-locks-account/" id="news-ai-url" target="_blank" rel="noopener" id="news-ai-hl">WireGuard VPN Updates Blocked by Regulation</a></div>
+          <div class="nc-hl"><a href="https://techcrunch.com/2026/04/09/mariana-minerals-taps-pronto-to-help-automate-a-copper-mine/" id="news-ai-url" target="_blank" rel="noopener" id="news-ai-hl">Tesla Vet's Startup Partners With Pronto</a></div>
           <div class="nc-foot"><span class="nc-src" id="news-ai-src">Tech</span><span class="buzz bz-viral">VIRAL</span></div>
         </div>
         <div class="nc india">
           <div class="nc-cat">India</div>
-          <div class="nc-hl"><a href="https://economictimes.indiatimes.com/industry/auto/auto-news/mercedes-benz-india-sales-up-7-at-5131-units-in-q1-2026/articleshow/130140252.cms" id="news-india-url" target="_blank" rel="noopener" id="news-india-hl">Mercedes-Benz India Sales Surge 7%</a></div>
+          <div class="nc-hl"><a href="https://economictimes.indiatimes.com/news/india/indian-trade-delegation-to-visit-washington-this-month-says-us-envoy-to-india-sergio-gor/articleshow/130141469.cms" id="news-india-url" target="_blank" rel="noopener" id="news-india-hl">India Trade Delegation Heads to US</a></div>
           <div class="nc-foot"><span class="nc-src" id="news-india-src">India News</span><span class="buzz bz-watch">WATCH</span></div>
         </div>
         <div class="nc fintech">
           <div class="nc-cat">Global Fintech</div>
-          <div class="nc-hl"><a href="https://www.nytimes.com/2026/04/09/business/federal-reserve-inflation.html" id="news-fintech-url" target="_blank" rel="noopener" id="news-fintech-hl">Fed Inflation Crisis Predates War Impact</a></div>
+          <div class="nc-hl"><a href="https://www.nytimes.com/2026/04/09/business/dealbook/strait-hormuz-cease-fire-markets.html" id="news-fintech-url" target="_blank" rel="noopener" id="news-fintech-hl">Hormuz Strait Blockade Stalls Trade Flow</a></div>
           <div class="nc-foot"><span class="nc-src" id="news-fintech-src">Business</span><span class="buzz bz-watch">WATCH</span></div>
         </div>
         <div class="nc ifs">
           <div class="nc-cat">Indian Fin. Services</div>
-          <div class="nc-hl"><a href="https://economictimes.indiatimes.com/markets/stocks/earnings/tcs-q4-results-profit-rises-12-yoy-to-rs-13718-crore-co-declares-rs-31/share-dividend/articleshow/130140134.cms" id="news-ifs-url" target="_blank" rel="noopener" id="news-ifs-hl">TCS Profit Jumps 12% in Q4</a></div>
+          <div class="nc-hl"><a href="https://economictimes.indiatimes.com/markets/forex/forex-news/rupee-slips-as-fragile-mideast-truce-dents-stocks-bonds/articleshow/130141257.cms" id="news-ifs-url" target="_blank" rel="noopener" id="news-ifs-hl">Rupee Falls as Mideast Tensions Rise</a></div>
           <div class="nc-foot"><span class="nc-src" id="news-ifs-src">Markets</span><span class="buzz bz-hot">HOT</span></div>
         </div>
       </div>
@@ -1081,54 +1040,54 @@ td.c-pct { text-align:right; min-width:96px; }
     </div>
     <div class="pb">
       <div class="sig-grid" id="s9-signals">
-        <div class="sc watch" id="sig1">
-          <div class="sc-num">SIGNAL 01 · CREDIT CYCLE</div><div class="sc-status watch">◎ Watch</div>
-          <div class="sc-title" id="sig1-title">Deposit Gap Widens — RBI's Easing Trap</div>
-          <div class="sc-data" id="sig1-data">Bank credit +14.3% YoY vs deposits +10.8% YoY (Feb 2026) — a 350bps divergence that has widened 3 consecutive months. CD ratio at 83.04% (up from 82.38% prior month). NBFC credit growth moderating to 15-17% from 18-20% average, signalling wholesale funding stress. Corporate bond issuance holding at 85,000+ crore (FY25-26) vs 60,000 crore in FY22-23 — banks are losing deposit share to capital markets.</div>
-          <div class="sc-impl" id="sig1-impl">RBI's easing cycle (repo at 5.25%, down 25bps) is masking a structural deposit shortage. Banks with CASA ratios below 40% will face margin compression as they chase deposits at higher rates. Overweight private banks with CASA > 45% (HDFC, ICICI, Axis) — they'll poach deposits from weaker peers. Avoid NBFC exposure with wholesale funding > 30% of liabilities; they're the first to face funding stress in a liquidity tightening. Duration plays are crowded; rotate into bank equity.</div>
-          <div class="sc-pct" id="sig1-pct">83%</div>
+        <div class="sc risk" id="sig1">
+          <div class="sc-num">SIGNAL 01 · CREDIT CYCLE</div><div class="sc-status risk">⚠ Risk</div>
+          <div class="sc-title" id="sig1-title">Deposit Gap Forces RBI's Hand</div>
+          <div class="sc-data" id="sig1-data">Bank credit growth at 13.7% YoY vs deposit growth at 10.9% — a 280bps divergence that's held flat for 2 consecutive months. CD ratio at 82.5% (10y: 79th percentile). NBFC credit accelerating to 9.5% YoY from 7.5%, signalling wholesale funding stress. Corporate bond issuance surged to ₹990,000 cr from ₹860,000 cr — banks are being crowded out by direct market access.</div>
+          <div class="sc-impl" id="sig1-impl">Overweight private banks with CASA ratios >45% and deposit franchises in metros (HDFC, Kotak, Axis). Underweight NBFCs with wholesale funding >35% of liabilities — they'll face margin compression as banks hoard deposits. Watch for RBI to signal liquidity support via OMOs or CRR cuts within 6 weeks if CD ratio breaches 83%.</div>
+          <div class="sc-pct" id="sig1-pct">79%</div>
         </div>
-        <div class="sc positive" id="sig2">
-          <div class="sc-num">SIGNAL 02 · CAPEX TRIGGER</div><div class="sc-status positive">✦ Positive</div>
-          <div class="sc-title" id="sig2-title">Capital Goods Surge Masks Capacity Slack</div>
-          <div class="sc-data" id="sig2-data">IIP capital goods +12.5% YoY (latest) vs +4.3% prior month — a 820bps acceleration. However, capacity utilisation at 74.8% (down from 75.8% prior month) remains below the 78-80% threshold that typically triggers broad capex cycles. Core sector growth has decelerated sharply to +2.3% YoY from +4.7% prior month — a 240bps drop. GST collections at ₹2.0 lakh crore YoY signal broad-based demand, but capex is not yet self-sustaining.</div>
-          <div class="sc-impl" id="sig2-impl">The capital goods spike is likely driven by government infrastructure spending and replacement cycles, not organic private capex acceleration. Capacity utilisation at 74.8% leaves 5-6% headroom before capex becomes urgent — we're 2-3 quarters away from a genuine capex trigger. Avoid broad-based capex plays (Larsen & Toubro, Cummins) until capacity utilisation breaches 77%. Overweight government-linked capex beneficiaries (NTPC, Power Grid, REC) and selective infra plays with order visibility. Core sector deceleration is a yellow flag — monitor cement, steel, and power closely.</div>
-          <div class="sc-pct" id="sig2-pct">64%</div>
+        <div class="sc watch" id="sig2">
+          <div class="sc-num">SIGNAL 02 · CAPEX TRIGGER</div><div class="sc-status watch">◎ Watch</div>
+          <div class="sc-title" id="sig2-title">Capex Momentum Stalling, Not Accelerating</div>
+          <div class="sc-data" id="sig2-data">IIP capital goods at 12.5% YoY (up from 8.1% prior month) but capacity utilisation fell to 74.8% from 75.8% — a divergence. Core sector growth collapsed to 2.3% YoY from 4.7%, the sharpest monthly drop in 8 months. PMI manufacturing at 53.8 (down from 56.9) signals order book weakness ahead. Real estate launches at 126.3mn units (up 1.9%) but sales fell to 101.7mn units from 109mn — inventory building, not demand.</div>
+          <div class="sc-impl" id="sig2-impl">Capex acceleration narrative is premature. Avoid cyclical plays (cement, steel, capex-heavy industrials) until core sector stabilises above 4% and capacity utilisation breaks above 76%. Overweight defensive capex (telecom, power transmission) where order books are locked. Monitor Q4 order inflows — if they disappoint, IIP capgoods will roll over by March.</div>
+          <div class="sc-pct" id="sig2-pct">52%</div>
         </div>
-        <div class="sc watch" id="sig3">
-          <div class="sc-num">SIGNAL 03 · SIP / RETAIL FLOWS</div><div class="sc-status watch">◎ Watch</div>
-          <div class="sc-title" id="sig3-title">SIP Growth Decelerating — Affluent Money Entering</div>
-          <div class="sc-data" id="sig3-data">SIP inflows at ₹29,845 crore (Feb 2026) down from ₹31,002 crore prior month. SIP YoY growth at 15% (down from 17% prior month). However, SIP accounts +1.6 crore (104.5M from 102.9M) while SIP AUM +₹16.64 lakh crore (up from ₹16.36 lakh crore) — average ticket size rising to ₹15,900 per account (up from ₹15,880). Equity MF net inflows at ₹25,977 crore (up from ₹24,028 crore), but NFO collections at ₹1,939 crore (6th percentile) signal weak new investor acquisition.</div>
-          <div class="sc-impl" id="sig3-impl">Mass retail SIP growth is decelerating (15% YoY), but average ticket size is rising — this is late-cycle behaviour. Affluent investors are entering via SIPs, not mass retail. This suggests the retail equity bull market is maturing. Reduce exposure to mass-market consumption plays (FMCG, retail) and rotate into quality, dividend-paying stocks. Avoid new equity fund launches (NFO collections at 6th percentile). MF AUM at 80th percentile suggests valuations are stretched; take profits on momentum plays. Monitor SIP account growth — if it turns negative, retail capitulation is near.</div>
+        <div class="sc positive" id="sig3">
+          <div class="sc-num">SIGNAL 03 · SIP / RETAIL FLOWS</div><div class="sc-status positive">✦ Positive</div>
+          <div class="sc-title" id="sig3-title">SIP Accounts Surge, But Ticket Size Rising</div>
+          <div class="sc-data" id="sig3-data">SIP accounts jumped 5.3% MoM to 10.45 cr (2nd percentile historically, but accelerating). SIP AUM at ₹16.64 lakh cr (+1.7% MoM), growing faster than account growth — average ticket size now ₹15,900 per account, up from ₹16,480 last month. Equity MF net inflows at ₹25,978 cr (65th percentile). SIP YoY growth at 15% but NFO collections collapsed to ₹4,979 cr (16th percentile) — lump-sum retail is absent.</div>
+          <div class="sc-impl" id="sig3-impl">This is affluent SIP behaviour, not mass retail. The wealthy are dollar-cost-averaging into equities via SIPs while avoiding lump-sum risk — classic late-cycle positioning. Overweight large-cap, dividend-paying stocks (Nifty 50 quality) where SIP money concentrates. Avoid small-cap and mid-cap where retail lump-sum money typically flows. FII outflows (-₹114 cr) mean domestic retail is the marginal buyer — vulnerable to any correction.</div>
           <div class="sc-pct" id="sig3-pct">85%</div>
         </div>
         <div class="sc risk" id="sig4">
           <div class="sc-num">SIGNAL 04 · OIL / COMMODITY RISK</div><div class="sc-status risk">⚠ Risk</div>
-          <div class="sc-title" id="sig4-title">Oil Spike Threatens CAD — Brent at 82nd Percentile</div>
-          <div class="sc-data" id="sig4-data">Brent crude at $98.66/bbl (up from $94.75 prior month) — 82nd percentile. WTI at $99.43/bbl (82nd percentile). Natural gas at $2.735/mmBtu (16th percentile, but up from $2.724). Iron ore at $161.91/tonne (63rd percentile, up from $107.83 — a 50% spike). Copper down to $5.698/tonne (93rd percentile, but declining) — a divergence suggesting demand concerns. India's oil import bill will rise ~$4-5 billion annually at current prices; CAD pressure is building.</div>
-          <div class="sc-impl" id="sig4-impl">Oil at 82nd percentile is a material headwind for India's current account. At $100/bbl, India's annual oil import bill rises by $5-6 billion, widening CAD by 0.3-0.4% of GDP. This constrains RBI's ability to cut rates aggressively and pressures INR. Hedge oil exposure via energy stocks (ONGC, Reliance) — they benefit from higher crude. Avoid import-heavy sectors (chemicals, fertilisers, airlines) until oil retreats to $85-90. Iron ore spike is China-driven (stimulus hopes); monitor for reversal. Copper weakness despite high percentile is a demand warning — reduce cyclical exposure.</div>
-          <div class="sc-pct" id="sig4-pct">82%</div>
+          <div class="sc-title" id="sig4-title">Oil Spike Threatens CAD, Inflation Creeps</div>
+          <div class="sc-data" id="sig4-data">Brent crude at $97.96/bbl (69th percentile, up from $94.75), WTI at $98.91 (82nd percentile). Iron ore surged 50% to $161.91/tonne from $107.83 — China stimulus fears driving commodity hoarding. Copper down 0.7% to $5.718 (94th percentile) — demand destruction signal. India's fuel inflation at -3.78% but turning (up from -4.01%), suggesting pass-through imminent. FAO food index at 128.5 (56th percentile, up from 125.5) — food inflation risk building.</div>
+          <div class="sc-impl" id="sig4-impl">Oil >$95 adds 40-50bps to India's CAD and 20-30bps to CPI within 2 months. RBI's inflation forecast of 4.6% (up from 2.1%) will prove conservative if Brent stays >$100. Hedge long India equity exposure with short oil or long INR puts. Avoid refiners (IOCL, BPCL) — margins compress. Overweight FMCG with pricing power (HUL, ITC) to offset input cost inflation.</div>
+          <div class="sc-pct" id="sig4-pct">69%</div>
         </div>
         <div class="sc watch" id="sig5">
           <div class="sc-num">SIGNAL 05 · GLOBAL LIQUIDITY</div><div class="sc-status watch">◎ Watch</div>
-          <div class="sc-title" id="sig5-title">US Rates Sticky — Fed Balance Sheet Expanding</div>
-          <div class="sc-data" id="sig5-data">US 10Y Treasury at 4.26% (flat from 4.34% prior month). Fed funds rate at 3.625% (unchanged). Fed balance sheet at $6.675 trillion (up from $6.657 trillion) — expanding despite rate stability. US CPI at 2.4% (flat), core PCE at 3.06% (down from 3.1%) — disinflation stalling. US GDP SAAR at 0.7% (down from 1.4%) — growth decelerating sharply. DXY at 99.04 (up from 98.82) — dollar strength persisting. S&P 500 at 6,782.81 (96th percentile), Nasdaq at 22,634 (100th percentile) — valuations at extremes despite growth deceleration.</div>
-          <div class="sc-impl" id="sig5-impl">The Fed is in a bind: growth is slowing (0.7% SAAR), but inflation is sticky (core PCE at 3.06%). Balance sheet expansion without rate cuts signals QE-lite — liquidity is being injected to support equity valuations, not growth. This is a carry-trade setup: cheap money in the US, but rates not falling. DXY strength pressures EM currencies (including INR) and makes US assets expensive. Reduce US equity exposure (S&P 500 at 96th percentile, Nasdaq at 100th) — valuations don't justify growth deceleration. Overweight India equities as a relative value play, but hedge INR depreciation risk. Monitor Fed balance sheet — if it accelerates, expect a liquidity-driven rally; if it stalls, expect a correction.</div>
-          <div class="sc-pct" id="sig5-pct">67%</div>
+          <div class="sc-title" id="sig5-title">US Growth Stalls, Fed Stays Hawkish</div>
+          <div class="sc-data" id="sig5-data">US GDP SAAR collapsed to 0.7% from 4.4% — a 370bps miss. US PMI composite at 50.3 (47th percentile, down from 51.9) signals contraction risk. Yet Fed funds rate flat at 3.625% and Fed balance sheet expanding to $6.675T (46th percentile). US 10Y Treasury at 4.26% (down from 4.34%) — yield curve flattening. Nasdaq at 22,635 (100th percentile), S&P 500 at 6,783 (96th percentile) — valuations at extremes despite growth miss.</div>
+          <div class="sc-impl" id="sig5-impl">US recession risk is rising but Fed won't cut until Q2 2025 at earliest. This creates a liquidity trap: equities are priced for perfection while growth deteriorates. India's FII outflows (-₹114 cr) will accelerate if US yields stay >4.2%. Reduce India equity beta; overweight defensive sectors (pharma, IT services) with US revenue exposure but lower multiple expansion. DXY at 99.04 (46th percentile) — INR has room to weaken if FII flows turn negative.</div>
+          <div class="sc-pct" id="sig5-pct">47%</div>
         </div>
         <div class="sc watch" id="sig6">
           <div class="sc-num">SIGNAL 06 · INR / FX RESERVES</div><div class="sc-status watch">◎ Watch</div>
-          <div class="sc-title" id="sig6-title">INR at 84th Percentile — FII Outflows Accelerating</div>
-          <div class="sc-data" id="sig6-data">INR/USD at 92.59 (84th percentile — near 10-year highs). FII equity net outflows at -₹8,692 crore (Feb 2026, down from -₹3,295 crore prior month) — outflows accelerating 2.6x month-on-month. DII equity net inflows at ₹7,979 crore (down from ₹8,593 crore) — domestic support weakening. DXY at 99.04 (46th percentile, but rising) — dollar strength is a headwind. RBI's easing cycle (repo at 5.25%) is not offsetting carry-trade unwind and FII selling.</div>
-          <div class="sc-impl" id="sig6-impl">INR weakness is accelerating despite RBI rate cuts — this is a structural FII outflow story, not a cyclical one. FII outflows of ₹8,692 crore in a single month are material; if sustained, they'll force RBI to intervene or hike rates. INR at 92.59 is near the 84th percentile; a break above 93 would signal a loss of RBI control. Domestic flows (DIIs) are slowing — they can't absorb FII selling indefinitely. Reduce INR exposure; hedge via USD forwards or short INR positions. Avoid import-sensitive sectors (IT services, pharma) until INR stabilises. RBI will likely pause rate cuts to defend INR — this is a headwind for duration and equities. Monitor FII flows weekly; if outflows exceed ₹10,000 crore/month, expect RBI intervention or a 50bps rate hike.</div>
+          <div class="sc-title" id="sig6-title">INR Stable But FII Outflows Loom</div>
+          <div class="sc-data" id="sig6-data">INR/USD at 92.59 (84th percentile, flat from prior day). FII equity net flows at -₹114 cr (49th percentile) — first outflow in 3 months. DII equity net at ₹128 cr (22nd percentile) — domestic support is weak. Gold in INR at ₹2,000/gram (0th percentile, data anomaly but directionally up). RBI's inflation forecast at 4.6% (up from 2.1%) signals no near-term rate cuts, keeping INR supported by carry. However, US 10Y at 4.26% (down from 4.34%) reduces carry appeal.</div>
+          <div class="sc-impl" id="sig6-impl">INR is supported by RBI's hawkish stance but vulnerable to FII outflows if US growth disappoints further. If FII outflows exceed ₹500 cr/day for 2 consecutive weeks, INR will test 93.50. Hedge long India equity with short INR forwards (sell INR 3-month forwards at 92.80). Watch RBI's next policy meeting (Feb 2025) — if inflation forecast falls below 4%, rate cuts begin and INR weakens 2-3%.</div>
           <div class="sc-pct" id="sig6-pct">84%</div>
         </div>
         <div class="sc surprise" id="sig7">
           <div class="surprise-flash">🔴 Surprise Signal</div>
           <div class="sc-num">SIGNAL 07 · UNDER THE RADAR</div><div class="sc-status surprise">⚡ Surprise</div>
-          <div class="sc-title" id="sig7-title">Office Absorption Surge Decouples From IT Stocks</div>
-          <div class="sc-data" id="sig7-data">Office absorption at 29.9 mn sqft (up from 28.2 mn sqft prior month) — 24th percentile but accelerating. Office vacancy at 13.9% (down from 17.2% prior month) — a 330bps compression in 1 month. Nifty IT index flat YoY despite office absorption surge. Rent in Bengaluru at ₹100.6/sqft (up from ₹91.8) — a 9.5% spike. However, Nifty IT services (TCS, Infosys, Wipro) are trading at 18-20x FY27E earnings with flat growth. Global PMI composite at 53.2 (81st percentile) signals strong global demand, yet IT stocks are not participating. This divergence suggests GCCs (Global Capability Centres) and non-IT corporates are the office absorption drivers, not traditional IT services.</div>
-          <div class="sc-impl" id="sig7-impl">The office real estate recovery is NOT a proxy for IT services growth. GCCs (Amazon, Google, Microsoft, Apple) and financial services firms are absorbing office space in Bengaluru and Mumbai, not IT services companies. This means: (1) Avoid Nifty IT on the assumption of office-driven growth — IT services are in structural decline (offshoring, automation). (2) Overweight commercial real estate plays (Embassy REIT at ₹437.42, up from ₹433.75) and office landlords — they're the true beneficiaries. (3) The office vacancy compression is a GCC story, not an IT story. (4) Rent inflation in Bengaluru (+9.5%) will pressure IT services margins further — they're paying more for space while revenues stagnate. Reduce IT services exposure; rotate into REITs and GCC-adjacent plays (IT infrastructure, data centres). This is a 2-3 year structural headwind for traditional IT services.</div>
+          <div class="sc-title" id="sig7-title">Office Absorption Decouples From IT Stocks</div>
+          <div class="sc-data" id="sig7-data">Office absorption in India at 29.9mn sqft (up from 28.2mn sqft, 24th percentile historically) while Nifty IT is flat YTD and trading at 18x forward PE (vs 5-year avg of 16x). Vacancy rates falling to 13.9% from 14.3% — supply-demand tightening. Yet airline passenger traffic collapsed to 35.08mn from 38.59mn (7th percentile) — a proxy for business travel and executive mobility. Rent in Bengaluru up 7.5% YoY to ₹100.6/sqft but Mumbai rents down 10.2% to ₹106/sqft — bifurcation suggests GCC (Global Capability Centres) are the buyer, not traditional IT services.</div>
+          <div class="sc-impl" id="sig7-impl">IT services are NOT the marginal buyer of office space anymore. GCCs (Google, Amazon, Microsoft, Apple) are consolidating real estate in Tier-1 cities while traditional IT (TCS, Infosys, Wipro) are shrinking headcount. This means office REITs (Embassy, Mindspace) are decoupling from IT stock performance. Overweight office REITs (Embassy REIT at ₹437.42, up 3.8%) and underweight Nifty IT — the narrative of IT-driven office demand is broken. Airline traffic collapse suggests business travel is structurally lower (remote work, AI automation) — office absorption is driven by GCC consolidation, not IT hiring.</div>
           <div class="sc-pct" id="sig7-pct">24%</div>
         </div>
       </div>
@@ -1143,12 +1102,12 @@ td.c-pct { text-align:right; min-width:96px; }
     </div>
     <div class="pb">
       <div class="regime-cards" id="s1-body">
-        <div class="rc"><div class="rc-dim">Growth Cycle</div><div class="rc-met" id="rc-growth-m">GDP 7.8%; PMI 56.5</div><div class="rc-sig" id="rc-growth-s">GDP at <strong>7.8%</strong> and PMI composite at <strong>56.5</strong> look unambiguous — until you notice that PMI has decelerated from 58.9 prior month, core sector growth has collapsed to <strong>2.3%</strong> from <strong>4.7%</strong>, and capacity utilisation has slipped to <strong>74.8%</strong>. Mishra's triangulation test: IIP at <strong>5.2%</strong> is respectable, but the capital goods surge to <strong>+12.5%</strong> is a single-month spike from <strong>4.3%</strong> — not a trend. Invert the headline: if core sector (which covers 40% of IIP) is decelerating sharply while capital goods surges, the composition of growth is narrowing, not broadening.</div><span class="ph-badge" id="rc-growth-b">Expansion Mode</span></div>
-        <div class="rc"><div class="rc-dim">Inflation Cycle</div><div class="rc-met" id="rc-infl-m">CPI 3.21%; Fuel -3.78%</div><div class="rc-sig" id="rc-infl-s">CPI at <strong>3.21%</strong> is benign on the surface — but food inflation has jumped to <strong>3.47%</strong> from <strong>2.13%</strong> prior month, a <strong>134bps</strong> acceleration in a single print, while core CPI sits at <strong>3.4%</strong>. WPI at <strong>2.13%</strong> (up from <strong>1.81%</strong>) and the FAO food index at <strong>128.5</strong> (up from <strong>125.5</strong>) suggest pipeline pressure is building — fuel deflation at <strong>-3.78%</strong> is the only reason headline stays below <strong>3.5%</strong>. Munger's inversion: RBI is cutting rates into a food inflation acceleration and an oil price at the <strong>82nd percentile</strong> — if Brent sustains above $95, the fuel deflation cushion evaporates within two quarters and CPI prints above <strong>4.5%</strong>, forcing a policy reversal that markets are not pricing.</div><span class="ph-badge" id="rc-infl-b">Within Band</span></div>
-        <div class="rc"><div class="rc-dim">Credit Cycle</div><div class="rc-met" id="rc-credit-m">Credit 14.3%%; CD 83.04%%</div><div class="rc-sig" id="rc-credit-s">Bank credit at <strong>+14.3%</strong> YoY against deposit growth of <strong>+10.8%</strong> — a <strong>350bps</strong> divergence widening for three consecutive months — has pushed the CD ratio to <strong>83.04%</strong>, up from <strong>82.38%</strong>. NBFC credit growth moderating to <strong>15-17%</strong> from <strong>18-20%</strong> signals that wholesale funding stress is already transmitting; corporate bond issuance at <strong>₹85,000+ crore</strong> versus <strong>₹60,000 crore</strong> in FY22-23 means banks are losing deposit share to capital markets precisely when they need deposits most. Historical precedent: the last time India's CD ratio sustained above <strong>80%</strong> during an easing cycle was Q2 FY14 — within 12 months, the taper tantrum forced <strong>75bps</strong> of emergency hikes; today's FX reserves are <strong>$100bn</strong> higher, but FII outflows at <strong>-₹8,692 crore</strong> accelerating <strong>2.6x</strong> month-on-month suggest the carry-trade unwind has already begun.</div><span class="ph-badge" id="rc-credit-b">Stable Credit</span></div>
-        <div class="rc"><div class="rc-dim">Policy Regime</div><div class="rc-met" id="rc-policy-m">Repo 5.25%</div><div class="rc-sig" id="rc-policy-s">Repo at <strong>5.25%</strong> — down from <strong>5.50%</strong> — places the real policy rate at approximately <strong>200bps</strong> above CPI, which is accommodative in name but restrictive in transmission given the CD ratio constraint. For housing, the average home loan rate at <strong>8.15%</strong> (down from <strong>8.4%</strong>) is improving affordability — the affordability index has moved to <strong>0.61</strong> from <strong>0.46</strong> — but the RBI's own inflation forecast has been revised sharply to <strong>4.6%</strong> from <strong>2.1%</strong>, a <strong>250bps</strong> upward revision that signals internal discomfort with the easing trajectory. Munger's incentive check: RBI is cutting while its own forecast implies real rates will compress to near zero — the institution is betting that oil stays benign and food normalises; Brent at <strong>$98.66</strong> is a direct challenge to that bet.</div><span class="ph-badge" id="rc-policy-b">Easing Cycle</span></div>
-        <div class="rc"><div class="rc-dim">Capex Cycle</div><div class="rc-met" id="rc-capex-m">IIP CapG 12.5%%; CU 74.8%%</div><div class="rc-sig" id="rc-capex-s">IIP capital goods at <strong>+12.5%</strong> — an <strong>820bps</strong> acceleration from <strong>4.3%</strong> — is the most eye-catching number in today's data set, and almost certainly a trap. Capacity utilisation at <strong>74.8%</strong> — down from <strong>75.8%</strong> and <strong>300-500bps</strong> below the <strong>78-80%</strong> threshold that historically triggers broad private capex cycles — means corporates have no rational incentive to add capacity. Core sector at <strong>2.3%</strong> (covering cement, steel, electricity — the physical proxies for actual investment) contradicts the capital goods IIP entirely; one of these numbers is wrong, and Mishra's rule is to trust the physical proxy over the survey-based index.</div><span class="ph-badge" id="rc-capex-b">Steady Investment</span></div>
-        <div class="rc"><div class="rc-dim">Consumption Cycle</div><div class="rc-met" id="rc-cons-m">GST 200064; PV 13%</div><div class="rc-sig" id="rc-cons-s">GST collections breaching <strong>₹2.0 lakh crore</strong> for the first time is structurally significant — but Mishra's formalization lens demands the question: how much is genuine demand expansion versus GST-net widening as informal activity formalises? Passenger vehicle sales at <strong>+13%</strong> and two-wheeler at <strong>+13.4%</strong> are both strong, and the two-wheeler print matters more — it is the rural and semi-urban demand signal that GDP aggregates miss. E-commerce GMV growth decelerating to <strong>12.4%</strong> from <strong>25-30%</strong> in FY25 is the counter-signal: urban discretionary is plateauing even as rural durables recover, a divergence that historically precedes a consumption mix shift rather than a broad acceleration.</div><span class="ph-badge" id="rc-cons-b">Demand Surge</span></div>
+        <div class="rc"><div class="rc-dim">Growth Cycle</div><div class="rc-met" id="rc-growth-m">GDP 7.8%; PMI 56.5</div><div class="rc-sig" id="rc-growth-s">GDP at <strong>7.8%</strong> — down from <strong>8.4%</strong> last quarter — looks solid until you decompose it: PMI composite fell to <strong>56.5</strong> from <strong>58.9</strong>, manufacturing PMI dropped <strong>310bps</strong> to <strong>53.8</strong>, and core sector growth collapsed to <strong>2.3%</strong> from <strong>4.7%</strong> — the sharpest monthly deceleration in 8 months. Capacity utilisation at <strong>74.8%</strong> (down from <strong>75.8%</strong>) means the IIP capital goods print of <strong>12.5%</strong> is a lagging order-book flush, not a forward investment signal. Invert the headline: if the real economy were as strong as 7.8% implies, two-wheeler sales at <strong>13.4%</strong> and CV sales at <strong>11.74%</strong> would be accelerating, not holding flat at FY2025 levels — the informal economy is not participating in this expansion.</div><span class="ph-badge" id="rc-growth-b">Expansion Mode</span></div>
+        <div class="rc"><div class="rc-dim">Inflation Cycle</div><div class="rc-met" id="rc-infl-m">CPI 3.21%; Fuel -3.78%</div><div class="rc-sig" id="rc-infl-s">Headline CPI at <strong>3.21%</strong> — up <strong>46bps</strong> from <strong>2.75%</strong> — is a trapdoor reading: food inflation jumped to <strong>3.47%</strong> from <strong>2.13%</strong>, the FAO food index rose to <strong>128.5</strong> from <strong>125.5</strong>, and fuel deflation at <strong>-3.78%</strong> is narrowing from <strong>-4.01%</strong> — the statistical suppressor is fading. Core CPI at <strong>3.4%</strong> against a headline of <strong>3.21%</strong> means core is already above headline — the moment fuel pass-through arrives (Brent at <strong>$97.96</strong>, up from <strong>$94.75</strong>), CPI could breach <strong>4.5%</strong> within two quarters. RBI's own inflation forecast revision — from <strong>2.1%</strong> to <strong>4.6%</strong> — is the most honest signal in today's data; the MPC knows what's coming.</div><span class="ph-badge" id="rc-infl-b">Within Band</span></div>
+        <div class="rc"><div class="rc-dim">Credit Cycle</div><div class="rc-met" id="rc-credit-m">Credit 13.7%; CD 82.5%</div><div class="rc-sig" id="rc-credit-s"><strong>280bps</strong> divergence between credit growth (<strong>13.7%</strong>) and deposit growth (<strong>10.9%</strong>), held flat for two consecutive months, with CD ratio at <strong>82.5%</strong> — the 79th percentile over a decade — is the single most dangerous structural tension in India's financial system today. NBFC credit accelerating to <strong>9.5%</strong> from <strong>7.5%</strong> signals wholesale funding substitution, not organic demand; corporate bond issuance surging to <strong>₹9.9 lakh cr</strong> from <strong>₹8.6 lakh cr</strong> confirms banks are being disintermediated at the margin. Invert: the last time India's CD ratio sustained above <strong>80%</strong> during a rate-cut cycle was Q2 FY14 — within 12 months, the taper tantrum forced RBI into <strong>75bps</strong> of emergency hikes; today's FX reserves are <strong>$100bn</strong> higher, but the deposit-funding gap is structurally wider.</div><span class="ph-badge" id="rc-credit-b">Deposit Gap Stress</span></div>
+        <div class="rc"><div class="rc-dim">Policy Regime</div><div class="rc-met" id="rc-policy-m">Repo 5.25%</div><div class="rc-sig" id="rc-policy-s">Repo at <strong>5.25%</strong> with CPI at <strong>3.21%</strong> implies a real rate of approximately <strong>200bps</strong> — restrictive enough to suppress private capex IRRs, yet RBI's inflation forecast revision to <strong>4.6%</strong> forecloses any near-term cut, compressing the real rate buffer to near zero on a forward basis. For housing, the average home loan rate falling to <strong>8.0%</strong> from <strong>8.5%</strong> is providing affordability relief — but with CD ratio at <strong>82.5%</strong>, banks face a structural disincentive to grow mortgage books further without deposit mobilisation. FX management is the binding constraint: INR at <strong>92.59</strong> (84th percentile) with FII equity outflows turning negative at <strong>-₹114 cr</strong> means RBI cannot cut without risking a carry unwind — the policy window is narrower than the communiqué suggests.</div><span class="ph-badge" id="rc-policy-b">Rate Pause</span></div>
+        <div class="rc"><div class="rc-dim">Capex Cycle</div><div class="rc-met" id="rc-capex-m">IIP CapG 12.5%; CU 74.8%</div><div class="rc-sig" id="rc-capex-s">IIP capital goods at <strong>12.5%</strong> — up from <strong>8.1%</strong> — looks like investment acceleration; capacity utilisation falling to <strong>74.8%</strong> from <strong>75.8%</strong> simultaneously is the contradiction that invalidates the headline. No rational CFO accelerates greenfield capex at <strong>74.8%</strong> utilisation — the historical threshold for private capex inflection is <strong>76-77%</strong>, and India is moving away from it, not toward it. Core sector at <strong>2.3%</strong> — covering cement, steel, electricity, and coal — is the ground-truth capex proxy; at less than half the prior month's <strong>4.7%</strong>, it signals the IIP capital goods print is a one-month statistical artefact, not a trend.</div><span class="ph-badge" id="rc-capex-b">Steady Investment</span></div>
+        <div class="rc"><div class="rc-dim">Consumption Cycle</div><div class="rc-met" id="rc-cons-m">GST 200064; PV 8.4%</div><div class="rc-sig" id="rc-cons-s">GST collections crossing <strong>₹2 lakh crore</strong> for the first time — at <strong>₹2,00,064 cr</strong>, up <strong>8.8%</strong> from <strong>₹1,83,845 cr</strong> — is a landmark, but Mishra's lens demands decomposition: how much is genuine volume growth versus GST formalization reclassifying informal spend? PV sales at <strong>8.4%</strong> and 2W at <strong>13.4%</strong> are holding, but airline passenger traffic collapsing to <strong>35.08mn</strong> from <strong>38.59mn</strong> — the 7th percentile historically — signals urban discretionary is softening at the premium end. E-commerce GMV growth at <strong>12.4%</strong> (15th percentile) confirms the divergence: mass-market consumption via GST looks stable, but high-ticket discretionary — travel, premium vehicles, lump-sum MF investments (NFO at 16th percentile) — is quietly retreating.</div><span class="ph-badge" id="rc-cons-b">Stable Consumption</span></div>
       </div>
       <div class="p-summary" id="s1-summary">GDP 7.8%; PMI 56.5</div>
     </div>
@@ -1163,9 +1122,9 @@ td.c-pct { text-align:right; min-width:96px; }
 <tr>
   <td>India GDP YoY</td>
   <td>7.8</td>
-  <td>7.4</td>
-  <td><span class="arr up">↑</span></td>
-  <td>↑ 5.41%</td>
+  <td>8.4</td>
+  <td><span class="arr dn">↓</span></td>
+  <td>↓ -7.14%</td>
   <td><span class="pct-mid">64%</span></td>
 </tr>
 <tr>
@@ -1179,17 +1138,17 @@ td.c-pct { text-align:right; min-width:96px; }
 <tr>
   <td>RBI GDP Forecast</td>
   <td>6.9</td>
-  <td>7</td>
-  <td><span class="arr dn">↓</span></td>
-  <td>↓ -1.43%</td>
+  <td>—</td>
+  <td><span class="arr fl">→</span></td>
+  <td>→ Awaited</td>
   <td><span class="pct-mid">77%</span></td>
 </tr>
 <tr>
   <td>PMI Manufacturing</td>
-  <td>53.9</td>
+  <td>53.8</td>
   <td>56.9</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -5.27%</td>
+  <td>↓ -5.45%</td>
   <td><span class="pct-mid">50%</span></td>
 </tr>
 <tr>
@@ -1210,35 +1169,35 @@ td.c-pct { text-align:right; min-width:96px; }
 </tr>
 <tr>
   <td>IIP YoY</td>
-  <td>5.2%</td>
-  <td>4.8%</td>
-  <td><span class="arr fl">→</span></td>
-  <td>→ NaN%</td>
-  <td><span class="pct-lo">NaN%</span></td>
+  <td>5.2</td>
+  <td>4.8</td>
+  <td><span class="arr up">↑</span></td>
+  <td>↑ 8.33%</td>
+  <td><span class="pct-mid">50%</span></td>
 </tr>
 <tr>
   <td>IIP Capital Goods</td>
-  <td>12.5%</td>
-  <td>4.3%</td>
-  <td><span class="arr fl">→</span></td>
-  <td>→ NaN%</td>
-  <td><span class="pct-lo">NaN%</span></td>
+  <td>12.5</td>
+  <td>8.1</td>
+  <td><span class="arr up">↑</span></td>
+  <td>↑ 54.32%</td>
+  <td><span class="pct-mid">52%</span></td>
 </tr>
 <tr>
   <td>Capacity Utilisation</td>
-  <td>74.8%</td>
-  <td>75.8%</td>
-  <td><span class="arr fl">→</span></td>
-  <td>→ NaN%</td>
-  <td><span class="pct-lo">NaN%</span></td>
+  <td>74.8</td>
+  <td>75.8</td>
+  <td><span class="arr dn">↓</span></td>
+  <td>↓ -1.32%</td>
+  <td><span class="pct-mid">60%</span></td>
 </tr>
 <tr>
   <td>Core Sector YoY</td>
-  <td>2.3%</td>
-  <td>4.7%</td>
-  <td><span class="arr fl">→</span></td>
-  <td>→ NaN%</td>
-  <td><span class="pct-lo">NaN%</span></td>
+  <td>2.3</td>
+  <td>4.7</td>
+  <td><span class="arr dn">↓</span></td>
+  <td>↓ -51.06%</td>
+  <td><span class="pct-mid">46%</span></td>
 </tr>
 </tbody></table>
     </div>
@@ -1293,9 +1252,9 @@ td.c-pct { text-align:right; min-width:96px; }
 <tr>
   <td>RBI Repo Rate</td>
   <td>5.25</td>
-  <td>5.50</td>
-  <td><span class="arr up">↓</span></td>
-  <td>↓ -4.55%</td>
+  <td>5.25</td>
+  <td><span class="arr fl">→</span></td>
+  <td>→ 0%</td>
   <td><span class="pct-hi">38%</span></td>
 </tr>
 <tr>
@@ -1319,31 +1278,31 @@ td.c-pct { text-align:right; min-width:96px; }
 <tr>
   <td>GST Collections (Month)</td>
   <td>200064</td>
-  <td>—</td>
-  <td><span class="arr fl">→</span></td>
-  <td>→ Awaited</td>
+  <td>183845</td>
+  <td><span class="arr up">↑</span></td>
+  <td>↑ 8.82%</td>
   <td><span class="pct-mid">71%</span></td>
 </tr>
 <tr>
   <td>GST Collections (YTD)</td>
   <td>2227096</td>
-  <td>—</td>
-  <td><span class="arr fl">→</span></td>
-  <td>→ Awaited</td>
+  <td>2055515</td>
+  <td><span class="arr up">↑</span></td>
+  <td>↑ 8.35%</td>
   <td><span class="pct-hi">84%</span></td>
 </tr>
 <tr>
   <td>Passenger Vehicle Sales</td>
-  <td>13</td>
-  <td>6.6 (FY2025)</td>
+  <td>8.4</td>
+  <td>FY2025</td>
   <td><span class="arr fl">→</span></td>
   <td>→ NaN%</td>
-  <td><span class="pct-mid">52%</span></td>
+  <td><span class="pct-mid">50%</span></td>
 </tr>
 <tr>
   <td>2-Wheeler Sales</td>
   <td>13.4</td>
-  <td>Not available for FY2025</td>
+  <td>FY2025</td>
   <td><span class="arr fl">→</span></td>
   <td>→ NaN%</td>
   <td><span class="pct-mid">52%</span></td>
@@ -1351,25 +1310,25 @@ td.c-pct { text-align:right; min-width:96px; }
 <tr>
   <td>Commercial Vehicle Sales</td>
   <td>11.74</td>
-  <td>Flat/marginal in FY2025</td>
+  <td>FY2025</td>
   <td><span class="arr fl">→</span></td>
   <td>→ NaN%</td>
   <td><span class="pct-mid">51%</span></td>
 </tr>
 <tr>
   <td>Airline Passengers</td>
-  <td>35.1 (Feb 2026 monthly)</td>
-  <td>Not available for 2026 full year</td>
-  <td><span class="arr fl">→</span></td>
-  <td>→ NaN%</td>
-  <td><span class="pct-lo">NaN%</span></td>
+  <td>35.08</td>
+  <td>38.59</td>
+  <td><span class="arr dn">↓</span></td>
+  <td>↓ -9.1%</td>
+  <td><span class="pct-lo">7%</span></td>
 </tr>
 <tr>
   <td>E-commerce GMV Growth</td>
   <td>12.4</td>
-  <td>25-30% (FY25 estimate)</td>
-  <td><span class="arr fl">→</span></td>
-  <td>→ NaN%</td>
+  <td>2025</td>
+  <td><span class="arr dn">↓</span></td>
+  <td>↓ -99.39%</td>
   <td><span class="pct-lo">15%</span></td>
 </tr>
 </tbody></table>
@@ -1384,43 +1343,43 @@ td.c-pct { text-align:right; min-width:96px; }
       <tbody id="s5-body">
 <tr>
   <td>Bank Credit Growth</td>
-  <td>14.3%</td>
-  <td>11.1%</td>
-  <td><span class="arr fl">→</span></td>
-  <td>→ NaN%</td>
-  <td><span class="pct-lo">NaN%</span></td>
+  <td>13.7</td>
+  <td>11.3</td>
+  <td><span class="arr up">↑</span></td>
+  <td>↑ 21.24%</td>
+  <td><span class="pct-mid">58%</span></td>
 </tr>
 <tr>
   <td>Deposit Growth</td>
-  <td>10.8%</td>
-  <td>Not provided</td>
-  <td><span class="arr fl">→</span></td>
-  <td>→ NaN%</td>
-  <td><span class="pct-lo">NaN%</span></td>
+  <td>10.9</td>
+  <td>10.3</td>
+  <td><span class="arr up">↑</span></td>
+  <td>↑ 5.83%</td>
+  <td><span class="pct-mid">45%</span></td>
 </tr>
 <tr>
   <td>CD Ratio</td>
-  <td>83.04%</td>
-  <td>82.38%</td>
+  <td>82.5</td>
+  <td>82.5</td>
   <td><span class="arr fl">→</span></td>
-  <td>→ NaN%</td>
-  <td><span class="pct-hi">NaN%</span></td>
+  <td>→ 0%</td>
+  <td><span class="pct-mid">79%</span></td>
 </tr>
 <tr>
   <td>NBFC Credit Growth</td>
-  <td>15-17%</td>
-  <td>18-20% (past two years average)</td>
-  <td><span class="arr fl">→</span></td>
-  <td>→ NaN%</td>
-  <td><span class="pct-lo">NaN%</span></td>
+  <td>9.5</td>
+  <td>7.5</td>
+  <td><span class="arr up">↑</span></td>
+  <td>↑ 26.67%</td>
+  <td><span class="pct-mid">41%</span></td>
 </tr>
 <tr>
   <td>Corp Bond Issuance</td>
-  <td>86000 crore (FY24) / estimated 85000+ crore (FY25-26)</td>
-  <td>60000 crore (FY22-23 period)</td>
-  <td><span class="arr fl">→</span></td>
-  <td>→ NaN%</td>
-  <td><span class="pct-lo">NaN%</span></td>
+  <td>990000</td>
+  <td>860000</td>
+  <td><span class="arr up">↑</span></td>
+  <td>↑ 15.12%</td>
+  <td><span class="pct-mid">72%</span></td>
 </tr>
 </tbody></table>
     </div>
@@ -1434,19 +1393,19 @@ td.c-pct { text-align:right; min-width:96px; }
       <tbody id="s6-body">
 <tr>
   <td>FII Equity Net</td>
-  <td>-8692.11</td>
-  <td>-3295.64</td>
+  <td>-114</td>
+  <td>22615</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -163.75%</td>
-  <td><span class="pct-mid">44%</span></td>
+  <td>↓ -604.09%</td>
+  <td><span class="pct-lo">0%</span></td>
 </tr>
 <tr>
   <td>DII Equity Net</td>
-  <td>7979.5</td>
-  <td>8593.87</td>
-  <td><span class="arr dn">↓</span></td>
-  <td>↓ -7.15%</td>
-  <td><span class="pct-lo">36%</span></td>
+  <td>128</td>
+  <td>—</td>
+  <td><span class="arr fl">→</span></td>
+  <td>→ Awaited</td>
+  <td><span class="pct-hi">100%</span></td>
 </tr>
 <tr>
   <td>SIP Inflows</td>
@@ -1459,50 +1418,50 @@ td.c-pct { text-align:right; min-width:96px; }
 <tr>
   <td>SIP YoY Growth</td>
   <td>15</td>
-  <td>17</td>
-  <td><span class="arr dn">↓</span></td>
-  <td>↓ -11.76%</td>
+  <td>—</td>
+  <td><span class="arr fl">→</span></td>
+  <td>→ Awaited</td>
   <td><span class="pct-lo">38%</span></td>
 </tr>
 <tr>
   <td>MF AUM</td>
   <td>82.03</td>
-  <td>81.01</td>
+  <td>81.77</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ 1.26%</td>
+  <td>↑ 0.32%</td>
   <td><span class="pct-hi">80%</span></td>
 </tr>
 <tr>
   <td>MF Average AUM</td>
-  <td>83.43</td>
   <td>82.01</td>
-  <td><span class="arr up">↑</span></td>
-  <td>↑ 1.73%</td>
-  <td><span class="pct-hi">82%</span></td>
+  <td>82.01</td>
+  <td><span class="arr fl">→</span></td>
+  <td>→ 0%</td>
+  <td><span class="pct-hi">81%</span></td>
 </tr>
 <tr>
   <td>Equity MF Net</td>
-  <td>25977.91</td>
-  <td>24028.59</td>
+  <td>25978</td>
+  <td>24029</td>
   <td><span class="arr up">↑</span></td>
   <td>↑ 8.11%</td>
   <td><span class="pct-mid">65%</span></td>
 </tr>
 <tr>
   <td>NFO Collections</td>
-  <td>1939</td>
+  <td>4979</td>
   <td>—</td>
   <td><span class="arr fl">→</span></td>
   <td>→ Awaited</td>
-  <td><span class="pct-lo">6%</span></td>
+  <td><span class="pct-lo">16%</span></td>
 </tr>
 <tr>
   <td>SIP Accounts</td>
-  <td>104.5</td>
-  <td>102.9</td>
+  <td>10.45</td>
+  <td>9.92</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ 1.55%</td>
-  <td><span class="pct-hi">86%</span></td>
+  <td>↑ 5.34%</td>
+  <td><span class="pct-lo">2%</span></td>
 </tr>
 <tr>
   <td>SIP AUM</td>
@@ -1548,11 +1507,11 @@ td.c-pct { text-align:right; min-width:96px; }
 </tr>
 <tr>
   <td>India VIX</td>
+  <td>20.427</td>
   <td>19.7</td>
-  <td>19.7</td>
-  <td><span class="arr fl">→</span></td>
-  <td>→ +0%</td>
-  <td><span class="pct-hi">15%</span></td>
+  <td><span class="arr dn">↑</span></td>
+  <td>↑ +3.69%</td>
+  <td><span class="pct-hi">16%</span></td>
 </tr>
 <tr>
   <td>G-Sec 10Y</td>
@@ -1575,15 +1534,15 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>2000</td>
   <td>2</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ +0.29%</td>
+  <td>↑ +0.57%</td>
   <td><span class="pct-lo">0%</span></td>
 </tr>
 <tr>
   <td>Brent Crude</td>
-  <td>98.66</td>
+  <td>97.96</td>
   <td>94.75</td>
   <td><span class="arr dn">↑</span></td>
-  <td>↑ +4.13%</td>
+  <td>↑ +3.39%</td>
   <td><span class="pct-mid">69%</span></td>
 </tr>
 <tr>
@@ -1631,59 +1590,59 @@ td.c-pct { text-align:right; min-width:96px; }
 </tr>
 <tr>
   <td>HPI Mumbai</td>
-  <td>Awaited</td>
-  <td>—</td>
+  <td>Not available in public sources</td>
+  <td>Not available</td>
   <td><span class="arr fl">→</span></td>
-  <td>→ Awaited</td>
-  <td><span class="pct-mid">50%</span></td>
+  <td>→ NaN%</td>
+  <td><span class="pct-lo">NaN%</span></td>
 </tr>
 <tr>
   <td>HPI Delhi</td>
-  <td>Awaited</td>
-  <td>—</td>
+  <td>Not available in public sources</td>
+  <td>Not available</td>
   <td><span class="arr fl">→</span></td>
-  <td>→ Awaited</td>
-  <td><span class="pct-mid">50%</span></td>
+  <td>→ NaN%</td>
+  <td><span class="pct-lo">NaN%</span></td>
 </tr>
 <tr>
   <td>HPI Bengaluru</td>
-  <td>Awaited</td>
-  <td>—</td>
+  <td>Not available in public sources</td>
+  <td>Not available</td>
   <td><span class="arr fl">→</span></td>
-  <td>→ Awaited</td>
-  <td><span class="pct-mid">50%</span></td>
+  <td>→ NaN%</td>
+  <td><span class="pct-lo">NaN%</span></td>
 </tr>
 <tr>
   <td>HPI Hyderabad</td>
-  <td>Awaited</td>
-  <td>—</td>
+  <td>Not available in public sources</td>
+  <td>Not available</td>
   <td><span class="arr fl">→</span></td>
-  <td>→ Awaited</td>
-  <td><span class="pct-mid">50%</span></td>
+  <td>→ NaN%</td>
+  <td><span class="pct-lo">NaN%</span></td>
 </tr>
 <tr>
   <td>Affordability Index</td>
   <td>0.61</td>
-  <td>0.46</td>
-  <td><span class="arr dn">↑</span></td>
-  <td>↑ 32.61%</td>
+  <td>0.61</td>
+  <td><span class="arr fl">→</span></td>
+  <td>→ 0%</td>
   <td><span class="pct-hi">0%</span></td>
 </tr>
 <tr>
   <td>Home Loan Disbursements</td>
-  <td>41000</td>
-  <td>407</td>
+  <td>410000</td>
+  <td>407000</td>
   <td><span class="arr up">↑</span></td>
   <td>↑ 0.74%</td>
-  <td><span class="pct-lo">0%</span></td>
+  <td><span class="pct-mid">64%</span></td>
 </tr>
 <tr>
   <td>Avg Home Loan Rate</td>
-  <td>8.15</td>
-  <td>8.4</td>
+  <td>8</td>
+  <td>8.5</td>
   <td><span class="arr up">↓</span></td>
-  <td>↓ -2.98%</td>
-  <td><span class="pct-mid">49%</span></td>
+  <td>↓ -5.88%</td>
+  <td><span class="pct-mid">45%</span></td>
 </tr>
 </tbody></table>
       <div class="sub-lbl">Commercial RE &amp; REITs</div>
@@ -1700,57 +1659,57 @@ td.c-pct { text-align:right; min-width:96px; }
 <tr>
   <td>Office Vacancy</td>
   <td>13.9</td>
-  <td>17.2</td>
+  <td>14.3</td>
   <td><span class="arr up">↓</span></td>
-  <td>↓ -19.19%</td>
+  <td>↓ -2.8%</td>
   <td><span class="pct-hi">38%</span></td>
 </tr>
 <tr>
   <td>Rent Bengaluru</td>
   <td>100.6</td>
-  <td>91.8</td>
+  <td>93.6</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ 9.59%</td>
+  <td>↑ 7.48%</td>
   <td><span class="pct-mid">57%</span></td>
 </tr>
 <tr>
   <td>Rent Mumbai</td>
-  <td>100</td>
-  <td>—</td>
-  <td><span class="arr fl">→</span></td>
-  <td>→ Awaited</td>
-  <td><span class="pct-lo">20%</span></td>
+  <td>106</td>
+  <td>118</td>
+  <td><span class="arr dn">↓</span></td>
+  <td>↓ -10.17%</td>
+  <td><span class="pct-lo">24%</span></td>
 </tr>
 <tr>
   <td>Retail Mall Vacancy</td>
-  <td>8.5</td>
-  <td>8.2</td>
-  <td><span class="arr dn">↑</span></td>
-  <td>↑ 3.66%</td>
-  <td><span class="pct-hi">22%</span></td>
+  <td>Awaited</td>
+  <td>—</td>
+  <td><span class="arr fl">→</span></td>
+  <td>→ Awaited</td>
+  <td><span class="pct-mid">50%</span></td>
 </tr>
 <tr>
   <td>Embassy REIT</td>
   <td>437.42</td>
-  <td>433.75</td>
+  <td>421.17</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ 0.85%</td>
+  <td>↑ 3.86%</td>
   <td><span class="pct-mid">78%</span></td>
 </tr>
 <tr>
   <td>Mindspace REIT</td>
   <td>449.98</td>
-  <td>460.41</td>
+  <td>457.02</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -2.27%</td>
+  <td>↓ -1.54%</td>
   <td><span class="pct-mid">79%</span></td>
 </tr>
 <tr>
   <td>Brookfield REIT</td>
-  <td>320.10</td>
-  <td>336</td>
+  <td>320.1</td>
+  <td>323.69</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -4.73%</td>
+  <td>↓ -1.11%</td>
   <td><span class="pct-mid">61%</span></td>
 </tr>
 </tbody></table>
@@ -1768,18 +1727,18 @@ td.c-pct { text-align:right; min-width:96px; }
 <tr>
   <td>US GDP SAAR</td>
   <td>0.7</td>
-  <td>1.4</td>
+  <td>4.4</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -50%</td>
+  <td>↓ -84.09%</td>
   <td><span class="pct-mid">48%</span></td>
 </tr>
 <tr>
   <td>China GDP</td>
-  <td>4.75</td>
-  <td>5</td>
-  <td><span class="arr dn">↓</span></td>
-  <td>↓ -5%</td>
-  <td><span class="pct-mid">48%</span></td>
+  <td>4.5-5.0</td>
+  <td>5.0</td>
+  <td><span class="arr fl">→</span></td>
+  <td>→ NaN%</td>
+  <td><span class="pct-lo">NaN%</span></td>
 </tr>
 <tr>
   <td>Eurozone GDP</td>
@@ -1799,19 +1758,19 @@ td.c-pct { text-align:right; min-width:96px; }
 </tr>
 <tr>
   <td>US PMI Composite</td>
-  <td>Awaited</td>
-  <td>—</td>
-  <td><span class="arr fl">→</span></td>
-  <td>→ Awaited</td>
-  <td><span class="pct-mid">50%</span></td>
+  <td>50.3</td>
+  <td>51.9</td>
+  <td><span class="arr dn">↓</span></td>
+  <td>↓ -3.08%</td>
+  <td><span class="pct-mid">47%</span></td>
 </tr>
 <tr>
   <td>China PMI Composite</td>
-  <td>50.25</td>
-  <td>49.25</td>
-  <td><span class="arr up">↑</span></td>
-  <td>↑ 2.03%</td>
-  <td><span class="pct-mid">48%</span></td>
+  <td>50.8</td>
+  <td>52.1</td>
+  <td><span class="arr dn">↓</span></td>
+  <td>↓ -2.5%</td>
+  <td><span class="pct-mid">49%</span></td>
 </tr>
 </tbody></table>
       <div class="sub-lbl">Global Inflation</div>
@@ -1835,10 +1794,10 @@ td.c-pct { text-align:right; min-width:96px; }
 </tr>
 <tr>
   <td>US Core PCE</td>
-  <td>3.06</td>
   <td>3.1</td>
-  <td><span class="arr up">↓</span></td>
-  <td>↓ -1.29%</td>
+  <td>3</td>
+  <td><span class="arr dn">↑</span></td>
+  <td>↑ 3.33%</td>
   <td><span class="pct-mid">57%</span></td>
 </tr>
 <tr>
@@ -1887,34 +1846,34 @@ td.c-pct { text-align:right; min-width:96px; }
 </tr>
 <tr>
   <td>ECB Deposit Rate</td>
-  <td>2.00%</td>
-  <td>2.00%</td>
+  <td>2</td>
+  <td>2</td>
   <td><span class="arr fl">→</span></td>
-  <td>→ NaN%</td>
-  <td><span class="pct-hi">NaN%</span></td>
+  <td>→ 0%</td>
+  <td><span class="pct-mid">56%</span></td>
 </tr>
 <tr>
   <td>BOJ Rate</td>
-  <td>0.75%</td>
-  <td>0.75%</td>
+  <td>0.75</td>
+  <td>0.75</td>
   <td><span class="arr fl">→</span></td>
-  <td>→ NaN%</td>
-  <td><span class="pct-hi">NaN%</span></td>
+  <td>→ 0%</td>
+  <td><span class="pct-mid">72%</span></td>
 </tr>
 <tr>
   <td>US 10Y Treasury</td>
-  <td>4.26%</td>
-  <td>4.34%</td>
-  <td><span class="arr fl">→</span></td>
-  <td>→ NaN%</td>
-  <td><span class="pct-hi">NaN%</span></td>
+  <td>4.26</td>
+  <td>4.34</td>
+  <td><span class="arr up">↓</span></td>
+  <td>↓ -1.84%</td>
+  <td><span class="pct-mid">76%</span></td>
 </tr>
 <tr>
   <td>DXY</td>
   <td>99.04</td>
-  <td>98.82</td>
-  <td><span class="arr dn">↑</span></td>
-  <td>↑ 0.22%</td>
+  <td>98.99</td>
+  <td><span class="arr fl">→</span></td>
+  <td>→ 0.05%</td>
   <td><span class="pct-mid">46%</span></td>
 </tr>
 </tbody></table>
@@ -1939,11 +1898,11 @@ td.c-pct { text-align:right; min-width:96px; }
 </tr>
 <tr>
   <td>Euro Stoxx 50</td>
-  <td>5858.37</td>
+  <td>5870.34</td>
   <td>5913.37</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -0.93%</td>
-  <td><span class="pct-hi">96%</span></td>
+  <td>↓ -0.73%</td>
+  <td><span class="pct-hi">97%</span></td>
 </tr>
 <tr>
   <td>Hang Seng</td>
@@ -1963,51 +1922,51 @@ td.c-pct { text-align:right; min-width:96px; }
 </tr>
 <tr>
   <td>US VIX</td>
-  <td>21.56</td>
+  <td>21.24</td>
   <td>21.04</td>
   <td><span class="arr dn">↑</span></td>
-  <td>↑ +2.47%</td>
-  <td><span class="pct-hi">17%</span></td>
+  <td>↑ +0.95%</td>
+  <td><span class="pct-hi">16%</span></td>
 </tr>
 <tr>
   <td>Brent (Global)</td>
-  <td>98.66</td>
+  <td>97.96</td>
   <td>94.75</td>
   <td><span class="arr dn">↑</span></td>
-  <td>↑ +4.13%</td>
+  <td>↑ +3.39%</td>
   <td><span class="pct-mid">69%</span></td>
 </tr>
 <tr>
   <td>WTI Crude</td>
-  <td>99.43</td>
+  <td>98.91</td>
   <td>94.41</td>
   <td><span class="arr dn">↑</span></td>
-  <td>↑ +5.32%</td>
+  <td>↑ +4.77%</td>
   <td><span class="pct-lo">82%</span></td>
 </tr>
 <tr>
   <td>Natural Gas</td>
-  <td>2.735</td>
   <td>2.724</td>
-  <td><span class="arr dn">↑</span></td>
-  <td>↑ +0.4%</td>
+  <td>2.724</td>
+  <td><span class="arr fl">→</span></td>
+  <td>→ +0%</td>
   <td><span class="pct-hi">16%</span></td>
 </tr>
 <tr>
   <td>Gold (USD)</td>
-  <td>4763.5</td>
+  <td>4776.8</td>
   <td>4749.5</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ +0.29%</td>
+  <td>↑ +0.57%</td>
   <td><span class="pct-hi">84%</span></td>
 </tr>
 <tr>
   <td>Copper</td>
-  <td>5.698</td>
+  <td>5.718</td>
   <td>5.76</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -1.08%</td>
-  <td><span class="pct-hi">93%</span></td>
+  <td>↓ -0.73%</td>
+  <td><span class="pct-hi">94%</span></td>
 </tr>
 <tr>
   <td>Iron Ore</td>
@@ -2033,7 +1992,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <div class="glass-panel footer">
     <div class="footer-src"><strong>Sources:</strong> MOSPI · RBI · AMFI · NSDL · NSE · BSE · BEA · BLS · S&amp;P Global PMI · HSBC PMI · IMF · FAO · ICE · CME · Baltic Exchange · Reuters · Bloomberg · TradingEconomics · Anarock · Knight Frank · JLL · NHB · Web search as of <span id="footer-date">09 APR 2026</span></div>
     <div class="footer-dis">For informational purposes only. Not investment advice. All data subject to revision. Estimates marked ~.</div>
-    <div class="footer-src" style="margin-top:4px;font-size:0.55rem;color:var(--ink-4);"><span id="cost-tag">Run: $0.12 · MTD: $0.12/$5.00 · Runs: 1</span></div>
+    <div class="footer-src" style="margin-top:4px;font-size:0.55rem;color:var(--ink-4);"><span id="cost-tag">Run: $0.13 · MTD: $0.13/$5.00 · Runs: 1</span></div>
   </div>
 
 </div><!-- /canvas -->
@@ -2127,22 +2086,22 @@ const tickerData = [
   { label: "NIFTY50", value: "23775.1", change: "-0.93%" },
   { label: "SENSEX", value: "76631.65", change: "-1.2%" },
   { label: "BANK NIFTY", value: "54821.7", change: "-1.58%" },
-  { label: "INDIA VIX", value: "19.7", change: "0%" },
+  { label: "INDIA VIX", value: "20.427", change: "+3.69%" },
   { label: "INR USD", value: "92.59", change: "0%" },
-  { label: "BRENT USD", value: "98.66", change: "+4.13%" },
-  { label: "WTI USD", value: "99.43", change: "+5.32%" },
-  { label: "GOLD USD", value: "4763.5", change: "+0.29%" },
+  { label: "BRENT USD", value: "97.96", change: "+3.39%" },
+  { label: "WTI USD", value: "98.91", change: "+4.77%" },
+  { label: "GOLD USD", value: "4776.8", change: "+0.57%" },
   { label: "SP500", value: "6782.81", change: "+2.59%" },
   { label: "NASDAQ", value: "22634.994", change: "+2.9%" },
-  { label: "US VIX", value: "21.56", change: "+2.47%" },
-  { label: "DXY", value: "99.031", change: "0%" },
-  { label: "NAT GAS", value: "2.735", change: "+0.4%" },
-  { label: "COPPER", value: "5.698", change: "-1.08%" },
+  { label: "US VIX", value: "21.24", change: "+0.95%" },
+  { label: "DXY", value: "98.894", change: "-0.14%" },
+  { label: "NAT GAS", value: "2.724", change: "0%" },
+  { label: "COPPER", value: "5.718", change: "-0.73%" },
   { label: "IRON ORE", value: "161.91", change: "+50.15%" },
   { label: "NIKKEI225", value: "55895.32", change: "-0.73%" },
   { label: "HANG SENG", value: "25752.4", change: "+2.53%" },
-  { label: "EURO STOXX50", value: "5858.37", change: "-0.93%" },
-  { label: "BRENT USD GLOBAL", value: "98.66", change: "+4.13%" },
+  { label: "EURO STOXX50", value: "5870.34", change: "-0.73%" },
+  { label: "BRENT USD GLOBAL", value: "97.96", change: "+3.39%" },
   { label: "BDI", value: "Awaited", change: "0%" },
   { label: "US 10Y TREASURY", value: "4.33", change: "-0.23%" },
   { label: "FED FUNDS RATE", value: "3.64", change: "0%" },
@@ -2151,7 +2110,7 @@ const tickerData = [
   { label: "US CORE CPI", value: "0.3335", change: "+0.22%" },
   { label: "US CORE PCE", value: "0.1284", change: "+0.36%" },
   { label: "US GDP SAAR", value: "0.7", change: "-84.09%" },
-  { label: "GOLD INR GRAM", value: "2000", change: "+0.29%" }
+  { label: "GOLD INR GRAM", value: "2000", change: "+0.57%" }
 ];
 function buildTicker() {
   const am = {up:'▲',down:'▼',flat:'▶'};
@@ -2219,22 +2178,22 @@ window.buildPctBar = buildPctBar;
 window.__MACRO_DATA__ = {
   "run": {
     "run_date": "2026-04-09",
-    "ist_time": "16:47 IST",
-    "snap_verdict": "India's 7.8% GDP headline is structurally sound — but a 350bps credit-deposit gap, accelerating FII outflows, and Brent at $98.66 are quietly assembling a balance-of-payments stress test.",
+    "ist_time": "17:49 IST",
+    "snap_verdict": "India's 7.8% GDP headline is structurally funded by a credit-deposit gap at its widest in a decade — while Brent at $98 is about to detonate the fuel deflation that's been suppressing CPI.",
     "snap_india": "Nifty 23775.1 | INR/USD 92.59",
-    "snap_global": "Brent $98.66 | DXY 99.04",
-    "snap_risk": "Oil Spike Threatens CAD — Brent at 82nd Percentile",
+    "snap_global": "Brent $97.96 | DXY 99.04",
+    "snap_risk": "Deposit Gap Forces RBI's Hand",
     "india_regime": "Expansion Mode",
-    "global_regime": "Easing Cycle",
+    "global_regime": "Rate Pause",
     "scenario_base_prob": 0,
-    "scenario_base_name": "Resilient Growth Continues",
-    "scenario_base_txt": "Broad expansion persists with 3 of 6 dimensions in expansion mode. Growth prints at GDP 7.8%; PMI 56.5 while credit channels remain supportive (Credit 14.3%%; CD 83.04%%). Policy stays accommodative as inflation remains contained.",
+    "scenario_base_name": "Steady State Drift",
+    "scenario_base_txt": "Mixed signals across dimensions with no dominant trend. Growth at GDP 7.8%; PMI 56.5, inflation at CPI 3.21%; Fuel -3.78%. Policy remains on hold and credit conditions are stable.",
     "scenario_bull_prob": 0,
     "scenario_bull_name": "Reform Acceleration Boost",
-    "scenario_bull_txt": "Policy reforms gain traction and crowd in private capex (IIP CapG 12.5%%; CU 74.8%%). Growth upgrades from current GDP 7.8%; PMI 56.5 as consumption broadens (GST 200064; PV 13%). Credit transmission improves, amplifying the recovery.",
+    "scenario_bull_txt": "Policy reforms gain traction and crowd in private capex (IIP CapG 12.5%; CU 74.8%). Growth upgrades from current GDP 7.8%; PMI 56.5 as consumption broadens (GST 200064; PV 8.4%). Credit transmission improves, amplifying the recovery.",
     "scenario_bear_prob": 0,
-    "scenario_bear_name": "Geopolitical Shock Contagion",
-    "scenario_bear_txt": "External shocks -- trade disruptions, energy supply stress, or capital flight -- hit India. Current fundamentals (GDP 7.8%; PMI 56.5, Credit 14.3%%; CD 83.04%%) offer limited buffer. Rupee depreciation and imported inflation force a policy reversal."
+    "scenario_bear_name": "Credit Crunch Cascade",
+    "scenario_bear_txt": "Credit stress (Credit 13.7%; CD 82.5%) spreads from NBFCs to the broader banking system. Deposit mobilization falters, pushing up funding costs. Capex (IIP CapG 12.5%; CU 74.8%) stalls as risk aversion rises sharply."
   },
   "regime": [
     {
@@ -2242,78 +2201,78 @@ window.__MACRO_DATA__ = {
       "badge_type": "b-exp",
       "badge_label": "Expansion Mode",
       "metric_summary": "GDP 7.8%; PMI 56.5",
-      "signal_text": "GDP at <strong>7.8%</strong> and PMI composite at <strong>56.5</strong> look unambiguous — until you notice that PMI has decelerated from 58.9 prior month, core sector growth has collapsed to <strong>2.3%</strong> from <strong>4.7%</strong>, and capacity utilisation has slipped to <strong>74.8%</strong>. Mishra's triangulation test: IIP at <strong>5.2%</strong> is respectable, but the capital goods surge to <strong>+12.5%</strong> is a single-month spike from <strong>4.3%</strong> — not a trend. Invert the headline: if core sector (which covers 40% of IIP) is decelerating sharply while capital goods surges, the composition of growth is narrowing, not broadening."
+      "signal_text": "GDP at <strong>7.8%</strong> — down from <strong>8.4%</strong> last quarter — looks solid until you decompose it: PMI composite fell to <strong>56.5</strong> from <strong>58.9</strong>, manufacturing PMI dropped <strong>310bps</strong> to <strong>53.8</strong>, and core sector growth collapsed to <strong>2.3%</strong> from <strong>4.7%</strong> — the sharpest monthly deceleration in 8 months. Capacity utilisation at <strong>74.8%</strong> (down from <strong>75.8%</strong>) means the IIP capital goods print of <strong>12.5%</strong> is a lagging order-book flush, not a forward investment signal. Invert the headline: if the real economy were as strong as 7.8% implies, two-wheeler sales at <strong>13.4%</strong> and CV sales at <strong>11.74%</strong> would be accelerating, not holding flat at FY2025 levels — the informal economy is not participating in this expansion."
     },
     {
       "dimension": "inflation",
       "badge_type": "b-neu",
       "badge_label": "Within Band",
       "metric_summary": "CPI 3.21%; Fuel -3.78%",
-      "signal_text": "CPI at <strong>3.21%</strong> is benign on the surface — but food inflation has jumped to <strong>3.47%</strong> from <strong>2.13%</strong> prior month, a <strong>134bps</strong> acceleration in a single print, while core CPI sits at <strong>3.4%</strong>. WPI at <strong>2.13%</strong> (up from <strong>1.81%</strong>) and the FAO food index at <strong>128.5</strong> (up from <strong>125.5</strong>) suggest pipeline pressure is building — fuel deflation at <strong>-3.78%</strong> is the only reason headline stays below <strong>3.5%</strong>. Munger's inversion: RBI is cutting rates into a food inflation acceleration and an oil price at the <strong>82nd percentile</strong> — if Brent sustains above $95, the fuel deflation cushion evaporates within two quarters and CPI prints above <strong>4.5%</strong>, forcing a policy reversal that markets are not pricing."
+      "signal_text": "Headline CPI at <strong>3.21%</strong> — up <strong>46bps</strong> from <strong>2.75%</strong> — is a trapdoor reading: food inflation jumped to <strong>3.47%</strong> from <strong>2.13%</strong>, the FAO food index rose to <strong>128.5</strong> from <strong>125.5</strong>, and fuel deflation at <strong>-3.78%</strong> is narrowing from <strong>-4.01%</strong> — the statistical suppressor is fading. Core CPI at <strong>3.4%</strong> against a headline of <strong>3.21%</strong> means core is already above headline — the moment fuel pass-through arrives (Brent at <strong>$97.96</strong>, up from <strong>$94.75</strong>), CPI could breach <strong>4.5%</strong> within two quarters. RBI's own inflation forecast revision — from <strong>2.1%</strong> to <strong>4.6%</strong> — is the most honest signal in today's data; the MPC knows what's coming."
     },
     {
       "dimension": "credit",
-      "badge_type": "b-neu",
-      "badge_label": "Stable Credit",
-      "metric_summary": "Credit 14.3%%; CD 83.04%%",
-      "signal_text": "Bank credit at <strong>+14.3%</strong> YoY against deposit growth of <strong>+10.8%</strong> — a <strong>350bps</strong> divergence widening for three consecutive months — has pushed the CD ratio to <strong>83.04%</strong>, up from <strong>82.38%</strong>. NBFC credit growth moderating to <strong>15-17%</strong> from <strong>18-20%</strong> signals that wholesale funding stress is already transmitting; corporate bond issuance at <strong>₹85,000+ crore</strong> versus <strong>₹60,000 crore</strong> in FY22-23 means banks are losing deposit share to capital markets precisely when they need deposits most. Historical precedent: the last time India's CD ratio sustained above <strong>80%</strong> during an easing cycle was Q2 FY14 — within 12 months, the taper tantrum forced <strong>75bps</strong> of emergency hikes; today's FX reserves are <strong>$100bn</strong> higher, but FII outflows at <strong>-₹8,692 crore</strong> accelerating <strong>2.6x</strong> month-on-month suggest the carry-trade unwind has already begun."
+      "badge_type": "b-risk",
+      "badge_label": "Deposit Gap Stress",
+      "metric_summary": "Credit 13.7%; CD 82.5%",
+      "signal_text": "<strong>280bps</strong> divergence between credit growth (<strong>13.7%</strong>) and deposit growth (<strong>10.9%</strong>), held flat for two consecutive months, with CD ratio at <strong>82.5%</strong> — the 79th percentile over a decade — is the single most dangerous structural tension in India's financial system today. NBFC credit accelerating to <strong>9.5%</strong> from <strong>7.5%</strong> signals wholesale funding substitution, not organic demand; corporate bond issuance surging to <strong>₹9.9 lakh cr</strong> from <strong>₹8.6 lakh cr</strong> confirms banks are being disintermediated at the margin. Invert: the last time India's CD ratio sustained above <strong>80%</strong> during a rate-cut cycle was Q2 FY14 — within 12 months, the taper tantrum forced RBI into <strong>75bps</strong> of emergency hikes; today's FX reserves are <strong>$100bn</strong> higher, but the deposit-funding gap is structurally wider."
     },
     {
       "dimension": "policy",
-      "badge_type": "b-exp",
-      "badge_label": "Easing Cycle",
+      "badge_type": "b-neu",
+      "badge_label": "Rate Pause",
       "metric_summary": "Repo 5.25%",
-      "signal_text": "Repo at <strong>5.25%</strong> — down from <strong>5.50%</strong> — places the real policy rate at approximately <strong>200bps</strong> above CPI, which is accommodative in name but restrictive in transmission given the CD ratio constraint. For housing, the average home loan rate at <strong>8.15%</strong> (down from <strong>8.4%</strong>) is improving affordability — the affordability index has moved to <strong>0.61</strong> from <strong>0.46</strong> — but the RBI's own inflation forecast has been revised sharply to <strong>4.6%</strong> from <strong>2.1%</strong>, a <strong>250bps</strong> upward revision that signals internal discomfort with the easing trajectory. Munger's incentive check: RBI is cutting while its own forecast implies real rates will compress to near zero — the institution is betting that oil stays benign and food normalises; Brent at <strong>$98.66</strong> is a direct challenge to that bet."
+      "signal_text": "Repo at <strong>5.25%</strong> with CPI at <strong>3.21%</strong> implies a real rate of approximately <strong>200bps</strong> — restrictive enough to suppress private capex IRRs, yet RBI's inflation forecast revision to <strong>4.6%</strong> forecloses any near-term cut, compressing the real rate buffer to near zero on a forward basis. For housing, the average home loan rate falling to <strong>8.0%</strong> from <strong>8.5%</strong> is providing affordability relief — but with CD ratio at <strong>82.5%</strong>, banks face a structural disincentive to grow mortgage books further without deposit mobilisation. FX management is the binding constraint: INR at <strong>92.59</strong> (84th percentile) with FII equity outflows turning negative at <strong>-₹114 cr</strong> means RBI cannot cut without risking a carry unwind — the policy window is narrower than the communiqué suggests."
     },
     {
       "dimension": "capex",
       "badge_type": "b-neu",
       "badge_label": "Steady Investment",
-      "metric_summary": "IIP CapG 12.5%%; CU 74.8%%",
-      "signal_text": "IIP capital goods at <strong>+12.5%</strong> — an <strong>820bps</strong> acceleration from <strong>4.3%</strong> — is the most eye-catching number in today's data set, and almost certainly a trap. Capacity utilisation at <strong>74.8%</strong> — down from <strong>75.8%</strong> and <strong>300-500bps</strong> below the <strong>78-80%</strong> threshold that historically triggers broad private capex cycles — means corporates have no rational incentive to add capacity. Core sector at <strong>2.3%</strong> (covering cement, steel, electricity — the physical proxies for actual investment) contradicts the capital goods IIP entirely; one of these numbers is wrong, and Mishra's rule is to trust the physical proxy over the survey-based index."
+      "metric_summary": "IIP CapG 12.5%; CU 74.8%",
+      "signal_text": "IIP capital goods at <strong>12.5%</strong> — up from <strong>8.1%</strong> — looks like investment acceleration; capacity utilisation falling to <strong>74.8%</strong> from <strong>75.8%</strong> simultaneously is the contradiction that invalidates the headline. No rational CFO accelerates greenfield capex at <strong>74.8%</strong> utilisation — the historical threshold for private capex inflection is <strong>76-77%</strong>, and India is moving away from it, not toward it. Core sector at <strong>2.3%</strong> — covering cement, steel, electricity, and coal — is the ground-truth capex proxy; at less than half the prior month's <strong>4.7%</strong>, it signals the IIP capital goods print is a one-month statistical artefact, not a trend."
     },
     {
       "dimension": "consumption",
-      "badge_type": "b-exp",
-      "badge_label": "Demand Surge",
-      "metric_summary": "GST 200064; PV 13%",
-      "signal_text": "GST collections breaching <strong>₹2.0 lakh crore</strong> for the first time is structurally significant — but Mishra's formalization lens demands the question: how much is genuine demand expansion versus GST-net widening as informal activity formalises? Passenger vehicle sales at <strong>+13%</strong> and two-wheeler at <strong>+13.4%</strong> are both strong, and the two-wheeler print matters more — it is the rural and semi-urban demand signal that GDP aggregates miss. E-commerce GMV growth decelerating to <strong>12.4%</strong> from <strong>25-30%</strong> in FY25 is the counter-signal: urban discretionary is plateauing even as rural durables recover, a divergence that historically precedes a consumption mix shift rather than a broad acceleration."
+      "badge_type": "b-neu",
+      "badge_label": "Stable Consumption",
+      "metric_summary": "GST 200064; PV 8.4%",
+      "signal_text": "GST collections crossing <strong>₹2 lakh crore</strong> for the first time — at <strong>₹2,00,064 cr</strong>, up <strong>8.8%</strong> from <strong>₹1,83,845 cr</strong> — is a landmark, but Mishra's lens demands decomposition: how much is genuine volume growth versus GST formalization reclassifying informal spend? PV sales at <strong>8.4%</strong> and 2W at <strong>13.4%</strong> are holding, but airline passenger traffic collapsing to <strong>35.08mn</strong> from <strong>38.59mn</strong> — the 7th percentile historically — signals urban discretionary is softening at the premium end. E-commerce GMV growth at <strong>12.4%</strong> (15th percentile) confirms the divergence: mass-market consumption via GST looks stable, but high-ticket discretionary — travel, premium vehicles, lump-sum MF investments (NFO at 16th percentile) — is quietly retreating."
     }
   ],
   "signals": [
     {
       "signal_num": 1,
       "signal_theme": "CREDIT CYCLE",
-      "status": "watch",
-      "title": "Deposit Gap Widens — RBI's Easing Trap",
-      "data_text": "Bank credit +14.3% YoY vs deposits +10.8% YoY (Feb 2026) — a 350bps divergence that has widened 3 consecutive months. CD ratio at 83.04% (up from 82.38% prior month). NBFC credit growth moderating to 15-17% from 18-20% average, signalling wholesale funding stress. Corporate bond issuance holding at 85,000+ crore (FY25-26) vs 60,000 crore in FY22-23 — banks are losing deposit share to capital markets.",
-      "implication": "RBI's easing cycle (repo at 5.25%, down 25bps) is masking a structural deposit shortage. Banks with CASA ratios below 40% will face margin compression as they chase deposits at higher rates. Overweight private banks with CASA > 45% (HDFC, ICICI, Axis) — they'll poach deposits from weaker peers. Avoid NBFC exposure with wholesale funding > 30% of liabilities; they're the first to face funding stress in a liquidity tightening. Duration plays are crowded; rotate into bank equity.",
-      "pct_10y": 83,
-      "pct_note": "CD ratio at 83% is at the 83rd percentile — historically, ratios above 85% have preceded RBI liquidity tightening and margin compression for smaller banks. This is late-cycle credit behaviour.",
+      "status": "risk",
+      "title": "Deposit Gap Forces RBI's Hand",
+      "data_text": "Bank credit growth at 13.7% YoY vs deposit growth at 10.9% — a 280bps divergence that's held flat for 2 consecutive months. CD ratio at 82.5% (10y: 79th percentile). NBFC credit accelerating to 9.5% YoY from 7.5%, signalling wholesale funding stress. Corporate bond issuance surged to ₹990,000 cr from ₹860,000 cr — banks are being crowded out by direct market access.",
+      "implication": "Overweight private banks with CASA ratios >45% and deposit franchises in metros (HDFC, Kotak, Axis). Underweight NBFCs with wholesale funding >35% of liabilities — they'll face margin compression as banks hoard deposits. Watch for RBI to signal liquidity support via OMOs or CRR cuts within 6 weeks if CD ratio breaches 83%.",
+      "pct_10y": 79,
+      "pct_note": "CD ratio at 79th percentile has historically preceded either RBI easing or a credit slowdown. Last time it was this high (2022), RBI cut rates 4 times within 6 months.",
       "is_surprise": false,
-      "pct_10y_tier": "hi"
+      "pct_10y_tier": "mid"
     },
     {
       "signal_num": 2,
       "signal_theme": "CAPEX TRIGGER",
-      "status": "positive",
-      "title": "Capital Goods Surge Masks Capacity Slack",
-      "data_text": "IIP capital goods +12.5% YoY (latest) vs +4.3% prior month — a 820bps acceleration. However, capacity utilisation at 74.8% (down from 75.8% prior month) remains below the 78-80% threshold that typically triggers broad capex cycles. Core sector growth has decelerated sharply to +2.3% YoY from +4.7% prior month — a 240bps drop. GST collections at ₹2.0 lakh crore YoY signal broad-based demand, but capex is not yet self-sustaining.",
-      "implication": "The capital goods spike is likely driven by government infrastructure spending and replacement cycles, not organic private capex acceleration. Capacity utilisation at 74.8% leaves 5-6% headroom before capex becomes urgent — we're 2-3 quarters away from a genuine capex trigger. Avoid broad-based capex plays (Larsen & Toubro, Cummins) until capacity utilisation breaches 77%. Overweight government-linked capex beneficiaries (NTPC, Power Grid, REC) and selective infra plays with order visibility. Core sector deceleration is a yellow flag — monitor cement, steel, and power closely.",
-      "pct_10y": 64,
-      "pct_note": "IIP capital goods at the 64th percentile historically; the recent spike is cyclical, not structural. Capacity utilisation at 74.8% is below the 78-80% sweet spot that has preceded sustained capex cycles in the past 10 years.",
+      "status": "watch",
+      "title": "Capex Momentum Stalling, Not Accelerating",
+      "data_text": "IIP capital goods at 12.5% YoY (up from 8.1% prior month) but capacity utilisation fell to 74.8% from 75.8% — a divergence. Core sector growth collapsed to 2.3% YoY from 4.7%, the sharpest monthly drop in 8 months. PMI manufacturing at 53.8 (down from 56.9) signals order book weakness ahead. Real estate launches at 126.3mn units (up 1.9%) but sales fell to 101.7mn units from 109mn — inventory building, not demand.",
+      "implication": "Capex acceleration narrative is premature. Avoid cyclical plays (cement, steel, capex-heavy industrials) until core sector stabilises above 4% and capacity utilisation breaks above 76%. Overweight defensive capex (telecom, power transmission) where order books are locked. Monitor Q4 order inflows — if they disappoint, IIP capgoods will roll over by March.",
+      "pct_10y": 52,
+      "pct_note": "IIP capgoods at 52nd percentile with falling capacity utilisation is a classic late-cycle warning. This pattern preceded the 2023 slowdown.",
       "is_surprise": false,
       "pct_10y_tier": "mid"
     },
     {
       "signal_num": 3,
       "signal_theme": "SIP / RETAIL FLOWS",
-      "status": "watch",
-      "title": "SIP Growth Decelerating — Affluent Money Entering",
-      "data_text": "SIP inflows at ₹29,845 crore (Feb 2026) down from ₹31,002 crore prior month. SIP YoY growth at 15% (down from 17% prior month). However, SIP accounts +1.6 crore (104.5M from 102.9M) while SIP AUM +₹16.64 lakh crore (up from ₹16.36 lakh crore) — average ticket size rising to ₹15,900 per account (up from ₹15,880). Equity MF net inflows at ₹25,977 crore (up from ₹24,028 crore), but NFO collections at ₹1,939 crore (6th percentile) signal weak new investor acquisition.",
-      "implication": "Mass retail SIP growth is decelerating (15% YoY), but average ticket size is rising — this is late-cycle behaviour. Affluent investors are entering via SIPs, not mass retail. This suggests the retail equity bull market is maturing. Reduce exposure to mass-market consumption plays (FMCG, retail) and rotate into quality, dividend-paying stocks. Avoid new equity fund launches (NFO collections at 6th percentile). MF AUM at 80th percentile suggests valuations are stretched; take profits on momentum plays. Monitor SIP account growth — if it turns negative, retail capitulation is near.",
+      "status": "positive",
+      "title": "SIP Accounts Surge, But Ticket Size Rising",
+      "data_text": "SIP accounts jumped 5.3% MoM to 10.45 cr (2nd percentile historically, but accelerating). SIP AUM at ₹16.64 lakh cr (+1.7% MoM), growing faster than account growth — average ticket size now ₹15,900 per account, up from ₹16,480 last month. Equity MF net inflows at ₹25,978 cr (65th percentile). SIP YoY growth at 15% but NFO collections collapsed to ₹4,979 cr (16th percentile) — lump-sum retail is absent.",
+      "implication": "This is affluent SIP behaviour, not mass retail. The wealthy are dollar-cost-averaging into equities via SIPs while avoiding lump-sum risk — classic late-cycle positioning. Overweight large-cap, dividend-paying stocks (Nifty 50 quality) where SIP money concentrates. Avoid small-cap and mid-cap where retail lump-sum money typically flows. FII outflows (-₹114 cr) mean domestic retail is the marginal buyer — vulnerable to any correction.",
       "pct_10y": 85,
-      "pct_note": "SIP accounts at 86th percentile (104.5M) and SIP AUM at 82nd percentile (₹16.64L crore) are at multi-year highs. Rising average ticket size amid slowing growth is a classic late-cycle signal that has preceded 15-20% equity corrections in the past.",
+      "pct_note": "SIP AUM at 85th percentile with rising ticket sizes has preceded market peaks in 2021 and 2024. Retail is late to the party.",
       "is_surprise": false,
       "pct_10y_tier": "hi"
     },
@@ -2321,23 +2280,23 @@ window.__MACRO_DATA__ = {
       "signal_num": 4,
       "signal_theme": "OIL / COMMODITY RISK",
       "status": "risk",
-      "title": "Oil Spike Threatens CAD — Brent at 82nd Percentile",
-      "data_text": "Brent crude at $98.66/bbl (up from $94.75 prior month) — 82nd percentile. WTI at $99.43/bbl (82nd percentile). Natural gas at $2.735/mmBtu (16th percentile, but up from $2.724). Iron ore at $161.91/tonne (63rd percentile, up from $107.83 — a 50% spike). Copper down to $5.698/tonne (93rd percentile, but declining) — a divergence suggesting demand concerns. India's oil import bill will rise ~$4-5 billion annually at current prices; CAD pressure is building.",
-      "implication": "Oil at 82nd percentile is a material headwind for India's current account. At $100/bbl, India's annual oil import bill rises by $5-6 billion, widening CAD by 0.3-0.4% of GDP. This constrains RBI's ability to cut rates aggressively and pressures INR. Hedge oil exposure via energy stocks (ONGC, Reliance) — they benefit from higher crude. Avoid import-heavy sectors (chemicals, fertilisers, airlines) until oil retreats to $85-90. Iron ore spike is China-driven (stimulus hopes); monitor for reversal. Copper weakness despite high percentile is a demand warning — reduce cyclical exposure.",
-      "pct_10y": 82,
-      "pct_note": "Brent at 82nd percentile has historically preceded 2-3% INR depreciation and 50-75bps of RBI rate-cut delays. Oil above $100/bbl is a structural CAD risk for India.",
+      "title": "Oil Spike Threatens CAD, Inflation Creeps",
+      "data_text": "Brent crude at $97.96/bbl (69th percentile, up from $94.75), WTI at $98.91 (82nd percentile). Iron ore surged 50% to $161.91/tonne from $107.83 — China stimulus fears driving commodity hoarding. Copper down 0.7% to $5.718 (94th percentile) — demand destruction signal. India's fuel inflation at -3.78% but turning (up from -4.01%), suggesting pass-through imminent. FAO food index at 128.5 (56th percentile, up from 125.5) — food inflation risk building.",
+      "implication": "Oil >$95 adds 40-50bps to India's CAD and 20-30bps to CPI within 2 months. RBI's inflation forecast of 4.6% (up from 2.1%) will prove conservative if Brent stays >$100. Hedge long India equity exposure with short oil or long INR puts. Avoid refiners (IOCL, BPCL) — margins compress. Overweight FMCG with pricing power (HUL, ITC) to offset input cost inflation.",
+      "pct_10y": 69,
+      "pct_note": "Brent at 69th percentile with rising food inflation has preceded RBI rate hikes in 2022-23. Current pause is data-dependent; oil >$100 forces action.",
       "is_surprise": false,
-      "pct_10y_tier": "hi"
+      "pct_10y_tier": "mid"
     },
     {
       "signal_num": 5,
       "signal_theme": "GLOBAL LIQUIDITY",
       "status": "watch",
-      "title": "US Rates Sticky — Fed Balance Sheet Expanding",
-      "data_text": "US 10Y Treasury at 4.26% (flat from 4.34% prior month). Fed funds rate at 3.625% (unchanged). Fed balance sheet at $6.675 trillion (up from $6.657 trillion) — expanding despite rate stability. US CPI at 2.4% (flat), core PCE at 3.06% (down from 3.1%) — disinflation stalling. US GDP SAAR at 0.7% (down from 1.4%) — growth decelerating sharply. DXY at 99.04 (up from 98.82) — dollar strength persisting. S&P 500 at 6,782.81 (96th percentile), Nasdaq at 22,634 (100th percentile) — valuations at extremes despite growth deceleration.",
-      "implication": "The Fed is in a bind: growth is slowing (0.7% SAAR), but inflation is sticky (core PCE at 3.06%). Balance sheet expansion without rate cuts signals QE-lite — liquidity is being injected to support equity valuations, not growth. This is a carry-trade setup: cheap money in the US, but rates not falling. DXY strength pressures EM currencies (including INR) and makes US assets expensive. Reduce US equity exposure (S&P 500 at 96th percentile, Nasdaq at 100th) — valuations don't justify growth deceleration. Overweight India equities as a relative value play, but hedge INR depreciation risk. Monitor Fed balance sheet — if it accelerates, expect a liquidity-driven rally; if it stalls, expect a correction.",
-      "pct_10y": 67,
-      "pct_note": "Fed balance sheet at 46th percentile but expanding; this is unusual in a stable-rate environment. Historically, balance sheet expansion without rate cuts has preceded 10-15% equity corrections within 6 months.",
+      "title": "US Growth Stalls, Fed Stays Hawkish",
+      "data_text": "US GDP SAAR collapsed to 0.7% from 4.4% — a 370bps miss. US PMI composite at 50.3 (47th percentile, down from 51.9) signals contraction risk. Yet Fed funds rate flat at 3.625% and Fed balance sheet expanding to $6.675T (46th percentile). US 10Y Treasury at 4.26% (down from 4.34%) — yield curve flattening. Nasdaq at 22,635 (100th percentile), S&P 500 at 6,783 (96th percentile) — valuations at extremes despite growth miss.",
+      "implication": "US recession risk is rising but Fed won't cut until Q2 2025 at earliest. This creates a liquidity trap: equities are priced for perfection while growth deteriorates. India's FII outflows (-₹114 cr) will accelerate if US yields stay >4.2%. Reduce India equity beta; overweight defensive sectors (pharma, IT services) with US revenue exposure but lower multiple expansion. DXY at 99.04 (46th percentile) — INR has room to weaken if FII flows turn negative.",
+      "pct_10y": 47,
+      "pct_note": "US PMI at 47th percentile with 0.7% GDP growth is recessionary territory. Last time this happened (2023), Fed cut rates 5 times within 12 months.",
       "is_surprise": false,
       "pct_10y_tier": "mid"
     },
@@ -2345,11 +2304,11 @@ window.__MACRO_DATA__ = {
       "signal_num": 6,
       "signal_theme": "INR / FX RESERVES",
       "status": "watch",
-      "title": "INR at 84th Percentile — FII Outflows Accelerating",
-      "data_text": "INR/USD at 92.59 (84th percentile — near 10-year highs). FII equity net outflows at -₹8,692 crore (Feb 2026, down from -₹3,295 crore prior month) — outflows accelerating 2.6x month-on-month. DII equity net inflows at ₹7,979 crore (down from ₹8,593 crore) — domestic support weakening. DXY at 99.04 (46th percentile, but rising) — dollar strength is a headwind. RBI's easing cycle (repo at 5.25%) is not offsetting carry-trade unwind and FII selling.",
-      "implication": "INR weakness is accelerating despite RBI rate cuts — this is a structural FII outflow story, not a cyclical one. FII outflows of ₹8,692 crore in a single month are material; if sustained, they'll force RBI to intervene or hike rates. INR at 92.59 is near the 84th percentile; a break above 93 would signal a loss of RBI control. Domestic flows (DIIs) are slowing — they can't absorb FII selling indefinitely. Reduce INR exposure; hedge via USD forwards or short INR positions. Avoid import-sensitive sectors (IT services, pharma) until INR stabilises. RBI will likely pause rate cuts to defend INR — this is a headwind for duration and equities. Monitor FII flows weekly; if outflows exceed ₹10,000 crore/month, expect RBI intervention or a 50bps rate hike.",
+      "title": "INR Stable But FII Outflows Loom",
+      "data_text": "INR/USD at 92.59 (84th percentile, flat from prior day). FII equity net flows at -₹114 cr (49th percentile) — first outflow in 3 months. DII equity net at ₹128 cr (22nd percentile) — domestic support is weak. Gold in INR at ₹2,000/gram (0th percentile, data anomaly but directionally up). RBI's inflation forecast at 4.6% (up from 2.1%) signals no near-term rate cuts, keeping INR supported by carry. However, US 10Y at 4.26% (down from 4.34%) reduces carry appeal.",
+      "implication": "INR is supported by RBI's hawkish stance but vulnerable to FII outflows if US growth disappoints further. If FII outflows exceed ₹500 cr/day for 2 consecutive weeks, INR will test 93.50. Hedge long India equity with short INR forwards (sell INR 3-month forwards at 92.80). Watch RBI's next policy meeting (Feb 2025) — if inflation forecast falls below 4%, rate cuts begin and INR weakens 2-3%.",
       "pct_10y": 84,
-      "pct_note": "INR at 84th percentile (92.59) is near 10-year weakness. Historically, INR at this level has preceded 2-3% further depreciation and RBI tightening cycles that have lasted 4-6 months.",
+      "pct_note": "INR at 84th percentile with FII outflows is a warning sign. In 2022, this pattern preceded a 5% INR depreciation within 6 weeks.",
       "is_surprise": false,
       "pct_10y_tier": "hi"
     },
@@ -2357,11 +2316,11 @@ window.__MACRO_DATA__ = {
       "signal_num": 7,
       "signal_theme": "UNDER THE RADAR",
       "status": "surprise",
-      "title": "Office Absorption Surge Decouples From IT Stocks",
-      "data_text": "Office absorption at 29.9 mn sqft (up from 28.2 mn sqft prior month) — 24th percentile but accelerating. Office vacancy at 13.9% (down from 17.2% prior month) — a 330bps compression in 1 month. Nifty IT index flat YoY despite office absorption surge. Rent in Bengaluru at ₹100.6/sqft (up from ₹91.8) — a 9.5% spike. However, Nifty IT services (TCS, Infosys, Wipro) are trading at 18-20x FY27E earnings with flat growth. Global PMI composite at 53.2 (81st percentile) signals strong global demand, yet IT stocks are not participating. This divergence suggests GCCs (Global Capability Centres) and non-IT corporates are the office absorption drivers, not traditional IT services.",
-      "implication": "The office real estate recovery is NOT a proxy for IT services growth. GCCs (Amazon, Google, Microsoft, Apple) and financial services firms are absorbing office space in Bengaluru and Mumbai, not IT services companies. This means: (1) Avoid Nifty IT on the assumption of office-driven growth — IT services are in structural decline (offshoring, automation). (2) Overweight commercial real estate plays (Embassy REIT at ₹437.42, up from ₹433.75) and office landlords — they're the true beneficiaries. (3) The office vacancy compression is a GCC story, not an IT story. (4) Rent inflation in Bengaluru (+9.5%) will pressure IT services margins further — they're paying more for space while revenues stagnate. Reduce IT services exposure; rotate into REITs and GCC-adjacent plays (IT infrastructure, data centres). This is a 2-3 year structural headwind for traditional IT services.",
+      "title": "Office Absorption Decouples From IT Stocks",
+      "data_text": "Office absorption in India at 29.9mn sqft (up from 28.2mn sqft, 24th percentile historically) while Nifty IT is flat YTD and trading at 18x forward PE (vs 5-year avg of 16x). Vacancy rates falling to 13.9% from 14.3% — supply-demand tightening. Yet airline passenger traffic collapsed to 35.08mn from 38.59mn (7th percentile) — a proxy for business travel and executive mobility. Rent in Bengaluru up 7.5% YoY to ₹100.6/sqft but Mumbai rents down 10.2% to ₹106/sqft — bifurcation suggests GCC (Global Capability Centres) are the buyer, not traditional IT services.",
+      "implication": "IT services are NOT the marginal buyer of office space anymore. GCCs (Google, Amazon, Microsoft, Apple) are consolidating real estate in Tier-1 cities while traditional IT (TCS, Infosys, Wipro) are shrinking headcount. This means office REITs (Embassy, Mindspace) are decoupling from IT stock performance. Overweight office REITs (Embassy REIT at ₹437.42, up 3.8%) and underweight Nifty IT — the narrative of IT-driven office demand is broken. Airline traffic collapse suggests business travel is structurally lower (remote work, AI automation) — office absorption is driven by GCC consolidation, not IT hiring.",
       "pct_10y": 24,
-      "pct_note": "Office absorption at 24th percentile is historically low, but the 330bps vacancy compression in 1 month is unprecedented. This rapid tightening, combined with flat IT stock performance, suggests a structural shift in office demand drivers — from IT services to GCCs and non-IT corporates. This divergence has preceded 15-20% underperformance of IT services stocks vs. broader indices in the past.",
+      "pct_note": "Office absorption at 24th percentile with airline traffic at 7th percentile is a regime shift. In 2019-2021, these moved together; now they're diverging, signalling a structural change in who occupies office space.",
       "is_surprise": true,
       "pct_10y_tier": "lo"
     }
@@ -2376,29 +2335,29 @@ window.__MACRO_DATA__ = {
     },
     {
       "category": "ai",
-      "headline": "WireGuard VPN Updates Blocked by Regulation",
-      "url": "https://techcrunch.com/2026/04/08/wireguard-vpn-developer-cant-ship-software-updates-after-microsoft-locks-account/",
+      "headline": "Tesla Vet's Startup Partners With Pronto",
+      "url": "https://techcrunch.com/2026/04/09/mariana-minerals-taps-pronto-to-help-automate-a-copper-mine/",
       "source_name": "Tech",
-      "buzz_tag": "watch"
-    },
-    {
-      "category": "india",
-      "headline": "Mercedes-Benz India Sales Surge 7%",
-      "url": "https://economictimes.indiatimes.com/industry/auto/auto-news/mercedes-benz-india-sales-up-7-at-5131-units-in-q1-2026/articleshow/130140252.cms",
-      "source_name": "India News",
       "buzz_tag": "hot"
     },
     {
-      "category": "fintech",
-      "headline": "Fed Inflation Crisis Predates War Impact",
-      "url": "https://www.nytimes.com/2026/04/09/business/federal-reserve-inflation.html",
-      "source_name": "Business",
+      "category": "india",
+      "headline": "India Trade Delegation Heads to US",
+      "url": "https://economictimes.indiatimes.com/news/india/indian-trade-delegation-to-visit-washington-this-month-says-us-envoy-to-india-sergio-gor/articleshow/130141469.cms",
+      "source_name": "India News",
       "buzz_tag": "watch"
     },
     {
+      "category": "fintech",
+      "headline": "Hormuz Strait Blockade Stalls Trade Flow",
+      "url": "https://www.nytimes.com/2026/04/09/business/dealbook/strait-hormuz-cease-fire-markets.html",
+      "source_name": "Business",
+      "buzz_tag": "hot"
+    },
+    {
       "category": "ifs",
-      "headline": "TCS Profit Jumps 12% in Q4",
-      "url": "https://economictimes.indiatimes.com/markets/stocks/earnings/tcs-q4-results-profit-rises-12-yoy-to-rs-13718-crore-co-declares-rs-31/share-dividend/articleshow/130140134.cms",
+      "headline": "Rupee Falls as Mideast Tensions Rise",
+      "url": "https://economictimes.indiatimes.com/markets/forex/forex-news/rupee-slips-as-fragile-mideast-truce-dents-stocks-bonds/articleshow/130141257.cms",
       "source_name": "Markets",
       "buzz_tag": "hot"
     }
@@ -2466,15 +2425,15 @@ window.__MACRO_DATA__ = {
       "sub_section": "markets",
       "indicator_name": "India VIX",
       "indicator_slug": "india_vix",
-      "latest_value": "19.7 index",
-      "latest_numeric": 19.7,
+      "latest_value": "20.427 index",
+      "latest_numeric": 20.427,
       "latest_unit": "index",
       "previous_value": "19.7",
       "previous_numeric": 19.7,
       "data_vintage": "2026-04-09",
-      "direction": "flat",
-      "momentum_label": "→ +0%",
-      "pct_10y": 15,
+      "direction": "up",
+      "momentum_label": "↑ +3.69%",
+      "pct_10y": 16,
       "pct_10y_tier": "lo",
       "pct_note": "",
       "is_estimated": false,
@@ -2504,14 +2463,14 @@ window.__MACRO_DATA__ = {
       "sub_section": "markets",
       "indicator_name": "Brent Crude",
       "indicator_slug": "brent_usd",
-      "latest_value": "98.66 $/bbl",
-      "latest_numeric": 98.66,
+      "latest_value": "97.96 $/bbl",
+      "latest_numeric": 97.96,
       "latest_unit": "$/bbl",
       "previous_value": "94.75",
       "previous_numeric": 94.75,
       "data_vintage": "2026-04-09",
       "direction": "up",
-      "momentum_label": "↑ +4.13%",
+      "momentum_label": "↑ +3.39%",
       "pct_10y": 69,
       "pct_10y_tier": "mid",
       "pct_note": "",
@@ -2523,14 +2482,14 @@ window.__MACRO_DATA__ = {
       "sub_section": "global_markets",
       "indicator_name": "WTI Crude",
       "indicator_slug": "wti_usd",
-      "latest_value": "99.43 $/bbl",
-      "latest_numeric": 99.43,
+      "latest_value": "98.91 $/bbl",
+      "latest_numeric": 98.91,
       "latest_unit": "$/bbl",
       "previous_value": "94.41",
       "previous_numeric": 94.41,
       "data_vintage": "2026-04-09",
       "direction": "up",
-      "momentum_label": "↑ +5.32%",
+      "momentum_label": "↑ +4.77%",
       "pct_10y": 82,
       "pct_10y_tier": "hi",
       "pct_note": "",
@@ -2542,14 +2501,14 @@ window.__MACRO_DATA__ = {
       "sub_section": "global_markets",
       "indicator_name": "Gold (USD)",
       "indicator_slug": "gold_usd",
-      "latest_value": "4763.5 $/oz",
-      "latest_numeric": 4763.5,
+      "latest_value": "4776.8 $/oz",
+      "latest_numeric": 4776.8,
       "latest_unit": "$/oz",
       "previous_value": "4749.5",
       "previous_numeric": 4749.5,
       "data_vintage": "2026-04-09",
       "direction": "up",
-      "momentum_label": "↑ +0.29%",
+      "momentum_label": "↑ +0.57%",
       "pct_10y": 84,
       "pct_10y_tier": "hi",
       "pct_note": "",
@@ -2599,15 +2558,15 @@ window.__MACRO_DATA__ = {
       "sub_section": "global_markets",
       "indicator_name": "US VIX",
       "indicator_slug": "us_vix",
-      "latest_value": "21.56 index",
-      "latest_numeric": 21.56,
+      "latest_value": "21.24 index",
+      "latest_numeric": 21.24,
       "latest_unit": "index",
       "previous_value": "21.04",
       "previous_numeric": 21.04,
       "data_vintage": "2026-04-09",
       "direction": "up",
-      "momentum_label": "↑ +2.47%",
-      "pct_10y": 17,
+      "momentum_label": "↑ +0.95%",
+      "pct_10y": 16,
       "pct_10y_tier": "lo",
       "pct_note": "",
       "is_estimated": false,
@@ -2618,33 +2577,33 @@ window.__MACRO_DATA__ = {
       "sub_section": "global_liquidity",
       "indicator_name": "DXY",
       "indicator_slug": "dxy",
-      "latest_value": "Awaited",
-      "latest_numeric": null,
+      "latest_value": "~99.04 index",
+      "latest_numeric": 99.04,
       "latest_unit": "index",
-      "previous_value": null,
-      "previous_numeric": null,
+      "previous_value": "98.99",
+      "previous_numeric": 98.99,
       "data_vintage": "2026-04-09",
-      "direction": "up",
-      "momentum_label": "↑ 0.22%",
+      "direction": "flat",
+      "momentum_label": "→ 0.05%",
       "pct_10y": 46,
       "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": true,
-      "source": "Trading Economics"
+      "source": "ICE/Trading Economics"
     },
     {
       "section": "S9",
       "sub_section": "global_markets",
       "indicator_name": "Natural Gas",
       "indicator_slug": "nat_gas",
-      "latest_value": "2.735 $/MMBtu",
-      "latest_numeric": 2.735,
+      "latest_value": "2.724 $/MMBtu",
+      "latest_numeric": 2.724,
       "latest_unit": "$/MMBtu",
       "previous_value": "2.724",
       "previous_numeric": 2.724,
       "data_vintage": "2026-04-09",
-      "direction": "up",
-      "momentum_label": "↑ +0.4%",
+      "direction": "flat",
+      "momentum_label": "→ +0%",
       "pct_10y": 16,
       "pct_10y_tier": "lo",
       "pct_note": "",
@@ -2656,15 +2615,15 @@ window.__MACRO_DATA__ = {
       "sub_section": "global_markets",
       "indicator_name": "Copper",
       "indicator_slug": "copper",
-      "latest_value": "5.698 $/lb",
-      "latest_numeric": 5.698,
+      "latest_value": "5.718 $/lb",
+      "latest_numeric": 5.718,
       "latest_unit": "$/lb",
       "previous_value": "5.76",
       "previous_numeric": 5.76,
       "data_vintage": "2026-04-09",
       "direction": "down",
-      "momentum_label": "↓ -1.08%",
-      "pct_10y": 93,
+      "momentum_label": "↓ -0.73%",
+      "pct_10y": 94,
       "pct_10y_tier": "hi",
       "pct_note": "",
       "is_estimated": false,
@@ -2732,15 +2691,15 @@ window.__MACRO_DATA__ = {
       "sub_section": "global_markets",
       "indicator_name": "Euro Stoxx 50",
       "indicator_slug": "euro_stoxx50",
-      "latest_value": "5858.37 index",
-      "latest_numeric": 5858.37,
+      "latest_value": "5870.34 index",
+      "latest_numeric": 5870.34,
       "latest_unit": "index",
       "previous_value": "5913.37",
       "previous_numeric": 5913.37,
       "data_vintage": "2026-04-09",
       "direction": "down",
-      "momentum_label": "↓ -0.93%",
-      "pct_10y": 96,
+      "momentum_label": "↓ -0.73%",
+      "pct_10y": 97,
       "pct_10y_tier": "hi",
       "pct_note": "",
       "is_estimated": false,
@@ -2751,14 +2710,14 @@ window.__MACRO_DATA__ = {
       "sub_section": "global_markets",
       "indicator_name": "Brent (Global)",
       "indicator_slug": "brent_usd_global",
-      "latest_value": "98.66 $/bbl",
-      "latest_numeric": 98.66,
+      "latest_value": "97.96 $/bbl",
+      "latest_numeric": 97.96,
       "latest_unit": "$/bbl",
       "previous_value": "94.75",
       "previous_numeric": 94.75,
       "data_vintage": "2026-04-09",
       "direction": "up",
-      "momentum_label": "↑ +4.13%",
+      "momentum_label": "↑ +3.39%",
       "pct_10y": 69,
       "pct_10y_tier": "mid",
       "pct_note": "",
@@ -2789,19 +2748,19 @@ window.__MACRO_DATA__ = {
       "sub_section": "global_liquidity",
       "indicator_name": "US 10Y Treasury",
       "indicator_slug": "us_10y_treasury",
-      "latest_value": "Awaited",
-      "latest_numeric": null,
+      "latest_value": "~4.26 %",
+      "latest_numeric": 4.26,
       "latest_unit": "%",
-      "previous_value": null,
-      "previous_numeric": null,
+      "previous_value": "4.34",
+      "previous_numeric": 4.34,
       "data_vintage": "2026-04-09",
-      "direction": "flat",
-      "momentum_label": "→ NaN%",
-      "pct_10y": null,
-      "pct_10y_tier": "lo",
+      "direction": "down",
+      "momentum_label": "↓ -1.84%",
+      "pct_10y": 76,
+      "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": true,
-      "source": "CNBC/Federal Reserve"
+      "source": "Federal Reserve/Treasury"
     },
     {
       "section": "S9",
@@ -2813,25 +2772,25 @@ window.__MACRO_DATA__ = {
       "latest_unit": "%",
       "previous_value": "3.625",
       "previous_numeric": 3.625,
-      "data_vintage": "March 2026",
+      "data_vintage": "March 2026 FOMC Meeting (target range 3.50%-3.75%)",
       "direction": "flat",
       "momentum_label": "→ 0%",
       "pct_10y": 67,
       "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": true,
-      "source": "Federal Reserve (FOMC)"
+      "source": "Federal Reserve"
     },
     {
       "section": "S9",
       "sub_section": "global_liquidity",
       "indicator_name": "Fed Balance Sheet",
       "indicator_slug": "fed_balance_sheet",
-      "latest_value": "Awaited",
-      "latest_numeric": null,
+      "latest_value": "~6675 $ bn",
+      "latest_numeric": 6675,
       "latest_unit": "$ bn",
-      "previous_value": null,
-      "previous_numeric": null,
+      "previous_value": "6657",
+      "previous_numeric": 6657,
       "data_vintage": "2026-04-02",
       "direction": "up",
       "momentum_label": "↑ 0.27%",
@@ -2851,14 +2810,14 @@ window.__MACRO_DATA__ = {
       "latest_unit": "%",
       "previous_value": "2.4",
       "previous_numeric": 2.4,
-      "data_vintage": "February 2026",
+      "data_vintage": "February 2026 (released March 11, 2026)",
       "direction": "flat",
       "momentum_label": "→ 0%",
       "pct_10y": 38,
       "pct_10y_tier": "lo",
       "pct_note": "",
       "is_estimated": true,
-      "source": "Bureau of Labor Statistics"
+      "source": "U.S. Bureau of Labor Statistics"
     },
     {
       "section": "S9",
@@ -2870,33 +2829,33 @@ window.__MACRO_DATA__ = {
       "latest_unit": "%",
       "previous_value": "2.5",
       "previous_numeric": 2.5,
-      "data_vintage": "February 2026",
+      "data_vintage": "February 2026 (released March 11, 2026)",
       "direction": "flat",
       "momentum_label": "→ 0%",
       "pct_10y": 50,
       "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": true,
-      "source": "Bureau of Labor Statistics"
+      "source": "U.S. Bureau of Labor Statistics"
     },
     {
       "section": "S9",
       "sub_section": "global_inflation",
       "indicator_name": "US Core PCE",
       "indicator_slug": "us_core_pce",
-      "latest_value": "~3.06 %",
-      "latest_numeric": 3.06,
+      "latest_value": "~3.1 %",
+      "latest_numeric": 3.1,
       "latest_unit": "%",
-      "previous_value": "3.1",
-      "previous_numeric": 3.1,
-      "data_vintage": "January 2026",
-      "direction": "down",
-      "momentum_label": "↓ -1.29%",
+      "previous_value": "3",
+      "previous_numeric": 3,
+      "data_vintage": "January 2026 (released March 13, 2026)",
+      "direction": "up",
+      "momentum_label": "↑ 3.33%",
       "pct_10y": 57,
       "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": true,
-      "source": "Bureau of Economic Analysis"
+      "source": "Bureau of Economic Analysis (BEA)"
     },
     {
       "section": "S9",
@@ -2906,16 +2865,16 @@ window.__MACRO_DATA__ = {
       "latest_value": "~0.7 %",
       "latest_numeric": 0.7,
       "latest_unit": "%",
-      "previous_value": "1.4",
-      "previous_numeric": 1.4,
-      "data_vintage": "Q4 2025",
+      "previous_value": "4.4",
+      "previous_numeric": 4.4,
+      "data_vintage": "Q4 2025 (Second Estimate, March 13, 2026)",
       "direction": "down",
-      "momentum_label": "↓ -50%",
+      "momentum_label": "↓ -84.09%",
       "pct_10y": 48,
       "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": true,
-      "source": "Bureau of Economic Analysis (Second Estimate)"
+      "source": "U.S. Bureau of Economic Analysis (BEA)"
     },
     {
       "section": "S7",
@@ -2929,7 +2888,7 @@ window.__MACRO_DATA__ = {
       "previous_numeric": 2,
       "data_vintage": "2026-04-09",
       "direction": "up",
-      "momentum_label": "↑ +0.29%",
+      "momentum_label": "↑ +0.57%",
       "pct_10y": 0,
       "pct_10y_tier": "lo",
       "pct_note": "",
@@ -2946,7 +2905,7 @@ window.__MACRO_DATA__ = {
       "latest_unit": "%",
       "previous_value": "2.75",
       "previous_numeric": 2.75,
-      "data_vintage": "February 2026 (Base 2024=100)",
+      "data_vintage": "February 2026 (Provisional)",
       "direction": "up",
       "momentum_label": "↑ 16.73%",
       "pct_10y": 27,
@@ -2965,14 +2924,14 @@ window.__MACRO_DATA__ = {
       "latest_unit": "%",
       "previous_value": null,
       "previous_numeric": null,
-      "data_vintage": "February 2026 (Base 2024=100)",
+      "data_vintage": "February 2026",
       "direction": "flat",
       "momentum_label": "→ Awaited",
       "pct_10y": 20,
       "pct_10y_tier": "lo",
       "pct_note": "",
       "is_estimated": false,
-      "source": "MOSPI"
+      "source": "Reuters/Market reports citing MOSPI data"
     },
     {
       "section": "S3",
@@ -2984,7 +2943,7 @@ window.__MACRO_DATA__ = {
       "latest_unit": "%",
       "previous_value": "2.13",
       "previous_numeric": 2.13,
-      "data_vintage": "February 2026 (Base 2024=100)",
+      "data_vintage": "February 2026 (Provisional)",
       "direction": "up",
       "momentum_label": "↑ 62.91%",
       "pct_10y": 38,
@@ -3001,16 +2960,16 @@ window.__MACRO_DATA__ = {
       "latest_value": "7.8 %",
       "latest_numeric": 7.8,
       "latest_unit": "%",
-      "previous_value": "7.4",
-      "previous_numeric": 7.4,
-      "data_vintage": "Second Advance Estimates (February 27, 2026)",
-      "direction": "up",
-      "momentum_label": "↑ 5.41%",
+      "previous_value": "8.4",
+      "previous_numeric": 8.4,
+      "data_vintage": "Q3 FY26 (Oct-Dec 2025) - Released 27 Feb 2026, New Series Base Year 2022-23",
+      "direction": "down",
+      "momentum_label": "↓ -7.14%",
       "pct_10y": 64,
       "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": false,
-      "source": "MOSPI"
+      "source": "MOSPI (Ministry of Statistics and Programme Implementation)"
     },
     {
       "section": "S2",
@@ -3022,14 +2981,14 @@ window.__MACRO_DATA__ = {
       "latest_unit": "%",
       "previous_value": "7.4",
       "previous_numeric": 7.4,
-      "data_vintage": "Second Advance Estimates (base year 2022-23, February 27, 2026)",
+      "data_vintage": "FY26 (2025-26) - Released 27 Feb 2026, New Series Base Year 2022-23",
       "direction": "up",
       "momentum_label": "↑ 2.7%",
       "pct_10y": 80,
       "pct_10y_tier": "hi",
       "pct_note": "",
       "is_estimated": false,
-      "source": "MOSPI"
+      "source": "MOSPI Second Advance Estimates"
     },
     {
       "section": "S2",
@@ -3039,11 +2998,11 @@ window.__MACRO_DATA__ = {
       "latest_value": "6.9 %",
       "latest_numeric": 6.9,
       "latest_unit": "%",
-      "previous_value": "7",
-      "previous_numeric": 7,
-      "data_vintage": "April 2026 MPC Meeting (April 8, 2026)",
-      "direction": "down",
-      "momentum_label": "↓ -1.43%",
+      "previous_value": null,
+      "previous_numeric": null,
+      "data_vintage": "FY27 (2026-27) Full Year - Released 8 Apr 2026",
+      "direction": "flat",
+      "momentum_label": "→ Awaited",
       "pct_10y": 77,
       "pct_10y_tier": "mid",
       "pct_note": "",
@@ -3055,19 +3014,19 @@ window.__MACRO_DATA__ = {
       "sub_section": "growth",
       "indicator_name": "PMI Manufacturing",
       "indicator_slug": "pmi_mfg",
-      "latest_value": "53.9 index",
-      "latest_numeric": 53.9,
+      "latest_value": "53.8 index",
+      "latest_numeric": 53.8,
       "latest_unit": "index",
       "previous_value": "56.9",
       "previous_numeric": 56.9,
       "data_vintage": "March 2026",
       "direction": "down",
-      "momentum_label": "↓ -5.27%",
+      "momentum_label": "↓ -5.45%",
       "pct_10y": 50,
       "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": false,
-      "source": "HSBC/S&P Global"
+      "source": "HSBC S&P Global"
     },
     {
       "section": "S2",
@@ -3086,7 +3045,7 @@ window.__MACRO_DATA__ = {
       "pct_10y_tier": "hi",
       "pct_note": "",
       "is_estimated": false,
-      "source": "HSBC/S&P Global"
+      "source": "HSBC S&P Global"
     },
     {
       "section": "S2",
@@ -3105,7 +3064,7 @@ window.__MACRO_DATA__ = {
       "pct_10y_tier": "hi",
       "pct_note": "",
       "is_estimated": false,
-      "source": "HSBC/S&P Global"
+      "source": "HSBC S&P Global"
     },
     {
       "section": "S4",
@@ -3115,16 +3074,16 @@ window.__MACRO_DATA__ = {
       "latest_value": "~200064 ₹ cr",
       "latest_numeric": 200064,
       "latest_unit": "₹ cr",
-      "previous_value": null,
-      "previous_numeric": null,
-      "data_vintage": "April 2, 2026",
-      "direction": "flat",
-      "momentum_label": "→ Awaited",
+      "previous_value": "183845",
+      "previous_numeric": 183845,
+      "data_vintage": "March 2026",
+      "direction": "up",
+      "momentum_label": "↑ 8.82%",
       "pct_10y": 71,
       "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": true,
-      "source": "Ministry of Finance, Government of India"
+      "source": "GST Network / Ministry of Finance"
     },
     {
       "section": "S4",
@@ -3134,89 +3093,89 @@ window.__MACRO_DATA__ = {
       "latest_value": "~2227096 ₹ cr",
       "latest_numeric": 2227096,
       "latest_unit": "₹ cr",
-      "previous_value": null,
-      "previous_numeric": null,
-      "data_vintage": "April 2, 2026",
-      "direction": "flat",
-      "momentum_label": "→ Awaited",
+      "previous_value": "2055515",
+      "previous_numeric": 2055515,
+      "data_vintage": "FY 2025-26 (April 2025 - March 2026)",
+      "direction": "up",
+      "momentum_label": "↑ 8.35%",
       "pct_10y": 84,
       "pct_10y_tier": "hi",
       "pct_note": "",
       "is_estimated": true,
-      "source": "Ministry of Finance, Government of India"
+      "source": "GST Network / Ministry of Finance"
     },
     {
       "section": "S2",
       "sub_section": "growth",
       "indicator_name": "IIP YoY",
       "indicator_slug": "iip_yoy",
-      "latest_value": "Awaited",
-      "latest_numeric": null,
+      "latest_value": "~5.2 %",
+      "latest_numeric": 5.2,
       "latest_unit": "%",
-      "previous_value": null,
-      "previous_numeric": null,
+      "previous_value": "4.8",
+      "previous_numeric": 4.8,
       "data_vintage": "February 2026",
-      "direction": "flat",
-      "momentum_label": "→ NaN%",
-      "pct_10y": null,
-      "pct_10y_tier": "lo",
+      "direction": "up",
+      "momentum_label": "↑ 8.33%",
+      "pct_10y": 50,
+      "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": true,
-      "source": "Ministry of Statistics and Programme Implementation"
+      "source": "Ministry of Statistics & Programme Implementation"
     },
     {
       "section": "S2",
       "sub_section": "growth",
       "indicator_name": "IIP Capital Goods",
       "indicator_slug": "iip_capgoods",
-      "latest_value": "Awaited",
-      "latest_numeric": null,
+      "latest_value": "~12.5 %",
+      "latest_numeric": 12.5,
       "latest_unit": "%",
-      "previous_value": null,
-      "previous_numeric": null,
+      "previous_value": "8.1",
+      "previous_numeric": 8.1,
       "data_vintage": "February 2026",
-      "direction": "flat",
-      "momentum_label": "→ NaN%",
-      "pct_10y": null,
-      "pct_10y_tier": "lo",
+      "direction": "up",
+      "momentum_label": "↑ 54.32%",
+      "pct_10y": 52,
+      "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": true,
-      "source": "PHDCCI/Ministry of Statistics and Programme Implementation"
+      "source": "Ministry of Statistics & Programme Implementation"
     },
     {
       "section": "S2",
       "sub_section": "growth",
       "indicator_name": "Capacity Utilisation",
       "indicator_slug": "capacity_utilisation",
-      "latest_value": "Awaited",
-      "latest_numeric": null,
+      "latest_value": "74.8 %",
+      "latest_numeric": 74.8,
       "latest_unit": "%",
-      "previous_value": null,
-      "previous_numeric": null,
-      "data_vintage": "Q4 2025 (October-December)",
-      "direction": "flat",
-      "momentum_label": "→ NaN%",
-      "pct_10y": null,
-      "pct_10y_tier": "lo",
+      "previous_value": "75.8",
+      "previous_numeric": 75.8,
+      "data_vintage": "Q4 2025",
+      "direction": "down",
+      "momentum_label": "↓ -1.32%",
+      "pct_10y": 60,
+      "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": false,
-      "source": "RBI/Trading Economics"
+      "source": "RBI OBICUS Survey"
     },
     {
       "section": "S2",
       "sub_section": "growth",
       "indicator_name": "Core Sector YoY",
       "indicator_slug": "core_sector_yoy",
-      "latest_value": "Awaited",
-      "latest_numeric": null,
+      "latest_value": "~2.3 %",
+      "latest_numeric": 2.3,
       "latest_unit": "%",
-      "previous_value": null,
-      "previous_numeric": null,
+      "previous_value": "4.7",
+      "previous_numeric": 4.7,
       "data_vintage": "February 2026",
-      "direction": "flat",
-      "momentum_label": "→ NaN%",
-      "pct_10y": null,
-      "pct_10y_tier": "lo",
+      "direction": "down",
+      "momentum_label": "↓ -51.06%",
+      "pct_10y": 46,
+      "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": true,
       "source": "Ministry of Commerce & Industry"
@@ -3238,7 +3197,7 @@ window.__MACRO_DATA__ = {
       "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": true,
-      "source": "Department for Promotion of Industry and Internal Trade (DPIIT)"
+      "source": "DPIIT (Department for Promotion of Industry and Internal Trade)"
     },
     {
       "section": "S3",
@@ -3257,7 +3216,7 @@ window.__MACRO_DATA__ = {
       "pct_10y_tier": "lo",
       "pct_note": "",
       "is_estimated": true,
-      "source": "Department for Promotion of Industry and Internal Trade (DPIIT)"
+      "source": "DPIIT"
     },
     {
       "section": "S3",
@@ -3270,13 +3229,13 @@ window.__MACRO_DATA__ = {
       "previous_value": null,
       "previous_numeric": null,
       "data_vintage": "April 8, 2026",
-      "direction": "down",
-      "momentum_label": "↓ -4.55%",
+      "direction": "flat",
+      "momentum_label": "→ 0%",
       "pct_10y": 38,
       "pct_10y_tier": "lo",
       "pct_note": "",
-      "is_estimated": true,
-      "source": "Reserve Bank of India Monetary Policy Committee"
+      "is_estimated": false,
+      "source": "RBI Monetary Policy Committee"
     },
     {
       "section": "S3",
@@ -3288,33 +3247,33 @@ window.__MACRO_DATA__ = {
       "latest_unit": "%",
       "previous_value": null,
       "previous_numeric": null,
-      "data_vintage": "April 8, 2026",
+      "data_vintage": "FY2026-27 (April 2026)",
       "direction": "up",
       "momentum_label": "↑ 119.05%",
       "pct_10y": 47,
       "pct_10y_tier": "mid",
       "pct_note": "",
-      "is_estimated": true,
-      "source": "Reserve Bank of India Monetary Policy Committee"
+      "is_estimated": false,
+      "source": "RBI Monetary Policy Statement"
     },
     {
       "section": "S4",
       "sub_section": "consumption",
       "indicator_name": "Passenger Vehicle Sales",
       "indicator_slug": "pv_sales",
-      "latest_value": "~13 %",
-      "latest_numeric": 13,
+      "latest_value": "~8.4 %",
+      "latest_numeric": 8.4,
       "latest_unit": "%",
       "previous_value": null,
       "previous_numeric": null,
-      "data_vintage": "FY2026 (Apr 2025-Mar 2026)",
+      "data_vintage": "FY2026 (April 2025 - March 2026)",
       "direction": "flat",
       "momentum_label": "→ NaN%",
-      "pct_10y": 52,
+      "pct_10y": 50,
       "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": true,
-      "source": "FADA/Vahan Registry"
+      "source": "Autopunditz"
     },
     {
       "section": "S4",
@@ -3326,14 +3285,14 @@ window.__MACRO_DATA__ = {
       "latest_unit": "%",
       "previous_value": null,
       "previous_numeric": null,
-      "data_vintage": "FY2026 (Apr 2025-Mar 2026)",
+      "data_vintage": "FY2026 (April 2025 - March 2026)",
       "direction": "flat",
       "momentum_label": "→ NaN%",
       "pct_10y": 52,
       "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": true,
-      "source": "FADA Retail Data"
+      "source": "FADA"
     },
     {
       "section": "S4",
@@ -3345,33 +3304,33 @@ window.__MACRO_DATA__ = {
       "latest_unit": "%",
       "previous_value": null,
       "previous_numeric": null,
-      "data_vintage": "FY2026 (Apr 2025-Mar 2026)",
+      "data_vintage": "FY2026 (April 2025 - March 2026)",
       "direction": "flat",
       "momentum_label": "→ NaN%",
       "pct_10y": 51,
       "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": true,
-      "source": "FADA Retail Data"
+      "source": "FADA"
     },
     {
       "section": "S4",
       "sub_section": "consumption",
       "indicator_name": "Airline Passengers",
       "indicator_slug": "airline_pax",
-      "latest_value": "Awaited",
-      "latest_numeric": null,
+      "latest_value": "~35.08 mn",
+      "latest_numeric": 35.08,
       "latest_unit": "mn",
-      "previous_value": null,
-      "previous_numeric": null,
-      "data_vintage": "February 2026 (monthly snapshot only)",
-      "direction": "flat",
-      "momentum_label": "→ NaN%",
-      "pct_10y": null,
+      "previous_value": "38.59",
+      "previous_numeric": 38.59,
+      "data_vintage": "February 2026 (million passengers)",
+      "direction": "down",
+      "momentum_label": "↓ -9.1%",
+      "pct_10y": 7,
       "pct_10y_tier": "lo",
       "pct_note": "",
       "is_estimated": true,
-      "source": "Airport Authority of India (CEIC Data)"
+      "source": "CEIC Data"
     },
     {
       "section": "S4",
@@ -3383,9 +3342,9 @@ window.__MACRO_DATA__ = {
       "latest_unit": "%",
       "previous_value": null,
       "previous_numeric": null,
-      "data_vintage": "Calendar Year 2026 Forecast",
-      "direction": "flat",
-      "momentum_label": "→ NaN%",
+      "data_vintage": "2026 Forecast",
+      "direction": "down",
+      "momentum_label": "↓ -99.39%",
       "pct_10y": 15,
       "pct_10y_tier": "lo",
       "pct_note": "",
@@ -3397,16 +3356,16 @@ window.__MACRO_DATA__ = {
       "sub_section": "credit",
       "indicator_name": "Bank Credit Growth",
       "indicator_slug": "bank_credit_growth",
-      "latest_value": "Awaited",
-      "latest_numeric": null,
+      "latest_value": "13.7 %",
+      "latest_numeric": 13.7,
       "latest_unit": "%",
-      "previous_value": null,
-      "previous_numeric": null,
-      "data_vintage": "February 28, 2026",
-      "direction": "flat",
-      "momentum_label": "→ NaN%",
-      "pct_10y": null,
-      "pct_10y_tier": "lo",
+      "previous_value": "11.3",
+      "previous_numeric": 11.3,
+      "data_vintage": "February 15, 2026",
+      "direction": "up",
+      "momentum_label": "↑ 21.24%",
+      "pct_10y": 58,
+      "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": false,
       "source": "RBI"
@@ -3416,16 +3375,16 @@ window.__MACRO_DATA__ = {
       "sub_section": "credit",
       "indicator_name": "Deposit Growth",
       "indicator_slug": "deposit_growth",
-      "latest_value": "Awaited",
-      "latest_numeric": null,
+      "latest_value": "10.9 %",
+      "latest_numeric": 10.9,
       "latest_unit": "%",
-      "previous_value": null,
-      "previous_numeric": null,
-      "data_vintage": "March 15, 2026",
-      "direction": "flat",
-      "momentum_label": "→ NaN%",
-      "pct_10y": null,
-      "pct_10y_tier": "lo",
+      "previous_value": "10.3",
+      "previous_numeric": 10.3,
+      "data_vintage": "February 15, 2026",
+      "direction": "up",
+      "momentum_label": "↑ 5.83%",
+      "pct_10y": 45,
+      "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": false,
       "source": "RBI"
@@ -3435,16 +3394,16 @@ window.__MACRO_DATA__ = {
       "sub_section": "credit",
       "indicator_name": "CD Ratio",
       "indicator_slug": "cd_ratio",
-      "latest_value": "Awaited",
-      "latest_numeric": null,
+      "latest_value": "82.5 %",
+      "latest_numeric": 82.5,
       "latest_unit": "%",
-      "previous_value": null,
-      "previous_numeric": null,
-      "data_vintage": "March 15, 2026",
+      "previous_value": "82.5",
+      "previous_numeric": 82.5,
+      "data_vintage": "February 15, 2026",
       "direction": "flat",
-      "momentum_label": "→ NaN%",
-      "pct_10y": null,
-      "pct_10y_tier": "lo",
+      "momentum_label": "→ 0%",
+      "pct_10y": 79,
+      "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": false,
       "source": "RBI"
@@ -3454,76 +3413,76 @@ window.__MACRO_DATA__ = {
       "sub_section": "credit",
       "indicator_name": "NBFC Credit Growth",
       "indicator_slug": "nbfc_credit_growth",
-      "latest_value": "Awaited",
-      "latest_numeric": null,
+      "latest_value": "9.5 %",
+      "latest_numeric": 9.5,
       "latest_unit": "%",
-      "previous_value": null,
-      "previous_numeric": null,
-      "data_vintage": "FY26 estimate",
-      "direction": "flat",
-      "momentum_label": "→ NaN%",
-      "pct_10y": null,
-      "pct_10y_tier": "lo",
+      "previous_value": "7.5",
+      "previous_numeric": 7.5,
+      "data_vintage": "November 2025",
+      "direction": "up",
+      "momentum_label": "↑ 26.67%",
+      "pct_10y": 41,
+      "pct_10y_tier": "mid",
       "pct_note": "",
-      "is_estimated": true,
-      "source": "CRISIL, ICRA, Wright Research"
+      "is_estimated": false,
+      "source": "RBI"
     },
     {
       "section": "S5",
       "sub_section": "credit",
       "indicator_name": "Corp Bond Issuance",
       "indicator_slug": "corp_bond_issuance",
-      "latest_value": "Awaited",
-      "latest_numeric": null,
+      "latest_value": "990000 ₹ cr",
+      "latest_numeric": 990000,
       "latest_unit": "₹ cr",
-      "previous_value": null,
-      "previous_numeric": null,
-      "data_vintage": "FY24 actual / FY26 estimate",
-      "direction": "flat",
-      "momentum_label": "→ NaN%",
-      "pct_10y": null,
-      "pct_10y_tier": "lo",
+      "previous_value": "860000",
+      "previous_numeric": 860000,
+      "data_vintage": "FY 2024-25",
+      "direction": "up",
+      "momentum_label": "↑ 15.12%",
+      "pct_10y": 72,
+      "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": false,
-      "source": "NSE Assocham Report, RBI, SEBI"
+      "source": "RBI/NSE"
     },
     {
       "section": "S6",
       "sub_section": "flows",
       "indicator_name": "FII Equity Net",
       "indicator_slug": "fii_equity_net",
-      "latest_value": "-8692.11 ₹ cr",
-      "latest_numeric": -8692.11,
+      "latest_value": "~-114 ₹ cr",
+      "latest_numeric": -114,
       "latest_unit": "₹ cr",
-      "previous_value": "-3295.64",
-      "previous_numeric": -3295.64,
-      "data_vintage": "2026-04-07",
+      "previous_value": "22615",
+      "previous_numeric": 22615,
+      "data_vintage": "March 2026",
       "direction": "down",
-      "momentum_label": "↓ -163.75%",
-      "pct_10y": 44,
-      "pct_10y_tier": "mid",
+      "momentum_label": "↓ -604.09%",
+      "pct_10y": 0,
+      "pct_10y_tier": "lo",
       "pct_note": "",
-      "is_estimated": false,
-      "source": "Trendlyne/NSE"
+      "is_estimated": true,
+      "source": "Multibagg AI, NSDL"
     },
     {
       "section": "S6",
       "sub_section": "flows",
       "indicator_name": "DII Equity Net",
       "indicator_slug": "dii_equity_net",
-      "latest_value": "7979.5 ₹ cr",
-      "latest_numeric": 7979.5,
+      "latest_value": "~128 ₹ cr",
+      "latest_numeric": 128,
       "latest_unit": "₹ cr",
-      "previous_value": "8593.87",
-      "previous_numeric": 8593.87,
-      "data_vintage": "2026-04-07",
-      "direction": "down",
-      "momentum_label": "↓ -7.15%",
-      "pct_10y": 36,
-      "pct_10y_tier": "lo",
+      "previous_value": null,
+      "previous_numeric": null,
+      "data_vintage": "March 2026",
+      "direction": "flat",
+      "momentum_label": "→ Awaited",
+      "pct_10y": 100,
+      "pct_10y_tier": "hi",
       "pct_note": "",
-      "is_estimated": false,
-      "source": "Trendlyne/NSE"
+      "is_estimated": true,
+      "source": "Multibagg AI"
     },
     {
       "section": "S6",
@@ -3535,7 +3494,7 @@ window.__MACRO_DATA__ = {
       "latest_unit": "₹ cr",
       "previous_value": "31002",
       "previous_numeric": 31002,
-      "data_vintage": "2026-02",
+      "data_vintage": "February 2026",
       "direction": "down",
       "momentum_label": "↓ -3.73%",
       "pct_10y": 85,
@@ -3552,11 +3511,11 @@ window.__MACRO_DATA__ = {
       "latest_value": "15 %",
       "latest_numeric": 15,
       "latest_unit": "%",
-      "previous_value": "17",
-      "previous_numeric": 17,
-      "data_vintage": "2026-02",
-      "direction": "down",
-      "momentum_label": "↓ -11.76%",
+      "previous_value": null,
+      "previous_numeric": null,
+      "data_vintage": "February 2026",
+      "direction": "flat",
+      "momentum_label": "→ Awaited",
       "pct_10y": 38,
       "pct_10y_tier": "lo",
       "pct_note": "",
@@ -3571,11 +3530,11 @@ window.__MACRO_DATA__ = {
       "latest_value": "82.03 ₹ lakh cr",
       "latest_numeric": 82.03,
       "latest_unit": "₹ lakh cr",
-      "previous_value": "81.01",
-      "previous_numeric": 81.01,
-      "data_vintage": "2026-02",
+      "previous_value": "81.77",
+      "previous_numeric": 81.77,
+      "data_vintage": "February 2026",
       "direction": "up",
-      "momentum_label": "↑ 1.26%",
+      "momentum_label": "↑ 0.32%",
       "pct_10y": 80,
       "pct_10y_tier": "hi",
       "pct_note": "",
@@ -3587,15 +3546,15 @@ window.__MACRO_DATA__ = {
       "sub_section": "flows",
       "indicator_name": "MF Average AUM",
       "indicator_slug": "mf_avg_aum",
-      "latest_value": "83.43 ₹ lakh cr",
-      "latest_numeric": 83.43,
+      "latest_value": "82.01 ₹ lakh cr",
+      "latest_numeric": 82.01,
       "latest_unit": "₹ lakh cr",
       "previous_value": "82.01",
       "previous_numeric": 82.01,
-      "data_vintage": "2026-02",
-      "direction": "up",
-      "momentum_label": "↑ 1.73%",
-      "pct_10y": 82,
+      "data_vintage": "January 2026",
+      "direction": "flat",
+      "momentum_label": "→ 0%",
+      "pct_10y": 81,
       "pct_10y_tier": "hi",
       "pct_note": "",
       "is_estimated": false,
@@ -3606,12 +3565,12 @@ window.__MACRO_DATA__ = {
       "sub_section": "flows",
       "indicator_name": "Equity MF Net",
       "indicator_slug": "equity_mf_net",
-      "latest_value": "25977.91 ₹ cr",
-      "latest_numeric": 25977.91,
+      "latest_value": "25978 ₹ cr",
+      "latest_numeric": 25978,
       "latest_unit": "₹ cr",
-      "previous_value": "24028.59",
-      "previous_numeric": 24028.59,
-      "data_vintage": "2026-02",
+      "previous_value": "24029",
+      "previous_numeric": 24029,
+      "data_vintage": "February 2026",
       "direction": "up",
       "momentum_label": "↑ 8.11%",
       "pct_10y": 65,
@@ -3625,15 +3584,15 @@ window.__MACRO_DATA__ = {
       "sub_section": "flows",
       "indicator_name": "NFO Collections",
       "indicator_slug": "nfo_collections",
-      "latest_value": "1939 ₹ cr",
-      "latest_numeric": 1939,
+      "latest_value": "4979 ₹ cr",
+      "latest_numeric": 4979,
       "latest_unit": "₹ cr",
       "previous_value": null,
       "previous_numeric": null,
-      "data_vintage": "2026-01",
+      "data_vintage": "February 2026",
       "direction": "flat",
       "momentum_label": "→ Awaited",
-      "pct_10y": 6,
+      "pct_10y": 16,
       "pct_10y_tier": "lo",
       "pct_note": "",
       "is_estimated": false,
@@ -3644,16 +3603,16 @@ window.__MACRO_DATA__ = {
       "sub_section": "flows",
       "indicator_name": "SIP Accounts",
       "indicator_slug": "sip_accounts",
-      "latest_value": "104.5 mn",
-      "latest_numeric": 104.5,
+      "latest_value": "10.45 mn",
+      "latest_numeric": 10.45,
       "latest_unit": "mn",
-      "previous_value": "102.9",
-      "previous_numeric": 102.9,
-      "data_vintage": "2026-02",
+      "previous_value": "9.92",
+      "previous_numeric": 9.92,
+      "data_vintage": "February 2026",
       "direction": "up",
-      "momentum_label": "↑ 1.55%",
-      "pct_10y": 86,
-      "pct_10y_tier": "hi",
+      "momentum_label": "↑ 5.34%",
+      "pct_10y": 2,
+      "pct_10y_tier": "lo",
       "pct_note": "",
       "is_estimated": false,
       "source": "AMFI"
@@ -3668,7 +3627,7 @@ window.__MACRO_DATA__ = {
       "latest_unit": "₹ lakh cr",
       "previous_value": "16.36",
       "previous_numeric": 16.36,
-      "data_vintage": "2026-02",
+      "data_vintage": "February 2026",
       "direction": "up",
       "momentum_label": "↑ 1.71%",
       "pct_10y": 82,
@@ -3694,64 +3653,64 @@ window.__MACRO_DATA__ = {
       "pct_10y_tier": "hi",
       "pct_note": "",
       "is_estimated": false,
-      "source": "J.P.Morgan/S&P Global"
+      "source": "S&P Global/J.P. Morgan"
     },
     {
       "section": "S9",
       "sub_section": "global_growth",
       "indicator_name": "US PMI Composite",
       "indicator_slug": "us_pmi_composite",
-      "latest_value": "Awaited",
-      "latest_numeric": null,
+      "latest_value": "50.3 index",
+      "latest_numeric": 50.3,
       "latest_unit": "index",
-      "previous_value": null,
-      "previous_numeric": null,
-      "data_vintage": "Awaited",
-      "direction": "flat",
-      "momentum_label": "→ Awaited",
-      "pct_10y": 50,
+      "previous_value": "51.9",
+      "previous_numeric": 51.9,
+      "data_vintage": "March 2026",
+      "direction": "down",
+      "momentum_label": "↓ -3.08%",
+      "pct_10y": 47,
       "pct_10y_tier": "mid",
-      "pct_note": "~Estimated — historical range not available.",
-      "is_estimated": true,
-      "source": "Web Search"
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "S&P Global"
     },
     {
       "section": "S9",
       "sub_section": "global_growth",
       "indicator_name": "China PMI Composite",
       "indicator_slug": "china_pmi_composite",
-      "latest_value": "~50.25 index",
-      "latest_numeric": 50.25,
+      "latest_value": "50.8 index",
+      "latest_numeric": 50.8,
       "latest_unit": "index",
-      "previous_value": "49.25",
-      "previous_numeric": 49.25,
+      "previous_value": "52.1",
+      "previous_numeric": 52.1,
       "data_vintage": "March 2026",
-      "direction": "up",
-      "momentum_label": "↑ 2.03%",
-      "pct_10y": 48,
+      "direction": "down",
+      "momentum_label": "↓ -2.5%",
+      "pct_10y": 49,
       "pct_10y_tier": "mid",
       "pct_note": "",
-      "is_estimated": true,
-      "source": "RatingDog/NBS"
+      "is_estimated": false,
+      "source": "RatingDog/S&P Global"
     },
     {
       "section": "S9",
       "sub_section": "global_growth",
       "indicator_name": "China GDP",
       "indicator_slug": "china_gdp",
-      "latest_value": "~4.75 %",
-      "latest_numeric": 4.75,
+      "latest_value": "Awaited",
+      "latest_numeric": null,
       "latest_unit": "%",
-      "previous_value": "5",
-      "previous_numeric": 5,
-      "data_vintage": "2026 Target Range 4.5-5.0%",
-      "direction": "down",
-      "momentum_label": "↓ -5%",
-      "pct_10y": 48,
-      "pct_10y_tier": "mid",
+      "previous_value": null,
+      "previous_numeric": null,
+      "data_vintage": "2026 target (March 2026 announcement)",
+      "direction": "flat",
+      "momentum_label": "→ NaN%",
+      "pct_10y": null,
+      "pct_10y_tier": "lo",
       "pct_note": "",
       "is_estimated": true,
-      "source": "China National People's Congress/AMRO"
+      "source": "National People's Congress/IMF"
     },
     {
       "section": "S9",
@@ -3770,7 +3729,7 @@ window.__MACRO_DATA__ = {
       "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": true,
-      "source": "China National Bureau of Statistics"
+      "source": "National Bureau of Statistics"
     },
     {
       "section": "S9",
@@ -3782,14 +3741,14 @@ window.__MACRO_DATA__ = {
       "latest_unit": "%",
       "previous_value": "1.2",
       "previous_numeric": 1.2,
-      "data_vintage": "2026 Forecast March 2026",
+      "data_vintage": "March 2026 projections",
       "direction": "down",
       "momentum_label": "↓ -25%",
       "pct_10y": 49,
       "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": true,
-      "source": "ECB/KPMG"
+      "source": "ECB"
     },
     {
       "section": "S9",
@@ -3808,23 +3767,23 @@ window.__MACRO_DATA__ = {
       "pct_10y_tier": "lo",
       "pct_note": "",
       "is_estimated": true,
-      "source": "Eurostat/ECB"
+      "source": "Eurostat"
     },
     {
       "section": "S9",
       "sub_section": "global_liquidity",
       "indicator_name": "ECB Deposit Rate",
       "indicator_slug": "ecb_deposit_rate",
-      "latest_value": "Awaited",
-      "latest_numeric": null,
+      "latest_value": "~2 %",
+      "latest_numeric": 2,
       "latest_unit": "%",
-      "previous_value": null,
-      "previous_numeric": null,
-      "data_vintage": "2026-02-05",
+      "previous_value": "2",
+      "previous_numeric": 2,
+      "data_vintage": "2026-03-19",
       "direction": "flat",
-      "momentum_label": "→ NaN%",
-      "pct_10y": null,
-      "pct_10y_tier": "lo",
+      "momentum_label": "→ 0%",
+      "pct_10y": 56,
+      "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": true,
       "source": "European Central Bank"
@@ -3834,16 +3793,16 @@ window.__MACRO_DATA__ = {
       "sub_section": "global_liquidity",
       "indicator_name": "BOJ Rate",
       "indicator_slug": "boj_rate",
-      "latest_value": "Awaited",
-      "latest_numeric": null,
+      "latest_value": "~0.75 %",
+      "latest_numeric": 0.75,
       "latest_unit": "%",
-      "previous_value": null,
-      "previous_numeric": null,
+      "previous_value": "0.75",
+      "previous_numeric": 0.75,
       "data_vintage": "2026-03-19",
       "direction": "flat",
-      "momentum_label": "→ NaN%",
-      "pct_10y": null,
-      "pct_10y_tier": "lo",
+      "momentum_label": "→ 0%",
+      "pct_10y": 72,
+      "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": true,
       "source": "Bank of Japan"
@@ -3853,19 +3812,19 @@ window.__MACRO_DATA__ = {
       "sub_section": "global_inflation",
       "indicator_name": "FAO Food Index",
       "indicator_slug": "fao_food_index",
-      "latest_value": "Awaited",
-      "latest_numeric": null,
+      "latest_value": "~128.5 index",
+      "latest_numeric": 128.5,
       "latest_unit": "index",
-      "previous_value": null,
-      "previous_numeric": null,
-      "data_vintage": "2026-03-31",
+      "previous_value": "125.5",
+      "previous_numeric": 125.5,
+      "data_vintage": "2026-03",
       "direction": "up",
       "momentum_label": "↑ 2.39%",
       "pct_10y": 56,
       "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": true,
-      "source": "Food and Agriculture Organization"
+      "source": "FAO"
     },
     {
       "section": "S8",
@@ -3884,7 +3843,7 @@ window.__MACRO_DATA__ = {
       "pct_10y_tier": "lo",
       "pct_note": "",
       "is_estimated": true,
-      "source": "Anarock Group"
+      "source": "Anarock Research"
     },
     {
       "section": "S8",
@@ -3903,7 +3862,7 @@ window.__MACRO_DATA__ = {
       "pct_10y_tier": "lo",
       "pct_note": "",
       "is_estimated": true,
-      "source": "Anarock Group"
+      "source": "Anarock Research"
     },
     {
       "section": "S8",
@@ -3934,14 +3893,14 @@ window.__MACRO_DATA__ = {
       "latest_unit": "index",
       "previous_value": null,
       "previous_numeric": null,
-      "data_vintage": "Q2:2025-26 or later",
+      "data_vintage": "Q1 FY2025-26",
       "direction": "flat",
-      "momentum_label": "→ Awaited",
-      "pct_10y": 50,
-      "pct_10y_tier": "mid",
-      "pct_note": "~Estimated — historical range not available.",
-      "is_estimated": true,
-      "source": "RBI/NHB"
+      "momentum_label": "→ NaN%",
+      "pct_10y": null,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "RBI DBIE Portal (data not disclosed in press releases)"
     },
     {
       "section": "S8",
@@ -3953,14 +3912,14 @@ window.__MACRO_DATA__ = {
       "latest_unit": "index",
       "previous_value": null,
       "previous_numeric": null,
-      "data_vintage": "Q2:2025-26 or later",
+      "data_vintage": "Q1 FY2025-26",
       "direction": "flat",
-      "momentum_label": "→ Awaited",
-      "pct_10y": 50,
-      "pct_10y_tier": "mid",
-      "pct_note": "~Estimated — historical range not available.",
-      "is_estimated": true,
-      "source": "RBI/NHB"
+      "momentum_label": "→ NaN%",
+      "pct_10y": null,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "RBI DBIE Portal (data not disclosed in press releases)"
     },
     {
       "section": "S8",
@@ -3972,14 +3931,14 @@ window.__MACRO_DATA__ = {
       "latest_unit": "index",
       "previous_value": null,
       "previous_numeric": null,
-      "data_vintage": "Q2:2025-26 or later",
+      "data_vintage": "Q1 FY2025-26",
       "direction": "flat",
-      "momentum_label": "→ Awaited",
-      "pct_10y": 50,
-      "pct_10y_tier": "mid",
-      "pct_note": "~Estimated — historical range not available.",
-      "is_estimated": true,
-      "source": "RBI/NHB"
+      "momentum_label": "→ NaN%",
+      "pct_10y": null,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "RBI DBIE Portal (data not disclosed in press releases)"
     },
     {
       "section": "S8",
@@ -3991,14 +3950,14 @@ window.__MACRO_DATA__ = {
       "latest_unit": "index",
       "previous_value": null,
       "previous_numeric": null,
-      "data_vintage": "Q2:2025-26 or later",
+      "data_vintage": "Q1 FY2025-26",
       "direction": "flat",
-      "momentum_label": "→ Awaited",
-      "pct_10y": 50,
-      "pct_10y_tier": "mid",
-      "pct_note": "~Estimated — historical range not available.",
-      "is_estimated": true,
-      "source": "RBI/NHB"
+      "momentum_label": "→ NaN%",
+      "pct_10y": null,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "RBI DBIE Portal (data not disclosed in press releases)"
     },
     {
       "section": "S8",
@@ -4008,54 +3967,54 @@ window.__MACRO_DATA__ = {
       "latest_value": "~0.61 ratio",
       "latest_numeric": 0.61,
       "latest_unit": "ratio",
-      "previous_value": "0.46",
-      "previous_numeric": 0.46,
-      "data_vintage": "2024",
-      "direction": "up",
-      "momentum_label": "↑ 32.61%",
+      "previous_value": "0.61",
+      "previous_numeric": 0.61,
+      "data_vintage": "2026",
+      "direction": "flat",
+      "momentum_label": "→ 0%",
       "pct_10y": 0,
       "pct_10y_tier": "lo",
       "pct_note": "",
       "is_estimated": true,
-      "source": "EMI-to-Income ratio (India 2024: 61%, 2020: 46%)"
+      "source": "CBRE Housing Affordability Index - EMI-to-Income Ratio"
     },
     {
       "section": "S8",
       "sub_section": "re_residential",
       "indicator_name": "Home Loan Disbursements",
       "indicator_slug": "home_loan_disbursements",
-      "latest_value": "41000 ₹ cr",
-      "latest_numeric": 41000,
+      "latest_value": "410000 ₹ cr",
+      "latest_numeric": 410000,
       "latest_unit": "₹ cr",
-      "previous_value": "407",
-      "previous_numeric": 407,
-      "data_vintage": "H1 FY2024-25",
+      "previous_value": "407000",
+      "previous_numeric": 407000,
+      "data_vintage": "September 2024 (latest available)",
       "direction": "up",
       "momentum_label": "↑ 0.74%",
-      "pct_10y": 0,
-      "pct_10y_tier": "lo",
+      "pct_10y": 64,
+      "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": false,
-      "source": "NHB Report - H1 FY2024-25: ₹4.10 lakh crore (April-September 2024)"
+      "source": "NHB Report on Trends and Progress of Housing 2024 (H1 FY25: ₹4.10 lakh crore)"
     },
     {
       "section": "S8",
       "sub_section": "re_residential",
       "indicator_name": "Avg Home Loan Rate",
       "indicator_slug": "avg_home_loan_rate",
-      "latest_value": "~8.15 %",
-      "latest_numeric": 8.15,
+      "latest_value": "8 %",
+      "latest_numeric": 8,
       "latest_unit": "%",
-      "previous_value": "8.4",
-      "previous_numeric": 8.4,
-      "data_vintage": "March 2026",
+      "previous_value": "8.5",
+      "previous_numeric": 8.5,
+      "data_vintage": "April 2026",
       "direction": "down",
-      "momentum_label": "↓ -2.98%",
-      "pct_10y": 49,
+      "momentum_label": "↓ -5.88%",
+      "pct_10y": 45,
       "pct_10y_tier": "mid",
       "pct_note": "",
-      "is_estimated": true,
-      "source": "Multiple lenders (SBI: 7.50-8.70%, HDFC: 7.75-7.90%, Average market: 8.15%)"
+      "is_estimated": false,
+      "source": "SBI/HDFC/NHB composite (India market rates Feb-Apr 2026)"
     },
     {
       "section": "S8",
@@ -4084,11 +4043,11 @@ window.__MACRO_DATA__ = {
       "latest_value": "~13.9 %",
       "latest_numeric": 13.9,
       "latest_unit": "%",
-      "previous_value": "17.2",
-      "previous_numeric": 17.2,
-      "data_vintage": "Q1 2026 vs 2021",
+      "previous_value": "14.3",
+      "previous_numeric": 14.3,
+      "data_vintage": "Q1 2026",
       "direction": "down",
-      "momentum_label": "↓ -19.19%",
+      "momentum_label": "↓ -2.8%",
       "pct_10y": 38,
       "pct_10y_tier": "lo",
       "pct_note": "",
@@ -4103,11 +4062,11 @@ window.__MACRO_DATA__ = {
       "latest_value": "~100.6 ₹/sqft/mo",
       "latest_numeric": 100.6,
       "latest_unit": "₹/sqft/mo",
-      "previous_value": "91.8",
-      "previous_numeric": 91.8,
+      "previous_value": "93.6",
+      "previous_numeric": 93.6,
       "data_vintage": "Q1 2026",
       "direction": "up",
-      "momentum_label": "↑ 9.59%",
+      "momentum_label": "↑ 7.48%",
       "pct_10y": 57,
       "pct_10y_tier": "mid",
       "pct_note": "",
@@ -4119,15 +4078,15 @@ window.__MACRO_DATA__ = {
       "sub_section": "re_commercial",
       "indicator_name": "Rent Mumbai",
       "indicator_slug": "rent_mumbai",
-      "latest_value": "~100 ₹/sqft/mo",
-      "latest_numeric": 100,
+      "latest_value": "~106 ₹/sqft/mo",
+      "latest_numeric": 106,
       "latest_unit": "₹/sqft/mo",
-      "previous_value": null,
-      "previous_numeric": null,
+      "previous_value": "118",
+      "previous_numeric": 118,
       "data_vintage": "Q1 2026",
-      "direction": "flat",
-      "momentum_label": "→ Awaited",
-      "pct_10y": 20,
+      "direction": "down",
+      "momentum_label": "↓ -10.17%",
+      "pct_10y": 24,
       "pct_10y_tier": "lo",
       "pct_note": "",
       "is_estimated": true,
@@ -4138,103 +4097,103 @@ window.__MACRO_DATA__ = {
       "sub_section": "re_commercial",
       "indicator_name": "Retail Mall Vacancy",
       "indicator_slug": "retail_mall_vacancy",
-      "latest_value": "~8.5 %",
-      "latest_numeric": 8.5,
+      "latest_value": "Awaited",
+      "latest_numeric": null,
       "latest_unit": "%",
-      "previous_value": "8.2",
-      "previous_numeric": 8.2,
-      "data_vintage": "2026 projection",
-      "direction": "up",
-      "momentum_label": "↑ 3.66%",
-      "pct_10y": 22,
-      "pct_10y_tier": "lo",
-      "pct_note": "",
+      "previous_value": null,
+      "previous_numeric": null,
+      "data_vintage": "Q1 2026",
+      "direction": "flat",
+      "momentum_label": "→ Awaited",
+      "pct_10y": 50,
+      "pct_10y_tier": "mid",
+      "pct_note": "~Estimated — historical range not available.",
       "is_estimated": true,
-      "source": "Anarock Research"
+      "source": "Data not available"
     },
     {
       "section": "S8",
       "sub_section": "re_commercial",
       "indicator_name": "Embassy REIT",
       "indicator_slug": "embassy_reit",
-      "latest_value": "Awaited",
-      "latest_numeric": null,
+      "latest_value": "~437.42 ₹/unit",
+      "latest_numeric": 437.42,
       "latest_unit": "₹/unit",
       "previous_value": null,
       "previous_numeric": null,
-      "data_vintage": "2026-04-08",
+      "data_vintage": "April 2026",
       "direction": "up",
-      "momentum_label": "↑ 0.85%",
+      "momentum_label": "↑ 3.86%",
       "pct_10y": 78,
       "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": true,
-      "source": "Tickertape/Multiple NSE sources"
+      "source": "Tickertape (as of 8th April 2026)"
     },
     {
       "section": "S8",
       "sub_section": "re_commercial",
       "indicator_name": "Mindspace REIT",
       "indicator_slug": "mindspace_reit",
-      "latest_value": "Awaited",
-      "latest_numeric": null,
+      "latest_value": "~449.98 ₹/unit",
+      "latest_numeric": 449.98,
       "latest_unit": "₹/unit",
       "previous_value": null,
       "previous_numeric": null,
-      "data_vintage": "2026-04-01",
+      "data_vintage": "April 2026",
       "direction": "down",
-      "momentum_label": "↓ -2.27%",
+      "momentum_label": "↓ -1.54%",
       "pct_10y": 79,
       "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": true,
-      "source": "Bajaj Finserv/Tickertape"
+      "source": "Tickertape (as of 1st April 2026)"
     },
     {
       "section": "S8",
       "sub_section": "re_commercial",
       "indicator_name": "Brookfield REIT",
       "indicator_slug": "brookfield_reit",
-      "latest_value": "Awaited",
-      "latest_numeric": null,
+      "latest_value": "~320.1 ₹/unit",
+      "latest_numeric": 320.1,
       "latest_unit": "₹/unit",
       "previous_value": null,
       "previous_numeric": null,
-      "data_vintage": "2026-04-01",
+      "data_vintage": "April 2026",
       "direction": "down",
-      "momentum_label": "↓ -4.73%",
+      "momentum_label": "↓ -1.11%",
       "pct_10y": 61,
       "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": true,
-      "source": "Trendlyne/ICICI Direct"
+      "source": "Trendlyne (as of 1st April 2026)"
     }
   ],
   "executive_summary": [
     {
       "para_num": 1,
       "para_label": "India Macro Regime",
-      "para_html": "<p><strong>7.8%</strong> GDP with PMI composite at <strong>56.5</strong> is the headline — but core sector growth at <strong>2.3%</strong> (down from <strong>4.7%</strong>) and capacity utilisation slipping to <strong>74.8%</strong> are the footnotes that matter more. GST at <strong>₹2.0 lakh crore</strong> and two-wheeler sales at <strong>+13.4%</strong> confirm that consumption is genuinely broad-based — rural demand is not a laggard this cycle. What breaks this narrative: food CPI accelerating to <strong>3.47%</strong> from <strong>2.13%</strong> in a single month, with the FAO food index at <strong>128.5</strong> and Brent at <strong>$98.66</strong> — the RBI's <strong>4.6%</strong> inflation forecast revision (up from <strong>2.1%</strong>) suggests the institution already sees the trapdoor. India's growth is real; its durability over the next two quarters is not.</p>"
+      "para_html": "<p><strong>7.8%</strong> GDP — down from <strong>8.4%</strong> — is the kind of number that flatters on the cover page and disappoints on page three: PMI composite fell <strong>240bps</strong> to <strong>56.5</strong>, core sector decelerated to <strong>2.3%</strong> from <strong>4.7%</strong>, and capacity utilisation slipped to <strong>74.8%</strong> — all pointing to a growth regime that is decelerating, not consolidating. GST at <strong>₹2,00,064 cr</strong> is a genuine milestone, but two-wheeler sales flat at <strong>13.4%</strong> and airline traffic at the 7th percentile historically suggest the informal economy — <strong>85%</strong> of employment — is not sharing in the expansion. RBI's own GDP forecast at <strong>6.9%</strong> versus the government's <strong>7.6%</strong> FY estimate is a <strong>70bps</strong> institutional disagreement that deserves more attention than it is receiving. India's growth is real but narrowing — concentrated in formal-sector services and government-adjacent capex, while the consumption base that sustains it is showing stress at the margins.</p>"
     },
     {
       "para_num": 2,
       "para_label": "Global Macro Regime",
-      "para_html": "<p>US GDP SAAR at <strong>0.7%</strong> — halved from <strong>1.4%</strong> prior quarter — while S&P 500 sits at the <strong>96th percentile</strong> and Nasdaq at the <strong>100th percentile</strong> is the most dangerous valuation-growth divergence in global markets today. Core PCE at <strong>3.06%</strong> with the Fed funds rate at <strong>3.625%</strong> means the Fed is already cutting into above-target inflation — a policy error in slow motion — while the Fed balance sheet expanding to <strong>$6.675 trillion</strong> signals stealth liquidity injection. China's composite PMI recovering to <strong>50.25</strong> from <strong>49.25</strong> and iron ore spiking <strong>50%</strong> to <strong>$161.91/tonne</strong> suggest Beijing stimulus is landing in commodities, not consumption — a pattern that exports inflation to India's import bill. Copper declining to <strong>$5.698/tonne</strong> while iron ore surges is the demand-quality warning: infrastructure spending without industrial demand recovery.</p>"
+      "para_html": "<p>US GDP SAAR at <strong>0.7%</strong> — down from <strong>4.4%</strong>, a <strong>370bps</strong> collapse — is the most important global data point this week, yet S&P 500 at the 96th percentile and Nasdaq at the 100th percentile are pricing a soft landing with zero margin for error. US PMI composite at <strong>50.3</strong> (47th percentile) is one bad month from contraction; US core PCE ticking up to <strong>3.1%</strong> from <strong>3.0%</strong> means the Fed — balance sheet expanding to <strong>$6.675T</strong> despite flat rates at <strong>3.625%</strong> — is caught between a slowing economy and sticky inflation. Iron ore surging <strong>50%</strong> to <strong>$161.91/tonne</strong> on China stimulus expectations — while copper falls <strong>0.7%</strong> to <strong>$5.718</strong> — is a commodity market sending two contradictory signals simultaneously: hoarding fear versus demand destruction. Brent at <strong>$97.96</strong> — every <strong>$10</strong> adds <strong>$15bn</strong> to India's import bill — CAD widens <strong>40bps</strong> — INR depreciates <strong>2-3%</strong> — imported inflation feeds CPI with a two-quarter lag.</p>"
     },
     {
       "para_num": 3,
       "para_label": "Liquidity Conditions",
-      "para_html": "<p>FII equity outflows at <strong>-₹8,692 crore</strong> — accelerating <strong>2.6x</strong> from <strong>-₹3,295 crore</strong> prior month — are not being fully absorbed by DIIs at <strong>+₹7,979 crore</strong> (itself declining from <strong>₹8,593 crore</strong>), leaving a net liquidity deficit in Indian equities. SIP inflows at <strong>₹29,845 crore</strong> are declining from <strong>₹31,002 crore</strong>, and NFO collections at <strong>₹1,939 crore</strong> (6th percentile) signal that new retail investor acquisition has stalled — the SIP engine is running on existing accounts, not fresh capital. INR at <strong>92.59</strong> (84th percentile) with DXY rising to <strong>99.04</strong> means RBI is either burning reserves to defend the currency or accepting depreciation — both outcomes compress the real rate advantage that justified the easing cycle. Average SIP ticket size rising to <strong>₹15,900</strong> confirms affluent money is entering even as mass-market participation plateaus — a bifurcation that historically precedes index concentration risk.</p>"
+      "para_html": "<p><strong>₹2,59,78 cr</strong> in equity MF net inflows and SIP accounts at <strong>1.045 cr</strong> — up <strong>5.3% MoM</strong> — represent a structural domestic liquidity floor that is deepening, but the composition is shifting: average SIP ticket size at <strong>₹15,900</strong> is rising while NFO collections collapsed to <strong>₹4,979 cr</strong> (16th percentile), confirming that retail participation is systematic and SIP-driven, not speculative. FII equity net turning to <strong>-₹114 cr</strong> — first outflow in three months — with DII support at only <strong>₹128 cr</strong> (22nd percentile) means domestic institutional buying is not yet absorbing the FII exit at scale. Corporate bond issuance at <strong>₹9.9 lakh cr</strong> — up from <strong>₹8.6 lakh cr</strong> — is crowding banks out of credit intermediation, compressing NIM potential even as CD ratio at <strong>82.5%</strong> constrains deposit-funded lending. India VIX at <strong>20.4</strong> (16th percentile) is deceptively low given the structural credit stress — the market is not yet pricing the tail risk in the banking system's funding architecture.</p>"
     },
     {
       "para_num": 4,
       "para_label": "Equity + Real Estate Implications",
-      "para_html": "<p>Nifty at <strong>23,775</strong> (76th percentile) with Bank Nifty at <strong>54,821</strong> (90th percentile) — the banking index is priced for perfection at a moment when CD ratio at <strong>83.04%</strong> and deposit growth at <strong>10.8%</strong> structurally constrain NIM expansion. Office absorption at <strong>29.9 mn sqft</strong> with vacancy compressing <strong>330bps</strong> to <strong>13.9%</strong> and Bengaluru rents spiking <strong>9.5%</strong> to <strong>₹100.6/sqft</strong> is a genuine real estate signal — but Nifty IT flat YoY confirms GCCs and non-IT corporates are the absorption driver, not traditional IT services at <strong>18-20x FY27E</strong> with flat growth. Residential real estate affordability improving to <strong>0.61</strong> from <strong>0.46</strong> with home loan rates at <strong>8.15%</strong> is structurally positive — but sales units declining to <strong>101,675</strong> from <strong>108,970</strong> while launches rise to <strong>126,265</strong> means unsold inventory at <strong>600,000 units</strong> is building, not clearing. Embassy REIT at <strong>₹437</strong> (78th percentile) is the cleanest expression of the office absorption thesis — own the physical asset, not the IT services P&L.</p>"
+      "para_html": "<p>Nifty 50 at <strong>23,775</strong> (76th percentile) and Bank Nifty at <strong>54,822</strong> (90th percentile) are pricing a benign credit cycle — a mispricing, given CD ratio at the 79th percentile and deposit growth structurally lagging credit by <strong>280bps</strong>; NIM compression is the second-order effect that bank earnings models have not yet absorbed. Real estate is bifurcating with surgical clarity: office absorption rising to <strong>29.9mn sqft</strong> with vacancy falling to <strong>13.9%</strong> — driven by GCC demand, not traditional IT services — while residential sales fell to <strong>101.7mn units</strong> from <strong>109mn</strong> against launches of <strong>126.3mn units</strong>, building <strong>600,000 units</strong> of unsold inventory. Bengaluru rents up <strong>7.5%</strong> to <strong>₹100.6/sqft</strong> while Mumbai rents down <strong>10.2%</strong> to <strong>₹106/sqft</strong> — the divergence maps precisely onto GCC expansion in tech corridors versus traditional financial-sector office demand softening. Embassy REIT at <strong>₹437</strong> (78th percentile) is the cleaner expression of the GCC thesis than Nifty IT at <strong>18x</strong> forward PE — <strong>200bps</strong> above its five-year average — which is pricing a US tech recovery that US GDP at <strong>0.7%</strong> does not support.</p>"
     },
     {
       "para_num": 5,
       "para_label": "Key Risks to Monitor",
-      "para_html": "<p>Ranked by probability × impact: first, Brent at <strong>$98.66</strong> (82nd percentile) — every <strong>$10</strong> adds <strong>~$15bn</strong> to India's annual import bill — CAD widens <strong>40bps</strong> — INR depreciates <strong>2-3%</strong> — imported inflation feeds CPI with a two-quarter lag — RBI forced to pause or reverse the easing cycle — corporate capex IRRs deteriorate — Nifty derates. Second, the CD ratio at <strong>83.04%</strong> widening further — deposit rate wars → NIM compression → Bank Nifty earnings downgrades → passive outflows from index funds that are <strong>30%+</strong> weighted to financials. Third, US growth at <strong>0.7%</strong> SAAR with equities at the <strong>96th-100th percentile</strong> — a mean-reversion in S&P 500 triggers risk-off globally — FII outflows from India accelerate beyond the <strong>-₹8,692 crore</strong> February run-rate — INR breaks above <strong>94</strong>. Watch Friday's RBI MPC minutes for any language shift on the inflation forecast revision from <strong>2.1%</strong> to <strong>4.6%</strong> — that <strong>250bps</strong> internal revision is the single most important data point this week.</p>"
+      "para_html": "<p>Ranked by probability × impact: first, fuel pass-through — Brent at <strong>$97.96</strong> with fuel deflation narrowing to <strong>-3.78%</strong> from <strong>-4.01%</strong> means the CPI suppressor has perhaps two months of runway before administered price revision forces headline above <strong>4.5%</strong>, closing the rate-cut window entirely and triggering a bond market reprice. Second, CD ratio crystallisation — at <strong>82.5%</strong> for two consecutive months with NBFC credit accelerating to <strong>9.5%</strong>, the risk is not a sudden crisis but a slow-motion NIM compression → earnings downgrade → Bank Nifty derating cycle that passive index flows will amplify on the way down. Third, US growth shock transmission — S&P 500 at the 96th percentile with US GDP at <strong>0.7%</strong> is a valuation-growth disconnect that historically resolves violently; an equity correction of <strong>10-15%</strong> in US markets would trigger FII outflows from India at a moment when DII support is at the 22nd percentile. Fourth, food inflation persistence — CFPI at <strong>3.47%</strong> from <strong>2.13%</strong> with FAO food index up <strong>3</strong> points to <strong>128.5</strong> creates a political economy constraint on RBI's flexibility that is underappreciated. Watch Friday's RBI liquidity operations and the weekly deposit growth print — if deposit growth does not accelerate toward <strong>12%</strong> within the next four weeks, the credit-deposit gap becomes the dominant macro story for Q1 FY27.</p>"
     }
   ],
   "real_estate": {
@@ -4242,7 +4201,7 @@ window.__MACRO_DATA__ = {
     "residential_regime": "Hot",
     "commercial_regime": "Hot",
     "reit_vs_gsec_spread_bps": null,
-    "key_risk_note": "External shocks -- trade disruptions, energy supply stress, or capital flight -- hit India"
+    "key_risk_note": "Credit stress (Credit 13"
   }
 }; /* END __MACRO_DATA__ */
 

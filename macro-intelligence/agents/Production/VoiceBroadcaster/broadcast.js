@@ -79,15 +79,16 @@ ${extremes}
 
 RULES:
 1. EXACTLY 140-155 words. Count them. This will be read aloud at natural pace.
-2. Structure: Hook (verdict rewritten for spoken delivery) → Two numbers with context → Memorable close.
+2. Structure: Hook (balanced overview) → Two numbers (one strength, one to watch) → Positive close.
 3. Open with: "Good morning from MacroIntelligence."
-4. Close with: "This has been your sixty-second macro. Have a sharp day."
-5. Pick the 2 most surprising/consequential numbers from the indicators above.
-6. For each number, explain in ONE sentence why a fund manager should care.
-7. Use conversational language — this is spoken, not written. Short sentences. Pauses.
-8. Include one Munger-style inversion: "Last time this happened, X followed within Y months."
-9. Include one metaphor or memorable phrase the listener can repeat at lunch.
-10. No jargon without instant explanation.
+4. Close with: "This has been your sixty-second macro. Have a great day."
+5. Pick 2 numbers — ideally one that's going WELL and one that needs context.
+6. For each number, explain in ONE sentence with perspective. Provide comparison.
+7. Conversational, warm, calm. This is breakfast briefing, not emergency broadcast.
+8. CRITICAL TONE RULE: Be optimistic and balanced. NEVER alarmist. No "collapsing", "crashing", "spiraling", "crisis", "brink", "alarm bells". If a number is concerning, state the fact and the counterbalance: "X is elevated at Y, but Z provides a cushion."
+9. Always find something positive to highlight. India is a growing economy — lead with that confidence.
+10. End on a note of perspective or optimism. NEVER end on fear.
+11. No jargon without instant explanation.
 
 Return ONLY the script text. No JSON. No markers. Just the words to be spoken.`;
 

@@ -3,123 +3,96 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Macro Intelligence — Light Mode</title>
+<title>Macro Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════════
-   MACRO INTELLIGENCE — CRED-STYLE TERMINAL
-   High contrast · Crisp ink · Premium dark luxury
-   v4.0 — CRED aesthetic overhaul
+   MACRO INTELLIGENCE — JONY IVE EDITION
+   Radical simplicity · Purposeful whitespace · Quiet confidence
+   v5.0 — Every pixel earns its place
 ═══════════════════════════════════════════════════ */
-@import url('https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&display=swap');
 
 :root {
-  /* ── LIGHT PALETTE — crisp paper-white ── */
-  --void:       #f5f6fa;
-  --deep:       #eceef5;
+  /* ── IVE PALETTE — pure, clean, no noise ── */
+  --void:       #f5f5f7;
+  --deep:       #f0f0f2;
   --surface:    #ffffff;
-  --raised:     #f0f2f8;
-  --rim:        #d0d4e8;
-  --muted:      #c0c4dc;
-  --card:       rgba(255,255,255,0.97);
+  --raised:     #fafafa;
+  --rim:        #d2d2d7;
+  --muted:      #c7c7cc;
+  --card:       rgba(255,255,255,0.98);
 
-  /* ── INK — deep charcoal hierarchy ── */
-  --ink-1:      #0a0c1a;        /* near-black — primary text */
-  --ink-2:      #1c2040;        /* dark navy — secondary */
-  --ink-3:      #3a4070;        /* medium — tertiary */
-  --ink-4:      #6068a0;        /* muted — metadata */
-  --ink-5:      #a0a8cc;        /* light — dividers */
+  /* ── INK — Apple-grade hierarchy ── */
+  --ink-1:      #1d1d1f;
+  --ink-2:      #424245;
+  --ink-3:      #6e6e73;
+  --ink-4:      #86868b;
+  --ink-5:      #aeaeb2;
 
-  /* ── SIGNALS — adjusted for light bg ── */
-  --signal:     #1a00cc;        /* deep indigo */
-  --signal-dim: rgba(26,0,204,0.08);
-  --signal-glow:rgba(26,0,204,0.15);
+  /* ── SIGNALS — restrained, purposeful ── */
+  --signal:     #0071e3;
+  --signal-dim: rgba(0,113,227,0.06);
+  --signal-glow:rgba(0,113,227,0.12);
 
-  /* ── STATUS — deepened for light mode ── */
-  --safe:       #007a52;        /* deep green */
-  --safe-dim:   rgba(0,122,82,0.08);
-  --safe-glow:  rgba(0,122,82,0.20);
-  --danger:     #cc0033;        /* deep red */
-  --danger-dim: rgba(204,0,51,0.07);
-  --danger-glow:rgba(204,0,51,0.20);
-  --caution:    #b85c00;        /* deep amber */
-  --caution-dim:rgba(184,92,0,0.08);
-  --frost:      #005c99;        /* deep cyan */
-  --frost-dim:  rgba(0,92,153,0.07);
-  --violet:     #6600cc;        /* deep violet */
-  --violet-dim: rgba(102,0,204,0.08);
+  /* ── STATUS — clear, not loud ── */
+  --safe:       #34c759;
+  --safe-dim:   rgba(52,199,89,0.08);
+  --safe-glow:  rgba(52,199,89,0.15);
+  --danger:     #ff3b30;
+  --danger-dim: rgba(255,59,48,0.06);
+  --danger-glow:rgba(255,59,48,0.15);
+  --caution:    #ff9500;
+  --caution-dim:rgba(255,149,0,0.06);
+  --frost:      #5ac8fa;
+  --frost-dim:  rgba(90,200,250,0.06);
+  --violet:     #af52de;
+  --violet-dim: rgba(175,82,222,0.06);
 
-  /* ── ACCENT GLOWS ── */
+  /* ── ACCENT GLOWS — barely there ── */
   --cred-gold:  #8c6200;
-  --cred-gold-dim: rgba(140,98,0,0.10);
-  --glow-blue:  rgba(26,0,204,0.18);
-  --glow-teal:  rgba(0,92,153,0.14);
-  --glow-gold:  rgba(140,98,0,0.12);
-  --glass-bg:   rgba(255,255,255,0.96);
-  --glass-edge: rgba(0,0,40,0.10);
-  --glass-edge-bright: rgba(0,0,40,0.18);
+  --cred-gold-dim: rgba(140,98,0,0.06);
+  --glow-blue:  rgba(0,113,227,0.08);
+  --glow-teal:  rgba(90,200,250,0.06);
+  --glow-gold:  rgba(140,98,0,0.06);
+  --glass-bg:   rgba(255,255,255,0.98);
+  --glass-edge: rgba(0,0,0,0.06);
+  --glass-edge-bright: rgba(0,0,0,0.10);
+  --glass-border: rgba(0,0,0,0.06);
 
-  /* ── TYPOGRAPHY ── */
-  --display: 'Syne', sans-serif;
-  --mono:    'DM Mono', monospace;
-  --body:    'DM Sans', sans-serif;
+  /* ── TYPOGRAPHY — Inter + JetBrains Mono ── */
+  --display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono:    'JetBrains Mono', 'SF Mono', monospace;
+  --body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
-  /* ── BASE FONT — 2 sizes up from 14px ── */
-  --fs-base: 16px;
+  /* ── BASE FONT ── */
+  --fs-base: 15px;
 
-  /* ── RADIUS ── */
-  --r-xl: 24px;
-  --r-lg: 18px;
+  /* ── RADIUS — generous, Apple-style ── */
+  --r-xl: 20px;
+  --r-lg: 16px;
   --r-md: 12px;
   --r-sm: 8px;
-  --r-xs: 5px;
+  --r-xs: 6px;
 
-  /* ── ELEVATION — deeper CRED shadows ── */
-  --shadow-panel: 0 4px 24px rgba(0,0,60,0.08), 0 1px 4px rgba(0,0,60,0.05);
-  --shadow-card:  0 2px 12px rgba(0,0,60,0.07), 0 1px 3px rgba(0,0,60,0.04);
-  --shadow-nav:   0 4px 24px rgba(0,0,60,0.10), 0 1px 4px rgba(0,0,60,0.06);
+  /* ── ELEVATION — whisper-quiet ── */
+  --shadow-panel: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02);
+  --shadow-card:  0 1px 2px rgba(0,0,0,0.03);
+  --shadow-nav:   0 1px 3px rgba(0,0,0,0.06);
 }
 
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html { font-size:var(--fs-base); scroll-behavior:smooth; }
 
 body {
-  background:
-    radial-gradient(ellipse at 20% 0%,   rgba(26,0,204,0.06),    transparent 35%),
-    radial-gradient(ellipse at 82% 5%,   rgba(0,92,153,0.05),    transparent 30%),
-    radial-gradient(ellipse at 50% 95%,  rgba(26,0,204,0.04),    transparent 38%),
-    radial-gradient(ellipse at 5% 60%,   rgba(102,0,204,0.04),   transparent 28%),
-    linear-gradient(180deg, #f5f6fa 0%, #eceef5 50%, #f5f6fa 100%);
+  background: var(--void);
   color: var(--ink-1);
   font-family: var(--body);
   min-height: 100vh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-}
-
-/* ── CRED grain texture overlay ── */
-body::before {
-  content:'';
-  position:fixed;
-  inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-  pointer-events:none;
-  z-index:9999;
-  opacity:0.08;
-}
-
-/* ── Subtle dot grid — CRED signature ── */
-body::after {
-  content:'';
-  position:fixed;
-  inset:0;
-  background-image: radial-gradient(circle, rgba(0,0,60,0.06) 1px, transparent 1px);
-  background-size: 32px 32px;
-  mask-image: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, transparent 65%);
-  pointer-events:none;
-  z-index:1;
+  line-height: 1.5;
 }
 
 ::-webkit-scrollbar { width:4px; }
@@ -138,43 +111,38 @@ body::after {
   z-index:1000;
 }
 .topbar {
-  height:56px;
-  background:rgba(250,251,255,0.97);
-  backdrop-filter:blur(40px) saturate(180%);
-  -webkit-backdrop-filter:blur(40px) saturate(180%);
-  border:1px solid var(--glass-edge-bright);
-  border-radius:999px;
-  box-shadow:
-    0 2px 16px rgba(0,0,60,0.10),
-    0 0 0 1px rgba(0,0,60,0.05);
+  height:52px;
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:0 18px 0 10px;
+  padding:0 20px 0 14px;
 }
 
 .brand-mark {
-  width:38px;
-  height:38px;
-  border-radius:12px;
-  background:linear-gradient(135deg, rgba(26,0,204,0.12), rgba(0,92,153,0.10));
-  border:1px solid rgba(26,0,204,0.25);
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  background: linear-gradient(135deg, #0071e3, #5856d6);
   display:flex;
   align-items:center;
   justify-content:center;
   flex-shrink:0;
-  margin-right:11px;
+  margin-right:12px;
   position:relative;
   overflow:hidden;
-  box-shadow:0 0 16px rgba(26,0,204,0.10);
 }
 .brand-mark::before {
-  content:'';
-  position:absolute;
-  inset:8px;
-  border:1.5px solid rgba(26,0,204,0.55);
-  border-radius:4px;
-  transform:rotate(45deg);
+  content:'M';
+  font-family:var(--display);
+  font-size:0.85rem;
+  font-weight:700;
+  color:#fff;
 }
 
 .brand-text {
@@ -275,19 +243,19 @@ body::after {
 ══════════════════════════════════════════════════ */
 .ticker-rail {
   position:fixed;
-  top:78px;
+  top:74px;
   left:10px;
   right:10px;
   height:30px;
-  background:rgba(255,255,255,0.97);
-  backdrop-filter:blur(24px);
-  border:1px solid rgba(0,0,60,0.14);
-  border-radius:999px;
+  background:rgba(255,255,255,0.95);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:10px;
   overflow:hidden;
   display:flex;
   align-items:center;
   z-index:999;
-  box-shadow:0 4px 20px rgba(0,0,0,0.40);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
 }
 .ticker-scroll {
   display:flex;
@@ -321,11 +289,11 @@ body::after {
   top:120px;
   bottom:10px;
   width:64px;
-  background:rgba(248,249,255,0.98);
-  backdrop-filter:blur(40px) saturate(200%);
-  -webkit-backdrop-filter:blur(40px) saturate(200%);
-  border:1px solid rgba(0,0,60,0.14);
-  border-radius:20px;
+  background:rgba(255,255,255,0.95);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:16px;
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -355,17 +323,17 @@ body::after {
   background:transparent;
 }
 .nav-item:hover {
-  background:rgba(26,0,204,0.06);
-  border-color:rgba(26,0,204,0.20);
-  transform:scale(1.04);
+  background:rgba(0,0,0,0.04);
+  border-color:rgba(0,0,0,0.08);
+  transform:scale(1.02);
 }
 .nav-item.active {
-  background:linear-gradient(145deg, rgba(26,0,204,0.10), rgba(26,0,204,0.04));
-  border-color:rgba(26,0,204,0.30);
-  box-shadow:0 2px 8px rgba(26,0,204,0.12);
+  background:rgba(0,113,227,0.08);
+  border-color:rgba(0,113,227,0.20);
+  box-shadow:none;
 }
 .nav-icon  { font-size:1.10rem; line-height:1; filter:drop-shadow(0 0 4px rgba(255,255,255,0.12)); }
-.nav-item.active .nav-icon { filter:drop-shadow(0 0 4px rgba(26,0,204,0.25)); }
+.nav-item.active .nav-icon { filter:none; }
 .nav-label {
   font-family:var(--mono);
   font-size:0.46rem;
@@ -376,7 +344,7 @@ body::after {
   font-weight:500;
 }
 .nav-item:hover .nav-label { color:var(--ink-2); }
-.nav-item.active .nav-label { color:#1a00cc; font-weight:700; }
+.nav-item.active .nav-label { color:#0071e3; font-weight:600; }
 .nav-dot { position:absolute; top:6px; right:6px; width:6px; height:6px; border-radius:50%; border:1.5px solid var(--deep); }
 .nd-r { background:var(--danger);  box-shadow:none; }
 .nd-a { background:var(--caution); box-shadow:none; }
@@ -422,47 +390,29 @@ body::after {
    GLASS PANEL — CRED card elevation
 ══════════════════════════════════════════════════ */
 .glass-panel {
-  background:rgba(255,255,255,0.98);
-  backdrop-filter:blur(32px) saturate(160%);
-  -webkit-backdrop-filter:blur(32px) saturate(160%);
-  border:1px solid rgba(0,0,60,0.10);
-  border-radius:var(--r-xl);
-  box-shadow:0 8px 40px rgba(0,0,60,0.08), 0 2px 8px rgba(0,0,60,0.06);
+  background: #ffffff;
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:var(--r-lg);
+  box-shadow: var(--shadow-panel);
   overflow:hidden;
-  margin-bottom:12px;
+  margin-bottom:14px;
   position:relative;
-  transition:border-color 0.2s;
+  transition: box-shadow 0.2s;
 }
-.glass-panel:hover { border-color:rgba(26,0,204,0.18); }
-
-/* Top shimmer — stronger than before */
-.glass-panel::before {
-  content:'';
-  position:absolute;
-  top:0;
-  left:10%;
-  right:10%;
-  height:1px;
-  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.20), transparent);
-  pointer-events:none;
-}
+.glass-panel:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.glass-panel::before { display:none; }
 
 /* ══════════════════════════════════════════════════
    COMMAND STRIP
 ══════════════════════════════════════════════════ */
 .cmd {
-  padding:32px 32px 28px;
+  padding:36px 36px 30px;
   position:relative;
   overflow:hidden;
+  border-radius: var(--r-xl);
 }
 .cmd-ambient {
-  position:absolute;
-  inset:0;
-  background:
-    radial-gradient(ellipse at 6% 50%,  rgba(26,0,204,0.06), transparent 44%),
-    radial-gradient(ellipse at 88% 15%, rgba(0,92,153,0.05),  transparent 40%),
-    radial-gradient(ellipse at 50% 100%,rgba(26,0,204,0.03),  transparent 50%);
-  pointer-events:none;
+  display:none;
 }
 .cmd-eyebrow {
   font-family:var(--mono);
@@ -966,15 +916,24 @@ td.c-pct { text-align:right; min-width:96px; }
     </div>
   </div>
 
-  <!-- 60-SECOND MACRO AUDIO -->
-  <div class="glass-panel" id="audio-panel" style="display:none;padding:12px 20px;margin-top:8px;">
-    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
-      <button id="audio-play-btn" onclick="toggleAudio()" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;border-radius:24px;padding:10px 22px;font-family:var(--mono);font-size:0.72rem;font-weight:700;letter-spacing:0.06em;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 2px 12px rgba(99,102,241,0.25);transition:all 0.2s;">
-        <span id="audio-icon">&#9654;</span> 60-SECOND MACRO
+  <!-- 60-SECOND MACRO AUDIO — HERO PLAYER -->
+  <div id="audio-panel" style="display:none;margin:12px 0 16px;padding:24px 28px;background:#fff;border-radius:20px;border:1px solid rgba(0,0,0,0.06);box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:14px;">
+      <div style="width:8px;height:8px;border-radius:50%;background:#0071e3;animation:livepulse 2s ease-in-out infinite;"></div>
+      <span style="font-family:var(--mono);font-size:0.65rem;font-weight:600;color:var(--ink-3);letter-spacing:0.12em;text-transform:uppercase;">AUDIO BRIEFING</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <button id="audio-play-btn" onclick="toggleAudio()" style="width:56px;height:56px;background:#1d1d1f;color:#fff;border:none;border-radius:50%;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,0.15);">
+        <span id="audio-icon">&#9654;</span>
       </button>
-      <div id="audio-time" style="font-family:var(--mono);font-size:0.65rem;color:var(--ink-3);">0:00 / 1:00</div>
-      <div id="audio-bar-wrap" style="flex:1;min-width:120px;height:4px;background:var(--glass-border);border-radius:2px;cursor:pointer;position:relative;" onclick="seekAudio(event)">
-        <div id="audio-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#6366f1,#8b5cf6);border-radius:2px;transition:width 0.1s;"></div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-family:var(--display);font-size:1.05rem;font-weight:600;color:var(--ink-1);margin-bottom:6px;">60-Second Macro</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div id="audio-bar-wrap" style="flex:1;height:4px;background:rgba(0,0,0,0.08);border-radius:2px;cursor:pointer;position:relative;overflow:hidden;" onclick="seekAudio(event)">
+            <div id="audio-bar" style="height:100%;width:0%;background:#0071e3;border-radius:2px;transition:width 0.15s;"></div>
+          </div>
+          <div id="audio-time" style="font-family:var(--mono);font-size:0.62rem;color:var(--ink-4);white-space:nowrap;">0:00 / 1:00</div>
+        </div>
       </div>
     </div>
     <audio id="macro-audio" preload="auto"></audio>

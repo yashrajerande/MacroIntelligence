@@ -29,6 +29,7 @@ import { VoiceBroadcaster }      from '../Production/VoiceBroadcaster/broadcast.
 import { Validator }              from '../Production/Validator/validate.js';
 import { SupabaseWriter }         from '../Infrastructure/SupabaseWriter/sync.js';
 import { GitPublisher }           from '../Infrastructure/GitPublisher/publish.js';
+import { TelegramPublisher }      from '../Infrastructure/TelegramPublisher/publish.js';
 
 async function withRetry(fn, agentName, logger) {
   try {
@@ -214,6 +215,22 @@ async function run() {
 
     await new GitPublisher().publish(outputPath, dateStr, indexPath);
     logger.agent('GitPublisher', { model: 'none', latency_ms: 0, tokens: { input: 0, output: 0 } });
+
+    // Telegram delivery (non-blocking)
+    try {
+      const telegramResult = await new TelegramPublisher().publish({
+        verdictLine: execSummary.verdict_line || macroDataObj.run.snap_verdict,
+        macroDataObj,
+        dateStr,
+        isoDate,
+        dashboardUrl: 'https://yashrajerande.github.io/MacroIntelligence/',
+        audioPath: voiceResult.audioPath || voiceResult.latestAudioPath,
+      });
+      logger.agent('TelegramPublisher', telegramResult.meta);
+    } catch (err) {
+      console.warn(`  ⚠ TelegramPublisher failed (non-fatal): ${err.message}`);
+      logger.warn('TelegramPublisher failed', err.message);
+    }
 
     // ── DONE ────────────────────────────────────────────────────────
     const finalCost = logger.estimateCost();

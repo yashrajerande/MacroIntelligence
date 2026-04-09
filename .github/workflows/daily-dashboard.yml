@@ -63,6 +63,8 @@ jobs:
           FRED_API_KEY:         ${{ secrets.FRED_API_KEY }}
           GH_PAT:              ${{ secrets.GH_PAT }}
           OPENAI_API_KEY:      ${{ secrets.OPENAI_API_KEY }}
+          TELEGRAM_BOT_TOKEN:  ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID:    ${{ secrets.TELEGRAM_CHAT_ID }}
           DATE_OVERRIDE:        ${{ inputs.run_date_override }}
           GITHUB_REPOSITORY:    ${{ github.repository }}
           NODE_ENV:             production

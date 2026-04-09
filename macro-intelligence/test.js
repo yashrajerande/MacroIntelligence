@@ -367,6 +367,55 @@ if (template) {
 }
 
 // ═══════════════════════════════════════════════════════════════════
+// 10. TELEGRAM PUBLISHER
+// ═══════════════════════════════════════════════════════════════════
+describe('Telegram Publisher');
+
+const telegramPersonaPath = join(__dirname, 'agents', 'Infrastructure', 'TelegramPublisher', 'Persona.md');
+assert(existsSync(telegramPersonaPath), 'TelegramPublisher Persona.md must exist');
+
+const telegramPublishPath = join(__dirname, 'agents', 'Infrastructure', 'TelegramPublisher', 'publish.js');
+assert(existsSync(telegramPublishPath), 'TelegramPublisher publish.js must exist');
+
+const summaryCardPath = join(__dirname, 'agents', 'Infrastructure', 'TelegramPublisher', 'skills', 'summary-card.js');
+assert(existsSync(summaryCardPath), 'summary-card.js must exist');
+
+const screenshotPath = join(__dirname, 'agents', 'Infrastructure', 'TelegramPublisher', 'skills', 'screenshot.js');
+assert(existsSync(screenshotPath), 'screenshot.js must exist');
+
+const telegramApiPath = join(__dirname, 'agents', 'Infrastructure', 'TelegramPublisher', 'skills', 'telegram-api.js');
+assert(existsSync(telegramApiPath), 'telegram-api.js must exist');
+
+// Test summary card HTML generation
+import { generateCardHTML } from './agents/Infrastructure/TelegramPublisher/skills/summary-card.js';
+const mockCardData = {
+  verdictLine: 'Test verdict line for card generation',
+  macroDataObj: {
+    indicators: [
+      { indicator_slug: 'nifty50', indicator_name: 'Nifty 50', latest_value: '23000', latest_numeric: 23000, direction: 'up', pct_10y: 72 },
+      { indicator_slug: 'cpi_headline', indicator_name: 'CPI', latest_value: '3.2%', latest_numeric: 3.2, direction: 'down', pct_10y: 25 },
+      { indicator_slug: 'cd_ratio', indicator_name: 'CD Ratio', latest_value: '83%', latest_numeric: 83, direction: 'up', pct_10y: 92 },
+      { indicator_slug: 'brent_usd', indicator_name: 'Brent', latest_value: '$99', latest_numeric: 99, direction: 'up', pct_10y: 85 },
+    ],
+    regime: [
+      { dimension: 'growth', badge_label: 'Expansion', badge_type: 'b-exp' },
+      { dimension: 'inflation', badge_label: 'Within Band', badge_type: 'b-neu' },
+    ],
+    signals: [],
+  },
+  dateStr: '09 APR 2026',
+  dashboardUrl: 'https://example.com',
+};
+const cardHTML = generateCardHTML(mockCardData);
+assert(cardHTML.includes('Test verdict line'), 'Card HTML must contain verdict line');
+assert(cardHTML.includes('Nifty 50'), 'Card HTML must contain Nifty');
+assert(cardHTML.includes('Explore the Full Dashboard'), 'Card HTML must contain CTA');
+assert(cardHTML.includes('https://example.com'), 'Card HTML must contain dashboard URL');
+assert(cardHTML.includes('1080px'), 'Card HTML must be 1080px wide');
+assert(cardHTML.includes('1350px'), 'Card HTML must be 1350px tall');
+assert(cardHTML.includes('60-Second Macro'), 'Card HTML must mention audio briefing');
+
+// ═══════════════════════════════════════════════════════════════════
 // RESULTS
 // ═══════════════════════════════════════════════════════════════════
 console.log(`\n═══════════════════════════════════════════════════════════`);

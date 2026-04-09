@@ -23,7 +23,8 @@
     "test:dry-run": "SKIP_SUPABASE=true SKIP_GIT_PUSH=true node agents/CEO/orchestrate.js"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.39.0"
+    "@anthropic-ai/sdk": "^0.39.0",
+    "puppeteer-core": "^24.40.0"
   },
   "engines": {
     "node": ">=20"

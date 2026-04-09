@@ -27,6 +27,7 @@ export async function gitPublish(filePath, indexPath, commitMessage, ghPat, repo
     `git add -f ${outputDir}/data-cache.json || echo "[Git] data-cache.json not found, skipping"`,
     `git add -f ${outputDir}/daily-broadcast.mp3 || echo "[Git] daily-broadcast.mp3 not found, skipping"`,
     `git commit -m "${commitMessage}"`,
+    'git pull --rebase origin main || true',
     'git push origin HEAD',
   ];
 

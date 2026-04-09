@@ -3,9 +3,10 @@
  * Uses system Chrome on GitHub Actions (no bundled Chromium).
  */
 
-import { writeFileSync, mkdirSync } from 'fs';
+import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -18,14 +19,9 @@ function findChrome() {
     '/usr/bin/google-chrome',
     '/usr/bin/chromium-browser',
     '/usr/bin/chromium',
-    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
   ];
   for (const p of paths) {
-    try {
-      const { execSync } = await import('child_process');
-      execSync(`test -f "${p}"`);
-      return p;
-    } catch { /* not found */ }
+    if (existsSync(p)) return p;
   }
   return null;
 }

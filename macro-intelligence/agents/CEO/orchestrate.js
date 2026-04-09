@@ -13,7 +13,7 @@
 import { getISTDate } from '../../src/utils/ist-date.js';
 import { RunLogger } from './run-log.js';
 import { checkBudget, recordRunCost, getCostSummary } from '../../src/utils/cost-ledger.js';
-import { shouldSkipDataIntelligence, getCachedIndicators, updateCache } from '../../src/utils/data-cache.js';
+import { shouldSkipDataIntelligence, getCachedIndicators, updateCache, checkWebSearchNeeded } from '../../src/utils/data-cache.js';
 import { normalizeAllIndicators } from '../../src/utils/unit-normalizer.js';
 
 import { MarketDataAnalyst }      from '../DataIntelligence/MarketDataAnalyst/fetch.js';
@@ -61,12 +61,12 @@ async function run() {
 
     let marketData, macroData, reData;
     const skipDI = shouldSkipDataIntelligence(isoDate);
+    const cachedMeta = { model: 'none', latency_ms: 0, tokens: { input: 0, output: 0 } };
 
     if (skipDI) {
+      // Weekend/holiday — use ALL cached data
       console.log('  ⏭ Weekend/holiday — using cached data from last trading day');
       const cached = getCachedIndicators(isoDate);
-      const cachedMeta = { model: 'none', latency_ms: 0, tokens: { input: 0, output: 0 } };
-      // Split cached data back into the 3 agent structures
       const marketPrices = {}, macroInds = {}, reInds = {};
       const MARKET_SLUGS = new Set(['nifty50','sensex','bank_nifty','india_vix','inr_usd','gold_usd','gold_inr_gram','brent_usd','sp500','nasdaq','us_vix','dxy','nat_gas','copper','iron_ore','nikkei225','hang_seng','euro_stoxx50','brent_usd_global','wti_usd','bdi','us_10y_treasury','gsec_10y','rbi_fx_reserves']);
       const RE_SLUGS = new Set(['re_launches_units','re_sales_units','re_unsold_inventory','hpi_mumbai','hpi_delhi','hpi_bengaluru','hpi_hyderabad','affordability_index','home_loan_disbursements','avg_home_loan_rate','office_absorption','office_vacancy','rent_bengaluru','rent_mumbai','retail_mall_vacancy','embassy_reit','mindspace_reit','brookfield_reit']);
@@ -82,31 +82,62 @@ async function run() {
       logger.agent('MacroDataAnalyst', cachedMeta);
       logger.agent('RealEstateAnalyst', cachedMeta);
     } else {
+      // ── Market prices: ALWAYS fetch (free via Yahoo/FRED) ──────
       marketData = await withRetry(
         () => new MarketDataAnalyst().fetch(),
         'MarketDataAnalyst', logger
       );
       logger.agent('MarketDataAnalyst', marketData.meta);
 
-      macroData = await withRetry(
-        () => new MacroDataAnalyst().fetch(isoDate),
-        'MacroDataAnalyst', logger
-      );
-      logger.agent('MacroDataAnalyst', macroData.meta);
+      // ── Macro + RE: only web_search when indicators are STALE ──
+      const wsCheck = checkWebSearchNeeded(isoDate);
+      console.log(`  ℹ Cache: ${wsCheck.cachedCount} indicators cached, ${wsCheck.staleSlugs.length} stale`);
+      console.log(`  ℹ Macro refresh needed: ${wsCheck.needsMacroRefresh} | RE refresh needed: ${wsCheck.needsRERefresh}`);
 
-      reData = await withRetry(
-        () => new RealEstateAnalyst().fetch(isoDate),
-        'RealEstateAnalyst', logger
-      );
-      logger.agent('RealEstateAnalyst', reData.meta);
+      if (wsCheck.needsMacroRefresh) {
+        macroData = await withRetry(
+          () => new MacroDataAnalyst().fetch(isoDate),
+          'MacroDataAnalyst', logger
+        );
+        logger.agent('MacroDataAnalyst', macroData.meta);
+      } else {
+        console.log('  ⏭ MacroDataAnalyst — all indicators fresh in cache, skipping web_search ($0.50 saved)');
+        const cached = getCachedIndicators(isoDate);
+        const macroInds = {};
+        const RE_SLUGS = new Set(['re_launches_units','re_sales_units','re_unsold_inventory','hpi_mumbai','hpi_delhi','hpi_bengaluru','hpi_hyderabad','affordability_index','home_loan_disbursements','avg_home_loan_rate','office_absorption','office_vacancy','rent_bengaluru','rent_mumbai','retail_mall_vacancy','embassy_reit','mindspace_reit','brookfield_reit']);
+        const MARKET_SLUGS = new Set(['nifty50','sensex','bank_nifty','india_vix','inr_usd','gold_usd','gold_inr_gram','brent_usd','sp500','nasdaq','us_vix','dxy','nat_gas','copper','iron_ore','nikkei225','hang_seng','euro_stoxx50','brent_usd_global','wti_usd','bdi','us_10y_treasury','gsec_10y','rbi_fx_reserves']);
+        for (const [slug, val] of Object.entries(cached)) {
+          if (!MARKET_SLUGS.has(slug) && !RE_SLUGS.has(slug)) macroInds[slug] = val;
+        }
+        macroData = { data: { generated_at: new Date().toISOString(), run_date: isoDate, indicators: macroInds }, meta: cachedMeta };
+        logger.agent('MacroDataAnalyst', cachedMeta);
+      }
 
-      // Normalize units before caching or using data
+      if (wsCheck.needsRERefresh) {
+        reData = await withRetry(
+          () => new RealEstateAnalyst().fetch(isoDate),
+          'RealEstateAnalyst', logger
+        );
+        logger.agent('RealEstateAnalyst', reData.meta);
+      } else {
+        console.log('  ⏭ RealEstateAnalyst — all RE indicators fresh in cache, skipping web_search ($0.30 saved)');
+        const cached = getCachedIndicators(isoDate);
+        const reInds = {};
+        const RE_SLUGS = new Set(['re_launches_units','re_sales_units','re_unsold_inventory','hpi_mumbai','hpi_delhi','hpi_bengaluru','hpi_hyderabad','affordability_index','home_loan_disbursements','avg_home_loan_rate','office_absorption','office_vacancy','rent_bengaluru','rent_mumbai','retail_mall_vacancy','embassy_reit','mindspace_reit','brookfield_reit']);
+        for (const [slug, val] of Object.entries(cached)) {
+          if (RE_SLUGS.has(slug)) reInds[slug] = val;
+        }
+        reData = { data: { generated_at: new Date().toISOString(), run_date: isoDate, indicators: reInds }, meta: cachedMeta };
+        logger.agent('RealEstateAnalyst', cachedMeta);
+      }
+
+      // Normalize units
       console.log('\n  ── Unit Normalization ──');
       normalizeAllIndicators(marketData.data.prices);
-      normalizeAllIndicators(macroData.data.indicators);
-      normalizeAllIndicators(reData.data.indicators);
+      if (wsCheck.needsMacroRefresh) normalizeAllIndicators(macroData.data.indicators);
+      if (wsCheck.needsRERefresh) normalizeAllIndicators(reData.data.indicators);
 
-      // Update cache with normalized data
+      // Update cache with all data (fresh + cached)
       const allFresh = { ...marketData.data.prices, ...macroData.data.indicators, ...reData.data.indicators };
       updateCache(allFresh, isoDate);
       console.log(`  ✓ Cache updated: ${Object.keys(allFresh).length} indicators`);

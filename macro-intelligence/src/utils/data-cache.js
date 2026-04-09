@@ -155,6 +155,45 @@ export function getStaleSlugs(currentDate) {
   );
 }
 
+/**
+ * Check if the expensive web_search agents (MacroData + RealEstate) need to run.
+ * Returns true ONLY if there are stale non-market indicators that need refreshing.
+ * Market indicators (daily prices) are fetched for free via Yahoo/FRED.
+ *
+ * @param {string} currentDate — ISO date
+ * @returns {{ needsMacroRefresh: boolean, needsRERefresh: boolean, staleSlugs: string[], cachedCount: number }}
+ */
+export function checkWebSearchNeeded(currentDate) {
+  const cache = readCache();
+  const MARKET_SLUGS = new Set([
+    'nifty50','sensex','bank_nifty','india_vix','inr_usd','gold_usd','gold_inr_gram',
+    'brent_usd','sp500','nasdaq','us_vix','dxy','nat_gas','copper','iron_ore',
+    'nikkei225','hang_seng','euro_stoxx50','brent_usd_global','wti_usd','bdi',
+    'us_10y_treasury','gsec_10y','rbi_fx_reserves','embassy_reit','mindspace_reit','brookfield_reit',
+  ]);
+  const RE_SLUGS = new Set([
+    're_launches_units','re_sales_units','re_unsold_inventory',
+    'hpi_mumbai','hpi_delhi','hpi_bengaluru','hpi_hyderabad',
+    'affordability_index','home_loan_disbursements','avg_home_loan_rate',
+    'office_absorption','office_vacancy','rent_bengaluru','rent_mumbai',
+    'retail_mall_vacancy',
+  ]);
+
+  const allStale = getStaleSlugs(currentDate);
+  const staleMacro = allStale.filter(s => !MARKET_SLUGS.has(s) && !RE_SLUGS.has(s));
+  const staleRE = allStale.filter(s => RE_SLUGS.has(s));
+
+  // Count how many non-market indicators we have cached
+  const cachedNonMarket = Object.keys(cache.indicators).filter(s => !MARKET_SLUGS.has(s)).length;
+
+  return {
+    needsMacroRefresh: staleMacro.length > 0 || cachedNonMarket < 40,
+    needsRERefresh: staleRE.length > 0 || Object.keys(cache.indicators).filter(s => RE_SLUGS.has(s)).length < 10,
+    staleSlugs: [...staleMacro, ...staleRE],
+    cachedCount: Object.keys(cache.indicators).length,
+  };
+}
+
 // ── Supabase dedup helpers ─────────────────────────────────────────
 
 /**

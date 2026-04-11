@@ -1,58 +1,26 @@
 /**
  * Summary Card Skill — Dark vibrant mobile-friendly card for Telegram/WhatsApp.
  * 1080×1350px. Hero verdict, regime badges, 4 risks, 4 strengths, CTA.
+ *
+ * Polarity (which indicators count as risks vs strengths) is delegated
+ * entirely to the Polarity Skill — see src/utils/polarity.js. This file
+ * contains NO inline polarity logic. That is deliberate: polarity is a
+ * single source of truth, and any agent that classifies indicators as
+ * positive/negative MUST go through the skill.
  */
 
-import { INDICATOR_SCHEMA, INVERSE_INDICATORS } from '../../../../src/utils/indicator-schema.js';
-
-/**
- * Pick the 4 most surprising RISK indicators (high percentile on inverse, or high pctl on non-inverse going wrong).
- */
-function pickSurprisingRisks(indicators) {
-  return indicators
-    .filter(i => i.latest_numeric !== null && i.pct_10y !== undefined)
-    .filter(i => {
-      const inv = INVERSE_INDICATORS.has(i.indicator_slug);
-      // Risk = inverse indicator at high percentile, OR non-inverse at very low percentile
-      return (inv && i.pct_10y >= 70) || (!inv && i.pct_10y <= 20);
-    })
-    .sort((a, b) => {
-      const aScore = INVERSE_INDICATORS.has(a.indicator_slug) ? a.pct_10y : (100 - a.pct_10y);
-      const bScore = INVERSE_INDICATORS.has(b.indicator_slug) ? b.pct_10y : (100 - b.pct_10y);
-      return bScore - aScore;
-    })
-    .slice(0, 4)
-    .map(ind => ({
-      name: ind.indicator_name,
-      value: ind.latest_value,
-      pct: ind.pct_10y,
-      direction: ind.direction,
-    }));
-}
+import { pickTopSignals } from '../../../../src/utils/polarity.js';
 
 /**
- * Pick the 4 most surprising POSITIVE indicators (high pctl on non-inverse, or low pctl on inverse = good).
+ * Shape a scored indicator into the fields the card renderer needs.
  */
-function pickSurprisingStrengths(indicators) {
-  return indicators
-    .filter(i => i.latest_numeric !== null && i.pct_10y !== undefined)
-    .filter(i => {
-      const inv = INVERSE_INDICATORS.has(i.indicator_slug);
-      // Strength = non-inverse at high percentile, OR inverse at very low percentile (good)
-      return (!inv && i.pct_10y >= 75) || (inv && i.pct_10y <= 20);
-    })
-    .sort((a, b) => {
-      const aScore = INVERSE_INDICATORS.has(a.indicator_slug) ? (100 - a.pct_10y) : a.pct_10y;
-      const bScore = INVERSE_INDICATORS.has(b.indicator_slug) ? (100 - b.pct_10y) : b.pct_10y;
-      return bScore - aScore;
-    })
-    .slice(0, 4)
-    .map(ind => ({
-      name: ind.indicator_name,
-      value: ind.latest_value,
-      pct: ind.pct_10y,
-      direction: ind.direction,
-    }));
+function toCardNode(ind) {
+  return {
+    name: ind.indicator_name,
+    value: ind.latest_value,
+    pct: ind.pct_10y,
+    direction: ind.direction,
+  };
 }
 
 /**
@@ -94,8 +62,12 @@ function pctBadge(pct, isRisk) {
  */
 export function generateCardHTML({ verdictLine, macroDataObj, dateStr, dashboardUrl }) {
   const indicators = macroDataObj.indicators || [];
-  const risks = pickSurprisingRisks(indicators);
-  const strengths = pickSurprisingStrengths(indicators);
+  // Polarity classification is delegated to the Polarity Skill.
+  // It rejects garbage data (pct_10y at sentinel 0/100 with in-range values)
+  // and scores each indicator on a signed [-100, +100] scale using the schema
+  // inverse flag plus direction-of-change weighting.
+  const risks = pickTopSignals(indicators, 4, 'negative').map(toCardNode);
+  const strengths = pickTopSignals(indicators, 4, 'positive').map(toCardNode);
 
   const regimes = (macroDataObj.regime || []).map(r => {
     const dim = r.dimension.charAt(0).toUpperCase() + r.dimension.slice(1);

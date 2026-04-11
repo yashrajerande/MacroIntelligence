@@ -417,6 +417,176 @@ assert(cardHTML.includes('1350px'), 'Card HTML must be 1350px tall');
 assert(cardHTML.includes('pctBadge') || cardHTML.includes('percentile') || cardHTML.includes('RISKS') || cardHTML.includes('STRENGTHS'), 'Card HTML must show risks/strengths sections');
 
 // ═══════════════════════════════════════════════════════════════════
+// 11. POLARITY SKILL — Single Source of Truth for positive/negative
+// ═══════════════════════════════════════════════════════════════════
+console.log('\n[11] Polarity Skill...');
+
+import {
+  getPolarity,
+  isValidSignal,
+  scoreIndicator,
+  classifyIndicator,
+  pickTopSignals,
+  isInversePolarity,
+  isPositiveSignal,
+  isNegativeSignal,
+} from './src/utils/polarity.js';
+
+// --- getPolarity: known-positive indicators
+for (const slug of ['india_gdp_yoy', 'gst_month', 'gst_ytd', 'bank_credit_growth',
+                    'sip_inflows', 'nifty50', 'rbi_fx_reserves', 'sp500', 'nasdaq', 'dii_equity_net']) {
+  assert(getPolarity(slug) === 'positive', `${slug} must have polarity 'positive' (got ${getPolarity(slug)})`);
+}
+
+// --- getPolarity: known-negative (inverse) indicators
+for (const slug of ['cpi_headline', 'cpi_core', 'wpi', 'cd_ratio', 'inr_usd',
+                    'india_vix', 'us_vix', 'brent_usd', 'dxy', 're_unsold_inventory',
+                    'office_vacancy', 'affordability_index', 'fuel_inflation']) {
+  assert(getPolarity(slug) === 'negative', `${slug} must have polarity 'negative' (got ${getPolarity(slug)})`);
+}
+
+// --- getPolarity: neutral overrides
+for (const slug of ['gold_inr_gram', 'gold_usd', 'embassy_reit']) {
+  assert(getPolarity(slug) === 'neutral', `${slug} must have polarity 'neutral' (got ${getPolarity(slug)})`);
+}
+
+// --- getPolarity: unknown slug → neutral
+assert(getPolarity('nonexistent_slug') === 'neutral', 'Unknown slug must return neutral');
+assert(getPolarity(null) === 'neutral', 'Null slug must return neutral');
+assert(getPolarity(undefined) === 'neutral', 'Undefined slug must return neutral');
+
+// --- isValidSignal: rejects garbage
+assert(!isValidSignal(null), 'null indicator must be invalid');
+assert(!isValidSignal({}), 'empty indicator must be invalid');
+assert(!isValidSignal({ indicator_slug: 'gst_month' }), 'Missing value must be invalid');
+assert(!isValidSignal({ indicator_slug: 'gst_month', latest_numeric: null, pct_10y: 50 }),
+  'Null latest_numeric must be invalid');
+assert(!isValidSignal({ indicator_slug: 'gst_month', latest_numeric: 'abc', pct_10y: 50 }),
+  'NaN latest_numeric must be invalid');
+assert(!isValidSignal({ indicator_slug: 'gst_month', latest_numeric: 160000 }),
+  'Missing pct_10y must be invalid');
+
+// --- isValidSignal: rejects sentinel pct=0/100 when value is within expected_range
+// gst_month expected_range is [80000, 250000]
+assert(!isValidSignal({ indicator_slug: 'gst_month', latest_numeric: 160000, pct_10y: 0, direction: 'up' }),
+  'In-range value with pct=0 must be rejected as garbage');
+assert(!isValidSignal({ indicator_slug: 'gst_month', latest_numeric: 160000, pct_10y: 100, direction: 'up' }),
+  'In-range value with pct=100 must be rejected as garbage');
+// But a value at the actual range edge can legitimately be 0/100
+assert(isValidSignal({ indicator_slug: 'gst_month', latest_numeric: 70000, pct_10y: 0, direction: 'down' }),
+  'Below-range value with pct=0 is legit');
+
+// --- isValidSignal: accepts good data
+assert(isValidSignal({ indicator_slug: 'gst_month', latest_numeric: 200640, pct_10y: 75, direction: 'up' }),
+  'Good data must be valid');
+
+// --- scoreIndicator: positive polarity, high percentile → positive score
+const gstHigh = { indicator_slug: 'gst_month', latest_numeric: 200640, pct_10y: 80, direction: 'up' };
+assert(scoreIndicator(gstHigh) > 0,
+  `GST high must score positive (got ${scoreIndicator(gstHigh)})`);
+assert(scoreIndicator(gstHigh) === 60,
+  `GST at pct=80 should score exactly +60 (got ${scoreIndicator(gstHigh)})`);
+
+// --- scoreIndicator: negative polarity, high percentile → negative score
+const inrWeak = { indicator_slug: 'inr_usd', latest_numeric: 93.46, pct_10y: 85, direction: 'up' };
+assert(scoreIndicator(inrWeak) < 0,
+  `Weak rupee must score negative (got ${scoreIndicator(inrWeak)})`);
+assert(scoreIndicator(inrWeak) === -70,
+  `INR/USD at pct=85 should score exactly -70 (got ${scoreIndicator(inrWeak)})`);
+
+// --- scoreIndicator: negative polarity at LOW percentile → positive score (inflation tamed)
+const cpiLow = { indicator_slug: 'cpi_headline', latest_numeric: 2.5, pct_10y: 15, direction: 'down' };
+assert(scoreIndicator(cpiLow) > 0,
+  `Low CPI must score positive (got ${scoreIndicator(cpiLow)})`);
+
+// --- scoreIndicator: flat direction halves the score
+const gstFlat = { indicator_slug: 'gst_month', latest_numeric: 200640, pct_10y: 80, direction: 'flat' };
+assert(scoreIndicator(gstFlat) === 30, `Flat direction should halve score (got ${scoreIndicator(gstFlat)})`);
+
+// --- scoreIndicator: neutral polarity is dampened
+const goldHigh = { indicator_slug: 'gold_inr_gram', latest_numeric: 6500, pct_10y: 95, direction: 'up' };
+const goldScore = scoreIndicator(goldHigh);
+assert(Math.abs(goldScore) <= 30,
+  `Neutral polarity max score should be ±30 (got ${goldScore})`);
+
+// --- scoreIndicator: invalid signals always score 0
+assert(scoreIndicator({}) === 0, 'Empty indicator must score 0');
+assert(scoreIndicator({ indicator_slug: 'gst_month', latest_numeric: 160000, pct_10y: 0, direction: 'up' }) === 0,
+  'Rejected garbage must score 0');
+
+// --- classifyIndicator
+assert(classifyIndicator(gstHigh) === 'mild-positive', `GST at +60 should be mild-positive`);
+const gstStrong = { indicator_slug: 'gst_month', latest_numeric: 240000, pct_10y: 95, direction: 'up' };
+assert(classifyIndicator(gstStrong) === 'strong-positive', `GST at pct=95 should be strong-positive`);
+assert(classifyIndicator(inrWeak) === 'strong-negative', `INR at -70 should be strong-negative`);
+assert(classifyIndicator({}) === 'unknown', 'Invalid must classify as unknown');
+
+// --- The original bug case: GST must NEVER appear as a "surprising risk"
+const bugIndicators = [
+  { indicator_slug: 'gst_month', indicator_name: 'GST Collections (Month)',
+    latest_value: '~2,00,640 ₹ cr', latest_numeric: 200640, pct_10y: 80, direction: 'up' },
+  { indicator_slug: 'gst_ytd', indicator_name: 'GST Collections (YTD)',
+    latest_value: '~22,27,096 ₹ cr', latest_numeric: 2227096, pct_10y: 85, direction: 'up' },
+  { indicator_slug: 'inr_usd', indicator_name: 'INR/USD',
+    latest_value: '93.46 ₹', latest_numeric: 93.46, pct_10y: 85, direction: 'up' },
+  { indicator_slug: 're_unsold_inventory', indicator_name: 'Unsold Inventory',
+    latest_value: '~600,000 units', latest_numeric: 600000, pct_10y: 75, direction: 'up' },
+  { indicator_slug: 'nasdaq', indicator_name: 'Nasdaq',
+    latest_value: '22,902.9 index', latest_numeric: 22902, pct_10y: 95, direction: 'up' },
+  { indicator_slug: 'cpi_headline', indicator_name: 'CPI',
+    latest_value: '5.1%', latest_numeric: 5.1, pct_10y: 55, direction: 'up' },
+];
+
+const risks = pickTopSignals(bugIndicators, 4, 'negative');
+const strengths = pickTopSignals(bugIndicators, 4, 'positive');
+
+const riskSlugs = risks.map(r => r.indicator_slug);
+const strengthSlugs = strengths.map(s => s.indicator_slug);
+
+// GST must NOT be a risk (the bug)
+assert(!riskSlugs.includes('gst_month'), 'GST month must NOT be classified as a risk');
+assert(!riskSlugs.includes('gst_ytd'), 'GST YTD must NOT be classified as a risk');
+
+// GST SHOULD be a strength
+assert(strengthSlugs.includes('gst_month') || strengthSlugs.includes('gst_ytd'),
+  'GST should appear in strengths when at high percentile');
+
+// INR/USD at high pct must BE a risk (rupee weakening)
+assert(riskSlugs.includes('inr_usd'), 'INR/USD at high pct must be classified as a risk');
+
+// INR/USD must NOT be a strength
+assert(!strengthSlugs.includes('inr_usd'), 'INR/USD must NOT appear in strengths when weak');
+
+// Unsold inventory rising must BE a risk
+assert(riskSlugs.includes('re_unsold_inventory'),
+  'Unsold inventory at high pct must be classified as a risk');
+
+// Unsold inventory must NOT be a strength
+assert(!strengthSlugs.includes('re_unsold_inventory'),
+  'Unsold inventory must NOT appear in strengths');
+
+// Nasdaq at high pct should be a strength
+assert(strengthSlugs.includes('nasdaq'), 'Nasdaq at high pct should be a strength');
+
+// --- pickTopSignals ordering: most extreme scores come first
+const ranked = pickTopSignals(bugIndicators, 10, 'negative');
+for (let i = 1; i < ranked.length; i++) {
+  assert(scoreIndicator(ranked[i - 1]) <= scoreIndicator(ranked[i]),
+    `Risks must be sorted most-negative-first at index ${i}`);
+}
+
+// --- isInversePolarity backward compat
+assert(isInversePolarity('cpi_headline') === true, 'cpi_headline must be inverse polarity');
+assert(isInversePolarity('gst_month') === false, 'gst_month must NOT be inverse polarity');
+assert(isInversePolarity('gold_inr_gram') === false, 'gold (neutral) must not be inverse polarity');
+
+// --- isPositiveSignal / isNegativeSignal
+assert(isPositiveSignal(gstHigh) === true, 'Strong GST must be positive signal');
+assert(isNegativeSignal(inrWeak) === true, 'Weak INR must be negative signal');
+assert(isPositiveSignal({}) === false, 'Invalid must not be positive');
+assert(isNegativeSignal({}) === false, 'Invalid must not be negative');
+
+// ═══════════════════════════════════════════════════════════════════
 // RESULTS
 // ═══════════════════════════════════════════════════════════════════
 console.log(`\n═══════════════════════════════════════════════════════════`);

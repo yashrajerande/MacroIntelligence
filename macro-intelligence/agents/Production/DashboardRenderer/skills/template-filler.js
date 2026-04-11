@@ -1,16 +1,20 @@
 /**
  * Template Filler Skill — Deterministic slot-filling engine.
  * No LLM. Pure regex + string replacement.
+ *
+ * Polarity (which indicators flip arrow / percentile colors) is delegated
+ * to the Polarity Skill — see src/utils/polarity.js. This file must not
+ * duplicate polarity logic.
  */
 
-import { INVERSE_INDICATORS } from '../../../../src/utils/indicator-schema.js';
+import { isInversePolarity } from '../../../../src/utils/polarity.js';
 
 /**
  * Generate a table row HTML string.
- * For inverse indicators, arrow colors are flipped (up=red, down=green).
+ * For negative-polarity indicators, arrow colors are flipped (up=red, down=green).
  */
 export function row(label, value, previous, direction, momentum, pct10y, tier, slug) {
-  const inverse = slug ? INVERSE_INDICATORS.has(slug) : false;
+  const inverse = slug ? isInversePolarity(slug) : false;
 
   // Flip arrow semantics for inverse indicators
   let arrClass, arrChar;

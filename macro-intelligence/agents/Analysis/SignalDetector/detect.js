@@ -8,6 +8,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import Anthropic from '@anthropic-ai/sdk';
 import { scoreAllIndicators } from './skills/signal-scoring.js';
+import { getPolarity, classifyIndicator, scoreIndicator } from '../../../src/utils/polarity.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const persona = readFileSync(join(__dirname, 'Persona.md'), 'utf-8');
@@ -38,9 +39,15 @@ export class SignalDetector {
       `${r.dimension}: ${r.badge_label} — ${r.signal_text}`
     ).join('\n');
 
-    const indicatorSummary = Object.entries(scored).map(([slug, ind]) =>
-      `${slug}: ${ind.value_str || ind.value} (prev: ${ind.previous}, dir: ${ind.direction}, 10y: ${ind.pct_10y}% ${ind.pct_10y_tier})`
-    ).join('\n');
+    // Tag every indicator with polarity + classification from the Polarity Skill
+    // so Haiku never has to re-judge whether rising = good or bad.
+    const indicatorSummary = Object.entries(scored).map(([slug, ind]) => {
+      const forPolarity = { ...ind, indicator_slug: slug, latest_numeric: ind.value };
+      const polarity = getPolarity(slug);
+      const classification = classifyIndicator(forPolarity);
+      const signedScore = scoreIndicator(forPolarity);
+      return `${slug}: ${ind.value_str || ind.value} (prev: ${ind.previous}, dir: ${ind.direction}, 10y: ${ind.pct_10y}% ${ind.pct_10y_tier}) [polarity: ${polarity}, signal: ${classification}, score: ${signedScore}]`;
+    }).join('\n');
 
     const prompt = `Analyze the following data and produce exactly 7 signal cards.
 
@@ -48,6 +55,9 @@ REGIME STATE:
 ${regimeSummary}
 
 KEY INDICATORS (${Object.keys(scored).length} total):
+Each indicator is tagged with [polarity: positive|negative|neutral, signal: classification, score: -100..+100]
+from the canonical Polarity Skill. TRUST these tags — do not re-judge polarity from the raw value.
+A 'positive' polarity metric rising is good; a 'negative' polarity metric rising is bad.
 ${indicatorSummary}
 
 FIXED SIGNAL THEMES:

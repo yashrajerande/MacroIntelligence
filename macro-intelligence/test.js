@@ -587,6 +587,141 @@ assert(isPositiveSignal({}) === false, 'Invalid must not be positive');
 assert(isNegativeSignal({}) === false, 'Invalid must not be negative');
 
 // ═══════════════════════════════════════════════════════════════════
+// 12. HOOK WRITER SKILL — freshness + anti-repetition for verdict lines
+// ═══════════════════════════════════════════════════════════════════
+console.log('\n[12] Hook Writer Skill...');
+
+import {
+  extractThemes,
+  extractSlugMentions,
+  getRecentThemes,
+  getRecentSlugs,
+  getBannedThemes,
+  scoreHookCandidates,
+  buildHookContext,
+} from './src/utils/hook-writer.js';
+
+// --- extractThemes: known phrases
+const cdRatioHook = "India's 7.8% GDP is funded by a credit-deposit gap that hasn't been this wide since pre-IL&FS.";
+const cdThemes = extractThemes(cdRatioHook);
+assert(cdThemes.includes('credit_deposit'), `CD ratio hook must extract credit_deposit theme (got ${cdThemes.join(',')})`);
+
+const cpiHook = "Core CPI at 3.6% is the number RBI actually watches — the food spike is noise.";
+const cpiThemes = extractThemes(cpiHook);
+assert(cpiThemes.includes('inflation'), `CPI hook must extract inflation theme`);
+
+const rupeeHook = "INR at 93.46 is the rupee's weakest print since the 2022 tightening cycle.";
+const currencyThemes = extractThemes(rupeeHook);
+assert(currencyThemes.includes('currency'), `Rupee hook must extract currency theme`);
+
+const brentHook = "Brent at $92 buys the RBI a week; a $5 print tomorrow buys it a problem.";
+const oilThemes = extractThemes(brentHook);
+assert(oilThemes.includes('oil'), `Brent hook must extract oil theme`);
+
+const niftyHook = "Nifty at 23,500 with India VIX at 11 is the calm before a Fed-driven repricing.";
+const marketThemes = extractThemes(niftyHook);
+assert(marketThemes.includes('markets'), `Nifty hook must extract markets theme`);
+
+// --- extractThemes: empty input
+assert(extractThemes('').length === 0, 'Empty string must return no themes');
+assert(extractThemes(null).length === 0, 'Null must return no themes');
+
+// --- Recency queries on a mock history
+const mockHistory = {
+  entries: [
+    { date: '2026-04-03', verdict_line: cdRatioHook, themes: ['credit_deposit'], slugs: ['cd_ratio'] },
+    { date: '2026-04-04', verdict_line: "CD ratio at 83% is still the story.", themes: ['credit_deposit'], slugs: ['cd_ratio'] },
+    { date: '2026-04-05', verdict_line: cpiHook, themes: ['inflation'], slugs: ['cpi_core'] },
+    { date: '2026-04-06', verdict_line: "Deposit gap widens again.", themes: ['credit_deposit'], slugs: [] },
+    { date: '2026-04-07', verdict_line: rupeeHook, themes: ['currency'], slugs: ['inr_usd'] },
+    { date: '2026-04-08', verdict_line: brentHook, themes: ['oil'], slugs: ['brent_usd'] },
+  ],
+};
+
+const recentThemes = getRecentThemes(mockHistory, 7);
+assert(recentThemes.includes('credit_deposit'), 'Recent themes must include credit_deposit');
+assert(recentThemes.includes('inflation'), 'Recent themes must include inflation');
+assert(recentThemes.includes('currency'), 'Recent themes must include currency');
+
+const bannedThemes = getBannedThemes(mockHistory, 7, 2);
+assert(bannedThemes.includes('credit_deposit'), 'credit_deposit must be BANNED (used 3x)');
+assert(!bannedThemes.includes('oil'), 'oil must NOT be banned (used 1x)');
+assert(!bannedThemes.includes('currency'), 'currency must NOT be banned (used 1x)');
+
+// --- scoreHookCandidates: fresh daily metric beats stale quarterly metric
+const mixedIndicators = [
+  // Stale quarterly metric at an extreme — BANNED theme
+  { indicator_slug: 'cd_ratio', indicator_name: 'CD Ratio', latest_numeric: 83, pct_10y: 90, direction: 'up' },
+  // Fresh daily market move
+  { indicator_slug: 'nifty50', indicator_name: 'Nifty 50', latest_numeric: 23500, pct_10y: 75, direction: 'up' },
+  // Fresh daily FX
+  { indicator_slug: 'inr_usd', indicator_name: 'INR/USD', latest_numeric: 93.46, pct_10y: 85, direction: 'up' },
+  // Fresh daily oil (but theme is not banned)
+  { indicator_slug: 'brent_usd', indicator_name: 'Brent', latest_numeric: 92, pct_10y: 70, direction: 'up' },
+  // Monthly PMI
+  { indicator_slug: 'pmi_mfg', indicator_name: 'PMI Manufacturing', latest_numeric: 58, pct_10y: 80, direction: 'up' },
+  // Quarterly HPI (stale)
+  { indicator_slug: 'hpi_mumbai', indicator_name: 'HPI Mumbai', latest_numeric: 180, pct_10y: 85, direction: 'up' },
+];
+
+const candidates = scoreHookCandidates(mixedIndicators, mockHistory);
+
+// Banned themes AND quarterly frequency are HARD-filtered
+const cdRank = candidates.findIndex(c => c.slug === 'cd_ratio');
+const niftyRank = candidates.findIndex(c => c.slug === 'nifty50');
+const hpiRank = candidates.findIndex(c => c.slug === 'hpi_mumbai');
+assert(cdRank === -1, `Banned cd_ratio must be hard-filtered out (cd=${cdRank})`);
+assert(hpiRank === -1, `Quarterly hpi_mumbai must be hard-filtered out (hpi=${hpiRank})`);
+assert(niftyRank !== -1, `Fresh daily nifty50 must be a candidate (nifty=${niftyRank})`);
+
+// --- buildHookContext: returns a well-formed context block
+const ctx = buildHookContext(mixedIndicators, mockHistory, { topN: 5 });
+assert(typeof ctx.text === 'string' && ctx.text.length > 200, 'Context text must be substantial');
+assert(ctx.text.includes('BANNED THEMES'), 'Context must include banned themes header');
+assert(ctx.text.includes('TOP HOOK CANDIDATES'), 'Context must include candidates header');
+assert(ctx.text.includes('credit_deposit'), 'Context must list credit_deposit as banned');
+assert(Array.isArray(ctx.candidates) && ctx.candidates.length <= 5, 'topN must cap candidates');
+assert(ctx.banned_themes.includes('credit_deposit'), 'ctx.banned_themes must include credit_deposit');
+
+// --- The regression test: the EXACT user complaint
+// User said: "the concept of the credit deposit ratio of Indian banks keeps
+// coming. Now, frankly, that is not going to change for three months."
+// Assert: with 3 recent CD-ratio hooks in history, the scorer MUST NOT
+// return cd_ratio as a top candidate, and the context MUST ban credit_deposit.
+const realWorldHistory = {
+  entries: [
+    { date: '2026-04-05', verdict_line: "CD ratio at 83% — widest since pre-IL&FS.", themes: ['credit_deposit'], slugs: ['cd_ratio'] },
+    { date: '2026-04-06', verdict_line: "Credit-deposit gap widens to 350 bps.", themes: ['credit_deposit'], slugs: ['cd_ratio'] },
+    { date: '2026-04-07', verdict_line: "India's credit engine running on deposit fumes.", themes: ['credit_deposit'], slugs: ['cd_ratio'] },
+    { date: '2026-04-08', verdict_line: "Deposit shortfall is the tension of the cycle.", themes: ['credit_deposit'], slugs: [] },
+  ],
+};
+const todayIndicators = [
+  { indicator_slug: 'cd_ratio', indicator_name: 'CD Ratio', latest_numeric: 83, pct_10y: 92, direction: 'up' },
+  { indicator_slug: 'nifty50', indicator_name: 'Nifty 50', latest_numeric: 23500, pct_10y: 75, direction: 'up' },
+  { indicator_slug: 'inr_usd', indicator_name: 'INR/USD', latest_numeric: 93.46, pct_10y: 85, direction: 'up' },
+  { indicator_slug: 'brent_usd', indicator_name: 'Brent', latest_numeric: 92, pct_10y: 70, direction: 'up' },
+];
+
+const todayCandidates = scoreHookCandidates(todayIndicators, realWorldHistory);
+const topCandidate = todayCandidates[0];
+assert(topCandidate && topCandidate.slug !== 'cd_ratio',
+  `Top candidate must NOT be cd_ratio after 4 days of credit_deposit theme (got ${topCandidate?.slug})`);
+
+const todayCtx = buildHookContext(todayIndicators, realWorldHistory);
+assert(todayCtx.banned_themes.includes('credit_deposit'),
+  'credit_deposit MUST be banned after 4 uses in 7 days');
+assert(todayCtx.text.includes('credit_deposit'),
+  'Banned theme must appear in the banned block');
+
+// After the hard-filter fix: banned themes AND quarterly metrics are
+// excluded from candidates entirely. cd_ratio is both (banned theme AND
+// quarterly frequency), so it must not appear at all.
+const cdInCandidates = todayCandidates.find(c => c.slug === 'cd_ratio');
+assert(cdInCandidates === undefined,
+  `Banned/quarterly cd_ratio must be HARD-FILTERED out of candidates (got ${JSON.stringify(cdInCandidates)})`);
+
+// ═══════════════════════════════════════════════════════════════════
 // RESULTS
 // ═══════════════════════════════════════════════════════════════════
 console.log(`\n═══════════════════════════════════════════════════════════`);

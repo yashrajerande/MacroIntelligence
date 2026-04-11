@@ -1,11 +1,27 @@
 /**
  * ExecutiveSummaryWriter — Uses claude-sonnet-4-6 for dense prose.
+ *
+ * Verdict-line (hook) writing is gated by the Hook Writer Skill
+ * (src/utils/hook-writer.js), which:
+ *   - loads the history of the last 30 verdict lines
+ *   - extracts themes and bans any used 2+ times in the past week
+ *   - scores every indicator on freshness × magnitude × novelty
+ *   - builds a prompt-ready context block of fresh candidates
+ *
+ * After Sonnet produces the verdict line, we record it back to history so
+ * tomorrow's run sees it in the banned themes. This is the ONLY way to
+ * stop the writer from looping on the same structural story for weeks.
  */
 
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import Anthropic from '@anthropic-ai/sdk';
+import {
+  loadHookHistory,
+  recordHook,
+  buildHookContext,
+} from '../../../src/utils/hook-writer.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const persona = readFileSync(join(__dirname, 'Persona.md'), 'utf-8');
@@ -47,6 +63,20 @@ Bear: ${allData.scenarios.data.bear.name} — ${allData.scenarios.data.bear.desc
       .map(([slug, v]) => `${slug}: ${v.value_str || v.value} (prev: ${v.previous ?? '—'}, ${v.direction || 'flat'}, 10y pct: ${v.pct_10y ?? '—'}%)`)
       .join('\n');
 
+    // ── Hook Writer Skill: freshness + anti-repetition context ──
+    const hookHistory = loadHookHistory();
+    const indicatorsForHook = Object.entries(allIndicators)
+      .filter(([, v]) => v.value !== null && v.value !== undefined && v.value_str !== 'Awaited')
+      .map(([slug, v]) => ({
+        indicator_slug: slug,
+        indicator_name: v.name || v.indicator_name || slug,
+        latest_value: v.value_str || v.value,
+        latest_numeric: typeof v.value === 'number' ? v.value : Number(v.value),
+        pct_10y: v.pct_10y,
+        direction: v.direction,
+      }));
+    const hookContext = buildHookContext(indicatorsForHook, hookHistory, { topN: 12 });
+
     const prompt = `DATE: ${allData.dateStr}
 
 HERE IS TODAY'S COMPLETE DATA SET. Use these numbers — do not invent any.
@@ -65,11 +95,15 @@ ${indicatorSummary}
 
 ───────────────────────────────────────────
 
+${hookContext.text}
+
+───────────────────────────────────────────
+
 Write the morning brief. Your Persona.md and summary-style.md define your voice and rules. Follow them precisely.
 
 Return JSON wrapped in <<<JSON and >>> markers:
 {
-  "verdict_line": "Max 25 words. The single most important tension in today's data. Apply the Munger test: invert it. Apply the Mishra test: what do proxies say vs the headline? This sentence decides if the CIO keeps reading.",
+  "verdict_line": "Max 25 words. The single most important tension in TODAY's data — not last quarter's. You are Neelkanth Mishra crossed with Charlie Munger writing in the FT's voice. The hook MUST (a) anchor on a fresh move from the Top Hook Candidates list above, (b) apply Munger inversion or a Mishra high-frequency proxy, (c) contain a specific number, (d) avoid every theme in the BANNED THEMES list, (e) differ in topic from yesterday's hook. If your first draft uses a banned theme, throw it out and try another angle.",
 
   "regime_narratives": {
     "growth": "2-3 sentences. Apply Mishra: triangulate GDP with IIP, PMI sub-components, core sector, capacity utilisation. Apply Munger: what's the quality of this growth? What breaks?",
@@ -129,9 +163,25 @@ REMEMBER: Your persona defines three voices (Mishra, Munger, Economist). USE THE
       para_html: p.para_html || `<p>${p.text || 'Awaited'}</p>`,
     }));
 
+    // Persist the verdict line to hook history so tomorrow's run bans
+    // today's theme. Use the Top Hook Candidate slugs as the initial
+    // referenced set (Sonnet almost always anchors on one of them now).
+    if (verdictLine && allData.dateStr) {
+      try {
+        const topCandidateSlugs = hookContext.candidates.slice(0, 5).map(c => c.slug);
+        recordHook(allData.dateStr, verdictLine, topCandidateSlugs);
+        console.log(`[ExecutiveSummaryWriter] Recorded hook to history (${topCandidateSlugs.length} candidate slugs).`);
+      } catch (e) {
+        console.warn(`[ExecutiveSummaryWriter] Failed to record hook history: ${e.message}`);
+      }
+    }
+
     const latency = Date.now() - start;
     console.log(`[ExecutiveSummaryWriter] Done in ${latency}ms. 5 paragraphs.`);
     if (verdictLine) console.log(`[ExecutiveSummaryWriter] Verdict: ${verdictLine}`);
+    if (hookContext.banned_themes.length) {
+      console.log(`[ExecutiveSummaryWriter] Banned themes this run: ${hookContext.banned_themes.join(', ')}`);
+    }
 
     return {
       data: paragraphs,
@@ -142,6 +192,8 @@ REMEMBER: Your persona defines three voices (Mishra, Munger, Economist). USE THE
         model: 'claude-sonnet-4-6',
         latency_ms: latency,
         tokens,
+        hook_banned_themes: hookContext.banned_themes,
+        hook_top_candidates: hookContext.candidates.slice(0, 5).map(c => c.slug),
       },
     };
   }

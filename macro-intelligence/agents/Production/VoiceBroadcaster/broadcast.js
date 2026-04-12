@@ -1,7 +1,13 @@
 /**
  * VoiceBroadcaster — Generates a 60-second macro audio briefing.
  *
- * Pipeline: verdict_line + key indicators → Haiku script → OpenAI TTS → MP3
+ * Pipeline: verdict_line + fresh candidates → Haiku script → OpenAI TTS → MP3
+ *
+ * The "Two Numbers That Matter" (Act 2) are now selected by the Hook Writer
+ * Skill — the same freshness × magnitude × novelty scorer that feeds the
+ * verdict line. Quarterly metrics that haven't changed today and themes
+ * overused in the last week are hard-filtered out.
+ *
  * Requires: ANTHROPIC_API_KEY + OPENAI_API_KEY
  */
 
@@ -10,6 +16,12 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import Anthropic from '@anthropic-ai/sdk';
 import { generateSpeech } from './skills/tts-api.js';
+import {
+  loadHookHistory,
+  scoreHookCandidates,
+  getBannedThemes,
+  getRecentThemes,
+} from '../../../src/utils/hook-writer.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..', '..', '..');
@@ -40,7 +52,7 @@ export class VoiceBroadcaster {
       };
     }
 
-    // ── Step 1: Pick the 2 most interesting indicators ───────────────
+    // ── Step 1: Pick the most interesting FRESH indicators ───────────
     const indicators = macroDataObj.indicators || [];
     const signals = macroDataObj.signals || [];
 
@@ -49,12 +61,15 @@ export class VoiceBroadcaster {
       `Sig${s.signal_num} [${s.status}]: ${s.title} — ${s.data_text}`
     ).join('\n');
 
-    // Find extreme percentile indicators (most notable)
-    const extremes = indicators
-      .filter(ind => ind.latest_numeric !== null && ind.pct_10y !== undefined)
-      .sort((a, b) => Math.abs(b.pct_10y - 50) - Math.abs(a.pct_10y - 50))
+    // Use the Hook Writer Skill to pick FRESH candidates — same scorer
+    // the ExecSummaryWriter uses. This ensures: (a) banned themes are
+    // hard-filtered, (b) quarterly stale metrics are excluded, (c) daily
+    // moves rank highest. No more CD-ratio-every-morning.
+    const hookHistory = loadHookHistory();
+    const bannedThemes = getBannedThemes(hookHistory, 7, 2);
+    const freshCandidates = scoreHookCandidates(indicators, hookHistory)
       .slice(0, 10)
-      .map(ind => `${ind.indicator_name}: ${ind.latest_value} (10y percentile: ${ind.pct_10y}%, ${ind.direction})`)
+      .map(c => `${c.name}: ${c.value} (10y pct: ${c.pct_10y}%, ${c.direction}, polarity: ${c.polarity}, freshness: ${c.freshness}, themes: ${c.themes.join('/')})`)
       .join('\n');
 
     const regimeSummary = (macroDataObj.regime || [])
@@ -62,11 +77,16 @@ export class VoiceBroadcaster {
       .join('\n');
 
     // ── Step 2: Generate the script via Haiku ────────────────────────
+    const bannedBlock = bannedThemes.length
+      ? bannedThemes.join(', ')
+      : '(none)';
+
     const prompt = `Write a 60-second audio script for today's macro briefing.
 
 DATE: ${dateStr}
 
-VERDICT: ${verdictLine}
+VERDICT (already written by the ExecSummaryWriter — rephrase for ears, don't repeat verbatim):
+${verdictLine}
 
 REGIME:
 ${regimeSummary}
@@ -74,21 +94,25 @@ ${regimeSummary}
 TOP SIGNALS:
 ${topSignals}
 
-MOST NOTABLE INDICATORS (by 10-year percentile extremity):
-${extremes}
+FRESH CANDIDATES FOR "TWO NUMBERS" (ranked by freshness × magnitude × novelty — pick from HERE):
+${freshCandidates}
+
+BANNED THEMES (overused in recent days — do NOT build your "two numbers" around these):
+${bannedBlock}
 
 RULES:
 1. EXACTLY 140-155 words. Count them. This will be read aloud at natural pace.
 2. Structure: Hook (balanced overview) → Two numbers (one strength, one to watch) → Positive close.
 3. Open with: "Good morning from MacroIntelligence."
 4. Close with: "This has been your sixty-second macro. Have a great day."
-5. Pick 2 numbers — ideally one that's going WELL and one that needs context.
+5. Pick your 2 numbers from the FRESH CANDIDATES list above. These are metrics that actually moved in the last 24-72 hours. DO NOT use stale quarterly metrics (GDP, CD ratio, HPI, capacity utilisation) unless they appear in the candidates list — they did not change today.
 6. For each number, explain in ONE sentence with perspective. Provide comparison.
 7. Conversational, warm, calm. This is breakfast briefing, not emergency broadcast.
-8. CRITICAL TONE RULE: Be optimistic and balanced. NEVER alarmist. No "collapsing", "crashing", "spiraling", "crisis", "brink", "alarm bells". If a number is concerning, state the fact and the counterbalance: "X is elevated at Y, but Z provides a cushion."
+8. CRITICAL TONE RULE: Be optimistic and balanced. NEVER alarmist. No "collapsing", "crashing", "spiraling", "crisis", "brink", "alarm bells". If a number is concerning, state the fact and the counterbalance.
 9. Always find something positive to highlight. India is a growing economy — lead with that confidence.
 10. End on a note of perspective or optimism. NEVER end on fear.
 11. No jargon without instant explanation.
+12. Your two numbers MUST cover DIFFERENT themes from each other. Don't pick two market indices or two inflation prints — diversify.
 
 Return ONLY the script text. No JSON. No markers. Just the words to be spoken.`;
 

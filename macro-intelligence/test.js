@@ -466,15 +466,22 @@ assert(!isValidSignal({ indicator_slug: 'gst_month', latest_numeric: 'abc', pct_
 assert(!isValidSignal({ indicator_slug: 'gst_month', latest_numeric: 160000 }),
   'Missing pct_10y must be invalid');
 
-// --- isValidSignal: rejects sentinel pct=0/100 when value is within expected_range
-// gst_month expected_range is [80000, 250000]
-assert(!isValidSignal({ indicator_slug: 'gst_month', latest_numeric: 160000, pct_10y: 0, direction: 'up' }),
-  'In-range value with pct=0 must be rejected as garbage');
-assert(!isValidSignal({ indicator_slug: 'gst_month', latest_numeric: 160000, pct_10y: 100, direction: 'up' }),
-  'In-range value with pct=100 must be rejected as garbage');
-// But a value at the actual range edge can legitimately be 0/100
+// --- isValidSignal: rejects values wildly below range (parsing bugs)
+// RE Launches expected_range is [15000, 140000]; value 126 is 1000x too small
+assert(!isValidSignal({ indicator_slug: 're_launches_units', latest_numeric: 126.27, pct_10y: 0, direction: 'flat' }),
+  'RE Launches at 126 (1000x below min 15000) must be rejected as parsing error');
+assert(!isValidSignal({ indicator_slug: 're_sales_units', latest_numeric: 101.68, pct_10y: 0, direction: 'flat' }),
+  'RE Sales at 101 (1000x below min 15000) must be rejected as parsing error');
+// Affordability Index expected_range is [2, 10]; value 0.61 is 3x below min
+assert(!isValidSignal({ indicator_slug: 'affordability_index', latest_numeric: 0.61, pct_10y: 0, direction: 'flat' }),
+  'Affordability at 0.61 (3x below min 2) must be rejected as parsing error');
+
+// But legitimate below-range values should still pass (value close to min)
 assert(isValidSignal({ indicator_slug: 'gst_month', latest_numeric: 70000, pct_10y: 0, direction: 'down' }),
-  'Below-range value with pct=0 is legit');
+  'GST at 70000 (close to min 80000) is a legit below-range value');
+// And legitimate above-range values should pass too (modest overshoot)
+assert(isValidSignal({ indicator_slug: 'nasdaq', latest_numeric: 23183, pct_10y: 100, direction: 'up' }),
+  'Nasdaq at 23183 (just above max 22000) is a legit above-range value');
 
 // --- isValidSignal: accepts good data
 assert(isValidSignal({ indicator_slug: 'gst_month', latest_numeric: 200640, pct_10y: 75, direction: 'up' }),

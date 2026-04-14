@@ -80,13 +80,32 @@ export function isValidSignal(indicator) {
 
   if (indicator.pct_10y === undefined || indicator.pct_10y === null) return false;
 
-  // Cross-check: if value is within expected_range but pct_10y is clamped to
-  // 0 or 100, the data is inconsistent (parse failure upstream). Reject it.
+  // Cross-check: detect values that are clearly wrong.
   const schema = INDICATOR_SCHEMA[slug];
   if (schema && schema.expected_range) {
     const [min, max] = schema.expected_range;
     const inRange = numVal >= min && numVal <= max;
+
+    // Guard 1: value is within range but pct is clamped to 0/100.
+    // This is inconsistent — a within-range value cannot be at a percentile
+    // extreme. Almost always a parse failure upstream.
     if (inRange && (indicator.pct_10y === 0 || indicator.pct_10y === 100)) {
+      return false;
+    }
+
+    // Guard 2: value is wildly below range minimum. When the value is less
+    // than 1/3 of the range minimum, it's almost certainly a unit parsing
+    // error (e.g., RE Launches at 126 when the range is [15000, 140000] —
+    // the value was scraped in hundreds instead of units).
+    if (min > 0 && numVal >= 0 && numVal < min / 3) {
+      return false;
+    }
+
+    // Guard 3: value is wildly above range maximum. If it's more than 5×
+    // the max, it's likely a unit error (e.g., GST in paisa instead of crore).
+    // We use a generous 5× threshold to avoid rejecting legitimate new highs
+    // (Nasdaq at 23,000 vs old max 22,000 = 1.05× — that's real).
+    if (max > 0 && numVal > max * 5) {
       return false;
     }
   }

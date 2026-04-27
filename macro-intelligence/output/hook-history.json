@@ -1,0 +1,19 @@
+{
+  "entries": [
+    {
+      "date": "28 APR 2026",
+      "verdict_line": "S&P 500 at all-time highs while US GDP prints 0.7% SAAR — the most expensive soft landing in history, and India's FIIs just blinked.",
+      "themes": [
+        "markets",
+        "gdp_growth"
+      ],
+      "slugs": [
+        "sp500",
+        "nasdaq",
+        "nikkei225",
+        "euro_stoxx50",
+        "bank_nifty"
+      ]
+    }
+  ]
+}

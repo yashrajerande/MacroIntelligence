@@ -30,6 +30,7 @@ import { Validator }              from '../Production/Validator/validate.js';
 import { SupabaseWriter }         from '../Infrastructure/SupabaseWriter/sync.js';
 import { GitPublisher }           from '../Infrastructure/GitPublisher/publish.js';
 import { TelegramPublisher }      from '../Infrastructure/TelegramPublisher/publish.js';
+import { OpsManager }             from '../Infrastructure/OpsManager/report.js';
 
 async function withRetry(fn, agentName, logger) {
   try {
@@ -42,6 +43,7 @@ async function withRetry(fn, agentName, logger) {
 }
 
 async function run() {
+  const runStartTime = Date.now();
   const { dateStr, isoDate } = getISTDate();
   const logger = new RunLogger(isoDate);
   logger.start(dateStr);
@@ -234,6 +236,24 @@ async function run() {
     }
 
     logger.setOutputFile(outputPath);
+
+    // ── Ops Cockpit (non-blocking — pipeline continues if it fails) ──
+    let cockpitPath = null;
+    try {
+      const agentMetas = logger.log?.agents || {};
+      const cockpitResult = await new OpsManager().report({
+        dateStr,
+        isoDate,
+        agentMetas,
+        feedHealth: news.feedHealth || null,
+        runStartTime,
+      });
+      cockpitPath = cockpitResult.outputPath;
+      logger.agent('OpsManager', cockpitResult.meta);
+    } catch (err) {
+      console.warn(`  ⚠ OpsManager failed (non-fatal): ${err.message}`);
+      logger.warn('OpsManager failed', err.message);
+    }
 
     // ── STEP 5: INFRASTRUCTURE ──────────────────────────────────────
     logger.phase('Infrastructure');

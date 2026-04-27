@@ -3,7 +3,7 @@
  */
 
 import Anthropic from '@anthropic-ai/sdk';
-import { fetchAllFeeds, pickTopNews } from './skills/rss-feeds.js';
+import { fetchAllFeeds, pickTopNews, getFeedHealthSummary } from './skills/rss-feeds.js';
 
 const client = new Anthropic();
 
@@ -69,6 +69,7 @@ export class NewsCurator {
 
     return {
       data: newsItems,
+      feedHealth: getFeedHealthSummary(),
       meta: {
         agent: 'NewsCurator',
         model: 'claude-haiku-4-5-20251001',

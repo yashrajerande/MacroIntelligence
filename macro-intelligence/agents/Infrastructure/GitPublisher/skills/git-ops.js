@@ -25,6 +25,8 @@ export async function gitPublish(filePath, indexPath, commitMessage, ghPat, repo
     ...(addIndex ? [addIndex] : []),
     `git add -f ${outputDir}/cost-ledger.json || echo "[Git] cost-ledger.json not found, skipping"`,
     `git add -f ${outputDir}/data-cache.json || echo "[Git] data-cache.json not found, skipping"`,
+    `git add -f ${outputDir}/hook-history.json || echo "[Git] hook-history.json not found, skipping"`,
+    `git add -f ${outputDir}/ops-cockpit.html || echo "[Git] ops-cockpit.html not found, skipping"`,
     `git add -f ${outputDir}/daily-broadcast.mp3 || echo "[Git] daily-broadcast.mp3 not found, skipping"`,
     `git commit -m "${commitMessage}"`,
     'git pull --rebase origin main || true',

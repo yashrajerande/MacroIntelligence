@@ -14,6 +14,21 @@
         "euro_stoxx50",
         "bank_nifty"
       ]
+    },
+    {
+      "date": "29 APR 2026",
+      "verdict_line": "Airline passengers down 9% to a decade-low 35 million while GST prints ₹2 lakh crore — India's consumption story is splitting along a fault line the headline numbers hide.",
+      "themes": [
+        "consumption"
+      ],
+      "slugs": [
+        "nikkei225",
+        "sp500",
+        "nasdaq",
+        "euro_stoxx50",
+        "us_vix",
+        "airline_pax"
+      ]
     }
   ]
 }

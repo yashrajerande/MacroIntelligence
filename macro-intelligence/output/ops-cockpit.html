@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MacroIntelligence Ops Cockpit — 29 APR 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:'Inter',-apple-system,sans-serif;
+    background:#0a0a1a;
+    color:#ffffff;
+    min-height:100vh;
+    padding:32px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .container { max-width:1200px; margin:0 auto; }
+  .header {
+    display:flex; justify-content:space-between; align-items:center;
+    padding-bottom:24px; border-bottom:1px solid rgba(255,255,255,0.08); margin-bottom:32px;
+  }
+  .header h1 { font-size:24px; font-weight:700; letter-spacing:-0.02em; }
+  .header .date { font-size:14px; color:rgba(255,255,255,0.5); }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:24px; }
+  .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; margin-bottom:24px; }
+  .card {
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.06);
+    border-radius:16px;
+    padding:24px;
+  }
+  .card h2 {
+    font-size:14px; font-weight:700; letter-spacing:0.1em;
+    text-transform:uppercase; color:rgba(255,255,255,0.45);
+    margin-bottom:16px;
+  }
+  .card .big-num {
+    font-size:36px; font-weight:800; letter-spacing:-0.03em;
+    font-family:'JetBrains Mono',monospace; line-height:1;
+  }
+  .card .sub { font-size:13px; color:rgba(255,255,255,0.45); margin-top:6px; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th { text-align:left; padding:8px 10px; color:rgba(255,255,255,0.45); font-weight:600; border-bottom:1px solid rgba(255,255,255,0.08); font-size:11px; text-transform:uppercase; letter-spacing:0.08em; }
+  td { padding:8px 10px; border-bottom:1px solid rgba(255,255,255,0.04); color:rgba(255,255,255,0.85); }
+  td.mono { font-family:'JetBrains Mono',monospace; font-size:12px; }
+  .ok { color:#30d158; } .warn { color:#ff9f0a; } .err { color:#ff453a; }
+  .section { margin-bottom:32px; }
+  .section-title {
+    font-size:18px; font-weight:700; margin-bottom:16px;
+    padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);
+  }
+  .hook-entry {
+    padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.04);
+    font-size:13px; color:rgba(255,255,255,0.75);
+  }
+  .hook-date { color:rgba(255,255,255,0.35); font-family:'JetBrains Mono',monospace; font-size:11px; margin-right:8px; }
+  .hook-themes { display:inline-flex; gap:4px; margin-left:8px; }
+  .hook-theme {
+    font-size:10px; padding:2px 8px; border-radius:4px;
+    background:rgba(10,132,255,0.12); color:#0a84ff; font-weight:600;
+  }
+  .hook-theme.banned {
+    background:rgba(255,69,58,0.12); color:#ff453a;
+  }
+  .footer {
+    text-align:center; padding-top:24px; border-top:1px solid rgba(255,255,255,0.06);
+    font-size:11px; color:rgba(255,255,255,0.25);
+  }
+  a { color:#0a84ff; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <h1>📡 Operations Cockpit</h1>
+      <div class="date">29 APR 2026 · MacroIntelligence Corp</div>
+    </div>
+    <div>
+      <a href="macro-dashboard-2026-04-29.html" style="background:rgba(10,132,255,0.12);color:#0a84ff;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;">← Back to Dashboard</a>
+    </div>
+  </div>
+
+  <!-- ROW 1: KEY METRICS -->
+  <div class="grid-3">
+    <div class="card">
+      <h2>Run Duration</h2>
+      <div class="big-num">129s</div>
+      <div class="sub">Target: &lt; 240s</div>
+    </div>
+    <div class="card">
+      <h2>Today's Cost</h2>
+      <div class="big-num">$0.000</div>
+      <div class="sub">Target: ~$0.11</div>
+    </div>
+    <div class="card">
+      <h2>Pipeline Status</h2>
+      <div class="big-num" style="font-size:28px;"><span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ Completed</span></div>
+      <div class="sub">Pre-flight: 2,996 assertions passed</div>
+    </div>
+  </div>
+
+  <!-- ROW 2: BUDGET + CACHE -->
+  <div class="grid">
+    <div class="card">
+      <h2>Budget (2026-04)</h2>
+      <div class="big-num">$0.00</div>
+      <div class="sub">0 runs this month</div>
+      <div style="margin:8px 0;">
+    <div style="display:flex;justify-content:space-between;font-size:13px;color:rgba(255,255,255,0.65);margin-bottom:4px;">
+      <span>Month-to-Date vs $5.00 Cap</span><span>$0.00 / $5.00</span>
+    </div>
+    <div style="height:8px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden;">
+      <div style="height:100%;width:0%;background:#30d158;border-radius:4px;transition:width 0.3s;"></div>
+    </div>
+  </div>
+    </div>
+    <div class="card">
+      <h2>Data Cache</h2>
+      <div class="big-num">95</div>
+      <div class="sub">indicators cached</div>
+      <div style="margin-top:12px;font-size:12px;color:rgba(255,255,255,0.45);">Last updated: [object Object]</div>
+    </div>
+  </div>
+
+  <!-- AGENT PERFORMANCE -->
+  <div class="section">
+    <div class="section-title">Agent Performance</div>
+    <div class="card" style="padding:0;overflow:hidden;">
+      <table>
+        <tr><th>Agent</th><th>Model</th><th>Latency</th><th>Tokens (In/Out)</th><th>Cost</th><th>Status</th></tr>
+        <tr>
+            <td style="font-weight:600;">MarketDataAnalyst</td>
+            <td class="mono">pure code</td>
+            <td class="mono">6843ms</td>
+            <td class="mono">—</td>
+            <td class="mono">$0</td>
+            <td><span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ OK</span></td>
+          </tr><tr>
+            <td style="font-weight:600;">MacroDataAnalyst</td>
+            <td class="mono">pure code</td>
+            <td class="mono">—</td>
+            <td class="mono">—</td>
+            <td class="mono">$0</td>
+            <td><span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ OK</span></td>
+          </tr><tr>
+            <td style="font-weight:600;">RealEstateAnalyst</td>
+            <td class="mono">pure code</td>
+            <td class="mono">—</td>
+            <td class="mono">—</td>
+            <td class="mono">$0</td>
+            <td><span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ OK</span></td>
+          </tr><tr>
+            <td style="font-weight:600;">RegimeClassifier</td>
+            <td class="mono">pure code</td>
+            <td class="mono">1ms</td>
+            <td class="mono">—</td>
+            <td class="mono">$0</td>
+            <td><span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ OK</span></td>
+          </tr><tr>
+            <td style="font-weight:600;">SignalDetector</td>
+            <td class="mono">claude-haiku-4-5-20251001</td>
+            <td class="mono">38239ms</td>
+            <td class="mono">—</td>
+            <td class="mono">$0.0085</td>
+            <td><span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ OK</span></td>
+          </tr><tr>
+            <td style="font-weight:600;">ScenarioPlanner</td>
+            <td class="mono">pure code</td>
+            <td class="mono">—</td>
+            <td class="mono">—</td>
+            <td class="mono">$0</td>
+            <td><span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ OK</span></td>
+          </tr><tr>
+            <td style="font-weight:600;">NewsCurator</td>
+            <td class="mono">claude-haiku-4-5-20251001</td>
+            <td class="mono">1810ms</td>
+            <td class="mono">—</td>
+            <td class="mono">$0.0004</td>
+            <td><span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ OK</span></td>
+          </tr><tr>
+            <td style="font-weight:600;">ExecutiveSummaryWriter</td>
+            <td class="mono">claude-sonnet-4-6</td>
+            <td class="mono">59990ms</td>
+            <td class="mono">—</td>
+            <td class="mono">$0.0635</td>
+            <td><span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ OK</span></td>
+          </tr><tr>
+            <td style="font-weight:600;">DashboardRenderer</td>
+            <td class="mono">pure code</td>
+            <td class="mono">—</td>
+            <td class="mono">—</td>
+            <td class="mono">$0</td>
+            <td><span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ OK</span></td>
+          </tr><tr>
+            <td style="font-weight:600;">VoiceBroadcaster</td>
+            <td class="mono">claude-haiku-4-5-20251001+openai-tts-1-hd</td>
+            <td class="mono">23684ms</td>
+            <td class="mono">—</td>
+            <td class="mono">$0</td>
+            <td><span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ OK</span></td>
+          </tr><tr>
+            <td style="font-weight:600;">Validator</td>
+            <td class="mono">pure code</td>
+            <td class="mono">—</td>
+            <td class="mono">—</td>
+            <td class="mono">$0</td>
+            <td><span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ OK</span></td>
+          </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- NEWS FEED HEALTH -->
+  <div class="section">
+    <div class="section-title">News Feed Health</div>
+    <div class="grid">
+      <div class="card">
+        <h2>Feed Summary</h2>
+        <div style="display:flex;gap:16px;margin-bottom:12px;">
+          <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ 5/5 categories OK</span>
+          <span style="font-size:13px;color:rgba(255,255,255,0.5);display:flex;align-items:center;">0 failed attempts · avg 277ms</span>
+        </div>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <table>
+          <tr><th>Category</th><th>Status</th><th>Source</th><th>Items</th><th>Latency</th></tr>
+          <tr>
+            <td style="font-weight:600;">geo</td>
+            <td><span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ ok</span></td>
+            <td class="mono" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;">feeds.bbci.co.uk</td>
+            <td class="mono">33</td>
+            <td class="mono">183ms</td>
+          </tr><tr>
+            <td style="font-weight:600;">ai</td>
+            <td><span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ ok</span></td>
+            <td class="mono" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;">www.theverge.com</td>
+            <td class="mono">10</td>
+            <td class="mono">135ms</td>
+          </tr><tr>
+            <td style="font-weight:600;">india</td>
+            <td><span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ ok</span></td>
+            <td class="mono" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;">www.thehindu.com</td>
+            <td class="mono">60</td>
+            <td class="mono">233ms</td>
+          </tr><tr>
+            <td style="font-weight:600;">fintech</td>
+            <td><span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ ok</span></td>
+            <td class="mono" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;">feeds.bbci.co.uk</td>
+            <td class="mono">55</td>
+            <td class="mono">342ms</td>
+          </tr><tr>
+            <td style="font-weight:600;">ifs</td>
+            <td><span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ ok</span></td>
+            <td class="mono" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;">www.thehindubusinessline.com</td>
+            <td class="mono">60</td>
+            <td class="mono">491ms</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUPABASE HEALTH -->
+  <div class="section">
+    <div class="section-title">Supabase Health</div>
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div style="padding:16px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,0.06);">
+        <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ All Tables Healthy</span>
+      </div>
+      <table>
+        <tr><th>Table</th><th>Status</th><th>Rows Today</th><th>Latency</th></tr>
+        <tr>
+          <td style="font-weight:600;" class="mono">dashboard_runs</td>
+          <td><span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ ok</span></td>
+          <td class="mono">1</td>
+          <td class="mono">1227ms</td>
+        </tr><tr>
+          <td style="font-weight:600;" class="mono">macro_indicators</td>
+          <td><span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ ok</span></td>
+          <td class="mono">92</td>
+          <td class="mono">222ms</td>
+        </tr><tr>
+          <td style="font-weight:600;" class="mono">regime_classification</td>
+          <td><span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ ok</span></td>
+          <td class="mono">6</td>
+          <td class="mono">205ms</td>
+        </tr><tr>
+          <td style="font-weight:600;" class="mono">signal_cards</td>
+          <td><span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ ok</span></td>
+          <td class="mono">7</td>
+          <td class="mono">206ms</td>
+        </tr><tr>
+          <td style="font-weight:600;" class="mono">news_feed</td>
+          <td><span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ ok</span></td>
+          <td class="mono">5</td>
+          <td class="mono">204ms</td>
+        </tr><tr>
+          <td style="font-weight:600;" class="mono">executive_summary</td>
+          <td><span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ ok</span></td>
+          <td class="mono">5</td>
+          <td class="mono">200ms</td>
+        </tr><tr>
+          <td style="font-weight:600;" class="mono">real_estate_summary</td>
+          <td><span style="display:inline-flex;align-items:center;gap:6px;background:rgba(48,209,88,0.12);color:#30d158;padding:4px 12px;border-radius:8px;font-weight:600;font-size:13px;">✓ ok</span></td>
+          <td class="mono">1</td>
+          <td class="mono">191ms</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- HOOK HISTORY -->
+  <div class="section">
+    <div class="section-title">Verdict Line History (Last 7 Days)</div>
+    <div class="card">
+      <div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap;">
+        <span style="font-size:12px;color:rgba(255,255,255,0.35);">Banned themes:</span>
+        <span style="font-size:12px;color:rgba(255,255,255,0.35);">none</span>
+      </div>
+      <div class="hook-entry">
+        <span class="hook-date">29 APR 2026</span>
+        Airline passengers down 9% to a decade-low 35 million while GST prints ₹2 lakh crore — India's consumption story is splitting along a fault line the headline numbers hide.
+        <span class="hook-themes"><span class="hook-theme">consumption</span></span>
+      </div><div class="hook-entry">
+        <span class="hook-date">28 APR 2026</span>
+        S&amp;P 500 at all-time highs while US GDP prints 0.7% SAAR — the most expensive soft landing in history, and India's FIIs just blinked.
+        <span class="hook-themes"><span class="hook-theme">markets</span><span class="hook-theme">gdp_growth</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    MacroIntelligence Corp · Operations Cockpit · Generated 2026-04-28T22:34:37.027Z · <a href="macro-dashboard-2026-04-29.html">View Dashboard</a>
+  </div>
+
+</div>
+</body>
+</html>

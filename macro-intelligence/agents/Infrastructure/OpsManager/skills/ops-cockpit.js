@@ -113,11 +113,12 @@ export async function generateCockpit({ dateStr, isoDate, agentMetas, feedHealth
 
   const runDuration = runStartTime ? Math.round((Date.now() - runStartTime) / 1000) : 0;
 
-  // Cost data
+  // Cost data — ledger structure: { months: { "2026-04": { total_usd, runs: [{date, cost_usd, ...}] } } }
   const currentMonth = isoDate?.slice(0, 7) || '';
-  const monthRuns = costLedger?.runs?.filter(r => r.date?.startsWith(currentMonth)) || [];
-  const mtdCost = monthRuns.reduce((sum, r) => sum + (r.cost_usd || 0), 0);
-  const todayCost = monthRuns.find(r => r.date === isoDate)?.cost_usd || 0;
+  const monthData = costLedger?.months?.[currentMonth];
+  const monthRuns = monthData?.runs || [];
+  const mtdCost = monthData?.total_usd || 0;
+  const todayCost = monthRuns.filter(r => r.date === isoDate).reduce((sum, r) => sum + (r.cost_usd || 0), 0);
   const budgetCap = 5.00;
 
   // Hook history
@@ -128,9 +129,12 @@ export async function generateCockpit({ dateStr, isoDate, agentMetas, feedHealth
   }
   const banned = Object.entries(bannedThemes).filter(([, n]) => n >= 2).map(([t]) => t);
 
-  // Cache stats
+  // Cache stats — last_updated is a per-slug object {nifty50: "2026-04-28", ...}, not a string
   const cacheEntries = dataCache?.indicators ? Object.keys(dataCache.indicators).length : 0;
-  const cacheLastUpdated = dataCache?.last_updated || '—';
+  const lastUpdatedMap = dataCache?.last_updated;
+  const cacheLastUpdated = lastUpdatedMap && typeof lastUpdatedMap === 'object'
+    ? Object.values(lastUpdatedMap).sort().pop() || '—'
+    : (lastUpdatedMap || '—');
 
   // Feed health
   const fh = feedHealth || { categories: {}, totals: { categories_ok: 0, categories_failed: 0, total_attempts: 0, avg_latency_ms: 0 } };

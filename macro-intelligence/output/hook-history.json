@@ -29,6 +29,20 @@
         "us_vix",
         "airline_pax"
       ]
+    },
+    {
+      "date": "30 APR 2026",
+      "verdict_line": "Copper at a 10-year high of $5.94 while US GDP prints 0.7% SAAR — global demand signals are contradicting each other, and India's CAD is caught in the crossfire.",
+      "themes": [
+        "gdp_growth"
+      ],
+      "slugs": [
+        "copper",
+        "nikkei225",
+        "sp500",
+        "nasdaq",
+        "euro_stoxx50"
+      ]
     }
   ]
 }

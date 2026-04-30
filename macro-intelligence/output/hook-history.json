@@ -43,6 +43,21 @@
         "nasdaq",
         "euro_stoxx50"
       ]
+    },
+    {
+      "date": "01 MAY 2026",
+      "verdict_line": "Copper at an all-time high of $6.03 while India VIX jumps to 18.46 — industrial metals are pricing a boom that India's own volatility gauge refuses to believe.",
+      "themes": [
+        "markets"
+      ],
+      "slugs": [
+        "copper",
+        "nikkei225",
+        "sp500",
+        "nasdaq",
+        "euro_stoxx50",
+        "india_vix"
+      ]
     }
   ]
 }

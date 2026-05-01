@@ -93,15 +93,14 @@ SKIP_SUPABASE=true SKIP_GIT_PUSH=true node agents/CEO/orchestrate.js
 | 15 | **ResearchAnalyst** | ConglomeratesTracker | Per-group evidence collection (capex, M&A, financing, leadership, regulatory) for last 30-60 days | LLM + web_search | Haiku |
 | 16 | **StrategyAdvisor** | ConglomeratesTracker | Senior-partner synthesis: 7 core scores + 6 overlays + ranking + typology + red flags | LLM | Sonnet |
 | 17 | **CriticReviewer** | ConglomeratesTracker | Stress-tests draft, gates publication, runs deterministic + LLM checks | LLM + Code | Sonnet |
-| 18 | **Publisher (Conglomerates)** | ConglomeratesTracker | HTML render, Notion sub-page upsert, git commit/push | Code only | — |
+| 18 | **Publisher (Conglomerates)** | ConglomeratesTracker | HTML render, root tab shell update, git commit/push | Code only | — |
 
 **Execution order:** DataIntelligence → Analysis → Editorial → Production → Infrastructure
 
 ## ConglomeratesTracker (Monthly)
 A separate department running once a month on the 1st. Produces a
 strategic-power report on the top 21 Indian conglomerates. Output
-publishes to GitHub Pages (as a tab on the MacroIntelligence root) and
-to a Notion sub-page under the org page. See
+publishes to GitHub Pages as a tab on the MacroIntelligence root. See
 `agents/ConglomeratesTracker/README.md` for details.
 
 ```bash

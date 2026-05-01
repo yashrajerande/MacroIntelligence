@@ -5,13 +5,13 @@
  *   1. Research  — ResearchAnalyst gathers per-group moves (web_search)
  *   2. Advise    — StrategyAdvisor scores + writes 13 sections
  *   3. Review    — CriticReviewer gates publication; one revision pass
- *   4. Publish   — Publisher renders HTML, updates root tab, posts to Notion
+ *   4. Publish   — Publisher renders HTML, updates root tab shell, commits
  *
  * Run manually:
  *   node agents/ConglomeratesTracker/orchestrate.js
  *
  * Idempotent: rerunning for the same month overwrites the archived
- * report and upserts the same Notion page.
+ * report at output/conglomerates/conglomerates-YYYY-MM.html.
  */
 
 import { writeFileSync, mkdirSync, readFileSync, existsSync } from 'fs';
@@ -23,7 +23,6 @@ import { StrategyAdvisor }  from './StrategyAdvisor/advise.js';
 import { CriticReviewer }   from './CriticReviewer/review.js';
 import { renderHTML }       from './Publisher/render.js';
 import { publishGit }       from './Publisher/publishGit.js';
-import { publishNotion }    from './Publisher/publishNotion.js';
 import { validateCycleOutput } from './skills/validate-cycle.js';
 import { checkBudget, recordRunCost } from '../../src/utils/cost-ledger.js';
 
@@ -266,19 +265,12 @@ async function run() {
     writeFileSync(ROOT_INDEX, buildRootIndex(cycle.cycleLabel, cycle.isoMonth));
     console.log(`[Publisher/HTML] Root tab shell updated: ${ROOT_INDEX}`);
 
-    // Notion (best-effort)
-    const notionResult = await publishNotion({
-      data: advised.data,
-      cycleLabel: cycle.cycleLabel,
-    });
-
     // Persist state for next cycle's delta
     saveState({
       cycle,
       data: advised.data,
       review: review.data,
       meta,
-      notion: notionResult,
     });
 
     // Git (skip if env says so)
@@ -300,7 +292,6 @@ async function run() {
     const totalMs = Date.now() - startTs;
     console.log(`\n═══ Cycle ${cycle.cycleLabel} complete in ${(totalMs / 1000).toFixed(1)}s ═══`);
     console.log(`  HTML:   ${rendered.latestPath}`);
-    console.log(`  Notion: ${notionResult?.url || notionResult?.reason || notionResult?.error || '—'}`);
     console.log(`  Git:    ${gitResult?.sha || gitResult?.reason || (gitResult?.skipped ? 'skipped' : '—')}`);
     console.log(`  Cost:   $${totalCost.toFixed(4)} (estimate — verify against Anthropic billing)`);
     process.exit(0);

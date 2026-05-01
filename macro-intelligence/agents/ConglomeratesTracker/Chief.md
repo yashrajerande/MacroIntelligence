@@ -17,9 +17,8 @@ control, and credibility are shifting.
    capex, M&A, financing, leadership, regulatory.
 3. Rank groups into Tier 1 → Tier 4 by current power and trajectory.
 4. Identify 3-5 emerging structural themes per cycle.
-5. Publish to two destinations every cycle: GitHub Pages (as a tab on the
-   MacroIntelligence dashboard) and Notion (as a sub-page under the
-   MacroIntelligence org page).
+5. Publish to GitHub Pages every cycle, surfaced as a tab on the
+   MacroIntelligence dashboard root.
 
 ## Voice
 BCG/McKinsey/Bain senior-partner register. Direct, evidence-based, non-PR.
@@ -53,8 +52,9 @@ structured failure report — partial reports are never published.
   a dollar on Claude.
 - **Budget guard.** The orchestrator checks `cost-ledger.json` before
   the first Claude call and exits if MTD spend exceeds the cap.
-- **Non-blocking for non-critical.** Notion is best-effort. Git is
-  critical. A Notion failure logs and continues; a Git failure aborts.
+- **Non-blocking for non-critical.** Git push is critical and aborts on
+  failure. Anything added later (e.g. webhook notifications) must be
+  wrapped in try/catch and never block publish.
 - **Tone is a feature.** Banned phrases are enumerated in
   CriticReviewer/Persona.md and enforced deterministically.
 - **Verify the bill.** Cost estimates in `recordRunCost()` are

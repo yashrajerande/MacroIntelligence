@@ -1,9 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta http-equiv="refresh" content="0; url=macro-intelligence/output/index.html">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MacroIntelligence</title>
+<style>
+:root{--ink:#0a0a14;--paper:#fafaf7;--muted:#6b6b78;--accent:#1a00cc;--rule:#e6e6e0;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'DM Mono',ui-monospace,monospace;height:100vh;display:flex;flex-direction:column;}
+header{padding:14px 28px;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:24px;flex-shrink:0;}
+header h1{font-family:'Syne',ui-sans-serif,system-ui;font-weight:700;font-size:18px;letter-spacing:-0.01em;margin:0;color:var(--accent);}
+nav{display:flex;gap:18px;font-family:'Syne',ui-sans-serif,system-ui;font-size:12px;text-transform:uppercase;letter-spacing:0.06em;}
+nav a{color:var(--muted);text-decoration:none;padding:6px 0;border-bottom:2px solid transparent;cursor:pointer;}
+nav a.active{color:var(--accent);border-bottom-color:var(--accent);}
+nav a:hover{color:var(--ink);}
+.frame-wrap{flex:1;overflow:hidden;}
+iframe{border:0;width:100%;height:100%;display:block;}
+.tag{margin-left:auto;color:var(--muted);font-size:11px;}
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700&family=DM+Mono:wght@400;500&display=swap');
+</style>
 </head>
 <body>
-<p>Redirecting to <a href="macro-intelligence/output/index.html">MacroIntelligence Dashboard</a>...</p>
+<header>
+  <h1>MacroIntelligence</h1>
+  <nav>
+    <a id="tab-macro" class="active" data-src="macro-intelligence/output/index.html">Daily Macro</a>
+    <a id="tab-cong"  data-src="macro-intelligence/output/conglomerates/index.html">Conglomerates</a>
+  </nav>
+  <span class="tag">Daily macro · Monthly conglomerates</span>
+</header>
+<div class="frame-wrap"><iframe id="frame" src="macro-intelligence/output/index.html"></iframe></div>
+<script>
+const tabs = document.querySelectorAll('nav a');
+const frame = document.getElementById('frame');
+const url = new URL(location.href);
+const initial = url.searchParams.get('tab');
+if (initial === 'conglomerates') {
+  tabs.forEach(x => x.classList.remove('active'));
+  document.getElementById('tab-cong').classList.add('active');
+  frame.src = 'macro-intelligence/output/conglomerates/index.html';
+}
+tabs.forEach(t => t.addEventListener('click', () => {
+  tabs.forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+  frame.src = t.dataset.src;
+  const which = t.id === 'tab-cong' ? 'conglomerates' : 'macro';
+  history.replaceState({}, '', `?tab=${which}`);
+}));
+</script>
 </body>
 </html>

@@ -90,8 +90,24 @@ SKIP_SUPABASE=true SKIP_GIT_PUSH=true node agents/CEO/orchestrate.js
 | 12 | **Validator** | Production | 22 deterministic checks + 6-layer reliability architecture (quality gate) | Code only | — |
 | 13 | **SupabaseWriter** | Infrastructure | Upserts `__MACRO_DATA__` to 7 Supabase tables with merge-duplicates strategy | Code only | — |
 | 14 | **GitPublisher** | Infrastructure | Commits & pushes validated dashboard HTML + MP3 to GitHub (with `[skip ci]`) | Code only | — |
+| 15 | **ResearchAnalyst** | ConglomeratesTracker | Per-group evidence collection (capex, M&A, financing, leadership, regulatory) for last 30-60 days | LLM + web_search | Haiku |
+| 16 | **StrategyAdvisor** | ConglomeratesTracker | Senior-partner synthesis: 7 core scores + 6 overlays + ranking + typology + red flags | LLM | Sonnet |
+| 17 | **CriticReviewer** | ConglomeratesTracker | Stress-tests draft, gates publication, runs deterministic + LLM checks | LLM + Code | Sonnet |
+| 18 | **Publisher (Conglomerates)** | ConglomeratesTracker | HTML render, Notion sub-page upsert, git commit/push | Code only | — |
 
 **Execution order:** DataIntelligence → Analysis → Editorial → Production → Infrastructure
+
+## ConglomeratesTracker (Monthly)
+A separate department running once a month on the 1st. Produces a
+strategic-power report on the top 21 Indian conglomerates. Output
+publishes to GitHub Pages (as a tab on the MacroIntelligence root) and
+to a Notion sub-page under the org page. See
+`agents/ConglomeratesTracker/README.md` for details.
+
+```bash
+npm run conglomerates:test    # zero-cost pre-flight (14 assertions)
+npm run conglomerates:dry-run # full cycle without git push
+```
 
 ## Cost Estimate
 

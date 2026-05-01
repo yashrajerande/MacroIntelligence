@@ -1,0 +1,73 @@
+name: ConglomeratesTracker - Monthly Run
+
+on:
+  schedule:
+    # 00:30 UTC on the 1st of every month = 06:00 IST
+    - cron: '30 0 1 * *'
+  workflow_dispatch:
+    inputs:
+      cycle_override:
+        description: 'Override cycle (YYYY-MM). Leave blank for current month.'
+        required: false
+        default: ''
+      skip_git_push:
+        description: 'Render without committing to GitHub'
+        required: false
+        default: 'false'
+
+jobs:
+  run-conglomerates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+          fetch-depth: 1
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: macro-intelligence/package-lock.json
+
+      - name: Install dependencies
+        working-directory: macro-intelligence
+        run: npm ci
+
+      - name: Pre-flight (zero-cost smoke test)
+        working-directory: macro-intelligence
+        run: npm run conglomerates:test
+
+      - name: Configure git identity
+        run: |
+          git config user.name "MacroIntelligence Corp"
+          git config user.email "pipeline@macrointelligence.corp"
+          git remote set-url origin \
+            https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git
+
+      - name: Run ConglomeratesTracker pipeline
+        working-directory: macro-intelligence
+        run: node agents/ConglomeratesTracker/orchestrate.js
+        env:
+          ANTHROPIC_API_KEY:       ${{ secrets.ANTHROPIC_API_KEY }}
+          NOTION_API_KEY:          ${{ secrets.NOTION_API_KEY }}
+          NOTION_PARENT_PAGE_ID:   ${{ secrets.NOTION_PARENT_PAGE_ID }}
+          GH_PAT:                  ${{ secrets.GH_PAT }}
+          CYCLE_OVERRIDE:          ${{ inputs.cycle_override }}
+          SKIP_GIT_PUSH:           ${{ inputs.skip_git_push }}
+          GITHUB_REPOSITORY:       ${{ github.repository }}
+          NODE_ENV:                production
+
+      - name: Upload state on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: conglomerates-state-${{ github.run_id }}
+          path: |
+            macro-intelligence/output/conglomerates/
+            macro-intelligence/logs/
+          retention-days: 14

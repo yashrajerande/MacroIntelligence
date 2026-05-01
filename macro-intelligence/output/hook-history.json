@@ -58,6 +58,21 @@
         "euro_stoxx50",
         "india_vix"
       ]
+    },
+    {
+      "date": "02 MAY 2026",
+      "verdict_line": "Brent down 5.2% to $109 while SIP accounts hit a decade-low 2nd percentile — oil buys RBI time, but India's retail equity base is narrowing exactly when FIIs just flipped negative.",
+      "themes": [
+        "oil"
+      ],
+      "slugs": [
+        "nikkei225",
+        "copper",
+        "euro_stoxx50",
+        "wti_usd",
+        "nat_gas",
+        "sip_accounts"
+      ]
     }
   ]
 }

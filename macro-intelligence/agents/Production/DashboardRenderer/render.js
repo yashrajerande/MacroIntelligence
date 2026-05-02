@@ -75,6 +75,10 @@ export class DashboardRenderer {
     // Load template
     let html = readFileSync(join(ROOT, 'template', 'macro-intelligence-light.html'), 'utf-8');
 
+    // Inject Rabbit Hole Edge Function URL
+    const rabbitHoleUrl = process.env.RABBIT_HOLE_URL || '';
+    html = html.replace('%%RABBIT_HOLE_URL%%', rabbitHoleUrl);
+
     const {
       marketData, macroData, reData,
       regime, signals, scenarios, news, execSummary,

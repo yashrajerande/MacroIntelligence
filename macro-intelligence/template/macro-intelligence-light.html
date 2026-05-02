@@ -728,6 +728,66 @@ td.c-pct { text-align:right; min-width:96px; }
 .sc-impl   { font-family:var(--body); font-size:0.76rem; color:var(--ink-2); line-height:1.68; font-weight:300; }
 .sc-pct    { font-family:var(--mono); font-size:0.62rem; color:var(--ink-3); margin-top:10px; padding-top:10px; border-top:1px solid rgba(0,0,60,0.10); font-weight:600; }
 .sc-pct strong { color:var(--ink-1); }
+
+/* ══════════════════════════════════════════════════
+   RABBIT HOLE — Inline expand chat for deep dives
+══════════════════════════════════════════════════ */
+.rh-trigger {
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:var(--mono); font-size:0.64rem; font-weight:600;
+  color:var(--signal); cursor:pointer; margin-top:12px;
+  padding:6px 14px; border-radius:8px;
+  background:rgba(26,0,204,0.06); border:1px solid rgba(26,0,204,0.15);
+  transition:all 0.18s; letter-spacing:0.04em;
+}
+.rh-trigger:hover { background:rgba(26,0,204,0.12); border-color:rgba(26,0,204,0.30); }
+.rh-panel {
+  display:none; margin-top:14px; padding:18px;
+  background:rgba(245,246,255,0.95); border:1px solid rgba(26,0,204,0.12);
+  border-radius:var(--r-md); max-height:500px; overflow-y:auto;
+}
+.rh-panel.open { display:block; animation:rhSlide 0.25s ease-out; }
+@keyframes rhSlide { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+.rh-thread { margin-bottom:14px; }
+.rh-msg {
+  margin-bottom:12px; padding:12px 14px; border-radius:10px;
+  font-family:var(--body); font-size:0.78rem; line-height:1.72; font-weight:300;
+}
+.rh-msg.analyst {
+  background:rgba(26,0,204,0.05); border-left:3px solid var(--signal);
+  color:var(--ink-1);
+}
+.rh-msg.analyst strong { color:var(--ink-1); font-weight:700; font-family:var(--mono); font-size:0.72rem; }
+.rh-msg.user {
+  background:rgba(0,122,82,0.06); border-left:3px solid var(--safe);
+  color:var(--ink-1); margin-left:24px;
+}
+.rh-msg.loading {
+  background:rgba(26,0,204,0.04); border-left:3px solid rgba(26,0,204,0.20);
+  color:var(--ink-3); font-style:italic;
+}
+.rh-input {
+  display:flex; gap:8px;
+}
+.rh-input input {
+  flex:1; padding:10px 14px; border:1px solid rgba(0,0,60,0.12);
+  border-radius:8px; font-family:var(--body); font-size:0.78rem;
+  background:rgba(255,255,255,0.95); color:var(--ink-1); outline:none;
+}
+.rh-input input:focus { border-color:var(--signal); box-shadow:0 0 0 3px rgba(26,0,204,0.08); }
+.rh-input button {
+  padding:10px 18px; border:none; border-radius:8px;
+  background:var(--signal); color:#fff; font-family:var(--mono);
+  font-size:0.72rem; font-weight:700; cursor:pointer; letter-spacing:0.06em;
+  transition:background 0.15s;
+}
+.rh-input button:hover { background:#2200cc; }
+.rh-input button:disabled { opacity:0.4; cursor:not-allowed; }
+.rh-label {
+  font-family:var(--mono); font-size:0.56rem; font-weight:700;
+  letter-spacing:0.14em; color:var(--signal); text-transform:uppercase;
+  margin-bottom:10px;
+}
 .surprise-flash { display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:0.56rem; font-weight:700; letter-spacing:0.12em; color:var(--danger); text-transform:uppercase; margin-bottom:7px; animation:flash 1.6s ease-in-out infinite; }
 @keyframes flash { 0%,100%{opacity:1;} 50%{opacity:0.30;} }
 
@@ -1442,6 +1502,205 @@ function setFS(k){
   try{localStorage.setItem('mi-fs',k);}catch(e){}
 }
 try{const s=localStorage.getItem('mi-fs');if(s&&FS[s])setFS(s);}catch(e){}
+
+/* ── RABBIT HOLE — Live LLM Chat Deep Dives ──── */
+const RH_URL = '%%RABBIT_HOLE_URL%%';
+const __RH = {};  // conversation state per entry
+
+function openRabbitHole(type, id) {
+  const panelId = `rh-${type}-${id}`;
+  const panel = document.getElementById(panelId);
+  if (!panel) return;
+
+  if (panel.classList.contains('open')) {
+    panel.classList.remove('open');
+    panel.style.display = 'none';
+    return;
+  }
+
+  panel.classList.add('open');
+  panel.style.display = 'block';
+
+  // First time opening — send the initial question
+  if (!__RH[panelId]) {
+    __RH[panelId] = { conversation: [], loading: false };
+    const q = type === 'signal'
+      ? "What's the deeper story here? Apply the Munger inversion and Mishra proxy test."
+      : "Break down the contributing indicators and what would change this classification.";
+    sendRabbitHole(type, id, q);
+  }
+}
+
+async function sendRabbitHole(type, id, questionOverride) {
+  const panelId = `rh-${type}-${id}`;
+  const state = __RH[panelId];
+  if (!state || state.loading) return;
+
+  const input = document.querySelector(`#${panelId} .rh-input input`);
+  const question = questionOverride || (input ? input.value.trim() : '');
+  if (!question) return;
+  if (input) input.value = '';
+
+  // Render user message (skip for auto-generated first question)
+  if (!questionOverride) {
+    appendMsg(panelId, 'user', question);
+  }
+
+  state.loading = true;
+  const btn = document.querySelector(`#${panelId} .rh-input button`);
+  if (btn) btn.disabled = true;
+
+  // Add loading indicator
+  const loadingId = appendMsg(panelId, 'loading', 'Thinking...');
+
+  const d = window.__MACRO_DATA__;
+  const runDate = d?.run?.run_date || new Date().toISOString().slice(0,10);
+
+  try {
+    const res = await fetch(RH_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        entry_type: type,
+        entry_id: type === 'signal' ? `sig${id}` : id,
+        run_date: runDate,
+        conversation: state.conversation,
+        question: question,
+      }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: 'Request failed' }));
+      removeMsg(loadingId);
+      appendMsg(panelId, 'analyst', err.error || `Error: ${res.status}`);
+      return;
+    }
+
+    // Stream the response
+    removeMsg(loadingId);
+    const msgId = appendMsg(panelId, 'analyst', '');
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let fullText = '';
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        try {
+          const data = JSON.parse(line.slice(6));
+          if (data.text) {
+            fullText += data.text;
+            updateMsg(msgId, fullText);
+          }
+        } catch(e) {}
+      }
+    }
+
+    // Record in conversation
+    state.conversation.push({ role: 'user', content: question });
+    state.conversation.push({ role: 'assistant', content: fullText });
+  } catch(err) {
+    removeMsg(loadingId);
+    appendMsg(panelId, 'analyst', 'Connection error. Please try again.');
+  } finally {
+    state.loading = false;
+    if (btn) btn.disabled = false;
+  }
+}
+
+let _rhMsgCounter = 0;
+function appendMsg(panelId, role, text) {
+  const thread = document.querySelector(`#${panelId} .rh-thread`);
+  if (!thread) return null;
+  const div = document.createElement('div');
+  const msgId = `rh-msg-${++_rhMsgCounter}`;
+  div.id = msgId;
+  div.className = `rh-msg ${role}`;
+  div.innerHTML = role === 'user' ? `<strong>You:</strong> ${escHtml(text)}` :
+                  role === 'loading' ? `<em>${escHtml(text)}</em>` :
+                  formatAnalystMsg(text);
+  thread.appendChild(div);
+  div.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  return msgId;
+}
+
+function updateMsg(msgId, text) {
+  const el = document.getElementById(msgId);
+  if (el) el.innerHTML = formatAnalystMsg(text);
+}
+
+function removeMsg(msgId) {
+  const el = document.getElementById(msgId);
+  if (el) el.remove();
+}
+
+function formatAnalystMsg(text) {
+  if (!text) return '';
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/\n/g, '<br>')
+    .replace(/^/, '<p>').replace(/$/, '</p>');
+}
+
+function escHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function rhKeydown(event, type, id) {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault();
+    sendRabbitHole(type, id);
+  }
+}
+
+// Inject rabbit hole triggers into signal cards and regime cards after DOM ready
+(function injectRabbitHoles() {
+  // Signal cards: sig1 through sig7
+  for (let i = 1; i <= 7; i++) {
+    const card = document.getElementById(`sig${i}`);
+    if (!card) continue;
+    const trigger = document.createElement('div');
+    trigger.className = 'rh-trigger';
+    trigger.onclick = () => openRabbitHole('signal', i);
+    trigger.textContent = '\u{1F407} Dive Deeper';
+    card.appendChild(trigger);
+
+    const panel = document.createElement('div');
+    panel.className = 'rh-panel';
+    panel.id = `rh-signal-${i}`;
+    panel.innerHTML = `<div class="rh-label">\u{1F407} Rabbit Hole</div><div class="rh-thread"></div><div class="rh-input"><input type="text" placeholder="Ask a follow-up..." onkeydown="rhKeydown(event,'signal',${i})" /><button onclick="sendRabbitHole('signal',${i})">Send</button></div>`;
+    card.appendChild(panel);
+  }
+
+  // Regime cards: growth, inflation, credit, policy, capex, consumption
+  const regimeDims = ['growth','infl','credit','policy','capex','cons'];
+  const regimeNames = ['growth','inflation','credit','policy','capex','consumption'];
+  regimeDims.forEach((dim, idx) => {
+    const card = document.getElementById(`rc-${dim}-s`)?.closest('.rc');
+    if (!card) return;
+    const trigger = document.createElement('div');
+    trigger.className = 'rh-trigger';
+    trigger.onclick = () => openRabbitHole('regime', regimeNames[idx]);
+    trigger.textContent = '\u{1F407} Dive Deeper';
+    card.appendChild(trigger);
+
+    const panel = document.createElement('div');
+    panel.className = 'rh-panel';
+    panel.id = `rh-regime-${regimeNames[idx]}`;
+    panel.innerHTML = `<div class="rh-label">\u{1F407} Rabbit Hole</div><div class="rh-thread"></div><div class="rh-input"><input type="text" placeholder="Ask a follow-up..." onkeydown="rhKeydown(event,'regime','${regimeNames[idx]}')" /><button onclick="sendRabbitHole('regime','${regimeNames[idx]}')">Send</button></div>`;
+    card.appendChild(panel);
+  });
+})();
 
 /* ── SIDENAV ACTIVE STATE ──────────────────────── */
 const navItems = document.querySelectorAll('.nav-item');

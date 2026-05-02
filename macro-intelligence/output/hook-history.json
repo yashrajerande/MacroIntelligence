@@ -74,6 +74,20 @@
         "wti_usd",
         "sip_inflows"
       ]
+    },
+    {
+      "date": "03 MAY 2026",
+      "verdict_line": "Nikkei at a decade-high 59,513 while US GDP prints 0.7% — global equities are pricing a recovery that the world's largest economy has not yet delivered.",
+      "themes": [
+        "gdp_growth"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "nat_gas",
+        "wti_usd"
+      ]
     }
   ]
 }

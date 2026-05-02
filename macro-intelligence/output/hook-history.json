@@ -61,16 +61,18 @@
     },
     {
       "date": "02 MAY 2026",
-      "verdict_line": "Nikkei at an all-time high of 59,513 while US GDP prints 0.7% SAAR — global equity is pricing a recovery that the world's largest economy has not yet delivered.",
+      "verdict_line": "Brent down 5.2% to $108 while SIP inflows slip to ₹29,845 cr — India's retail bid is softening precisely when the oil windfall should be fuelling it.",
       "themes": [
-        "gdp_growth"
+        "oil",
+        "flows"
       ],
       "slugs": [
         "nikkei225",
         "euro_stoxx50",
-        "us_10y_treasury",
+        "sip_accounts",
         "nat_gas",
-        "wti_usd"
+        "wti_usd",
+        "sip_inflows"
       ]
     }
   ]

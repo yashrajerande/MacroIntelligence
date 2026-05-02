@@ -61,17 +61,16 @@
     },
     {
       "date": "02 MAY 2026",
-      "verdict_line": "Brent down 5.2% to $109 while SIP accounts hit a decade-low 2nd percentile — oil buys RBI time, but India's retail equity base is narrowing exactly when FIIs just flipped negative.",
+      "verdict_line": "Nikkei at an all-time high of 59,513 while US GDP prints 0.7% SAAR — global equity is pricing a recovery that the world's largest economy has not yet delivered.",
       "themes": [
-        "oil"
+        "gdp_growth"
       ],
       "slugs": [
         "nikkei225",
-        "copper",
         "euro_stoxx50",
-        "wti_usd",
+        "us_10y_treasury",
         "nat_gas",
-        "sip_accounts"
+        "wti_usd"
       ]
     }
   ]

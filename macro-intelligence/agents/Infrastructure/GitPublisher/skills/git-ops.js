@@ -30,7 +30,7 @@ export async function gitPublish(filePath, indexPath, commitMessage, ghPat, repo
     `git add -f ${outputDir}/daily-broadcast.mp3 || echo "[Git] daily-broadcast.mp3 not found, skipping"`,
     `git commit -m "${commitMessage}"`,
     'git pull --rebase origin main || true',
-    'git push origin HEAD',
+    'git push origin HEAD:refs/heads/main',
   ];
 
   const results = [];

@@ -88,6 +88,20 @@
         "nat_gas",
         "wti_usd"
       ]
+    },
+    {
+      "date": "04 MAY 2026",
+      "verdict_line": "Gold at $4,644 in USD but ₹2,000/gram at a 10-year floor — INR weakness should be lifting gold in rupee terms, yet it isn't; someone large is selling.",
+      "themes": [
+        "currency"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "sip_accounts",
+        "us_10y_treasury",
+        "airline_pax"
+      ]
     }
   ]
 }

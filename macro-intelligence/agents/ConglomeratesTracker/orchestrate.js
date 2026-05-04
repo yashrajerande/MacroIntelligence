@@ -166,12 +166,30 @@ async function run() {
       process.exit(1);
     }
 
-    // ── 1. RESEARCH ────────────────────────────────────────────────
-    console.log('── Phase 1: Research ──');
-    const research = await new ResearchAnalyst().research({
-      windowStart: cycle.windowStart,
-      windowEnd: cycle.windowEnd,
-    });
+    // ── 1. RESEARCH (with per-cycle cache) ─────────────────────────
+    // Phase 1 takes ~5min and ~$0.50-1 across 21 web_search calls. If a
+    // later phase fails, we don't want the retry to redo all that work.
+    // Cache findings to disk keyed by cycle; busted via FORCE_REFRESH.
+    const researchCachePath = join(DEPT_OUT, `research-${cycle.isoMonth}.json`);
+    let research;
+    if (existsSync(researchCachePath) && process.env.FORCE_REFRESH !== 'true') {
+      console.log(`── Phase 1: Research (cached) ──`);
+      console.log(`  Loading ${researchCachePath} (set FORCE_REFRESH=true to re-fetch)`);
+      research = JSON.parse(readFileSync(researchCachePath, 'utf-8'));
+      console.log(
+        `  ${research.data.findings.length} groups loaded · ` +
+        `${research.data.findings.reduce((n, f) => n + (f.moves?.length || 0), 0)} moves`,
+      );
+    } else {
+      console.log('── Phase 1: Research ──');
+      research = await new ResearchAnalyst().research({
+        windowStart: cycle.windowStart,
+        windowEnd: cycle.windowEnd,
+      });
+      mkdirSync(DEPT_OUT, { recursive: true });
+      writeFileSync(researchCachePath, JSON.stringify(research, null, 2));
+      console.log(`  Cached to ${researchCachePath}`);
+    }
     meta.agents.ResearchAnalyst = research.meta;
 
     // ── 2. ADVISE ──────────────────────────────────────────────────

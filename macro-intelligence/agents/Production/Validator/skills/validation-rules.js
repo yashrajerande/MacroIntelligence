@@ -1,8 +1,10 @@
 /**
  * Validation Rules Skill — 6-Layer Reliability Architecture.
- * 22 deterministic checks + 6 reliability layers.
+ * 22 deterministic checks + 6 reliability layers + persona-anchor leak scan.
  * Returns { valid, errors, warnings }.
  */
+
+import { scanBannedNames } from '../../../../src/utils/banned-names.js';
 
 import { HISTORICAL_RANGES, VALID_SLUGS } from '../../../../src/utils/indicator-schema.js';
 
@@ -379,6 +381,25 @@ export function runAllChecks(html, macroData, expectedDate) {
   }
   if (outOfBoundsCount > 5) {
     errors.push(`L6: ${outOfBoundsCount} indicators out of historical bounds — data source may be corrupted`);
+  }
+
+  // ── L7: PERSONA-ANCHOR LEAK SCAN ───────────────────────────────────
+  // Named voices (Mishra, Munger, FT, Economist, etc.) are private analytical
+  // anchors used inside personas. They must never appear in reader-facing
+  // output. Scan the verdict line, regime narratives, signal cards, and
+  // executive summary paragraphs for leaks.
+  const readerSurfaces = [
+    run.snap_verdict,
+    ...((macroData.regime || []).flatMap(r => [r.metric_summary, r.signal_text, r.badge_label])),
+    ...((macroData.signals || []).flatMap(s => [s.title, s.data_text, s.implication, s.pct_note])),
+    ...((macroData.executive_summary || []).map(p => p.para_html)),
+  ].filter(Boolean).join('\n');
+  const nameHits = scanBannedNames(readerSurfaces);
+  if (nameHits.length) {
+    errors.push(
+      `L7: Persona-anchor names leaked into reader-facing output: ${nameHits.join(', ')}. ` +
+      `These are private analytical anchors and must not appear in the dashboard.`,
+    );
   }
 
   // ── WARNINGS ───────────────────────────────────────────────────────

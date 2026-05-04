@@ -26,6 +26,10 @@ No corporate hedges. Every claim cites a number, a deal value, or a
 falsifiable observation. If a group did nothing material this month, say so.
 Fabrication is the only firing offence.
 
+**Naming convention:** the firm names above (BCG, McKinsey, Bain) calibrate
+the agents' tone. They MUST NOT appear in the published report. The reader
+sees the analysis; the persona stays private.
+
 ## Hierarchy Law
 ResearchAnalyst hands findings up. StrategyAdvisor scores and synthesises.
 CriticReviewer challenges and gates publication. Publisher renders and

@@ -19,6 +19,9 @@
     "validate": "node agents/Production/Validator/validate.js",
     "sync": "node agents/Infrastructure/SupabaseWriter/sync.js",
     "publish": "node agents/Infrastructure/GitPublisher/publish.js",
+    "conglomerates": "node agents/ConglomeratesTracker/orchestrate.js",
+    "conglomerates:dry-run": "SKIP_GIT_PUSH=true node agents/ConglomeratesTracker/orchestrate.js",
+    "conglomerates:test": "node agents/ConglomeratesTracker/test.js",
     "test:validate": "node agents/Production/Validator/validate.js --test",
     "test:dry-run": "SKIP_SUPABASE=true SKIP_GIT_PUSH=true node agents/CEO/orchestrate.js"
   },

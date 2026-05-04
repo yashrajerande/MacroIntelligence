@@ -9,6 +9,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import Anthropic from '@anthropic-ai/sdk';
 import { UNIVERSE } from '../skills/universe.js';
+import { scanBannedNames } from '../../../src/utils/banned-names.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const persona = readFileSync(join(__dirname, 'Persona.md'), 'utf-8');
@@ -68,6 +69,15 @@ function deterministicChecks(draft) {
   const blob = JSON.stringify(draft).toLowerCase();
   const hits = banned.filter(p => blob.includes(p));
   if (hits.length) blockers.push(`Banned phrases detected: ${hits.join(', ')}.`);
+
+  // Named-voice leak detector — persona anchors must not appear in output.
+  const nameLeaks = scanBannedNames(JSON.stringify(draft));
+  if (nameLeaks.length) {
+    blockers.push(
+      `Persona-anchor names leaked into output: ${nameLeaks.join(', ')}. ` +
+      `These are private analytical anchors and must never appear in the published report.`,
+    );
+  }
 
   return blockers;
 }

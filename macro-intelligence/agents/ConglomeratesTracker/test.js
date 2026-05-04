@@ -34,6 +34,7 @@ console.log('ConglomeratesTracker pre-flight\n');
 const { UNIVERSE, CORE, BENCH, TIERS, TYPOLOGIES } = await import('./skills/universe.js');
 const { validateCycleOutput } = await import('./skills/validate-cycle.js');
 const { renderHTML } = await import('./Publisher/render.js');
+const { scanBannedNames } = await import('../../src/utils/banned-names.js');
 
 // ── Universe shape ─────────────────────────────────────────────────
 console.log('Universe');
@@ -132,6 +133,31 @@ test('catches bottom_line bullet count violation', () => {
   f.bottom_line = ['only one'];
   const v = validateCycleOutput(f);
   assert.equal(v.valid, false);
+});
+
+// ── Persona-anchor leak scanner ────────────────────────────────────
+console.log('\nPersona-anchor leak scanner');
+test('clean text has no name hits', () => {
+  assert.deepEqual(scanBannedNames('Reliance is over-extended on capex.'), []);
+});
+test('catches Mishra leak', () => {
+  const hits = scanBannedNames('As Neelkanth Mishra notes, the dual economy...');
+  assert.ok(hits.includes('Mishra'), JSON.stringify(hits));
+  assert.ok(hits.includes('Neelkanth'), JSON.stringify(hits));
+});
+test('catches Munger leak', () => {
+  const hits = scanBannedNames('Applying a Munger inversion here.');
+  assert.ok(hits.includes('Munger'), JSON.stringify(hits));
+});
+test('catches BCG firm leak', () => {
+  assert.ok(scanBannedNames('A BCG senior partner would say...').includes('BCG'));
+  assert.ok(scanBannedNames('McKinsey-style discipline').includes('McKinsey'));
+});
+test('does not false-positive on common words', () => {
+  // "ft" inside "front", "draft", "soft" etc. — word-boundary check
+  assert.deepEqual(scanBannedNames('The draft is soft on the front foot.'), []);
+  // Reuters/Bloomberg as research sources are NOT banned
+  assert.deepEqual(scanBannedNames('Source: Reuters, Bloomberg, ET.'), []);
 });
 
 // ── Renderer ───────────────────────────────────────────────────────

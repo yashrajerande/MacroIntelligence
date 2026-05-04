@@ -103,7 +103,7 @@ Write the morning brief. Your Persona.md and summary-style.md define your voice 
 
 Return JSON wrapped in <<<JSON and >>> markers:
 {
-  "verdict_line": "Max 25 words. The single most important tension in TODAY's data — not last quarter's. You are Neelkanth Mishra crossed with Charlie Munger writing in the FT's voice. The hook MUST (a) anchor on a fresh move from the Top Hook Candidates list above, (b) apply Munger inversion or a Mishra high-frequency proxy, (c) contain a specific number, (d) avoid every theme in the BANNED THEMES list, (e) differ in topic from yesterday's hook. If your first draft uses a banned theme, throw it out and try another angle.",
+  "verdict_line": "Max 25 words. The single most important tension in TODAY's data — not last quarter's. You are Neelkanth Mishra crossed with Charlie Munger writing in the FT's voice. The hook MUST (a) anchor on a fresh move from the Top Hook Candidates list above, (b) apply Munger inversion or a Mishra high-frequency proxy, (c) contain a specific number, (d) avoid every theme in the BANNED THEMES list, (e) differ in topic from yesterday's hook. NEVER name Mishra/Munger/FT/Economist in the output itself — these are private anchors. If your first draft uses a banned theme, throw it out and try another angle.",
 
   "regime_narratives": {
     "growth": "2-3 sentences. Apply Mishra: triangulate GDP with IIP, PMI sub-components, core sector, capacity utilisation. Apply Munger: what's the quality of this growth? What breaks?",
@@ -123,7 +123,7 @@ Return JSON wrapped in <<<JSON and >>> markers:
   ]
 }
 
-REMEMBER: Your persona defines three voices (Mishra, Munger, Economist). USE THEM. Every regime narrative must show at least one inversion (Munger), one proxy-vs-headline tension (Mishra), and zero banned phrases (Economist test).`;
+REMEMBER: Your persona defines three voices (Mishra, Munger, Economist). USE THEM TO THINK — never to attribute. Every regime narrative must show at least one inversion (Munger), one proxy-vs-headline tension (Mishra), and zero banned phrases (Economist test). The names are your private analytical anchors and MUST NOT appear in the output. Do not write "as Mishra notes", "applying Munger", "in the FT's voice", or any variant. Present every conclusion as your own, unattributed.`;
 
     const response = await client.messages.create({
       model: 'claude-sonnet-4-6',

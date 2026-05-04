@@ -3,7 +3,7 @@
  * all 13 output sections of the scoring framework.
  */
 
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import Anthropic from '@anthropic-ai/sdk';
@@ -15,6 +15,7 @@ const framework = readFileSync(
   join(__dirname, '..', 'skills', 'scoring-framework.md'),
   'utf-8',
 );
+const LOG_DIR = join(__dirname, '..', '..', '..', 'logs');
 const client = new Anthropic();
 
 function extractJSON(text) {
@@ -25,6 +26,26 @@ function extractJSON(text) {
   const naked = text.match(/\{[\s\S]*\}/);
   if (naked) return JSON.parse(naked[0]);
   throw new Error('[StrategyAdvisor] no JSON in response');
+}
+
+function dumpRawResponse(text, response, label) {
+  try {
+    mkdirSync(LOG_DIR, { recursive: true });
+    const ts = new Date().toISOString().replace(/[:.]/g, '-');
+    const path = join(LOG_DIR, `advisor-${label}-${ts}.txt`);
+    const stopReason = response?.stop_reason || 'unknown';
+    const out = `# StrategyAdvisor ${label}\n` +
+      `# stop_reason: ${stopReason}\n` +
+      `# input_tokens: ${response?.usage?.input_tokens}\n` +
+      `# output_tokens: ${response?.usage?.output_tokens}\n` +
+      `# raw_length: ${text.length}\n\n${text}\n`;
+    writeFileSync(path, out);
+    console.error(`[StrategyAdvisor] Raw response dumped to ${path}`);
+    return path;
+  } catch (err) {
+    console.error(`[StrategyAdvisor] Failed to dump raw response: ${err.message}`);
+    return null;
+  }
 }
 
 function summariseFindings(findings) {
@@ -97,7 +118,9 @@ Wrap the JSON in <<<JSON ... >>>.`;
 
     const response = await client.messages.create({
       model: 'claude-sonnet-4-6',
-      max_tokens: 8192,
+      // 21 groups × 8 tables × commentary fields ≈ 12-15K output tokens.
+      // 8192 truncates mid-JSON; 32768 leaves comfortable headroom.
+      max_tokens: 32768,
       temperature: 0.25,
       system: [{ type: 'text', text: persona, cache_control: { type: 'ephemeral' } }],
       messages: [{ role: 'user', content: prompt }],
@@ -108,7 +131,22 @@ Wrap the JSON in <<<JSON ... >>>.`;
       output: response.usage?.output_tokens || 0,
     };
     const text = response.content.filter(b => b.type === 'text').map(b => b.text).join('');
-    const data = extractJSON(text);
+
+    if (response.stop_reason === 'max_tokens') {
+      dumpRawResponse(text, response, 'truncated');
+      throw new Error(
+        `[StrategyAdvisor] Response hit max_tokens (output_tokens=${response.usage?.output_tokens}). ` +
+        `Raw response saved to logs/. Bump max_tokens or split the call.`,
+      );
+    }
+
+    let data;
+    try {
+      data = extractJSON(text);
+    } catch (err) {
+      dumpRawResponse(text, response, 'parse-failure');
+      throw new Error(`[StrategyAdvisor] JSON parse failed: ${err.message}. Raw response saved to logs/.`);
+    }
 
     const latency = Date.now() - start;
     console.log(

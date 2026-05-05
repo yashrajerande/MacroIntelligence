@@ -23,7 +23,7 @@ function extractJSON(text) {
   throw new Error('[ResearchAnalyst] no JSON in response');
 }
 
-async function researchOne(group, windowStart, windowEnd, logger) {
+async function researchOne(group, windowStart, windowEnd) {
   const start = Date.now();
   const prompt = `GROUP: ${group}
 WINDOW: ${windowStart} to ${windowEnd}
@@ -39,7 +39,9 @@ no_material_movement=true.`;
 
   let response;
   try {
-    response = await client.messages.create({
+    // Streaming so the SDK doesn't pre-flight-reject web_search calls
+    // for taking too long (multiple internal tool rounds add up).
+    const stream = client.messages.stream({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 2048,
       temperature: 0.1,
@@ -47,8 +49,9 @@ no_material_movement=true.`;
       tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: 4 }],
       messages: [{ role: 'user', content: prompt }],
     });
+    response = await stream.finalMessage();
   } catch (err) {
-    logger?.warn?.(`[ResearchAnalyst] ${group} fetch failed`, err.message);
+    console.warn(`[ResearchAnalyst] ${group} fetch failed: ${err.message}`);
     return { group, no_material_movement: true, moves: [], error: err.message };
   }
 
@@ -65,7 +68,7 @@ no_material_movement=true.`;
   try {
     parsed = extractJSON(text);
   } catch (err) {
-    logger?.warn?.(`[ResearchAnalyst] ${group} JSON parse failed`, err.message);
+    console.warn(`[ResearchAnalyst] ${group} JSON parse failed: ${err.message}`);
     parsed = { group, no_material_movement: true, moves: [], parse_error: true };
   }
 
@@ -75,14 +78,16 @@ no_material_movement=true.`;
 }
 
 export class ResearchAnalyst {
-  async research({ windowStart, windowEnd, logger }) {
+  async research({ windowStart, windowEnd }) {
     const start = Date.now();
     const findings = [];
     const tokens = { input: 0, output: 0 };
+    let errorCount = 0;
 
     for (const group of UNIVERSE) {
-      const r = await researchOne(group, windowStart, windowEnd, logger);
+      const r = await researchOne(group, windowStart, windowEnd);
       findings.push(r);
+      if (r.error) errorCount++;
       if (r._meta?.tokens) {
         tokens.input += r._meta.tokens.input;
         tokens.output += r._meta.tokens.output;
@@ -91,7 +96,20 @@ export class ResearchAnalyst {
 
     const totalMoves = findings.reduce((n, f) => n + (f.moves?.length || 0), 0);
     const latency = Date.now() - start;
-    console.log(`[ResearchAnalyst] Done. ${UNIVERSE.length} groups · ${totalMoves} moves · ${latency}ms`);
+    console.log(
+      `[ResearchAnalyst] Done. ${UNIVERSE.length} groups · ${totalMoves} moves · ` +
+      `${errorCount} errors · ${latency}ms`,
+    );
+
+    // If every single call errored, fail loudly — a "0 moves" cycle from
+    // 21 silent failures is worse than no run.
+    if (errorCount === UNIVERSE.length) {
+      throw new Error(
+        `[ResearchAnalyst] All ${UNIVERSE.length} per-group fetches failed. ` +
+        `Most likely cause: SDK or network. Check the warnings above for the ` +
+        `specific error.`,
+      );
+    }
 
     return {
       data: { window_start: windowStart, window_end: windowEnd, findings },

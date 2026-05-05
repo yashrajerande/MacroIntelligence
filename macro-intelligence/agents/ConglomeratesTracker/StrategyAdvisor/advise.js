@@ -116,15 +116,18 @@ a red_flags entry noting the unusually quiet cycle.
 
 Wrap the JSON in <<<JSON ... >>>.`;
 
-    const response = await client.messages.create({
+    // Streaming required: the SDK rejects non-streaming requests when
+    // max_tokens × estimated tok/sec could exceed its 10-min timeout, and
+    // 32768 trips that heuristic for Sonnet. Streaming bypasses the check
+    // and also lets us watch the response build in real time.
+    const stream = client.messages.stream({
       model: 'claude-sonnet-4-6',
-      // 21 groups × 8 tables × commentary fields ≈ 12-15K output tokens.
-      // 8192 truncates mid-JSON; 32768 leaves comfortable headroom.
       max_tokens: 32768,
       temperature: 0.25,
       system: [{ type: 'text', text: persona, cache_control: { type: 'ephemeral' } }],
       messages: [{ role: 'user', content: prompt }],
     });
+    const response = await stream.finalMessage();
 
     const tokens = {
       input: response.usage?.input_tokens || 0,

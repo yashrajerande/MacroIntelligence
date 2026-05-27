@@ -7,7 +7,7 @@ import Anthropic from '@anthropic-ai/sdk';
 const client = new Anthropic();
 
 export async function searchAndExtract(query, extractionPrompt) {
-  const response = await client.messages.create({
+  const stream = client.messages.stream({
     model: 'claude-haiku-4-5-20251001',
     max_tokens: 4096,
     system: [{
@@ -21,6 +21,7 @@ export async function searchAndExtract(query, extractionPrompt) {
       content: `${query}\n\nExtract: ${extractionPrompt}`,
     }],
   });
+  const response = await stream.finalMessage();
 
   // Concatenate all text blocks from the response
   let fullText = '';

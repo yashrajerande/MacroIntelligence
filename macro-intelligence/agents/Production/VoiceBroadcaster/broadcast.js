@@ -116,13 +116,14 @@ RULES:
 
 Return ONLY the script text. No JSON. No markers. Just the words to be spoken.`;
 
-    const response = await client.messages.create({
+    const stream = client.messages.stream({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 512,
       temperature: 0.5,
       system: [{ type: 'text', text: persona, cache_control: { type: 'ephemeral' } }],
       messages: [{ role: 'user', content: prompt }],
     });
+    const response = await stream.finalMessage();
 
     const tokens = {
       input: response.usage?.input_tokens || 0,

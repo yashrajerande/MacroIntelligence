@@ -100,13 +100,14 @@ Apply your Persona's review discipline. Return verdict PASS only if every
 score reconciles, every commentary line carries a fact, and no banned
 phrases survived. Otherwise REVISE with specific blockers.`;
 
-    const response = await client.messages.create({
+    const stream = client.messages.stream({
       model: 'claude-sonnet-4-6',
       max_tokens: 4096,
       temperature: 0.1,
       system: [{ type: 'text', text: persona, cache_control: { type: 'ephemeral' } }],
       messages: [{ role: 'user', content: prompt }],
     });
+    const response = await stream.finalMessage();
 
     const tokens = {
       input: response.usage?.input_tokens || 0,

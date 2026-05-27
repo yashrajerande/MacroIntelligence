@@ -24,7 +24,7 @@ export class NewsCurator {
         `${i + 1}. [${item.category}] "${item.headline}" (source: ${item.source_name}, buzz: ${item.buzz_tag})`
       ).join('\n');
 
-      const response = await client.messages.create({
+      const stream = client.messages.stream({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 512,
         system: [{
@@ -37,6 +37,7 @@ export class NewsCurator {
           content: `Today is ${isoDate}. Refine these headlines:\n${prompt}`,
         }],
       });
+      const response = await stream.finalMessage();
 
       tokens.input = response.usage?.input_tokens || 0;
       tokens.output = response.usage?.output_tokens || 0;

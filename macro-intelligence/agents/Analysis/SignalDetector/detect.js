@@ -76,13 +76,14 @@ For each signal, provide:
 
 Return a JSON array of 7 objects wrapped in <<<JSON and >>> markers.`;
 
-    const response = await client.messages.create({
+    const stream = client.messages.stream({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 4096,
       temperature: 0,
       system: [{ type: 'text', text: persona, cache_control: { type: 'ephemeral' } }],
       messages: [{ role: 'user', content: prompt }],
     });
+    const response = await stream.finalMessage();
 
     const tokens = { input: response.usage?.input_tokens || 0, output: response.usage?.output_tokens || 0 };
     const text = response.content.filter(b => b.type === 'text').map(b => b.text).join('');

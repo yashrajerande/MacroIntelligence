@@ -215,7 +215,7 @@ async function run() {
       logger.warn('VoiceBroadcaster failed', err.message);
     }
 
-    const validation = new Validator().validate(html, macroDataObj, isoDate);
+    const validation = await new Validator().validate(html, macroDataObj, isoDate);
     logger.validation(validation);
     logger.agent('Validator', {
       model: 'none', latency_ms: 0,

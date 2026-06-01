@@ -4,11 +4,13 @@
  */
 
 import { runAllChecks, VALID_SLUGS } from './skills/validation-rules.js';
+import { fetchDynamicRanges } from './skills/dynamic-ranges.js';
 
 export class Validator {
-  validate(html, macroData, expectedDate) {
+  async validate(html, macroData, expectedDate) {
+    const dynamicRanges = await fetchDynamicRanges();
     console.log('[Validator] Running 22 validation checks...');
-    const result = runAllChecks(html, macroData, expectedDate);
+    const result = runAllChecks(html, macroData, expectedDate, dynamicRanges);
 
     if (result.valid) {
       console.log(`[Validator] ALL PASS. ${result.warnings.length} warnings.`);
@@ -112,7 +114,7 @@ if (process.argv.includes('--test')) {
   };
 
   const v = new Validator();
-  const result = v.validate(mockHtml, mockData, '2026-04-07');
+  const result = await v.validate(mockHtml, mockData, '2026-04-07');
   console.log(`\nResult: ${result.valid ? 'PASS' : 'FAIL'}`);
   // HTML size check will fail with mock data (expected)
   console.log('Note: Rule 20 (HTML size) and L6 (range bounds) will fail with mock data — expected.');

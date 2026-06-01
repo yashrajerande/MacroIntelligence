@@ -85,7 +85,7 @@ function isVintageInFuture(vintage, runDate) {
 // MAIN VALIDATION — 22 structural checks + 6 reliability layers
 // ═════════════════════════════════════════════════════════════════════════
 
-export function runAllChecks(html, macroData, expectedDate) {
+export function runAllChecks(html, macroData, expectedDate, dynamicRanges) {
   const errors = [];
   const warnings = [];
 
@@ -356,25 +356,43 @@ export function runAllChecks(html, macroData, expectedDate) {
   }
 
   // ── LAYER 6: HISTORICAL RANGE BOUNDS ───────────────────────────────
-  // If a value is outside the 10-year min/max, flag as error (likely fetch bug)
+  // Dynamic ranges (from Supabase history) adapt as markets evolve.
+  // Static ranges (from indicator-schema.js) are the cold-start fallback.
+  const useDynamic = dynamicRanges && Object.keys(dynamicRanges).length > 0;
+  if (useDynamic) {
+    console.log('[Validator] L6: Using dynamic ranges from Supabase history');
+  } else {
+    console.log('[Validator] L6: Using static ranges (no historical data available)');
+  }
+
   let outOfBoundsCount = 0;
   for (const ind of indicators) {
     const slug = ind.indicator_slug;
     const val  = ind.latest_numeric;
     if (val === null || val === undefined) continue;
 
-    const range = HISTORICAL_RANGES[slug];
-    if (!range) continue;
+    const dynRange    = useDynamic ? dynamicRanges[slug] : null;
+    const staticRange = HISTORICAL_RANGES[slug];
+    if (!dynRange && !staticRange) continue;
 
-    // Allow 20% buffer beyond historical extremes for genuinely new records
-    const buffer = Math.abs(range.max - range.min) * 0.20;
-    const loBound = range.min - buffer;
-    const hiBound = range.max + buffer;
+    let loBound, hiBound, rangeLabel;
+
+    if (dynRange) {
+      // 30% buffer on the observed historical spread
+      const buffer = Math.abs(dynRange.max - dynRange.min) * 0.30;
+      loBound    = dynRange.min - buffer;
+      hiBound    = dynRange.max + buffer;
+      rangeLabel = `dynamic [${dynRange.min}, ${dynRange.max}] +30%`;
+    } else {
+      const buffer = Math.abs(staticRange.max - staticRange.min) * 0.20;
+      loBound    = staticRange.min - buffer;
+      hiBound    = staticRange.max + buffer;
+      rangeLabel = `static [${staticRange.min}, ${staticRange.max}] +20%`;
+    }
 
     if (val < loBound || val > hiBound) {
       errors.push(
-        `L6: indicator "${slug}" value ${val} is outside historical range ` +
-        `[${range.min}, ${range.max}] with 20% buffer — likely fetch bug`
+        `L6: indicator "${slug}" value ${val} is outside ${rangeLabel} — likely fetch bug`
       );
       outOfBoundsCount++;
     }

@@ -480,8 +480,8 @@ assert(!isValidSignal({ indicator_slug: 'affordability_index', latest_numeric: 0
 assert(isValidSignal({ indicator_slug: 'gst_month', latest_numeric: 70000, pct_10y: 0, direction: 'down' }),
   'GST at 70000 (close to min 80000) is a legit below-range value');
 // And legitimate above-range values should pass too (modest overshoot)
-assert(isValidSignal({ indicator_slug: 'nasdaq', latest_numeric: 23183, pct_10y: 100, direction: 'up' }),
-  'Nasdaq at 23183 (just above max 22000) is a legit above-range value');
+assert(isValidSignal({ indicator_slug: 'nasdaq', latest_numeric: 36500, pct_10y: 100, direction: 'up' }),
+  'Nasdaq at 36500 (just above max 35000) is a legit above-range value');
 
 // --- isValidSignal: accepts good data
 assert(isValidSignal({ indicator_slug: 'gst_month', latest_numeric: 200640, pct_10y: 75, direction: 'up' }),

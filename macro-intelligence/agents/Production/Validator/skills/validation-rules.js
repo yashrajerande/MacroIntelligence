@@ -356,14 +356,11 @@ export function runAllChecks(html, macroData, expectedDate, dynamicRanges) {
   }
 
   // ── LAYER 6: HISTORICAL RANGE BOUNDS ───────────────────────────────
-  // Dynamic ranges (from Supabase history) adapt as markets evolve.
-  // Static ranges (from indicator-schema.js) are the cold-start fallback.
-  const useDynamic = dynamicRanges && Object.keys(dynamicRanges).length > 0;
-  if (useDynamic) {
-    console.log('[Validator] L6: Using dynamic ranges from Supabase history');
-  } else {
-    console.log('[Validator] L6: Using static ranges (no historical data available)');
-  }
+  // Merge dynamic (Supabase history) and static (indicator-schema.js) ranges.
+  // For each indicator, take the WIDER of the two — dynamic ranges can only
+  // expand the acceptable window, never shrink it below the static baseline.
+  const hasDynamic = dynamicRanges && Object.keys(dynamicRanges).length > 0;
+  console.log(`[Validator] L6: ${hasDynamic ? 'Merging dynamic + static ranges (wider wins)' : 'Using static ranges (no historical data available)'}`);
 
   let outOfBoundsCount = 0;
   for (const ind of indicators) {
@@ -371,28 +368,31 @@ export function runAllChecks(html, macroData, expectedDate, dynamicRanges) {
     const val  = ind.latest_numeric;
     if (val === null || val === undefined) continue;
 
-    const dynRange    = useDynamic ? dynamicRanges[slug] : null;
+    const dynRange    = hasDynamic ? dynamicRanges[slug] : null;
     const staticRange = HISTORICAL_RANGES[slug];
     if (!dynRange && !staticRange) continue;
 
-    let loBound, hiBound, rangeLabel;
+    let mergedMin, mergedMax;
 
-    if (dynRange) {
-      // 30% buffer on the observed historical spread
-      const buffer = Math.abs(dynRange.max - dynRange.min) * 0.30;
-      loBound    = dynRange.min - buffer;
-      hiBound    = dynRange.max + buffer;
-      rangeLabel = `dynamic [${dynRange.min}, ${dynRange.max}] +30%`;
+    if (dynRange && staticRange) {
+      mergedMin = Math.min(dynRange.min, staticRange.min);
+      mergedMax = Math.max(dynRange.max, staticRange.max);
+    } else if (dynRange) {
+      mergedMin = dynRange.min;
+      mergedMax = dynRange.max;
     } else {
-      const buffer = Math.abs(staticRange.max - staticRange.min) * 0.20;
-      loBound    = staticRange.min - buffer;
-      hiBound    = staticRange.max + buffer;
-      rangeLabel = `static [${staticRange.min}, ${staticRange.max}] +20%`;
+      mergedMin = staticRange.min;
+      mergedMax = staticRange.max;
     }
+
+    const buffer = Math.abs(mergedMax - mergedMin) * 0.30;
+    const loBound = mergedMin - buffer;
+    const hiBound = mergedMax + buffer;
 
     if (val < loBound || val > hiBound) {
       errors.push(
-        `L6: indicator "${slug}" value ${val} is outside ${rangeLabel} — likely fetch bug`
+        `L6: indicator "${slug}" value ${val} is outside merged range ` +
+        `[${mergedMin}, ${mergedMax}] +30% — likely fetch bug`
       );
       outOfBoundsCount++;
     }

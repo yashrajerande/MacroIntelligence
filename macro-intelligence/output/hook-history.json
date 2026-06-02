@@ -102,6 +102,18 @@
         "us_10y_treasury",
         "airline_pax"
       ]
+    },
+    {
+      "date": "02 JUN 2026",
+      "verdict_line": "SIP accounts grew just 1.6% MoM to 10.45 crore — a decade-low addition rate — while inflows hold at ₹29,845 crore; India's equity bid is concentrating, not broadening.",
+      "themes": [],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "sip_accounts",
+        "nat_gas",
+        "copper"
+      ]
     }
   ]
 }

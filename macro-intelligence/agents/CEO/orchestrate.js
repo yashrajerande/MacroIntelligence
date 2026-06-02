@@ -27,6 +27,7 @@ import { NewsCurator }            from '../Editorial/NewsCurator/curate.js';
 import { DashboardRenderer }      from '../Production/DashboardRenderer/render.js';
 import { VoiceBroadcaster }      from '../Production/VoiceBroadcaster/broadcast.js';
 import { Validator }              from '../Production/Validator/validate.js';
+import { fetchDynamicRanges }    from '../Production/Validator/skills/dynamic-ranges.js';
 import { SupabaseWriter }         from '../Infrastructure/SupabaseWriter/sync.js';
 import { GitPublisher }           from '../Infrastructure/GitPublisher/publish.js';
 import { TelegramPublisher }      from '../Infrastructure/TelegramPublisher/publish.js';
@@ -195,8 +196,10 @@ async function run() {
     const thisRunCost = logger.estimateCost();
     const costSummary = getCostSummary(isoDate, thisRunCost);
 
+    const dynamicRanges = await fetchDynamicRanges();
+
     const { html, macroDataObj, outputPath, indexPath } = new DashboardRenderer().render({
-      ...allData, regime, signals, scenarios, news, execSummary, costSummary,
+      ...allData, regime, signals, scenarios, news, execSummary, costSummary, dynamicRanges,
     });
     logger.agent('DashboardRenderer', { model: 'none', latency_ms: 0, tokens: { input: 0, output: 0 } });
 
@@ -215,7 +218,7 @@ async function run() {
       logger.warn('VoiceBroadcaster failed', err.message);
     }
 
-    const validation = await new Validator().validate(html, macroDataObj, isoDate);
+    const validation = await new Validator().validate(html, macroDataObj, isoDate, dynamicRanges);
     logger.validation(validation);
     logger.agent('Validator', {
       model: 'none', latency_ms: 0,

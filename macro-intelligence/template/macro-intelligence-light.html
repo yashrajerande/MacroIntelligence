@@ -572,6 +572,20 @@ td.c-pct { text-align:right; min-width:96px; }
 .pct-mid .pct-n{ color:#b85c00; }  .pct-mid .pct-f{ background:#b85c00; box-shadow:none; }
 .pct-lo .pct-n { color:#cc0033; }  .pct-lo .pct-f { background:#cc0033; box-shadow:none; }
 
+/* ── Sigma anomaly tags + hover tooltip ── */
+.sigma-tag { font-size:0.56rem; font-weight:700; padding:1px 5px; border-radius:3px; margin-left:5px; letter-spacing:0.02em; vertical-align:middle; cursor:help; }
+.sigma-tag.warn  { background:rgba(184,92,0,0.12); color:#b85c00; }
+.sigma-tag.alert { background:rgba(204,0,51,0.12); color:#cc0033; }
+.has-tip { position:relative; }
+.stat-tip {
+  display:none; position:absolute; right:0; bottom:calc(100% + 6px); z-index:200;
+  background:#1a1a2e; color:#e0e0e8; padding:10px 14px; border-radius:8px;
+  font-size:0.70rem; font-family:var(--mono); line-height:1.65; white-space:nowrap;
+  box-shadow:0 6px 24px rgba(0,0,40,0.30); pointer-events:none;
+}
+.stat-tip b { color:#fff; font-size:0.72rem; }
+.has-tip:hover .stat-tip { display:block; }
+
 .sub-lbl {
   font-family:var(--mono);
   font-size:0.58rem;

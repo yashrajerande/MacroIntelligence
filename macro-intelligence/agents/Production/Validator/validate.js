@@ -7,8 +7,8 @@ import { runAllChecks, VALID_SLUGS } from './skills/validation-rules.js';
 import { fetchDynamicRanges } from './skills/dynamic-ranges.js';
 
 export class Validator {
-  async validate(html, macroData, expectedDate) {
-    const dynamicRanges = await fetchDynamicRanges();
+  async validate(html, macroData, expectedDate, dynamicRanges) {
+    if (!dynamicRanges) dynamicRanges = await fetchDynamicRanges();
     console.log('[Validator] Running 22 validation checks...');
     const result = runAllChecks(html, macroData, expectedDate, dynamicRanges);
 

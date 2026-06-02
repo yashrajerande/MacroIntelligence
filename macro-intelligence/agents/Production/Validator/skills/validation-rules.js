@@ -356,11 +356,11 @@ export function runAllChecks(html, macroData, expectedDate, dynamicRanges) {
   }
 
   // ── LAYER 6: HISTORICAL RANGE BOUNDS ───────────────────────────────
-  // Merge dynamic (Supabase history) and static (indicator-schema.js) ranges.
-  // For each indicator, take the WIDER of the two — dynamic ranges can only
-  // expand the acceptable window, never shrink it below the static baseline.
+  // When dynamic stats exist (mean, stddev from Supabase), use z-score:
+  //   |value - mean| / stddev > 4  →  reject (data bug, not a market move)
+  // When no stats exist, fall back to static ranges with 20% buffer.
   const hasDynamic = dynamicRanges && Object.keys(dynamicRanges).length > 0;
-  console.log(`[Validator] L6: ${hasDynamic ? 'Merging dynamic + static ranges (wider wins)' : 'Using static ranges (no historical data available)'}`);
+  console.log(`[Validator] L6: ${hasDynamic ? 'Using z-score validation (mean ± 4σ)' : 'Using static ranges (no historical data available)'}`);
 
   let outOfBoundsCount = 0;
   for (const ind of indicators) {
@@ -368,33 +368,27 @@ export function runAllChecks(html, macroData, expectedDate, dynamicRanges) {
     const val  = ind.latest_numeric;
     if (val === null || val === undefined) continue;
 
-    const dynRange    = hasDynamic ? dynamicRanges[slug] : null;
+    const stats       = hasDynamic ? dynamicRanges[slug] : null;
     const staticRange = HISTORICAL_RANGES[slug];
-    if (!dynRange && !staticRange) continue;
 
-    let mergedMin, mergedMax;
-
-    if (dynRange && staticRange) {
-      mergedMin = Math.min(dynRange.min, staticRange.min);
-      mergedMax = Math.max(dynRange.max, staticRange.max);
-    } else if (dynRange) {
-      mergedMin = dynRange.min;
-      mergedMax = dynRange.max;
-    } else {
-      mergedMin = staticRange.min;
-      mergedMax = staticRange.max;
-    }
-
-    const buffer = Math.abs(mergedMax - mergedMin) * 0.30;
-    const loBound = mergedMin - buffer;
-    const hiBound = mergedMax + buffer;
-
-    if (val < loBound || val > hiBound) {
-      errors.push(
-        `L6: indicator "${slug}" value ${val} is outside merged range ` +
-        `[${mergedMin}, ${mergedMax}] +30% — likely fetch bug`
-      );
-      outOfBoundsCount++;
+    if (stats && stats.stddev > 0) {
+      const z = Math.abs(val - stats.mean) / stats.stddev;
+      if (z > 4) {
+        errors.push(
+          `L6: indicator "${slug}" value ${val} is ${z.toFixed(1)}σ from mean ` +
+          `${stats.mean.toFixed(2)} (stddev ${stats.stddev.toFixed(2)}) — likely fetch bug`
+        );
+        outOfBoundsCount++;
+      }
+    } else if (staticRange) {
+      const buffer = Math.abs(staticRange.max - staticRange.min) * 0.20;
+      if (val < staticRange.min - buffer || val > staticRange.max + buffer) {
+        errors.push(
+          `L6: indicator "${slug}" value ${val} is outside static range ` +
+          `[${staticRange.min}, ${staticRange.max}] +20% — likely fetch bug`
+        );
+        outOfBoundsCount++;
+      }
     }
   }
   if (outOfBoundsCount > 5) {

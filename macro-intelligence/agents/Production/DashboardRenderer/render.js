@@ -82,7 +82,7 @@ export class DashboardRenderer {
     const {
       marketData, macroData, reData,
       regime, signals, scenarios, news, execSummary,
-      dateStr, isoDate,
+      dateStr, isoDate, dynamicRanges,
     } = allData;
 
     // ── Merge all raw indicators ─────────────────────────────────────
@@ -265,6 +265,7 @@ export class DashboardRenderer {
       const ind = allRaw[slug] || {};
       const meta = SLUG_MAP[slug] || {};
       const label = meta.indicator_name || slug.replace(/_/g, ' ');
+      const stats = dynamicRanges?.[slug] || null;
       return row(
         label,
         ind.value_str || ind.value,
@@ -274,6 +275,8 @@ export class DashboardRenderer {
         ind.pct_10y      ?? 50,
         ind.pct_10y_tier || 'mid',
         slug,
+        ind.value,
+        stats,
       );
     }).join('\n');
 

@@ -12,8 +12,9 @@ import { isInversePolarity } from '../../../../src/utils/polarity.js';
 /**
  * Generate a table row HTML string.
  * For negative-polarity indicators, arrow colors are flipped (up=red, down=green).
+ * When dynamic stats exist and |z-score| > 2, a sigma tag + hover tooltip is added.
  */
-export function row(label, value, previous, direction, momentum, pct10y, tier, slug) {
+export function row(label, value, previous, direction, momentum, pct10y, tier, slug, numericValue, stats) {
   const inverse = slug ? isInversePolarity(slug) : false;
 
   // Flip arrow semantics for inverse indicators
@@ -33,9 +34,30 @@ export function row(label, value, previous, direction, momentum, pct10y, tier, s
     tierClass = tier === 'hi' ? 'pct-hi' : tier === 'lo' ? 'pct-lo' : 'pct-mid';
   }
 
+  // Z-score anomaly detection
+  let sigmaHtml = '';
+  let tdClass = '';
+  if (stats && stats.stddev > 0 && typeof numericValue === 'number') {
+    const z = (numericValue - stats.mean) / stats.stddev;
+    const absZ = Math.abs(z);
+    if (absZ > 2) {
+      const zLabel = absZ.toFixed(1) + 'σ';
+      const tagClass = absZ > 3 ? 'sigma-tag alert' : 'sigma-tag warn';
+      const dir = z > 0 ? 'above' : 'below';
+      const fmt = (n) => Number.isInteger(n) ? n.toLocaleString() : n.toFixed(2);
+      sigmaHtml = ` <span class="${tagClass}">${zLabel}</span>` +
+        `<div class="stat-tip">` +
+        `<b>Historical (180 days)</b><br>` +
+        `Mean: ${fmt(stats.mean)} · StdDev: ±${fmt(stats.stddev)}<br>` +
+        `Range: ${fmt(stats.min)} – ${fmt(stats.max)}<br>` +
+        `Z-score: ${absZ.toFixed(1)}σ ${dir} mean</div>`;
+      tdClass = ' class="has-tip"';
+    }
+  }
+
   return `<tr>
   <td>${label}</td>
-  <td>${value ?? 'Awaited'}</td>
+  <td${tdClass}>${value ?? 'Awaited'}${sigmaHtml}</td>
   <td>${previous ?? '—'}</td>
   <td><span class="${arrClass}">${arrChar}</span></td>
   <td>${momentum || '—'}</td>

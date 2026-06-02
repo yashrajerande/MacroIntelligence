@@ -1,6 +1,7 @@
 /**
  * Fetches historical indicator values from Supabase and computes
- * dynamic min/max ranges so the validator adapts as markets evolve.
+ * statistical ranges (mean, stddev, min, max) so the validator and
+ * dashboard can adapt as markets evolve.
  * Falls back to null (triggering static ranges) if Supabase is unavailable.
  */
 
@@ -58,11 +59,19 @@ export async function fetchDynamicRanges() {
     const ranges = {};
     for (const [slug, values] of Object.entries(bySlug)) {
       if (values.length < MIN_DATA_POINTS) continue;
-      ranges[slug] = { min: Math.min(...values), max: Math.max(...values) };
+
+      const n   = values.length;
+      const min = Math.min(...values);
+      const max = Math.max(...values);
+      const mean = values.reduce((s, v) => s + v, 0) / n;
+      const variance = values.reduce((s, v) => s + (v - mean) ** 2, 0) / n;
+      const stddev = Math.sqrt(variance);
+
+      ranges[slug] = { mean, stddev, min, max, count: n };
     }
 
     console.log(
-      `[DynamicRanges] Computed ranges for ${Object.keys(ranges).length} indicators ` +
+      `[DynamicRanges] Computed stats for ${Object.keys(ranges).length} indicators ` +
       `from ${allRows.length} records (last ${LOOKBACK_DAYS} days)`
     );
     return ranges;

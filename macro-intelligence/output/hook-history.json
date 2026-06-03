@@ -114,6 +114,23 @@
         "nat_gas",
         "copper"
       ]
+    },
+    {
+      "date": "04 JUN 2026",
+      "verdict_line": "Bank Nifty at an 89th-percentile high while iron ore surges 54% in a month — the market is pricing a capex boom that core sector growth of 2.3% flatly contradicts.",
+      "themes": [
+        "markets",
+        "gdp_growth",
+        "capex"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "sp500",
+        "bank_nifty",
+        "us_vix",
+        "iron_ore"
+      ]
     }
   ]
 }

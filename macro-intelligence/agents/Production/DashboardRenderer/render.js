@@ -92,6 +92,40 @@ export class DashboardRenderer {
       ...reData.data.indicators,
     };
 
+    // ── Sanitize: swap suspect values for previous data ─────────────
+    const staleIndicators = [];
+    if (dynamicRanges) {
+      for (const [slug, raw] of Object.entries(allRaw)) {
+        if (typeof raw.value !== 'number') continue;
+        const stats = dynamicRanges[slug];
+        if (!stats || !stats.stddev) continue;
+
+        const effectiveStddev = Math.max(stats.stddev, Math.abs(stats.mean) * 0.05);
+        const z = Math.abs(raw.value - stats.mean) / effectiveStddev;
+
+        if (z > 4 && raw.previous != null) {
+          staleIndicators.push({
+            slug,
+            name: (SLUG_MAP[slug] || {}).indicator_name || slug,
+            badValue: raw.value,
+            zScore: z.toFixed(1),
+            previousValue: raw.previous,
+            vintage: raw.vintage || 'unknown',
+          });
+          raw.value = raw.previous;
+          raw.value_str = String(raw.previous);
+          raw.direction = 'flat';
+          raw.momentum_label = '(stale)';
+        }
+      }
+      if (staleIndicators.length > 0) {
+        console.log(`[DashboardRenderer] Substituted ${staleIndicators.length} suspect indicator(s) with previous values:`);
+        for (const s of staleIndicators) {
+          console.log(`  ↳ ${s.slug}: ${s.badValue} (${s.zScore}σ) → ${s.previousValue}`);
+        }
+      }
+    }
+
     // ── Build indicators array (template format) ─────────────────────
     const indicators = Object.entries(allRaw).map(([slug, raw]) =>
       buildIndicatorObj(slug, raw)
@@ -346,6 +380,19 @@ export class DashboardRenderer {
     // ── Fill cost tag ─────────────────────────────────────────────────
     if (allData.costSummary) {
       html = fillId(html, 'cost-tag', allData.costSummary);
+    }
+
+    // ── Inject stale-data footnote ─────────────────────────────────────
+    if (staleIndicators.length > 0) {
+      const items = staleIndicators.map(s =>
+        `<li><b>${s.name}</b> — using previous value (${s.previousValue}) because today's fetch (${s.badValue}) was ${s.zScore}σ from the 180-day mean. Last good data: ${s.vintage}.</li>`
+      ).join('\n');
+      const footnote = `
+<div class="stale-footnote">
+  <b>⚠ Data Note</b> — The following indicator(s) are showing previous values due to suspect data today:
+  <ul>${items}</ul>
+</div>`;
+      html = html.replace('</body>', `${footnote}\n</body>`);
     }
 
     // ── Strip unfilled FILL markers (best-effort) ────────────────────

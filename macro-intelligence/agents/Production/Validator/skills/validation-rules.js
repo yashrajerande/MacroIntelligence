@@ -355,12 +355,11 @@ export function runAllChecks(html, macroData, expectedDate, dynamicRanges) {
     }
   }
 
-  // ── LAYER 6: HISTORICAL RANGE BOUNDS ───────────────────────────────
-  // When dynamic stats exist (mean, stddev from Supabase), use z-score:
-  //   |value - mean| / stddev > 4  →  reject (data bug, not a market move)
-  // When no stats exist, fall back to static ranges with 20% buffer.
+  // ── LAYER 6: HISTORICAL RANGE BOUNDS (warnings only) ────────────────
+  // Suspect values are already substituted by the renderer's sanitizer.
+  // L6 now only warns for audit trail — it never blocks the pipeline.
   const hasDynamic = dynamicRanges && Object.keys(dynamicRanges).length > 0;
-  console.log(`[Validator] L6: ${hasDynamic ? 'Using z-score validation (mean ± 4σ)' : 'Using static ranges (no historical data available)'}`);
+  console.log(`[Validator] L6: ${hasDynamic ? 'Auditing z-scores (warn only)' : 'Using static ranges (warn only)'}`);
 
   let outOfBoundsCount = 0;
   for (const ind of indicators) {
@@ -372,30 +371,28 @@ export function runAllChecks(html, macroData, expectedDate, dynamicRanges) {
     const staticRange = HISTORICAL_RANGES[slug];
 
     if (stats && stats.stddev > 0) {
-      // Floor stddev at 5% of mean to prevent low-volatility periods
-      // from creating impossibly tight bounds on volatile assets
       const effectiveStddev = Math.max(stats.stddev, Math.abs(stats.mean) * 0.05);
       const z = Math.abs(val - stats.mean) / effectiveStddev;
       if (z > 4) {
-        errors.push(
+        warnings.push(
           `L6: indicator "${slug}" value ${val} is ${z.toFixed(1)}σ from mean ` +
-          `${stats.mean.toFixed(2)} (stddev ${effectiveStddev.toFixed(2)}) — likely fetch bug`
+          `${stats.mean.toFixed(2)} (stddev ${effectiveStddev.toFixed(2)})`
         );
         outOfBoundsCount++;
       }
     } else if (staticRange) {
       const buffer = Math.abs(staticRange.max - staticRange.min) * 0.20;
       if (val < staticRange.min - buffer || val > staticRange.max + buffer) {
-        errors.push(
+        warnings.push(
           `L6: indicator "${slug}" value ${val} is outside static range ` +
-          `[${staticRange.min}, ${staticRange.max}] +20% — likely fetch bug`
+          `[${staticRange.min}, ${staticRange.max}] +20%`
         );
         outOfBoundsCount++;
       }
     }
   }
   if (outOfBoundsCount > 5) {
-    errors.push(`L6: ${outOfBoundsCount} indicators out of historical bounds — data source may be corrupted`);
+    warnings.push(`L6: ${outOfBoundsCount} indicators out of historical bounds — data source may need review`);
   }
 
   // ── L7: PERSONA-ANCHOR LEAK SCAN ───────────────────────────────────

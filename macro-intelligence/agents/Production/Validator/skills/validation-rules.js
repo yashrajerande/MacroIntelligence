@@ -372,11 +372,14 @@ export function runAllChecks(html, macroData, expectedDate, dynamicRanges) {
     const staticRange = HISTORICAL_RANGES[slug];
 
     if (stats && stats.stddev > 0) {
-      const z = Math.abs(val - stats.mean) / stats.stddev;
+      // Floor stddev at 5% of mean to prevent low-volatility periods
+      // from creating impossibly tight bounds on volatile assets
+      const effectiveStddev = Math.max(stats.stddev, Math.abs(stats.mean) * 0.05);
+      const z = Math.abs(val - stats.mean) / effectiveStddev;
       if (z > 4) {
         errors.push(
           `L6: indicator "${slug}" value ${val} is ${z.toFixed(1)}σ from mean ` +
-          `${stats.mean.toFixed(2)} (stddev ${stats.stddev.toFixed(2)}) — likely fetch bug`
+          `${stats.mean.toFixed(2)} (stddev ${effectiveStddev.toFixed(2)}) — likely fetch bug`
         );
         outOfBoundsCount++;
       }

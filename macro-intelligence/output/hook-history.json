@@ -131,6 +131,19 @@
         "us_vix",
         "iron_ore"
       ]
+    },
+    {
+      "date": "05 JUN 2026",
+      "verdict_line": "Airline passengers crashed 9.1% to 35mn — a 10-year low — while PV sales surged 26.1%; India's demand story is bifurcating, and the weaker half is the one that moves people.",
+      "themes": [],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "sip_accounts",
+        "copper",
+        "airline_pax"
+      ]
     }
   ]
 }

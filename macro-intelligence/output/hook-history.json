@@ -144,6 +144,21 @@
         "copper",
         "airline_pax"
       ]
+    },
+    {
+      "date": "06 JUN 2026",
+      "verdict_line": "US VIX spiked from 15.4 to 21.5 overnight while Nikkei and Euro Stoxx both sit at 100th-percentile highs — global equities are priced for perfection into a volatility regime that just repriced sharply.",
+      "themes": [
+        "markets"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "sip_accounts",
+        "nat_gas",
+        "us_vix"
+      ]
     }
   ]
 }

@@ -159,6 +159,20 @@
         "nat_gas",
         "us_vix"
       ]
+    },
+    {
+      "date": "07 JUN 2026",
+      "verdict_line": "US 10Y at 4.47% barely budged while S&P shed 2.3% and VIX jumped to 21.5 — bonds aren't rallying into the equity selloff, which means the flight-to-safety trade is broken.",
+      "themes": [
+        "markets"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "sip_accounts",
+        "nat_gas"
+      ]
     }
   ]
 }

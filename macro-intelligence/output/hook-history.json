@@ -173,6 +173,21 @@
         "sip_accounts",
         "nat_gas"
       ]
+    },
+    {
+      "date": "08 JUN 2026",
+      "verdict_line": "Brent at $95.7 — up 2.8% in 72 hours — while fuel CPI sits at -3.78%: the lagged pass-through hits Indian CPI in 6 weeks, not today, and the market is priced for the lag, not the landing.",
+      "themes": [
+        "inflation",
+        "oil"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "nat_gas",
+        "us_10y_treasury",
+        "sip_accounts"
+      ]
     }
   ]
 }

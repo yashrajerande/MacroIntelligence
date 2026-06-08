@@ -188,6 +188,20 @@
         "us_10y_treasury",
         "sip_accounts"
       ]
+    },
+    {
+      "date": "09 JUN 2026",
+      "verdict_line": "US 10Y at 4.55% — an 8bps move in 24 hours — while S&P sits at an all-time high and VIX collapses to 18.9; the bond market is pricing Fed tightening that equities are refusing to believe.",
+      "themes": [
+        "markets"
+      ],
+      "slugs": [
+        "nikkei225",
+        "us_10y_treasury",
+        "sip_accounts",
+        "nat_gas",
+        "airline_pax"
+      ]
     }
   ]
 }

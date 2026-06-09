@@ -202,6 +202,22 @@
         "nat_gas",
         "airline_pax"
       ]
+    },
+    {
+      "date": "10 JUN 2026",
+      "verdict_line": "PMI Services at 57.5 — an 88th-percentile read — while airline passengers hit a 10-year low at 35mn; India's services expansion is statistical, not experiential.",
+      "themes": [
+        "gdp_growth"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "sip_accounts",
+        "wti_usd",
+        "pmi_services",
+        "airline_pax"
+      ]
     }
   ]
 }

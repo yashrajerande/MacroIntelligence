@@ -218,6 +218,19 @@
         "pmi_services",
         "airline_pax"
       ]
+    },
+    {
+      "date": "11 JUN 2026",
+      "verdict_line": "SIP AUM up 64% YoY while accounts grew only 15% — affluent money is colonising retail mutual funds, and the mass investor the bulls are counting on hasn't arrived.",
+      "themes": [],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "sip_accounts",
+        "nat_gas",
+        "sip_aum"
+      ]
     }
   ]
 }

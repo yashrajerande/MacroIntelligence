@@ -231,6 +231,22 @@
         "nat_gas",
         "sip_aum"
       ]
+    },
+    {
+      "date": "12 JUN 2026",
+      "verdict_line": "Copper up 2.4% to $6.40 while iron ore surged 59% — industrial metals are pricing a China recovery that China's own 4.5% GDP and fading PMI flatly contradict.",
+      "themes": [
+        "gdp_growth",
+        "global_macro"
+      ],
+      "slugs": [
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "sip_accounts",
+        "nat_gas",
+        "copper",
+        "iron_ore"
+      ]
     }
   ]
 }

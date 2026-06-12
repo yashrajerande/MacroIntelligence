@@ -247,6 +247,21 @@
         "copper",
         "iron_ore"
       ]
+    },
+    {
+      "date": "13 JUN 2026",
+      "verdict_line": "Airline passengers at a 10-year low of 35mn while GST hits ₹2.01 lakh crore — India's formal economy is booming and its urban consumer is quietly retreating.",
+      "themes": [
+        "consumption"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "sip_accounts",
+        "nat_gas",
+        "us_10y_treasury",
+        "airline_pax"
+      ]
     }
   ]
 }

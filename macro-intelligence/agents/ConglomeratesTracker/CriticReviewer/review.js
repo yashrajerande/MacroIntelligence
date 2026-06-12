@@ -4,7 +4,7 @@
  * pass before publishing.
  */
 
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import Anthropic from '@anthropic-ai/sdk';
@@ -13,6 +13,7 @@ import { scanBannedNames } from '../../../src/utils/banned-names.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const persona = readFileSync(join(__dirname, 'Persona.md'), 'utf-8');
+const LOG_DIR = join(__dirname, '..', '..', '..', 'logs');
 const client = new Anthropic();
 
 function extractJSON(text) {
@@ -23,6 +24,23 @@ function extractJSON(text) {
   const naked = text.match(/\{[\s\S]*\}/);
   if (naked) return JSON.parse(naked[0]);
   throw new Error('[CriticReviewer] no JSON in response');
+}
+
+function dumpRawResponse(text, response, label) {
+  try {
+    mkdirSync(LOG_DIR, { recursive: true });
+    const ts = new Date().toISOString().replace(/[:.]/g, '-');
+    const path = join(LOG_DIR, `critic-${label}-${ts}.txt`);
+    const out = `# CriticReviewer ${label}\n` +
+      `# stop_reason: ${response?.stop_reason || 'unknown'}\n` +
+      `# input_tokens: ${response?.usage?.input_tokens}\n` +
+      `# output_tokens: ${response?.usage?.output_tokens}\n` +
+      `# raw_length: ${text.length}\n\n${text}\n`;
+    writeFileSync(path, out);
+    console.error(`[CriticReviewer] Raw response dumped to ${path}`);
+  } catch (err) {
+    console.error(`[CriticReviewer] Failed to dump raw response: ${err.message}`);
+  }
 }
 
 const REQUIRED_TABLES = [
@@ -102,7 +120,11 @@ phrases survived. Otherwise REVISE with specific blockers.`;
 
     const stream = client.messages.stream({
       model: 'claude-sonnet-4-6',
-      max_tokens: 4096,
+      // The draft Sonnet reads is 30-40KB of nested JSON across 21 groups
+      // and 8 tables. A REVISE verdict with specific blockers and suggested
+      // fixes routinely runs 3-5K output tokens. 4096 truncated mid-JSON
+      // on the June 1 cron; 16384 leaves comfortable headroom.
+      max_tokens: 16384,
       temperature: 0.1,
       system: [{ type: 'text', text: persona, cache_control: { type: 'ephemeral' } }],
       messages: [{ role: 'user', content: prompt }],
@@ -114,7 +136,22 @@ phrases survived. Otherwise REVISE with specific blockers.`;
       output: response.usage?.output_tokens || 0,
     };
     const text = response.content.filter(b => b.type === 'text').map(b => b.text).join('');
-    const data = extractJSON(text);
+
+    if (response.stop_reason === 'max_tokens') {
+      dumpRawResponse(text, response, 'truncated');
+      throw new Error(
+        `[CriticReviewer] Response hit max_tokens (output_tokens=${response.usage?.output_tokens}). ` +
+        `Raw response saved to logs/. Bump max_tokens.`,
+      );
+    }
+
+    let data;
+    try {
+      data = extractJSON(text);
+    } catch (err) {
+      dumpRawResponse(text, response, 'parse-failure');
+      throw new Error(`[CriticReviewer] JSON parse failed: ${err.message}. Raw response saved to logs/.`);
+    }
 
     if (deterministic.length) {
       data.verdict = 'REVISE';

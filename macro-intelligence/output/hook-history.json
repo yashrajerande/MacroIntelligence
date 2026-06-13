@@ -262,6 +262,20 @@
         "us_10y_treasury",
         "airline_pax"
       ]
+    },
+    {
+      "date": "14 JUN 2026",
+      "verdict_line": "Nikkei at an all-time high of 66,020 while US GDP printed 0.7% SAAR — global equities are pricing a soft landing that the world's largest economy is not delivering.",
+      "themes": [
+        "gdp_growth"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "sip_accounts",
+        "nat_gas",
+        "us_10y_treasury"
+      ]
     }
   ]
 }

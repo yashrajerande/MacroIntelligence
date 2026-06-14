@@ -276,6 +276,22 @@
         "nat_gas",
         "us_10y_treasury"
       ]
+    },
+    {
+      "date": "15 JUN 2026",
+      "verdict_line": "Bank Nifty at a 10-year high of 56,815 while the CD ratio sits at 83% and corporate bond issuance hits a 7th-percentile panic floor — the equity market is pricing banking health that the funding structure does not support.",
+      "themes": [
+        "credit_deposit",
+        "markets"
+      ],
+      "slugs": [
+        "sp500",
+        "nikkei225",
+        "euro_stoxx50",
+        "bank_nifty",
+        "india_vix",
+        "cd_ratio"
+      ]
     }
   ]
 }

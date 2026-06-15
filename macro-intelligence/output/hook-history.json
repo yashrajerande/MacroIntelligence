@@ -292,6 +292,22 @@
         "india_vix",
         "cd_ratio"
       ]
+    },
+    {
+      "date": "16 JUN 2026",
+      "verdict_line": "Iron ore at $161.91/tonne — a 21% single-period surge — while e-commerce GMV growth halved to 12.4% and airline traffic fell 9.1%; the commodity market is pricing a demand boom that India's own consumers are not delivering.",
+      "themes": [
+        "consumption"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "nat_gas",
+        "sip_accounts",
+        "copper",
+        "ecom_gmv_growth",
+        "iron_ore"
+      ]
     }
   ]
 }

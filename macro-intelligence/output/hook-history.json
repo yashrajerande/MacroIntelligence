@@ -308,6 +308,21 @@
         "ecom_gmv_growth",
         "iron_ore"
       ]
+    },
+    {
+      "date": "17 JUN 2026",
+      "verdict_line": "S&P 500 at an all-time high of 7,511 while US GDP prints 0.7% SAAR — global equity markets are pricing a recovery that the world's largest economy has already stopped delivering.",
+      "themes": [
+        "markets",
+        "gdp_growth"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "sp500",
+        "us_vix",
+        "bank_nifty"
+      ]
     }
   ]
 }

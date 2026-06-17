@@ -323,6 +323,21 @@
         "us_vix",
         "bank_nifty"
       ]
+    },
+    {
+      "date": "18 JUN 2026",
+      "verdict_line": "Natural gas at a decade-low ₹3.16 while US core PCE ticks up to 3.1% — the Fed's inflation problem and the world's energy glut are pulling in opposite directions, and one of them is wrong.",
+      "themes": [
+        "inflation"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "nat_gas",
+        "sip_accounts",
+        "us_10y_treasury",
+        "us_core_pce"
+      ]
     }
   ]
 }

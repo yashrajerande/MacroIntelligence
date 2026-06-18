@@ -338,6 +338,22 @@
         "us_10y_treasury",
         "us_core_pce"
       ]
+    },
+    {
+      "date": "19 JUN 2026",
+      "verdict_line": "SIP inflows fell sequentially for the first time in 8 months to ₹29,845 cr — even as MF AUM hit ₹82 lakh crore; retail is still in, but the marginal buyer is quietly stepping back.",
+      "themes": [
+        "flows"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "nat_gas",
+        "sip_accounts",
+        "us_10y_treasury",
+        "sip_inflows",
+        "mf_aum"
+      ]
     }
   ]
 }

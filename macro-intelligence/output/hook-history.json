@@ -354,6 +354,20 @@
         "sip_inflows",
         "mf_aum"
       ]
+    },
+    {
+      "date": "20 JUN 2026",
+      "verdict_line": "US 10-year at 4.49% — an 81st-percentile print — while the Fed holds at 3.625% and core PCE ticks to 3.1%; the carry trade that funded EM inflows is repricing, and India's ₹22,729 cr FII swing in a single month is the first casualty.",
+      "themes": [
+        "flows"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "nat_gas",
+        "sip_accounts"
+      ]
     }
   ]
 }

@@ -368,6 +368,20 @@
         "nat_gas",
         "sip_accounts"
       ]
+    },
+    {
+      "date": "21 JUN 2026",
+      "verdict_line": "Airline passenger traffic fell 8.5% MoM to 35 million — a 7th-percentile print in non-seasonal March — while mass-market GST and auto sales surge; India's affluent consumer is quietly stepping off the escalator.",
+      "themes": [
+        "consumption"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "nat_gas",
+        "sip_accounts"
+      ]
     }
   ]
 }

@@ -382,6 +382,21 @@
         "nat_gas",
         "sip_accounts"
       ]
+    },
+    {
+      "date": "22 JUN 2026",
+      "verdict_line": "Nikkei at a 10-year high while US GDP prints 0.7% SAAR and India's PMI composite slips 240bps — global equity is pricing a growth acceleration that no major economy's output data is delivering.",
+      "themes": [
+        "gdp_growth"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "sip_accounts",
+        "nat_gas",
+        "pmi_composite"
+      ]
     }
   ]
 }

@@ -397,6 +397,21 @@
         "nat_gas",
         "pmi_composite"
       ]
+    },
+    {
+      "date": "23 JUN 2026",
+      "verdict_line": "India VIX at an 8th-percentile 12.84 while Bank Nifty hits a 96th-percentile high — the market is pricing perfection into banks whose deposit tanks are running 300bps behind their credit engines.",
+      "themes": [
+        "credit_deposit",
+        "markets"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "sp500",
+        "india_vix",
+        "bank_nifty"
+      ]
     }
   ]
 }

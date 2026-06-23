@@ -412,6 +412,19 @@
         "india_vix",
         "bank_nifty"
       ]
+    },
+    {
+      "date": "24 JUN 2026",
+      "verdict_line": "Copper down 3.6% to $6.13/lb while iron ore surges 60% — industrial metals are sending contradictory signals, and one of them is lying about the global growth cycle.",
+      "themes": [],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "nat_gas",
+        "sip_accounts",
+        "copper",
+        "iron_ore"
+      ]
     }
   ]
 }

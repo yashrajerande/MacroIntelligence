@@ -425,6 +425,21 @@
         "copper",
         "iron_ore"
       ]
+    },
+    {
+      "date": "25 JUN 2026",
+      "verdict_line": "S&P 500 at an all-time high yesterday, down 1.5% today — global equity is pricing perfection while US GDP prints 0.7% SAAR and every major index rolls over simultaneously.",
+      "themes": [
+        "markets",
+        "gdp_growth"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "sp500",
+        "bank_nifty",
+        "us_vix"
+      ]
     }
   ]
 }

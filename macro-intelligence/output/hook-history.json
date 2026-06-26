@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "29 APR 2026",
-      "verdict_line": "Airline passengers down 9% to a decade-low 35 million while GST prints ₹2 lakh crore — India's consumption story is splitting along a fault line the headline numbers hide.",
-      "themes": [
-        "consumption"
-      ],
-      "slugs": [
-        "nikkei225",
-        "sp500",
-        "nasdaq",
-        "euro_stoxx50",
-        "us_vix",
-        "airline_pax"
-      ]
-    },
-    {
       "date": "30 APR 2026",
       "verdict_line": "Copper at a 10-year high of $5.94 while US GDP prints 0.7% SAAR — global demand signals are contradicting each other, and India's CAD is caught in the crossfire.",
       "themes": [
@@ -437,6 +422,18 @@
         "nat_gas",
         "us_10y_treasury",
         "copper"
+      ]
+    },
+    {
+      "date": "27 JUN 2026",
+      "verdict_line": "SIP accounts at a decade-low 2nd percentile while AUM hits ₹16.64 tr — India's mutual fund engine is concentrating into fewer, wealthier hands, and the retail democratisation story is quietly reversing.",
+      "themes": [],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "sip_accounts",
+        "nat_gas",
+        "us_10y_treasury"
       ]
     }
   ]

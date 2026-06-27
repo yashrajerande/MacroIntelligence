@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "30 APR 2026",
-      "verdict_line": "Copper at a 10-year high of $5.94 while US GDP prints 0.7% SAAR — global demand signals are contradicting each other, and India's CAD is caught in the crossfire.",
-      "themes": [
-        "gdp_growth"
-      ],
-      "slugs": [
-        "copper",
-        "nikkei225",
-        "sp500",
-        "nasdaq",
-        "euro_stoxx50"
-      ]
-    },
-    {
       "date": "01 MAY 2026",
       "verdict_line": "Copper at an all-time high of $6.03 while India VIX jumps to 18.46 — industrial metals are pricing a boom that India's own volatility gauge refuses to believe.",
       "themes": [
@@ -428,6 +414,20 @@
       "date": "27 JUN 2026",
       "verdict_line": "SIP accounts at a decade-low 2nd percentile while AUM hits ₹16.64 tr — India's mutual fund engine is concentrating into fewer, wealthier hands, and the retail democratisation story is quietly reversing.",
       "themes": [],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "sip_accounts",
+        "nat_gas",
+        "us_10y_treasury"
+      ]
+    },
+    {
+      "date": "28 JUN 2026",
+      "verdict_line": "US 10Y at 4.4% — a 79th-percentile print falling while core PCE ticks up to 3.1% — the bond market is pricing Fed cuts that the Fed's own inflation data won't permit.",
+      "themes": [
+        "inflation"
+      ],
       "slugs": [
         "nikkei225",
         "euro_stoxx50",

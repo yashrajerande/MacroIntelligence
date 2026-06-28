@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "01 MAY 2026",
-      "verdict_line": "Copper at an all-time high of $6.03 while India VIX jumps to 18.46 — industrial metals are pricing a boom that India's own volatility gauge refuses to believe.",
-      "themes": [
-        "markets"
-      ],
-      "slugs": [
-        "copper",
-        "nikkei225",
-        "sp500",
-        "nasdaq",
-        "euro_stoxx50",
-        "india_vix"
-      ]
-    },
-    {
       "date": "02 MAY 2026",
       "verdict_line": "Brent down 5.2% to $108 while SIP inflows slip to ₹29,845 cr — India's retail bid is softening precisely when the oil windfall should be fuelling it.",
       "themes": [
@@ -434,6 +419,20 @@
         "sip_accounts",
         "nat_gas",
         "us_10y_treasury"
+      ]
+    },
+    {
+      "date": "29 JUN 2026",
+      "verdict_line": "Airline passenger traffic at a 7th-percentile 35.08 million while vehicle sales surge 26–29% — India's consumption story is bifurcating, and the segment that can't be faked by GST formalization is pointing down.",
+      "themes": [
+        "consumption"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "airline_pax",
+        "sip_accounts",
+        "nat_gas"
       ]
     }
   ]

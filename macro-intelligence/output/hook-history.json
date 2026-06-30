@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "03 MAY 2026",
-      "verdict_line": "Nikkei at a decade-high 59,513 while US GDP prints 0.7% — global equities are pricing a recovery that the world's largest economy has not yet delivered.",
-      "themes": [
-        "gdp_growth"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "nat_gas",
-        "wti_usd"
-      ]
-    },
-    {
       "date": "04 MAY 2026",
       "verdict_line": "Gold at $4,644 in USD but ₹2,000/gram at a 10-year floor — INR weakness should be lifting gold in rupee terms, yet it isn't; someone large is selling.",
       "themes": [
@@ -431,6 +417,21 @@
         "nat_gas",
         "sip_accounts",
         "us_10y_treasury"
+      ]
+    },
+    {
+      "date": "01 JUL 2026",
+      "verdict_line": "Euro Stoxx 50 and S&P 500 both at 100th-percentile highs while US GDP prints 0.7% SAAR — global equities are pricing a recovery that no growth data has yet authorised.",
+      "themes": [
+        "markets",
+        "gdp_growth"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "sp500",
+        "bank_nifty",
+        "us_vix"
       ]
     }
   ]

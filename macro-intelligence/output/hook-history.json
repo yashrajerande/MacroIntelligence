@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "04 MAY 2026",
-      "verdict_line": "Gold at $4,644 in USD but ₹2,000/gram at a 10-year floor — INR weakness should be lifting gold in rupee terms, yet it isn't; someone large is selling.",
-      "themes": [
-        "currency"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "sip_accounts",
-        "us_10y_treasury",
-        "airline_pax"
-      ]
-    },
-    {
       "date": "02 JUN 2026",
       "verdict_line": "SIP accounts grew just 1.6% MoM to 10.45 crore — a decade-low addition rate — while inflows hold at ₹29,845 crore; India's equity bid is concentrating, not broadening.",
       "themes": [],
@@ -432,6 +418,21 @@
         "sp500",
         "bank_nifty",
         "us_vix"
+      ]
+    },
+    {
+      "date": "02 JUL 2026",
+      "verdict_line": "US 10Y at 4.44% — an 80th-percentile yield rising while US GDP prints 0.7% SAAR — the bond market is tightening what the Fed refuses to, and India's ₹95.24 INR has no rate defence.",
+      "themes": [
+        "gdp_growth",
+        "policy"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "nat_gas",
+        "us_10y_treasury",
+        "sip_accounts"
       ]
     }
   ]

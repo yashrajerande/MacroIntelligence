@@ -1,18 +1,6 @@
 {
   "entries": [
     {
-      "date": "02 JUN 2026",
-      "verdict_line": "SIP accounts grew just 1.6% MoM to 10.45 crore — a decade-low addition rate — while inflows hold at ₹29,845 crore; India's equity bid is concentrating, not broadening.",
-      "themes": [],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "sip_accounts",
-        "nat_gas",
-        "copper"
-      ]
-    },
-    {
       "date": "04 JUN 2026",
       "verdict_line": "Bank Nifty at an 89th-percentile high while iron ore surges 54% in a month — the market is pricing a capex boom that core sector growth of 2.3% flatly contradicts.",
       "themes": [
@@ -433,6 +421,21 @@
         "nat_gas",
         "us_10y_treasury",
         "sip_accounts"
+      ]
+    },
+    {
+      "date": "03 JUL 2026",
+      "verdict_line": "India VIX at a 7th-percentile 12.29 while Bank Nifty flatlines at a 96th-percentile high — the market is pricing perfection into a credit system where deposits are losing the race to loans by 300bps.",
+      "themes": [
+        "markets"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "sp500",
+        "india_vix",
+        "us_vix",
+        "bank_nifty"
       ]
     }
   ]

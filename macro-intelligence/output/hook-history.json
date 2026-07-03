@@ -1,23 +1,6 @@
 {
   "entries": [
     {
-      "date": "04 JUN 2026",
-      "verdict_line": "Bank Nifty at an 89th-percentile high while iron ore surges 54% in a month — the market is pricing a capex boom that core sector growth of 2.3% flatly contradicts.",
-      "themes": [
-        "markets",
-        "gdp_growth",
-        "capex"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "sp500",
-        "bank_nifty",
-        "us_vix",
-        "iron_ore"
-      ]
-    },
-    {
       "date": "05 JUN 2026",
       "verdict_line": "Airline passengers crashed 9.1% to 35mn — a 10-year low — while PV sales surged 26.1%; India's demand story is bifurcating, and the weaker half is the one that moves people.",
       "themes": [],
@@ -436,6 +419,22 @@
         "india_vix",
         "us_vix",
         "bank_nifty"
+      ]
+    },
+    {
+      "date": "04 JUL 2026",
+      "verdict_line": "Copper at $6.224 — a 73rd-percentile print rising while US GDP prints 0.7% SAAR — the metal is pricing a China stimulus bounce, not a global recovery, and India's capex narrative is borrowing someone else's signal.",
+      "themes": [
+        "gdp_growth",
+        "capex",
+        "global_macro"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "nat_gas",
+        "sip_accounts",
+        "copper"
       ]
     }
   ]

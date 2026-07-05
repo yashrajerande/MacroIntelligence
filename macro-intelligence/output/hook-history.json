@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "06 JUN 2026",
-      "verdict_line": "US VIX spiked from 15.4 to 21.5 overnight while Nikkei and Euro Stoxx both sit at 100th-percentile highs — global equities are priced for perfection into a volatility regime that just repriced sharply.",
-      "themes": [
-        "markets"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "sip_accounts",
-        "nat_gas",
-        "us_vix"
-      ]
-    },
-    {
       "date": "07 JUN 2026",
       "verdict_line": "US 10Y at 4.47% barely budged while S&P shed 2.3% and VIX jumped to 21.5 — bonds aren't rallying into the equity selloff, which means the flight-to-safety trade is broken.",
       "themes": [
@@ -434,6 +419,22 @@
         "nat_gas",
         "sip_accounts",
         "us_10y_treasury"
+      ]
+    },
+    {
+      "date": "06 JUL 2026",
+      "verdict_line": "Iron ore at $161.91 — a 65% single-session surge to a 63rd-percentile print — is either the most important China stimulus signal of 2026 or the most dangerous head-fake for India's capex narrative.",
+      "themes": [
+        "capex",
+        "global_macro"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "nat_gas",
+        "sip_accounts",
+        "us_10y_treasury",
+        "iron_ore"
       ]
     }
   ]

@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "07 JUN 2026",
-      "verdict_line": "US 10Y at 4.47% barely budged while S&P shed 2.3% and VIX jumped to 21.5 — bonds aren't rallying into the equity selloff, which means the flight-to-safety trade is broken.",
-      "themes": [
-        "markets"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "sip_accounts",
-        "nat_gas"
-      ]
-    },
-    {
       "date": "08 JUN 2026",
       "verdict_line": "Brent at $95.7 — up 2.8% in 72 hours — while fuel CPI sits at -3.78%: the lagged pass-through hits Indian CPI in 6 weeks, not today, and the market is priced for the lag, not the landing.",
       "themes": [
@@ -435,6 +421,20 @@
         "sip_accounts",
         "us_10y_treasury",
         "iron_ore"
+      ]
+    },
+    {
+      "date": "07 JUL 2026",
+      "verdict_line": "Airline passengers down 9.1% MoM to a 7th-percentile low while GST prints ₹2.01 lakh crore — India's consumption story has two floors, and the one carrying the weight just cracked.",
+      "themes": [
+        "consumption"
+      ],
+      "slugs": [
+        "euro_stoxx50",
+        "airline_pax",
+        "nat_gas",
+        "sip_accounts",
+        "copper"
       ]
     }
   ]

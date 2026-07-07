@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "08 JUN 2026",
-      "verdict_line": "Brent at $95.7 — up 2.8% in 72 hours — while fuel CPI sits at -3.78%: the lagged pass-through hits Indian CPI in 6 weeks, not today, and the market is priced for the lag, not the landing.",
-      "themes": [
-        "inflation",
-        "oil"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "nat_gas",
-        "us_10y_treasury",
-        "sip_accounts"
-      ]
-    },
-    {
       "date": "09 JUN 2026",
       "verdict_line": "US 10Y at 4.55% — an 8bps move in 24 hours — while S&P sits at an all-time high and VIX collapses to 18.9; the bond market is pricing Fed tightening that equities are refusing to believe.",
       "themes": [
@@ -435,6 +420,21 @@
         "nat_gas",
         "sip_accounts",
         "copper"
+      ]
+    },
+    {
+      "date": "08 JUL 2026",
+      "verdict_line": "SIP inflows slipped to ₹29,845 cr while FII equity net flipped to -₹114 cr — domestic liquidity is still the floor, but it just got thinner.",
+      "themes": [
+        "flows"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "sip_accounts",
+        "nat_gas",
+        "sip_inflows",
+        "fii_equity_net"
       ]
     }
   ]

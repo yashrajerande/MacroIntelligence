@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "09 JUN 2026",
-      "verdict_line": "US 10Y at 4.55% — an 8bps move in 24 hours — while S&P sits at an all-time high and VIX collapses to 18.9; the bond market is pricing Fed tightening that equities are refusing to believe.",
-      "themes": [
-        "markets"
-      ],
-      "slugs": [
-        "nikkei225",
-        "us_10y_treasury",
-        "sip_accounts",
-        "nat_gas",
-        "airline_pax"
-      ]
-    },
-    {
       "date": "10 JUN 2026",
       "verdict_line": "PMI Services at 57.5 — an 88th-percentile read — while airline passengers hit a 10-year low at 35mn; India's services expansion is statistical, not experiential.",
       "themes": [
@@ -435,6 +421,20 @@
         "nat_gas",
         "sip_inflows",
         "fii_equity_net"
+      ]
+    },
+    {
+      "date": "09 JUL 2026",
+      "verdict_line": "Nikkei at a 100th-percentile high while printing 6,681 — a data anomaly or the sharpest single-session dislocation in a decade — and Bank Nifty's 94th-percentile perch looks lonelier by the hour.",
+      "themes": [
+        "markets"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "bank_nifty",
+        "india_vix",
+        "nat_gas"
       ]
     }
   ]

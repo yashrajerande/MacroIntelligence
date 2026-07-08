@@ -291,11 +291,14 @@ async function run() {
       meta,
     });
 
-    // Git (skip if env says so)
+    // Git (skip if env says so). state.json and the research cache are
+    // committed too — the next cycle's delta computation depends on them
+    // surviving the ephemeral runner.
     const gitResult = publishGit({
       archivePath: rendered.archivePath,
       latestPath:  rendered.latestPath,
       rootIndexPath: ROOT_INDEX,
+      statePaths: [STATE_PATH, researchCachePath],
       cycleLabel: cycle.cycleLabel,
       dryRun: process.env.SKIP_GIT_PUSH === 'true',
     });

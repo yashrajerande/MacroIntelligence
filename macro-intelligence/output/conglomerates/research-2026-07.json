@@ -1,0 +1,1014 @@
+{
+  "data": {
+    "window_start": "2026-06-01",
+    "window_end": "2026-07-01",
+    "findings": [
+      {
+        "group": "Reliance",
+        "window_start": "2026-06-01",
+        "window_end": "2026-07-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-06-07",
+            "category": "leadership",
+            "headline": "Anant Ambani appointed whole-time executive director, 94.4% shareholder approval",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Business Standard / Simply Wall St",
+            "raw_evidence": "<cite index=\"8-1,8-2\">Reliance Industries Limited announced Anant M. Ambani's appointment as a whole-time executive director, receiving strong backing from shareholders with 94.4% approval on 07 June 2026.</cite>"
+          },
+          {
+            "date": "2026-06-24",
+            "category": "regulatory",
+            "headline": "SEBI administrative warning for insider trading violations by employees in July 2024",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Business Standard / SEBI",
+            "raw_evidence": "<cite index=\"15-3,15-4,15-5\">The Securities and Exchange Board of India (SEBI) issued an administrative warning to Reliance Industries in a letter dated June 24, relating to dealings in the company's shares by two employees and an immediate relative of an employee in July 2024, pertaining to trades carried out while in possession of unpublished price-sensitive information.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "levering",
+          "succession_color": "settled",
+          "regulatory_color": "under-watch"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 1117
+          },
+          "latency_ms": 11839
+        }
+      },
+      {
+        "group": "Tata",
+        "window_start": "2026-06-01",
+        "window_end": "2026-07-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-06-24",
+            "category": "M&A",
+            "headline": "Tata Steel acquires T Steel Holdings subsidiary equity for $172 million",
+            "value_inr_cr": 1625.29,
+            "value_usd_mn": 172,
+            "value_status": "confirmed",
+            "source": "Business Upturn",
+            "raw_evidence": "<cite index=\"28-1,28-2\">Tata Steel Limited acquired 199,07,40,741 equity shares in its wholly owned subsidiary, T Steel Holdings Pte. Ltd, for a total consideration of USD 172 million, equivalent to ₹1,625.29 crore.</cite>"
+          },
+          {
+            "date": "2026-06-30",
+            "category": "leadership",
+            "headline": "Noel Tata steps down as Voltas chairman, completing planned board transitions",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "People Matters / Business Standard",
+            "raw_evidence": "<cite index=\"9-1,9-2\">Noel Tata announced he will step down as chairman of Voltas following the company's AGM, marking another leadership transition as he approaches the group's retirement age for non-executive directors.</cite>"
+          },
+          {
+            "date": "2026-07-06",
+            "category": "capex",
+            "headline": "Tata Steel announces $2.09 billion capex for FY27, 60% allocated to India operations",
+            "value_inr_cr": 17500,
+            "value_usd_mn": 2090,
+            "value_status": "confirmed",
+            "source": "Steel Orbis",
+            "raw_evidence": "<cite index=\"4-1,4-3\">Tata Steel Limited will spend an estimated $2.09 billion as capital expenditure in fiscal year 2026-27, with 60 percent of which on its facilities in India.</cite>"
+          },
+          {
+            "date": "2026-06-30",
+            "category": "capex",
+            "headline": "Indian Hotels announces ₹7,500 crore capex plan over 5 years under Accelerate 2030",
+            "value_inr_cr": 7500,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Trade Brains / Business Standard",
+            "raw_evidence": "<cite index=\"6-12,6-13\">Indian Hotels Company Limited (IHCL), the hospitality arm of the Tata Group, announced a major expansion plan involving significant capital investment over the next five years at its 125th Annual General Meeting held on June 30.</cite>"
+          },
+          {
+            "date": "2026-07-05",
+            "category": "leadership",
+            "headline": "Tata Digital appoints three C-suite leaders: CTO, CPO, CHRO amid restructuring",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Business Standard",
+            "raw_evidence": "<cite index=\"12-1,12-2\">Rajesh Naik joined as CTO, Chandramouli Gopalakrishnan as CPO, and Snigdha Singh as CHRO. After a prolonged restructuring that saw hundreds of layoffs and several senior executives' exit, Tata Digital began rebuilding its leadership team.</cite>"
+          },
+          {
+            "date": "2026-06-24",
+            "category": "leadership",
+            "headline": "Air India CEO Campbell Wilson resigns; Tata Sons increases oversight with weekly reviews",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Business Standard",
+            "raw_evidence": "<cite index=\"13-1,13-4,13-9\">As Air India enters a leadership transition and faces rising financial pressure, Tata Sons Chairman N Chandrasekaran began conducting weekly reviews of the airline. Campbell Wilson resigned as Air India Chief Executive Officer and Managing Director.</cite>"
+          },
+          {
+            "date": "2026-06-29",
+            "category": "M&A",
+            "headline": "Tata Motors Iveco acquisition on track for Q2 FY27 completion; majority regulatory approvals secured",
+            "value_inr_cr": null,
+            "value_usd_mn": 4500,
+            "value_status": "confirmed",
+            "source": "Business Standard / Reuters",
+            "raw_evidence": "<cite index=\"29-1,29-2\">The company expects to complete the acquisition by the second quarter of FY27, subject to remaining regulatory approvals. Tata Motors has already secured the majority of the mandatory clearances across multiple jurisdictions.</cite>"
+          },
+          {
+            "date": "2026-07-07",
+            "category": "financing",
+            "headline": "Tata Capital allots ₹2,750 crore secured NCDs maturing July 2031",
+            "value_inr_cr": 2750,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Screener.in",
+            "raw_evidence": "<cite index=\"1-1\">Tata Capital allotted secured NCDs worth Rs.2,750 crore on July 7, 2026, maturing July 7, 2031.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "levering",
+          "succession_color": "active",
+          "regulatory_color": "under-watch"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 2096
+          },
+          "latency_ms": 18524
+        }
+      },
+      {
+        "group": "Adani",
+        "window_start": "2026-06-01",
+        "window_end": "2026-07-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-06-02",
+            "category": "capex",
+            "headline": "FY26 record capex of ₹1.53 lakh crore; portfolio EBITDA ₹94,834 crore",
+            "value_inr_cr": 153000,
+            "value_usd_mn": 16100,
+            "value_status": "confirmed",
+            "source": "Adani Group press release / Deccan Herald",
+            "raw_evidence": "<cite index=\"5-4\">Adani group companies reported a record capital expenditure of Rs 1.53 lakh crore (USD 16.1 billion) and an all-time high EBITDA of Rs 94,834 crore (USD 10 billion) in the 2025-26 fiscal year</cite>."
+          },
+          {
+            "date": "2026-06-09",
+            "category": "M&A",
+            "headline": "Adani Energy Solutions to acquire IntelliSmart for ₹3,050 crore",
+            "value_inr_cr": 3050,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Adani Group press release",
+            "raw_evidence": "Adani Energy Solutions announced acquisition of IntelliSmart, one of India's largest smart meter players, for ₹3,050 crore to expand utilities business."
+          },
+          {
+            "date": "2026-06-24",
+            "category": "leadership",
+            "headline": "Gautam Adani outlines three-pronged plan at AGM; US legal issues resolved",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Business Standard",
+            "raw_evidence": "<cite index=\"3-3\">In May 2026, the US Securities and Exchange Commission (SEC) reached an $18 million civil settlement, while the US Department of Justice (DOJ) permanently dropped all criminal charges against the group</cite>."
+          },
+          {
+            "date": "2026-07-01",
+            "category": "leadership",
+            "headline": "Adani Energy Solutions appoints Pramath Nath as Chief People Officer",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "TipRanks / Adani Energy Solutions",
+            "raw_evidence": "<cite index=\"8-1\">Adani Energy Solutions has replaced Chief People Officer Samir Prakash with HR veteran Pramath Nath as part of an organisational restructuring, effective July 1, 2026</cite>."
+          },
+          {
+            "date": "2026-07-01",
+            "category": "financing",
+            "headline": "Adani Energy Solutions approves ₹10,000 crore fund raise via QIP",
+            "value_inr_cr": 10000,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Adani Energy Solutions / Scanx",
+            "raw_evidence": "<cite index=\"12-4,12-5\">Adani Energy Solutions has approved raising up to ₹10,000 crore through a Qualified Institutions Placement (QIP) or other permissible modes. The Board of Directors approved the fund-raising proposal at a meeting held on July 1, 2026</cite>."
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "stable",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 1660
+          },
+          "latency_ms": 14343
+        }
+      },
+      {
+        "group": "Aditya Birla",
+        "window_start": "2026-06-01",
+        "window_end": "2026-07-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-06-11",
+            "category": "financing",
+            "headline": "Vodafone Idea shareholders approve ₹4,730 crore Aditya Birla infusion",
+            "value_inr_cr": 4730,
+            "value_usd_mn": 567,
+            "value_status": "confirmed",
+            "source": "Outlook Business",
+            "raw_evidence": "<cite index=\"1-1,1-7\">Vodafone Idea shareholders on June 11, 2026 approved a ₹4,730-crore investment from the Aditya Birla Group through a preferential allotment of warrants at an extraordinary general meeting (EGM).</cite> <cite index=\"1-8\">Aditya Birla Group's stake in the telecom operator will increase to around 13% from its existing holding of 9.6%.</cite>"
+          },
+          {
+            "date": "2026-06-23",
+            "category": "leadership",
+            "headline": "Aditya Birla Sun Life AMC appoints Hemen Bhatia as Head of Passives",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "MediaNews4U",
+            "raw_evidence": "<cite index=\"14-1\">Hemen Bhatia has been appointed as Head – Passives and designated as Senior Management Personnel, effective June 23, 2026.</cite>"
+          },
+          {
+            "date": "2026-07-02",
+            "category": "regulatory",
+            "headline": "NCLT sanctions merger of Jaypore and TG Apparel with Aditya Birla Fashion & Retail",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "NCLT Mumbai Bench / Scanx",
+            "raw_evidence": "<cite index=\"29-3,29-8\">The National Company Law Tribunal has sanctioned the amalgamation of Jaypore E-Commerce and TG Apparel & Decor with Aditya Birla Fashion & Retail, with the order dated July 2, 2026, approving the merger of the two wholly owned subsidiaries with the parent company, effective from the Appointed Date of April 1, 2026.</cite> <cite index=\"29-4\">The merger aims to simplify the group structure and reduce costs, with no new shares issued as the subsidiaries are wholly owned.</cite>"
+          },
+          {
+            "date": "2026-07-01",
+            "category": "leadership",
+            "headline": "Aditya Birla Sun Life AMC appoints Parag Murudkar as Head of Marketing",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "MediaNews4U",
+            "raw_evidence": "<cite index=\"14-4\">Parag Murudkar has been appointed Head – Marketing and designated as Senior Management Personnel with effect from July 1, 2026, succeeding Ranabir Bose.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "stable",
+          "succession_color": "active",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3191,
+            "output": 1506
+          },
+          "latency_ms": 13342
+        }
+      },
+      {
+        "group": "Mahindra",
+        "window_start": "2026-06-01",
+        "window_end": "2026-07-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-06-10",
+            "category": "leadership",
+            "headline": "SML Mahindra CEO Dr. Venkataraman Srinivas steps down effective June 30",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Business Standard",
+            "raw_evidence": "<cite index=\"11-1,11-2\">SML Mahindra's executive director and chief executive officer, Dr. Venkataraman Srinivas, will step down from his position with effect from the close of 30 June 2026, following his transition to a new role within the Mahindra Group. The company's board of directors approved the leadership change at its meeting held on 10 June 2026.</cite>"
+          },
+          {
+            "date": "2026-06-22",
+            "category": "leadership",
+            "headline": "M&M Financial Services changes LIC board representative",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Scanx",
+            "raw_evidence": "<cite index=\"20-3,20-4\">Mahindra & Mahindra Financial Services Limited has changed the director representing Life Insurance Corporation of India (LIC) on its Board, effective June 22, 2026. Mr. Ashwani Ghai has ceased to be a Non-Executive (Non-Independent) Director, following the nomination of a new representative by LIC.</cite>"
+          },
+          {
+            "date": "2026-07-01",
+            "category": "rating",
+            "headline": "CARE reaffirms AAA/Stable ratings for M&M Financial's debts",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Screener",
+            "raw_evidence": "<cite index=\"3-6\">CARE reaffirmed AAA/Stable ratings for M&M Financial's debts on 1 July 2026; one NCD tranche withdrawn after redemption.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "stable",
+          "succession_color": "active",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3185,
+            "output": 1271
+          },
+          "latency_ms": 12474
+        }
+      },
+      {
+        "group": "L&T",
+        "window_start": "2026-06-01",
+        "window_end": "2026-07-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-06-20",
+            "category": "M&A",
+            "headline": "L&T incorporates new data centre subsidiary LTA Data Centres Private Limited",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "unconfirmed",
+            "source": "ScanX",
+            "raw_evidence": "<cite index=\"8-16,8-17\">L&T's wholly owned subsidiary Vyoma.AI Limited incorporated a new step-down subsidiary, LTA Data Centres Private Limited (LTADCPL), on June 20, 2026, to focus on data centres and related technology-enabled services.</cite>"
+          },
+          {
+            "date": "2026-07-01",
+            "category": "leadership",
+            "headline": "P. Ramakrishnan appointed new CFO; R. Shankar Raman transitions to President role",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "B2B Purchase",
+            "raw_evidence": "<cite index=\"10-1,10-2,10-3\">P. Ramakrishnan appointed as new Chief Financial Officer from 1 July 2026, a long-serving L&T executive with more than three decades of experience who has previously handled finance, taxation, treasury, investor relations and risk management responsibilities.</cite> <cite index=\"10-5\">Current CFO R. Shankar Raman will continue as President and Whole-time Director – Finance until September 2028, stepping down from the CFO role at the end of June.</cite>"
+          },
+          {
+            "date": "2026-07-07",
+            "category": "rating",
+            "headline": "Moody's assigns Baa1 long-term issuer rating with Stable outlook to L&T",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Larsen & Toubro Press Release",
+            "raw_evidence": "<cite index=\"25-1\">Larsen & Toubro Limited secured a 'Baa1' long term issuer rating with a 'Stable' outlook from Moody's Ratings on 07 July 2026, reinforcing the Group's robust credit profile and financial resilience.</cite> <cite index=\"24-7\">The rating is two notches above India's sovereign rating, placing L&T among a select group of Indian corporates.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "stable",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 1370
+          },
+          "latency_ms": 14426
+        }
+      },
+      {
+        "group": "Bharti",
+        "window_start": "2026-06-01",
+        "window_end": "2026-07-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-06-12",
+            "category": "M&A",
+            "headline": "Bharti Airtel shareholders approve Airtel Africa stake consolidation via share swap",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "unconfirmed",
+            "source": "BSE Filing / Bharti Airtel",
+            "raw_evidence": "<cite index=\"29-2,29-3\">Bharti Airtel announced that nearly 100% of shareholders approved a transaction to consolidate its stake in Airtel Africa plc, involving Bharti Airtel issuing equity shares to Indian Continent Investment Limited in exchange for its 16.31% stake in Airtel Africa.</cite> <cite index=\"29-8\">Upon consummation, this will increase Bharti Airtel's effective stake in Airtel Africa to approximately 79%.</cite>"
+          },
+          {
+            "date": "2026-06-24",
+            "category": "rating",
+            "headline": "S&P upgrades Bharti Airtel to BBB+ from BBB on Africa growth and balance sheet discipline",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "S&P Global Ratings",
+            "raw_evidence": "<cite index=\"2-27\">On June 24, 2026, S&P Global Ratings raised its long-term issuer credit ratings on Bharti Airtel to 'BBB+' from 'BBB'.</cite>"
+          },
+          {
+            "date": "2026-06-30",
+            "category": "regulatory",
+            "headline": "DoT imposes ₹1.69 crore penalty on Bharti Airtel for subscriber verification violations",
+            "value_inr_cr": 1.69,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "BSE Filing / DoT",
+            "raw_evidence": "<cite index=\"1-8\">DoT imposed Rs. 1,69,000 penalty on June 30, 2026 for alleged subscriber verification violations; company will pay.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "deleveraging",
+          "succession_color": "active",
+          "regulatory_color": "under-watch"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 1274
+          },
+          "latency_ms": 12326
+        }
+      },
+      {
+        "group": "JSW",
+        "window_start": "2026-06-01",
+        "window_end": "2026-07-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-07-01",
+            "category": "financing",
+            "headline": "JSW Infrastructure raises ₹7,503 crore via QIP for capex",
+            "value_inr_cr": 7503,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Webnewswire / BusinessLine",
+            "raw_evidence": "<cite index=\"2-1,2-3\">JSW Infrastructure completed a ₹7,503 crore Qualified Institutions Placement comprising ₹6,555 crore primary issuance and balance via promoter offer-for-sale</cite>. <cite index=\"2-5\">The deal raised development capital to support its 39,000 crore multi-year capital investment program</cite>."
+          },
+          {
+            "date": "2026-07-02",
+            "category": "M&A",
+            "headline": "NCLT sanctions merger of ARCL, MCL, JRDL into JSW Steel",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "unconfirmed",
+            "source": "Screener.in",
+            "raw_evidence": "<cite index=\"3-1\">NCLT sanctioned merger of ARCL, MCL and JRDL into JSW Steel on July 2, 2026</cite>."
+          },
+          {
+            "date": "2026-07-03",
+            "category": "capex",
+            "headline": "JSW Steel starts Rayalaseema project; 2 MTPA plant, ₹16,350 cr investment",
+            "value_inr_cr": 16350,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Screener.in",
+            "raw_evidence": "<cite index=\"3-3\">JSW Steel starts Rayalaseema project in Andhra Pradesh; 2 MTPA plant, total investment up to ₹16,350 crore</cite>."
+          },
+          {
+            "date": "2026-07-02",
+            "category": "rating",
+            "headline": "Moody's upgrades JSW Infrastructure to Baa3 stable; notes upgraded Ba1 to Baa3",
+            "value_inr_cr": null,
+            "value_usd_mn": 400,
+            "value_status": "confirmed",
+            "source": "Screener.in",
+            "raw_evidence": "<cite index=\"6-5\">Moody's assigned JSW Infrastructure Baa3 stable; $400 million notes upgraded from Ba1 to Baa3</cite>."
+          },
+          {
+            "date": "2026-07-02",
+            "category": "leadership",
+            "headline": "JSW Steel appoints Dev Bajpai as Independent Director for five-year term",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Scanx",
+            "raw_evidence": "<cite index=\"7-1,7-4\">JSW Steel appointed Dev Bajpai as Additional Director (Non-Executive Independent) effective July 2, 2026, for a five-year term from July 2, 2026 to July 1, 2031, subject to shareholder approval</cite>."
+          },
+          {
+            "date": "2026-06-30",
+            "category": "M&A",
+            "headline": "JFE Steel acquires additional 25% stake in JSW JFE Kalinga Steel for ₹7,875 cr",
+            "value_inr_cr": 7875,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Scanx",
+            "raw_evidence": "<cite index=\"7-11,7-12,7-13\">JFE Steel acquired an additional 25% stake in JSW JFE Kalinga Steel Limited on June 30, 2026, for Rs. 7,875 crores, bringing its total investment to Rs. 15,750 crores for a 50% holding</cite>."
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "deleveraging",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3181,
+            "output": 1476
+          },
+          "latency_ms": 13672
+        }
+      },
+      {
+        "group": "Bajaj",
+        "window_start": "2026-06-01",
+        "window_end": "2026-07-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-06-09",
+            "category": "leadership",
+            "headline": "Rajiv Bajaj steps down from Bajaj Finserv board at July 31 AGM",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Screener/Bajaj Finserv regulatory filing",
+            "raw_evidence": "<cite index=\"11-1,11-3,11-4\">Rajiv Bajaj will not seek re-election at the Bajaj Finserv AGM on 31 July 2026, citing increased commitments at Bajaj Auto Ltd, including new subsidiaries (Bajaj Auto Technology Ltd. and Bajaj Auto Credit Ltd.) and the KTM acquisition.</cite>"
+          },
+          {
+            "date": "2026-06-24",
+            "category": "M&A",
+            "headline": "Bajaj Auto announces ₹5,633 crore share buyback at ₹12,000/share",
+            "value_inr_cr": 5633,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Business Standard / Bajaj Auto regulatory filing",
+            "raw_evidence": "<cite index=\"33-16,33-17\">Bajaj Auto's Rs 5,632.8-crore share buyback will start from July 1, 2026. The company is undertaking a buyback of up to 46.94 lakh fully paid-up equity shares at a price of Rs 12,000 per share.</cite>"
+          },
+          {
+            "date": "2026-06-01",
+            "category": "leadership",
+            "headline": "Bajaj Auto senior management restructuring; two executives cease senior status",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "MarketScreener / Bajaj Auto regulatory filing",
+            "raw_evidence": "<cite index=\"22-2\">Ms. Baminee Viswanat (General Counsel, redesignated as Chief Legal Officer) and Mr. Vijay Jerome (Chief Digital & Information Officer) will cease to form part of senior management with effect from June 1, 2026.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "stable",
+          "succession_color": "active",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 1239
+          },
+          "latency_ms": 12698
+        }
+      },
+      {
+        "group": "Vedanta",
+        "window_start": "2026-06-01",
+        "window_end": "2026-07-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-06-01",
+            "category": "leadership",
+            "headline": "Arun Misra tenure extended as Executive Director for two months",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Scanx",
+            "raw_evidence": "<cite index=\"8-1,8-2\">Vedanta Limited extended Mr. Arun Misra's tenure as Executive Director for two months, effective June 01, 2026, to July 31, 2026, pending shareholder approval.</cite>"
+          },
+          {
+            "date": "2026-06-22",
+            "category": "M&A",
+            "headline": "Vedanta incorporates wholly-owned real estate subsidiary",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "unconfirmed",
+            "source": "Screener",
+            "raw_evidence": "<cite index=\"1-9\">Vedanta incorporated Vedanta Property Platforms Limited, a wholly owned real estate subsidiary, on June 22, 2026.</cite>"
+          },
+          {
+            "date": "2026-06-26",
+            "category": "financing",
+            "headline": "Bluspring receives ₹406 crore O&M contract extension from Vedanta Power",
+            "value_inr_cr": 406,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Business Standard",
+            "raw_evidence": "<cite index=\"6-4,6-5,6-6,6-7\">STEAG Energy Services (India) received an extension of contract for operations and maintenance of a 600 MW thermal power plant from Vedanta Power. The contract shall remain in force for a period of 5 years with effect from 01 July 2026. The estimated aggregate contract value, including additional services, is Rs. 406.43 crore.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "deleveraging",
+          "succession_color": "active",
+          "regulatory_color": "under-watch"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 1242
+          },
+          "latency_ms": 12960
+        }
+      },
+      {
+        "group": "Murugappa",
+        "window_start": "2026-06-01",
+        "window_end": "2026-07-01",
+        "no_material_movement": true,
+        "moves": [],
+        "context_signals": {
+          "leverage_color": "stable",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3185,
+            "output": 609
+          },
+          "latency_ms": 7883
+        }
+      },
+      {
+        "group": "TVS",
+        "window_start": "2026-06-01",
+        "window_end": "2026-07-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-06-15",
+            "category": "capex",
+            "headline": "TVS Motor pledges ₹2,000 crore capex for Norton Motorcycles expansion",
+            "value_inr_cr": 2000,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "SAHI",
+            "raw_evidence": "TVS Motor earmarked ₹2,000 crore for Norton Motorcycles with plans to expand dealer presence from 50 to 200 dealers by FY27-end, targeting premium global markets."
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "stable",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3181,
+            "output": 799
+          },
+          "latency_ms": 10230
+        }
+      },
+      {
+        "group": "Sundaram",
+        "window_start": "2026-06-01",
+        "window_end": "2026-07-01",
+        "no_material_movement": true,
+        "moves": [],
+        "context_signals": {
+          "leverage_color": "unknown",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 620
+          },
+          "latency_ms": 8483
+        }
+      },
+      {
+        "group": "Godrej",
+        "window_start": "2026-06-01",
+        "window_end": "2026-07-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-06-18",
+            "category": "financing",
+            "headline": "Godrej Industries approves ₹1,000 crore NCD issuance on private placement",
+            "value_inr_cr": 1000,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "ScanX",
+            "raw_evidence": "<cite index=\"28-2,28-3\">Godrej Industries approved the Key Information Document for issuing up to 1,00,000 Rated, Listed, Unsecured, Redeemable, Non-Convertible Debentures aggregating ₹1,000 Cr on a private placement basis, split into two series of 50,000 debentures each, worth ₹500 Cr, approved by the Management Committee on June 18, 2026.</cite>"
+          },
+          {
+            "date": "2026-06-30",
+            "category": "M&A",
+            "headline": "Godrej Properties acquires 47-acre Chennai land parcel for ₹500 crore",
+            "value_inr_cr": 500,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Screener/BSE",
+            "raw_evidence": "<cite index=\"5-15\">Godrej Properties acquires 47-acre Chennai land parcel; 1.2 million sq ft potential, INR 500 crore revenue.</cite>"
+          },
+          {
+            "date": "2026-07-01",
+            "category": "M&A",
+            "headline": "Godrej Properties wins Noida Sector 151 land parcel for ₹331.75 crore",
+            "value_inr_cr": 332,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Screener/BSE",
+            "raw_evidence": "<cite index=\"5-14\">Godrej Properties wins Noida Sector 151 land parcel for ₹331.75 crore; project may generate over ₹2,000 crore revenue.</cite>"
+          },
+          {
+            "date": "2026-07-03",
+            "category": "regulatory",
+            "headline": "CGRERA imposes ₹10 lakh penalty on Godrej Properties for pre-registration advertising",
+            "value_inr_cr": 0.1,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Screener/BSE",
+            "raw_evidence": "<cite index=\"26-2,26-3,26-4\">Godrej Properties received a penalty of Rs 10,00,000 from the Chhattisgarh Real Estate Regulatory Authority (CGRERA), Raipur, for an alleged contravention of the Real Estate (Regulation and Development) Act, 2016. The order, dated June 08, 2026, was received by the company on July 03, 2026. The penalty was imposed under Section 3(1) read with Section 59 of the Act, relating to the advertisement of \"Project – Greenvale Estate\" prior to obtaining RERA registration.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "levering",
+          "succession_color": "settled",
+          "regulatory_color": "under-watch"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 1469
+          },
+          "latency_ms": 13731
+        }
+      },
+      {
+        "group": "Hero",
+        "window_start": "2026-06-01",
+        "window_end": "2026-07-01",
+        "no_material_movement": true,
+        "moves": [],
+        "context_signals": {
+          "leverage_color": "stable",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3179,
+            "output": 769
+          },
+          "latency_ms": 10652
+        }
+      },
+      {
+        "group": "Hinduja",
+        "window_start": "2026-06-01",
+        "window_end": "2026-07-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-06-18",
+            "category": "M&A",
+            "headline": "NCLT orders NDL Ventures shareholder meetings for HLF merger approval",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "unconfirmed",
+            "source": "SAHI / NCLT Mumbai Bench",
+            "raw_evidence": "NCLT formally directed NDL Ventures to convene meetings for shareholders and unsecured creditors to approve the proposed merger of Hinduja Leyland Finance into NDL Ventures, with a 25:10 share swap ratio. This back-door listing of HLF is a strategic deployment by Hinduja Group to unlock value from their financing arm."
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "unknown",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 963
+          },
+          "latency_ms": 10588
+        }
+      },
+      {
+        "group": "RPG",
+        "window_start": "2026-06-01",
+        "window_end": "2026-07-01",
+        "no_material_movement": true,
+        "moves": [],
+        "context_signals": {
+          "leverage_color": "unknown",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3181,
+            "output": 544
+          },
+          "latency_ms": 7490
+        }
+      },
+      {
+        "group": "Shapoorji Pallonji",
+        "window_start": "2026-06-01",
+        "window_end": "2026-07-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-06-24",
+            "category": "financing",
+            "headline": "Porteast Investment secures covenant relief on $3.4B private credit facility",
+            "value_inr_cr": null,
+            "value_usd_mn": 3400,
+            "value_status": "confirmed",
+            "source": "Bloomberg",
+            "raw_evidence": "<cite index=\"5-2,5-3\">A unit of India's Shapoorji Pallonji Group secured approval from its major lenders to ease a key debt condition after falling collateral values pushed it closer to its borrowing limits. Its financing arm, Porteast Investment, will temporarily raise its loan-to-value limit to 40 per cent from 34 per cent for four months through July 15.</cite>"
+          },
+          {
+            "date": "2026-06-29",
+            "category": "financing",
+            "headline": "Goswami Infratech seeks extension of ₹8,343 crore zero-coupon bonds maturing June 30",
+            "value_inr_cr": 8343,
+            "value_usd_mn": 884,
+            "value_status": "confirmed",
+            "source": "Business Standard",
+            "raw_evidence": "<cite index=\"4-8,4-14\">An investment unit of the infrastructure conglomerate has recently been asking creditors to allow it to delay the repayment of the notes with ₹8,343 crore ($884 million) outstanding that mature this month. Goswami is seeking to extend its zero-coupon bonds by at least a month beyond the June 30 maturity date.</cite>"
+          },
+          {
+            "date": "2026-06-29",
+            "category": "financing",
+            "headline": "Bondholders of Goswami Infratech attempt secondary market sales at 90% of par",
+            "value_inr_cr": null,
+            "value_usd_mn": 1500,
+            "value_status": "unconfirmed",
+            "source": "Bloomberg",
+            "raw_evidence": "<cite index=\"8-2,8-3,8-4\">Some bondholders of Shapoorji Pallonji Group, India's largest private credit borrower, are attempting to sell debt linked to one of its units as prolonged refinancing talks test investor patience. Traders in Singapore and Hong Kong have been offering the so-called non-convertible debentures of subsidiary Goswami Infratech Pvt. at about 90% of par in the past two weeks, although it wasn't immediately clear whether any trades were executed.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "stressed",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3193,
+            "output": 1402
+          },
+          "latency_ms": 16234
+        }
+      },
+      {
+        "group": "Essar",
+        "window_start": "2026-06-01",
+        "window_end": "2026-07-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-06-02",
+            "category": "M&A",
+            "headline": "Mesabi Metallics sells 50% royalty interest to Metals Royalty Company",
+            "value_inr_cr": null,
+            "value_usd_mn": 265,
+            "value_status": "confirmed",
+            "source": "Essar Group Press Release",
+            "raw_evidence": "<cite index=\"9-2,9-3\">Mesabi Metallics Company LLC (Mesabi Metallics), backed by Essar Group, has agreed to sell 50% of its royalty interest to The Metals Royalty Company Inc. (TMCR) for total consideration of $265 million. The transaction with TMCR will be completed in two equal tranches of $132.5 million each: the first tranche closed on 1st June 2026, with the second tranche expected to close within 60 days.</cite>"
+          },
+          {
+            "date": "2026-06-16",
+            "category": "financing",
+            "headline": "Essar Energy Transition Fuels secures $500M crude sourcing facility with IRH",
+            "value_inr_cr": null,
+            "value_usd_mn": 500,
+            "value_status": "confirmed",
+            "source": "Essar Group Press Release",
+            "raw_evidence": "<cite index=\"1-1\">Essar Group and International Resources Holding (IRH) announced the successful execution of a USD 500 million crude sourcing facility and product supply facility between Essar Energy Transition Fuels and IRH Global Trading on 16 June 2026.</cite>"
+          },
+          {
+            "date": "2026-07-06",
+            "category": "financing",
+            "headline": "Essar Energy Transition renews $300M crude facility with Petraco Oil Company",
+            "value_inr_cr": null,
+            "value_usd_mn": 300,
+            "value_status": "confirmed",
+            "source": "Essar Group Press Release / Business Desk",
+            "raw_evidence": "<cite index=\"18-15\">Essar Energy Transition successfully renewed US$300m crude facility between Essar Energy Transition Fuels and Petraco Oil Company SA on 6 July 2026, demonstrating market confidence in the company's performance, market position and strategic importance.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "deleveraging",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 1363
+          },
+          "latency_ms": 13230
+        }
+      },
+      {
+        "group": "Welspun",
+        "window_start": "2026-06-01",
+        "window_end": "2026-07-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-06-15",
+            "category": "capex",
+            "headline": "Welspun USA pillow unit achieves full commercial production in Nevada",
+            "value_inr_cr": 98,
+            "value_usd_mn": 13,
+            "value_status": "confirmed",
+            "source": "Screener.in / BSE Regulation 30 filing",
+            "raw_evidence": "<cite index=\"8-4\">Welspun USA Inc. fully commenced pillow unit commercial production in Nevada on June 15, 2026.</cite> Project capex was USD 13 million approved in July 2025."
+          },
+          {
+            "date": "2026-06-19",
+            "category": "financing",
+            "headline": "Welspun Living completes share buyback, extinguishes 1.44 crore shares",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "unconfirmed",
+            "source": "Screener.in / BSE Regulation 30 filing",
+            "raw_evidence": "<cite index=\"8-3\">Welspun Living completed extinguishment of 1,44,00,000 shares under buyback on June 19, 2026.</cite> Promoter group tendered 84.09 crore shares on June 11, 2026; holding changed to 66.36%."
+          },
+          {
+            "date": "2026-07-08",
+            "category": "leadership",
+            "headline": "CFO of Welspun Michigan Engineers resigns; MD assumes interim water vertical charge",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Whalesbook / Welspun Enterprises disclosure",
+            "raw_evidence": "<cite index=\"10-1\">WMEL's CFO, Hardik Dhebar, resigned, effective July 8, 2026, and will leave on August 14, 2026.</cite> <cite index=\"10-4\">Mr. Sandeep Garg, the Managing Director, will now also serve as the interim leader for the company's Water vertical operations.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "deleveraging",
+          "succession_color": "active",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3185,
+            "output": 1255
+          },
+          "latency_ms": 12569
+        }
+      },
+      {
+        "group": "Piramal",
+        "window_start": "2026-06-01",
+        "window_end": "2026-07-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-07-02",
+            "category": "leadership",
+            "headline": "Piramal Finance AGM approves re-appointment of Anand Piramal and Suhail Nathani as directors",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Scanx / BSE-NSE filings",
+            "raw_evidence": "<cite index=\"2-16,2-17\">Piramal Finance Limited secured shareholder approval for all six resolutions at its 42nd Annual General Meeting held on July 2, 2026. The meeting approved the declaration of a final dividend of ₹11 per equity share for FY26, the adoption of audited financial statements, and the re-appointment of Mr. Anand Piramal and Mr. Suhail Nathani as directors.</cite>"
+          },
+          {
+            "date": "2026-07-02",
+            "category": "financing",
+            "headline": "Piramal Finance AGM approves NCD issuance and loan-to-equity conversion authority",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Scanx / BSE-NSE filings",
+            "raw_evidence": "<cite index=\"2-18\">Special resolutions regarding the issue of Non-Convertible Debentures and the conversion of loans into equity were also passed with significant majorities.</cite>"
+          },
+          {
+            "date": "2026-07-04",
+            "category": "regulatory",
+            "headline": "Piramal Finance files NCLT petition for subsidiary amalgamation scheme",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Scanx / NCLT filing",
+            "raw_evidence": "<cite index=\"2-1\">Piramal Finance filed a petition with the National Company Law Tribunal (NCLT) on July 4, 2026, seeking sanction for its amalgamation scheme with three subsidiaries: Piramal Corporate Tower Private Limited, Piramal Agastya Offices Private Limited, and DHFL Investments Limited.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "stable",
+          "succession_color": "settled",
+          "regulatory_color": "under-action"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3185,
+            "output": 1332
+          },
+          "latency_ms": 16782
+        }
+      }
+    ]
+  },
+  "meta": {
+    "agent": "ResearchAnalyst",
+    "model": "claude-haiku-4-5-20251001",
+    "latency_ms": 264479,
+    "tokens": {
+      "input": 66859,
+      "output": 25376
+    },
+    "groups_with_moves": 17
+  }
+}

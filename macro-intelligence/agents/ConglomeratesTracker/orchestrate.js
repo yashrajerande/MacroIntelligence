@@ -214,6 +214,7 @@ async function run() {
       for (const e of boundary.errors) console.warn(`  · ${e}`);
       // Treat as a critic-blocker — request a structured revision before review.
       const fixHints = `Boundary validation found these structural failures. Fix them in the next emit:\n- ${boundary.errors.join('\n- ')}`;
+      const boundaryDraft = advised.data;
       advised = await withRetry(
         () => new StrategyAdvisor().advise({
           findings: research.data.findings,
@@ -222,6 +223,7 @@ async function run() {
           windowStart: cycle.windowStart,
           windowEnd: cycle.windowEnd,
           critique: fixHints,
+          previousDraft: boundaryDraft,
         }),
         'StrategyAdvisor (boundary-fix)',
       );
@@ -250,6 +252,7 @@ async function run() {
     for (let rev = 1; review.data.verdict === 'REVISE' && rev <= MAX_REVISIONS; rev++) {
       console.log(`[Orchestrator] REVISE — Advisor revision pass ${rev}/${MAX_REVISIONS}.`);
       const critique = `${review.data.suggested_fixes || ''}\n\nBlockers:\n- ${(review.data.blockers || []).join('\n- ')}`;
+      const revisionBase = advised.data;
       advised = await new StrategyAdvisor().advise({
         findings: research.data.findings,
         prior: prior?.data || null,
@@ -257,6 +260,7 @@ async function run() {
         windowStart: cycle.windowStart,
         windowEnd: cycle.windowEnd,
         critique,
+        previousDraft: revisionBase,
       });
       meta.agents[`StrategyAdvisor_revision${rev}`] = advised.meta;
 

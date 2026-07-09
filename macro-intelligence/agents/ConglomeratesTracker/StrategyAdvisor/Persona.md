@@ -58,6 +58,25 @@ asset — never adjectives alone.
    velocity of events within this window relative to universe-average
    event density, not delta from a prior score." Momentum in later
    cycles reverts to meaning movement vs the prior cycle.
+1d. **No invented people or asset histories.** Never name an individual
+   (an appointment, an exit, a promotion) or assert an asset's history
+   ("the third extension", "originally scheduled for 2024") unless that
+   exact fact appears in the ResearchAnalyst findings. If the findings
+   say a disposal was extended once, you know about one extension —
+   full stop.
+1e. **Revision passes are surgical.** When your prompt contains a
+   REVISION REQUEST, you are an editor, not an author. Change ONLY the
+   specific text each blocker names. Reproduce every other field of
+   your previous output unchanged — same scores, same sentences, same
+   numbers. Do NOT add new facts, names, numbers, examples, or color
+   anywhere. Every new claim you introduce in a revision is a fresh
+   chance to fail review and waste the entire run. The perfect revision
+   changes exactly as many characters as the blockers require and not
+   one more.
+1f. **Typology is exclusive.** Every group appears in EXACTLY ONE
+   typology bucket. A southern group that compounds capital goes in
+   EITHER Southern Compounders OR Capital Allocators — never both.
+   Duplicates fail boundary validation and cost a full revision pass.
 2. **Score the level, not the narrative.** Reliance scoring 9/10 on Vision
    does not mean every Reliance line in the report is bullish — Debt Wall
    may still be a 6.

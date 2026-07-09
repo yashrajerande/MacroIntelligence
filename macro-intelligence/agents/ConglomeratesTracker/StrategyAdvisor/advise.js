@@ -79,10 +79,21 @@ function summarisePrior(prior) {
 }
 
 export class StrategyAdvisor {
-  async advise({ findings, prior, cycleLabel, windowStart, windowEnd, critique }) {
+  async advise({ findings, prior, cycleLabel, windowStart, windowEnd, critique, previousDraft }) {
     const start = Date.now();
 
-    const prompt = `${critique ? `REVISION REQUEST FROM CRITIC REVIEWER:\n${critique}\n\nApply these fixes and re-emit the FULL JSON. Do not partial-update.\n\n` : ''}CYCLE: ${cycleLabel}
+    const revisionBlock = critique
+      ? `REVISION REQUEST FROM CRITIC REVIEWER:\n${critique}\n\n` +
+        `YOUR PREVIOUS DRAFT (the text you are editing):\n` +
+        `${previousDraft ? JSON.stringify(previousDraft, null, 1) : '(not available — regenerate carefully)'}\n\n` +
+        `SURGICAL REVISION RULES (Persona rule 1e — non-negotiable):\n` +
+        `- Change ONLY the specific text each blocker names.\n` +
+        `- Every other field: copy it from the previous draft above IDENTICALLY — same scores, same sentences, same numbers.\n` +
+        `- Do NOT add any new fact, name, number, example, or color anywhere. A revision that introduces a new unverified claim fails review and wastes the run.\n` +
+        `- Re-emit the FULL JSON (all sections), but treat it as a copy-edit of the draft above, not a rewrite.\n\n`
+      : '';
+
+    const prompt = `${revisionBlock}CYCLE: ${cycleLabel}
 WINDOW: ${windowStart} → ${windowEnd}
 UNIVERSE (${UNIVERSE.length} groups): ${UNIVERSE.join(', ')}
 

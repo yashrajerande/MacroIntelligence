@@ -38,6 +38,12 @@ record. Higher score = better delivery.
 Drivers: capital deployment changes · execution progress · new sector
 entry/exit · investor sentiment · leadership changes.
 
+**Inaugural-cycle semantics:** with no prior scorecard, momentum measures
+the velocity of events within the current window relative to
+universe-average event density (0 = average density, no directional
+signal). From cycle 2 onward, momentum measures movement vs the prior
+cycle. The report must state which semantics apply.
+
 ## Overlay 5 — Future Dominance Index (0-10)
 Factors: AI positioning · energy transition assets · digital platforms ·
 manufacturing depth · capital compounding ability · talent density.

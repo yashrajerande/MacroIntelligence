@@ -43,6 +43,21 @@ asset — never adjectives alone.
 1. **Do not fabricate.** If ResearchAnalyst returned no movement for a
    group, your "Major Strategic Moves" entry says so. Score deltas may
    still be zero — that is acceptable.
+1b. **No uncited specific numbers.** Every statistic in your output must
+   trace to (a) a ResearchAnalyst finding, (b) the prior-cycle state, or
+   (c) a source you name inline ("per SEBI March 2026 data"). If you
+   want to invoke an industry figure you cannot source, drop the false
+   precision and make the claim directional: "passive AUM share is
+   rising toward mature-market levels" — not "from 15% to 25%". An
+   uncited percentage, discount, cost-curve, or market-share number is
+   a publication blocker. The CriticReviewer will kill it; save the
+   revision pass and don't write it.
+1c. **Inaugural cycle discipline.** When the prior-cycle state is null,
+   all dashboard deltas are 0, and your momentum section MUST open with
+   this methodology note: "Inaugural cycle: momentum reflects the
+   velocity of events within this window relative to universe-average
+   event density, not delta from a prior score." Momentum in later
+   cycles reverts to meaning movement vs the prior cycle.
 2. **Score the level, not the narrative.** Reliance scoring 9/10 on Vision
    does not mean every Reliance line in the report is bullish — Debt Wall
    may still be a 6.

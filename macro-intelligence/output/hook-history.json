@@ -1,22 +1,6 @@
 {
   "entries": [
     {
-      "date": "10 JUN 2026",
-      "verdict_line": "PMI Services at 57.5 — an 88th-percentile read — while airline passengers hit a 10-year low at 35mn; India's services expansion is statistical, not experiential.",
-      "themes": [
-        "gdp_growth"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "sip_accounts",
-        "wti_usd",
-        "pmi_services",
-        "airline_pax"
-      ]
-    },
-    {
       "date": "11 JUN 2026",
       "verdict_line": "SIP AUM up 64% YoY while accounts grew only 15% — affluent money is colonising retail mutual funds, and the mass investor the bulls are counting on hasn't arrived.",
       "themes": [],
@@ -435,6 +419,21 @@
         "bank_nifty",
         "india_vix",
         "nat_gas"
+      ]
+    },
+    {
+      "date": "10 JUL 2026",
+      "verdict_line": "Natural gas at $3.01 — an 18th-percentile distress print — is the one commodity telling the truth about global demand while copper and iron ore perform their China stimulus pantomime.",
+      "themes": [
+        "global_macro"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "nat_gas",
+        "sip_accounts",
+        "copper",
+        "iron_ore"
       ]
     }
   ]

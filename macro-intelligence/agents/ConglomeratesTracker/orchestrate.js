@@ -234,7 +234,12 @@ async function run() {
       }
     }
 
-    // ── 3. REVIEW (with one revision pass) ────────────────────────
+    // ── 3. REVIEW (with up to MAX_REVISIONS revision passes) ──────
+    // One pass proved too tight in practice: a strict critic reliably
+    // finds a second round of smaller issues in the first revision.
+    // Two passes converge; if the third review still blocks, the cycle
+    // has a real quality problem and aborting is correct.
+    const MAX_REVISIONS = 2;
     console.log('\n── Phase 3: Review ──');
     let review = await new CriticReviewer().review({
       draft: advised.data,
@@ -242,8 +247,8 @@ async function run() {
     });
     meta.agents.CriticReviewer_pass1 = review.meta;
 
-    if (review.data.verdict === 'REVISE') {
-      console.log('[Orchestrator] REVISE — running one Advisor revision pass.');
+    for (let rev = 1; review.data.verdict === 'REVISE' && rev <= MAX_REVISIONS; rev++) {
+      console.log(`[Orchestrator] REVISE — Advisor revision pass ${rev}/${MAX_REVISIONS}.`);
       const critique = `${review.data.suggested_fixes || ''}\n\nBlockers:\n- ${(review.data.blockers || []).join('\n- ')}`;
       advised = await new StrategyAdvisor().advise({
         findings: research.data.findings,
@@ -253,19 +258,19 @@ async function run() {
         windowEnd: cycle.windowEnd,
         critique,
       });
-      meta.agents.StrategyAdvisor_revision = advised.meta;
+      meta.agents[`StrategyAdvisor_revision${rev}`] = advised.meta;
 
       review = await new CriticReviewer().review({
         draft: advised.data,
         cycleLabel: cycle.cycleLabel,
       });
-      meta.agents.CriticReviewer_pass2 = review.meta;
+      meta.agents[`CriticReviewer_pass${rev + 1}`] = review.meta;
+    }
 
-      if (review.data.verdict !== 'PASS') {
-        console.error('[Orchestrator] Revision still REVISE. Aborting publish.');
-        console.error('Blockers:', JSON.stringify(review.data.blockers, null, 2));
-        process.exit(1);
-      }
+    if (review.data.verdict !== 'PASS') {
+      console.error(`[Orchestrator] Still REVISE after ${MAX_REVISIONS} revisions. Aborting publish.`);
+      console.error('Blockers:', JSON.stringify(review.data.blockers, null, 2));
+      process.exit(1);
     }
 
     // ── 4. PUBLISH ────────────────────────────────────────────────
@@ -291,11 +296,14 @@ async function run() {
       meta,
     });
 
-    // Git (skip if env says so)
+    // Git (skip if env says so). state.json and the research cache are
+    // committed too — the next cycle's delta computation depends on them
+    // surviving the ephemeral runner.
     const gitResult = publishGit({
       archivePath: rendered.archivePath,
       latestPath:  rendered.latestPath,
       rootIndexPath: ROOT_INDEX,
+      statePaths: [STATE_PATH, researchCachePath],
       cycleLabel: cycle.cycleLabel,
       dryRun: process.env.SKIP_GIT_PUSH === 'true',
     });

@@ -1,22 +1,6 @@
 {
   "entries": [
     {
-      "date": "12 JUN 2026",
-      "verdict_line": "Copper up 2.4% to $6.40 while iron ore surged 59% — industrial metals are pricing a China recovery that China's own 4.5% GDP and fading PMI flatly contradict.",
-      "themes": [
-        "gdp_growth",
-        "global_macro"
-      ],
-      "slugs": [
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "sip_accounts",
-        "nat_gas",
-        "copper",
-        "iron_ore"
-      ]
-    },
-    {
       "date": "13 JUN 2026",
       "verdict_line": "Airline passengers at a 10-year low of 35mn while GST hits ₹2.01 lakh crore — India's formal economy is booming and its urban consumer is quietly retreating.",
       "themes": [
@@ -437,6 +421,20 @@
         "india_vix",
         "nat_gas",
         "fii_equity_net"
+      ]
+    },
+    {
+      "date": "12 JUL 2026",
+      "verdict_line": "PMI Services at 57.5 — an 88th-percentile print — is sliding fast enough that the composite's 86th-percentile glow may be last quarter's story by September.",
+      "themes": [
+        "gdp_growth"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "nat_gas",
+        "sip_accounts",
+        "pmi_services"
       ]
     }
   ]

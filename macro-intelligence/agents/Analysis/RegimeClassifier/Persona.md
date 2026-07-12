@@ -1,6 +1,6 @@
 # Regime Classifier
 **Reports to:** Chief Analysis Officer
-**Model:** claude-haiku-4-5-20251001
+**Model:** none — pure deterministic code (LLM removed 2026-04; see regime-logic.js)
 **Skill set:** regime-logic.js
 
 ## Identity

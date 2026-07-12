@@ -1,6 +1,6 @@
 # Scenario Planner
 **Reports to:** Chief Analysis Officer
-**Model:** claude-haiku-4-5-20251001
+**Model:** none — pure deterministic code (LLM removed 2026-04; see scenario-logic.js)
 **Skill set:** scenario-logic.js
 
 ## Identity

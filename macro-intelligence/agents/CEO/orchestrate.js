@@ -148,7 +148,12 @@ async function run() {
 
     // ── STEP 2: ANALYSIS ────────────────────────────────────────────
     logger.phase('Analysis');
-    const allData = { marketData, macroData, reData, isoDate, dateStr };
+
+    // Fetched once, used three ways: trend context for the LLM agents,
+    // sparklines in the renderer, and z-score bounds in the validator.
+    const dynamicRanges = await fetchDynamicRanges();
+
+    const allData = { marketData, macroData, reData, isoDate, dateStr, dynamicRanges };
 
     const regime = await withRetry(
       () => new RegimeClassifier().classify(allData),
@@ -171,13 +176,32 @@ async function run() {
     // ── STEP 3: EDITORIAL ───────────────────────────────────────────
     logger.phase('Editorial');
 
-    const [news, execSummary] = await Promise.all([
-      withRetry(() => new NewsCurator().curate(isoDate), 'NewsCurator', logger),
+    // News is nice-to-have; the summary is the flagship. A news failure must
+    // not take the ExecutiveSummaryWriter (or the run) down with it.
+    const FALLBACK_NEWS = [
+      { category: 'geo',     headline: 'Feed unavailable — tap for latest world coverage',   url: 'https://www.reuters.com/world/',            source_name: 'Reuters',      buzz_tag: '' },
+      { category: 'ai',      headline: 'Feed unavailable — tap for latest AI coverage',      url: 'https://www.theverge.com/ai-artificial-intelligence', source_name: 'The Verge', buzz_tag: '' },
+      { category: 'india',   headline: 'Feed unavailable — tap for latest India coverage',   url: 'https://www.livemint.com/economy',          source_name: 'LiveMint',     buzz_tag: '' },
+      { category: 'fintech', headline: 'Feed unavailable — tap for latest fintech coverage', url: 'https://www.moneycontrol.com/news/business/', source_name: 'Moneycontrol', buzz_tag: '' },
+      { category: 'ifs',     headline: 'Feed unavailable — tap for latest markets coverage', url: 'https://www.reuters.com/markets/',          source_name: 'Reuters',      buzz_tag: '' },
+    ];
+
+    const [newsSettled, execSummary] = await Promise.all([
+      withRetry(() => new NewsCurator().curate(isoDate), 'NewsCurator', logger)
+        .catch(err => {
+          console.warn(`  ⚠ NewsCurator failed after retry (non-fatal): ${err.message}`);
+          logger.warn('NewsCurator failed — using fallback links', err.message);
+          return {
+            data: FALLBACK_NEWS,
+            meta: { agent: 'NewsCurator', model: 'none', latency_ms: 0, tokens: { input: 0, output: 0 }, fallback: true },
+          };
+        }),
       withRetry(
         () => new ExecutiveSummaryWriter().write({ ...allData, regime, signals, scenarios }),
         'ExecutiveSummaryWriter', logger
       ),
     ]);
+    const news = newsSettled;
     logger.agent('NewsCurator', news.meta);
     logger.agent('ExecutiveSummaryWriter', execSummary.meta);
 
@@ -195,8 +219,6 @@ async function run() {
 
     const thisRunCost = logger.estimateCost();
     const costSummary = getCostSummary(isoDate, thisRunCost);
-
-    const dynamicRanges = await fetchDynamicRanges();
 
     const { html, macroDataObj, outputPath, indexPath } = new DashboardRenderer().render({
       ...allData, regime, signals, scenarios, news, execSummary, costSummary, dynamicRanges,
@@ -250,6 +272,7 @@ async function run() {
         agentMetas,
         feedHealth: news.feedHealth || null,
         runStartTime,
+        validation,
       });
       cockpitPath = cockpitResult.outputPath;
       logger.agent('OpsManager', cockpitResult.meta);
@@ -267,7 +290,17 @@ async function run() {
     );
     logger.agent('SupabaseWriter', { model: 'none', latency_ms: 0, tokens: { input: 0, output: 0 } });
 
-    await new GitPublisher().publish(outputPath, dateStr, indexPath);
+    // Record cost BEFORE publishing so the updated cost-ledger.json is part
+    // of the commit — otherwise every fresh CI checkout sees $0 spent and
+    // the monthly budget cap never binds.
+    const finalCost = logger.estimateCost();
+    recordRunCost(isoDate, finalCost, logger.log.run_id);
+
+    // GitPublisher pushes every run — the most transient-failure-prone step.
+    await withRetry(
+      () => new GitPublisher().publish(outputPath, dateStr, indexPath),
+      'GitPublisher', logger
+    );
     logger.agent('GitPublisher', { model: 'none', latency_ms: 0, tokens: { input: 0, output: 0 } });
 
     // Telegram delivery (non-blocking)
@@ -287,8 +320,6 @@ async function run() {
     }
 
     // ── DONE ────────────────────────────────────────────────────────
-    const finalCost = logger.estimateCost();
-    recordRunCost(isoDate, finalCost, logger.log.run_id);
     logger.complete({ totalCostUSD: finalCost });
     process.exit(0);
 

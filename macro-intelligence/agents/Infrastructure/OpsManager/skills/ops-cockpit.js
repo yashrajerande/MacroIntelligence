@@ -106,7 +106,7 @@ function buildGauge(value, max, label) {
   </div>`;
 }
 
-export async function generateCockpit({ dateStr, isoDate, agentMetas, feedHealth, runStartTime }) {
+export async function generateCockpit({ dateStr, isoDate, agentMetas, feedHealth, runStartTime, validation }) {
   const costLedger = readJSON(join(OUTPUT_DIR, 'cost-ledger.json'));
   const hookHistory = readJSON(join(OUTPUT_DIR, 'hook-history.json'));
   const dataCache = readJSON(join(OUTPUT_DIR, 'data-cache.json'));
@@ -253,8 +253,18 @@ export async function generateCockpit({ dateStr, isoDate, agentMetas, feedHealth
     </div>
     <div class="card">
       <h2>Pipeline Status</h2>
-      <div class="big-num" style="font-size:28px;">${buildStatusBadge(true, 'Completed')}</div>
-      <div class="sub">Pre-flight: 2,996 assertions passed</div>
+      <div class="big-num" style="font-size:28px;">${
+        validation
+          ? buildStatusBadge(validation.valid, validation.valid ? 'Validated' : 'Validation Failed')
+          : buildStatusBadge(true, 'Running')
+      }</div>
+      <div class="sub">${
+        validation
+          ? (validation.warnings.length > 0
+              ? `${validation.warnings.length} validation warning(s)`
+              : 'All validation checks clean')
+          : 'Validation pending'
+      }</div>
     </div>
   </div>
 

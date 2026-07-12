@@ -32,6 +32,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { INDICATOR_SCHEMA } from './indicator-schema.js';
 import { scoreIndicator, isValidSignal, getPolarity } from './polarity.js';
+import { getLastChanged } from './data-cache.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const HISTORY_PATH = join(__dirname, '..', '..', 'output', 'hook-history.json');
@@ -409,6 +410,9 @@ export function scoreHookCandidates(indicators, history) {
   const recentSlugs = getRecentSlugs(history, 7);
   const recentThemes = getRecentThemes(history, 7);
   const bannedThemes = getBannedThemes(history, 7, 2);
+  const lastChanged = getLastChanged();
+  const now = Date.now();
+  const RELEASE_WINDOW_MS = 10 * 24 * 60 * 60 * 1000;
 
   const scored = [];
 
@@ -426,15 +430,22 @@ export function scoreHookCandidates(indicators, history) {
     const slugThemes = SLUG_TO_THEMES[slug] || [];
     if (slugThemes.some(t => bannedThemes.includes(t))) continue;
 
-    // HARD FILTER: quarterly indicators are excluded from candidates UNLESS
-    // we have reason to believe they just updated. Today, we use a simple
-    // heuristic — quarterly metrics are by default not fresh enough to be
-    // the hook. (When vintage-date tracking is added, we can re-admit them
-    // within a 10-day window of a new release.)
-    if (schema.frequency === 'quarterly') continue;
+    // HARD FILTER: quarterly indicators are excluded UNLESS their value
+    // actually changed within the last 10 days (release window) — the
+    // data-cache's last_changed tracking tells us when the print landed.
+    // A fresh GDP or CD-ratio release CAN be the hook in its release week.
+    let inReleaseWindow = false;
+    if (schema.frequency === 'quarterly') {
+      const changedAt = lastChanged[slug];
+      inReleaseWindow = changedAt &&
+        (now - new Date(changedAt + 'T00:00:00Z').getTime()) <= RELEASE_WINDOW_MS;
+      if (!inReleaseWindow) continue;
+    }
 
-    // Freshness by update frequency (daily > monthly)
-    const freshness = schema.frequency === 'daily' ? 100 : 55;
+    // Freshness by update frequency (daily > monthly > quarterly-in-window)
+    const freshness = schema.frequency === 'daily' ? 100
+      : inReleaseWindow ? 85   // a quarterly print in release week IS news
+      : 55;
 
     // Magnitude (how extreme is the reading)
     const magnitude = Math.abs(scoreIndicator(ind));

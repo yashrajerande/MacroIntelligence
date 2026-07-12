@@ -11,7 +11,7 @@
 import { generateCockpit } from './skills/ops-cockpit.js';
 
 export class OpsManager {
-  async report({ dateStr, isoDate, agentMetas, feedHealth, runStartTime }) {
+  async report({ dateStr, isoDate, agentMetas, feedHealth, runStartTime, validation }) {
     const start = Date.now();
 
     const result = await generateCockpit({
@@ -20,6 +20,7 @@ export class OpsManager {
       agentMetas,
       feedHealth,
       runStartTime,
+      validation,
     });
 
     const latency = Date.now() - start;

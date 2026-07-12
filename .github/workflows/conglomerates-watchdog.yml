@@ -1,0 +1,77 @@
+name: ConglomeratesTracker - Watchdog
+
+# Verifies the monthly tracker run succeeded and this month's report was
+# published. Runs 2 hours after the tracker cron; also dispatchable
+# on-demand for a health check. Sends the outcome to Telegram when the
+# bot secrets are present, and fails the job (-> GitHub failure email)
+# when the tracker is unhealthy.
+
+on:
+  schedule:
+    - cron: '37 2 1 * *'   # 02:37 UTC on the 1st (tracker runs 00:30 UTC)
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Check tracker health
+        env:
+          GITHUB_TOKEN:       ${{ secrets.GITHUB_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID:   ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          month=$(date -u +%Y-%m)
+
+          run_json=$(curl -sf \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/workflows/conglomerates-monthly.yml/runs?per_page=1&status=completed" \
+            || echo '{}')
+          conclusion=$(echo "$run_json" | jq -r '.workflow_runs[0].conclusion // "unknown"')
+          run_date=$(echo "$run_json"   | jq -r '.workflow_runs[0].created_at // "unknown"')
+          run_url=$(echo "$run_json"    | jq -r '.workflow_runs[0].html_url // ""')
+
+          report="macro-intelligence/output/conglomerates/conglomerates-$month.html"
+          if [ -s "$report" ]; then report_ok="published"; else report_ok="MISSING"; fi
+
+          if [ "$conclusion" = "success" ] && [ "$report_ok" = "published" ]; then
+            status="✅ healthy"
+          else
+            status="🚨 UNHEALTHY"
+          fi
+
+          msg="🏛 ConglomeratesTracker watchdog — $status
+          Cycle: $month
+          Last run: $conclusion ($run_date)
+          Report $month: $report_ok
+          $run_url"
+          msg=$(echo "$msg" | sed 's/^[[:space:]]*//')
+
+          echo "$msg"
+
+          if [ -n "$TELEGRAM_BOT_TOKEN" ] && [ -n "$TELEGRAM_CHAT_ID" ]; then
+            curl -s "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
+              --data-urlencode chat_id="$TELEGRAM_CHAT_ID" \
+              --data-urlencode text="$msg" >/dev/null \
+              && echo "Telegram notification sent." \
+              || echo "Telegram send failed (non-fatal)."
+          else
+            echo "Telegram secrets not set — skipping notification."
+          fi
+
+          if [ "$status" != "✅ healthy" ]; then
+            echo "::error::ConglomeratesTracker unhealthy: run=$conclusion, report=$report_ok"
+            exit 1
+          fi

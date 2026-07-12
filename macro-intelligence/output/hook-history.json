@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "13 JUN 2026",
-      "verdict_line": "Airline passengers at a 10-year low of 35mn while GST hits ₹2.01 lakh crore — India's formal economy is booming and its urban consumer is quietly retreating.",
-      "themes": [
-        "consumption"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "sip_accounts",
-        "nat_gas",
-        "us_10y_treasury",
-        "airline_pax"
-      ]
-    },
-    {
       "date": "14 JUN 2026",
       "verdict_line": "Nikkei at an all-time high of 66,020 while US GDP printed 0.7% SAAR — global equities are pricing a soft landing that the world's largest economy is not delivering.",
       "themes": [
@@ -435,6 +420,20 @@
         "nat_gas",
         "sip_accounts",
         "pmi_services"
+      ]
+    },
+    {
+      "date": "13 JUL 2026",
+      "verdict_line": "Gold at ₹12,520/gram — a 100th-percentile INR print — while copper climbs and oil creeps: India's commodity import bill is quietly repricing before anyone has updated their CAD models.",
+      "themes": [
+        "oil"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "nat_gas",
+        "sip_accounts",
+        "copper"
       ]
     }
   ]

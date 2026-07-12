@@ -596,6 +596,41 @@ td.c-pct { text-align:right; min-width:96px; }
 .stale-footnote ul { margin:8px 0 0 16px; padding:0; }
 .stale-footnote li { margin-bottom:4px; }
 
+/* ── Sparklines (trend cell) ── */
+.spark-wrap { display:flex; flex-direction:column; align-items:flex-end; gap:2px; }
+.spark-wrap span { font-size:0.68rem; }
+.spark { display:block; }
+
+/* ── Top movers strip ── */
+#top-movers:empty { display:none; }
+.movers { display:flex; gap:10px; flex-wrap:wrap; margin:14px 0 4px; align-items:center; }
+.movers-lbl { font-family:var(--mono); font-size:0.60rem; font-weight:600; letter-spacing:0.16em; color:var(--ink-3); text-transform:uppercase; margin-right:2px; }
+.mover { display:flex; align-items:baseline; gap:7px; padding:7px 13px; background:#fff; border:1px solid rgba(0,0,60,0.08); border-radius:10px; font-size:0.76rem; }
+.mover b { font-weight:600; color:var(--ink-1); }
+.mover .mv-val { font-family:var(--mono); color:var(--ink-2); }
+.mover .mv-chg { font-family:var(--mono); font-weight:700; font-size:0.70rem; }
+.mover.good .mv-chg { color:#007a52; }
+.mover.bad  .mv-chg { color:#cc0033; }
+
+/* ── TV / kiosk mode (?tv=1) ── */
+html.tv { font-size:22px; }
+html.tv .sidenav, html.tv .footer-dis, html.tv #audio-panel { display:none !important; }
+html.tv body { padding-bottom:40px; }
+html.tv .cmd-verdict { font-size:1.5em; line-height:1.35; }
+html.tv .dt td, html.tv .dt th { padding:14px 0; }
+
+/* ── Mobile: sidenav becomes a horizontal sticky chip bar (was hidden) ── */
+@media (max-width: 768px) {
+  .sidenav {
+    display:flex !important; position:sticky; top:0; left:0; z-index:150;
+    flex-direction:row; overflow-x:auto; -webkit-overflow-scrolling:touch;
+    width:100%; height:auto; padding:8px 10px; gap:6px;
+    background:rgba(255,255,255,0.92); backdrop-filter:blur(12px);
+    border-bottom:1px solid rgba(0,0,60,0.08);
+  }
+  .sidenav a { white-space:nowrap; flex:0 0 auto; }
+}
+
 .sub-lbl {
   font-family:var(--mono);
   font-size:0.58rem;
@@ -938,7 +973,7 @@ td.c-pct { text-align:right; min-width:96px; }
       <span class="brand-sub">Macro Intelligence</span>
       <div class="live-badge"><div class="live-dot"></div>LIVE</div>
     </div>
-    <div class="topbar-center" id="header-date">12 JUL 2026</div>
+    <div class="topbar-center" id="header-date">13 JUL 2026</div>
     <div class="topbar-right">
       <div class="font-controls">
         <button class="fc-btn" onclick="setFS('sm')">A−</button>
@@ -992,13 +1027,16 @@ td.c-pct { text-align:right; min-width:96px; }
   <div class="glass-panel cmd" id="cmd">
     <div class="cmd-ambient"></div>
     <div class="cmd-eyebrow" id="cmd-date">INDIA &amp; GLOBAL MACRO · DAILY INTELLIGENCE BRIEF</div>
-    <div class="cmd-verdict" id="snap-verdict">PMI Services at 57.5 — an 88th-percentile print — is sliding fast enough that the composite's 86th-percentile glow may be last quarter's story by September.</div>
+    <div class="cmd-verdict" id="snap-verdict">Gold at ₹12,520/gram — a 100th-percentile INR print — while copper climbs and oil creeps: India's commodity import bill is quietly repricing before anyone has updated their CAD models.</div>
     <div class="cmd-trio">
       <div class="ctrio"><div class="ctrio-lbl">🇮🇳 India Regime</div><div class="ctrio-val" id="snap-india">Nifty 24206.9 | INR/USD 95.24</div></div>
-      <div class="ctrio"><div class="ctrio-lbl">🌍 Global Regime</div><div class="ctrio-val" id="snap-global">Brent $76.01 | DXY 100.965</div></div>
+      <div class="ctrio"><div class="ctrio-lbl">🌍 Global Regime</div><div class="ctrio-val" id="snap-global">Brent $78.93 | DXY 101.162</div></div>
       <div class="ctrio"><div class="ctrio-lbl">⚡ Top Risk Now</div><div class="ctrio-val" id="snap-risk">Deposit Gap Forces RBI's Hand</div></div>
     </div>
   </div>
+
+  <!-- TOP MOVERS — biggest daily moves, filled by DashboardRenderer -->
+  <div class="movers" id="top-movers"><span class="movers-lbl">Top Movers</span><div class="mover bad"><b>FII Equity Net</b><span class="mv-val">-114</span><span class="mv-chg">-604.09%</span></div><div class="mover bad"><b>China CPI</b><span class="mv-val">1.3</span><span class="mv-chg">+550%</span></div><div class="mover good"><b>2-Wheeler Sales</b><span class="mv-val">28.68</span><span class="mv-chg">+114.03%</span></div><div class="mover good"><b>Commercial Vehicle Sales</b><span class="mv-val">28.89</span><span class="mv-chg">+91.71%</span></div><div class="mover bad"><b>US GDP SAAR</b><span class="mv-val">0.7</span><span class="mv-chg">-84.09%</span></div></div>
 
   <!-- 60-SECOND MACRO AUDIO — HERO PLAYER -->
   <div id="audio-panel" style="display:none;margin:12px 0 16px;padding:24px 28px;background:#fff;border-radius:20px;border:1px solid rgba(0,0,0,0.06);box-shadow:0 2px 8px rgba(0,0,0,0.04);">
@@ -1031,11 +1069,11 @@ td.c-pct { text-align:right; min-width:96px; }
     </div>
     <div class="pb">
       <div class="exec-grid">
-        <div class="ec"><div class="ec-num">01</div><div class="ec-lbl">India Macro Regime</div><div class="ec-txt" id="exec-01"><p><strong>7.8%</strong> GDP sits atop a foundation that is visibly softening: PMI Composite fell to <strong>56.5</strong> from <strong>58.9</strong>, PMI Manufacturing to <strong>53.9</strong> from <strong>56.9</strong>, and core sector growth more than halved to <strong>2.3%</strong> from <strong>4.7%</strong> — three independent proxies pointing toward deceleration while the headline number points the other way. IIP capital goods at <strong>12.5%</strong> is the statistical outlier that flatters the capex narrative; when core sector — cement, steel, electricity, coal — is running at <strong>2.3%</strong>, the capital goods print is almost certainly a one-off, not a cycle. RBI's own GDP forecast at <strong>6.9%</strong> is <strong>90bps</strong> below the government print, and that gap is not modesty — it is the central bank pricing in the same PMI and core sector signals the data is already showing. Airline passengers at a <strong>7th-percentile</strong> low and e-commerce GMV growth halved to <strong>12.4%</strong> from <strong>25%</strong> confirm that the discretionary consumption layer is under pressure even as GST and auto sales hold.</p></div></div>
-        <div class="ec"><div class="ec-num">02</div><div class="ec-lbl">Global Macro Regime</div><div class="ec-txt" id="exec-02"><p><strong>0.7%</strong> US GDP SAAR — down from <strong>4.4%</strong> prior — is the single most important global number in today's dataset, and it is being ignored by a market where the S&P 500 sits at a <strong>100th-percentile</strong> all-time high and US VIX at <strong>15.03</strong> is in the <strong>9th percentile</strong> of complacency. US Core PCE ticked up to <strong>3.1%</strong> from <strong>3.0%</strong> — the Fed's preferred measure is moving in the wrong direction while growth is decelerating, a stagflationary whisper the equity market is choosing not to hear. Global PMI Composite at <strong>51</strong>, down from <strong>51.5</strong>, and natural gas at <strong>$2.94</strong> — an <strong>18th-percentile</strong> distress print — are the commodity and activity signals that corroborate the US GDP slowdown. Copper at <strong>$6.282/lb</strong> (<strong>74th percentile</strong>) is the one dissenting voice, but copper's China stimulus sensitivity makes it an unreliable global demand gauge when China's own GDP has decelerated to <strong>4.5%</strong> from <strong>5.0%</strong>.</p></div></div>
-        <div class="ec"><div class="ec-num">03</div><div class="ec-lbl">Liquidity Conditions</div><div class="ec-txt" id="exec-03"><p><strong>₹29,845 crore</strong> in SIP inflows — <strong>85th percentile</strong> — is the domestic liquidity floor, but its composition is shifting in a way that matters: SIP AUM grew <strong>1.7%</strong> in one month to <strong>₹16.64 lakh crore</strong> while accounts grew only <strong>1.6%</strong>, meaning average ticket size is rising and affluent retail is deepening positions rather than mass-market India widening the base. FII equity net at <strong>-₹114 crore</strong> and DII equity net at a thin <strong>₹128 crore</strong> — <strong>22nd percentile</strong> — mean the domestic absorption buffer is thinner than the SIP headline implies. CD ratio at <strong>83.04%</strong> is the liquidity constraint that binds the real economy: with deposit growth at <strong>10.8%</strong> trailing credit at <strong>13.8%</strong> for three consecutive months, banks face a structural funding gap that will either slow credit or force deposit rate competition — both outcomes compress NIMs. Corporate bond issuance at ₹<strong>1.12 lakh crore</strong> sitting at the <strong>7th percentile</strong> signals that credit rationing is already pushing corporates to capital markets at a moment of peak equity valuations.</p></div></div>
-        <div class="ec"><div class="ec-num">04</div><div class="ec-lbl">Equity + Real Estate Implications</div><div class="ec-txt" id="exec-04"><p>Bank Nifty at <strong>58,046</strong> — <strong>96th percentile</strong> — is the most exposed index to the CD ratio story: if deposit rate competition intensifies to close the <strong>300bps</strong> credit-deposit gap, NIM compression follows, earnings estimates come down, and a <strong>96th-percentile</strong> valuation has no margin of safety. Nifty at <strong>24,207</strong> (<strong>78th percentile</strong>) and India VIX at <strong>12.25</strong> (<strong>7th percentile</strong>) together describe a market pricing perfection into a growth deceleration — PMI Composite down <strong>240bps</strong> in one month is not a rounding error. Real estate presents a more nuanced picture: home loan rates fell to <strong>8.0%</strong> from <strong>9.1%</strong>, affordability index improved to <strong>0.61</strong>, and office vacancy dropped to <strong>13.9%</strong> from <strong>17.2%</strong> — but residential sales fell to <strong>101,675</strong> units from <strong>108,970</strong> while launches rose to <strong>126,265</strong>, pushing unsold inventory to <strong>600,000</strong> units. Retail mall vacancy at <strong>5.7%</strong>, up from <strong>5.1%</strong>, is a quiet confirmation that the discretionary consumption softness visible in airline and e-commerce data is beginning to show up in physical retail.</p></div></div>
-        <div class="ec full"><div class="ec-num">05</div><div class="ec-lbl">Key Risks to Monitor</div><div class="ec-txt" id="exec-05"><p>Ranked by probability × impact: first, CD ratio at <strong>83.04%</strong> triggering macro-prudential tightening — risk weights on unsecured or NBFC lending would reprice credit costs across the system within one quarter. Second, PMI Services at <strong>57.5</strong> continuing its slide — at <strong>88th percentile</strong> it has room to fall, and services is <strong>55%</strong> of India's GVA; a move below <strong>55</strong> would force GDP estimate revisions. Third, US GDP at <strong>0.7%</strong> SAAR with Core PCE at <strong>3.1%</strong> — if the Fed is forced to hold or hike into a slowdown, the DXY strengthens, INR at <strong>95.24</strong> (<strong>89th percentile</strong> weakness) faces renewed pressure, and India's import bill widens. Fourth, the airline-ecommerce demand cliff — passengers down <strong>9%</strong> and GMV growth halved — spreading into GST and auto data over the next two months, which would break the consumption narrative that is currently holding the growth story together. Watch Tuesday's RBI liquidity data and any macro-prudential circular on NBFC risk weights — that is the single data point most likely to reprice the credit and banking complex this week.</p></div></div>
+        <div class="ec"><div class="ec-num">01</div><div class="ec-lbl">India Macro Regime</div><div class="ec-txt" id="exec-01"><p><strong>7.8%</strong> GDP with a PMI Composite that has dropped 2.4 points in a single month to <strong>56.5</strong> — and a core sector at <strong>2.3% YoY</strong>, the weakest in the dataset — is a growth regime that is decelerating faster than the headline suggests. Vehicle sales across PV, 2W, and CV are all printing above <strong>26%</strong> YoY, which anchors mass-market consumption; simultaneously, airline passenger traffic at a <strong>7th-percentile low</strong> and e-commerce GMV growth at <strong>12.4%</strong> (down from 25%) signal that urban discretionary demand has hit a wall. GST at <strong>₹2,00,640 crore</strong> is a record, but with April advance filings and formalisation effects in the mix, it is a tax-collection story as much as a demand story. India's growth engine is running on two tracks — and the faster one is slowing.</p></div></div>
+        <div class="ec"><div class="ec-num">02</div><div class="ec-lbl">Global Macro Regime</div><div class="ec-txt" id="exec-02"><p>US GDP SAAR at <strong>0.7%</strong> — down from 4.4% the prior quarter — is the number that should be dominating every risk meeting, yet S&P 500 at a <strong>100th-percentile</strong> print of 7,575 and US VIX at <strong>15.03</strong> (9th percentile) suggest markets have decided to look through it entirely. US core PCE has ticked up to <strong>3.1%</strong> from 3.0%, keeping the Fed pinned at <strong>3.625%</strong> with the 10Y Treasury at <strong>4.54%</strong> — a real rate of roughly 145bps that is still doing restrictive work. China GDP at <strong>4.5%</strong> (down from 5%) with CPI at only <strong>1.3%</strong> confirms that domestic demand remains insufficient to absorb the stimulus being signalled by commodity prices. The global setup is: equity markets pricing a soft landing, bond markets pricing sticky inflation, and activity data pricing something closer to stall speed — one of these three is wrong.</p></div></div>
+        <div class="ec"><div class="ec-num">03</div><div class="ec-lbl">Liquidity Conditions</div><div class="ec-txt" id="exec-03"><p>FII equity net at <strong>-₹114 crore</strong> — a reversal from +₹22,615 crore the prior month — is the sharpest single-month swing in the dataset, and DII absorption at only <strong>+₹128 crore</strong> (22nd percentile) means domestic institutions are not stepping in with conviction. SIP inflows at <strong>₹29,845 crore</strong> remain structurally elevated (85th percentile), but SIP account growth has decelerated to <strong>1.6%</strong> — the incremental retail investor is not arriving at the pace the AUM growth implies; average ticket size is rising because existing investors are deepening, not because the base is widening. Corporate bond issuance at <strong>₹1,12,000 crore</strong> — a 10-year low percentile — signals that the credit market is tightening at the margin even as the equity market holds. With CD ratio at <strong>83.04%</strong> and deposit growth at 10.8%, the banking system's capacity to absorb both credit demand and government borrowing simultaneously is the binding constraint of this cycle.</p></div></div>
+        <div class="ec"><div class="ec-num">04</div><div class="ec-lbl">Equity + Real Estate Implications</div><div class="ec-txt" id="exec-04"><p>Bank Nifty at <strong>58,046</strong> — a <strong>96th-percentile</strong> 10-year print — is pricing a banking sector whose structural funding constraint (CD ratio at 83%) has not yet been reflected in NIM guidance or risk-weight circulars; that gap between price and fundamental stress is the trade. Real estate shows a clean bifurcation: office absorption at <strong>29.9 msf</strong> (24th percentile but rising), vacancy falling to <strong>13.9%</strong> from 17.2%, and Bengaluru rents up <strong>8.97%</strong> to ₹102 — the commercial segment is tightening — while residential sales units have fallen to <strong>1,01,675</strong> from 1,08,970 even as launches hit <strong>1,26,265</strong>, pushing unsold inventory to <strong>6,00,000 units</strong>. REIT prices — Embassy at <strong>₹369.92</strong> (down from ₹443.69), Mindspace at <strong>₹345.06</strong> (down from ₹487.59) — are pricing the office tightening story at a discount, which is either an opportunity or a signal that the market knows something about demand durability that the absorption numbers don't yet show. Home loan rates at <strong>8%</strong> (down from 9.1%) have improved affordability to <strong>0.61</strong>, but with disbursements at ₹5,50,000 crore and CD ratio at 83%, the pipeline of mortgage credit is constrained by the same deposit gap that is squeezing NBFC funding.</p></div></div>
+        <div class="ec full"><div class="ec-num">05</div><div class="ec-lbl">Key Risks to Monitor</div><div class="ec-txt" id="exec-05"><p>Three risks, ranked by probability × impact. First: Brent at <strong>$78.93</strong> — up in 4 of the last 5 months — crossing $85 would add approximately <strong>$10bn</strong> to India's annual import bill, widen CAD by ~40bps, and feed into CPI with a 2-3 quarter lag precisely when food inflation is already accelerating from <strong>2.13% to 3.47%</strong>; the INR at a <strong>0th-percentile</strong> 10-year print of 95.24 has no cushion for a commodity shock. Second: the CD ratio at <strong>83.04%</strong> sustaining above 83% for two consecutive quarters historically precedes macro-prudential action — risk weights on unsecured lending or NBFC funding restrictions — which would compress credit growth from 13.8% toward single digits and trigger a Bank Nifty derating from its current 96th-percentile valuation. Third: US GDP at <strong>0.7% SAAR</strong> with core PCE at 3.1% creates a stagflationary trap for the Fed — if the next print confirms sub-1% growth, risk-off flows would reverse FII positioning sharply, and India's DII absorption at the 22nd percentile is insufficient to hold index levels. Watch Friday's US CPI print — at <strong>2.4%</strong> headline and <strong>2.5%</strong> core, any upside surprise resets the Fed cut timeline and reprices the entire EM carry trade that is currently keeping INR from a sharper move.</p></div></div>
       </div>
     </div>
   </div>
@@ -1089,27 +1127,27 @@ td.c-pct { text-align:right; min-width:96px; }
       <div class="news-strip">
         <div class="nc geo">
           <div class="nc-cat">Geopolitics</div>
-          <div class="nc-hl"><a href="https://www.bbc.co.uk/news/articles/cze94x4361po?at_medium=RSS&amp;at_campaign=rss" id="news-geo-url" target="_blank" rel="noopener" id="news-geo-hl">Polish PM pledges memorial to victims</a></div>
+          <div class="nc-hl"><a href="https://www.bbc.co.uk/news/articles/cj9gkpp0dkeo?at_medium=RSS&amp;at_campaign=rss" id="news-geo-url" target="_blank" rel="noopener" id="news-geo-hl">US insists Strait of Hormuz stays open</a></div>
           <div class="nc-foot"><span class="nc-src" id="news-geo-src">World News</span><span class="buzz bz-hot">HOT</span></div>
         </div>
         <div class="nc ai">
           <div class="nc-cat">AI</div>
-          <div class="nc-hl"><a href="https://www.theverge.com/policy/964302/ice-donald-trump-killings" id="news-ai-url" target="_blank" rel="noopener" id="news-ai-hl">ICE enforcement bots spark safety concerns</a></div>
+          <div class="nc-hl"><a href="https://www.theverge.com/ai-artificial-intelligence/964539/lorde-says-ray-ban-meta-ai-glasses-are-not-sexy" id="news-ai-url" target="_blank" rel="noopener" id="news-ai-hl">Lorde endorses Ray-Ban Meta AI glasses</a></div>
           <div class="nc-foot"><span class="nc-src" id="news-ai-src">Tech / AI</span><span class="buzz bz-viral">VIRAL</span></div>
         </div>
         <div class="nc india">
           <div class="nc-cat">India</div>
-          <div class="nc-hl"><a href="https://www.thehindu.com/news/national/west-bengal/trinamool-rebel-camp-forms-state-and-district-committees/article71211312.ece" id="news-india-url" target="_blank" rel="noopener" id="news-india-hl">Trinamool rebels launch parallel party structure</a></div>
+          <div class="nc-hl"><a href="https://www.thehindu.com/news/cities/kolkata/road-rage-politics-of-renaming-a-street-in-bengal/article71211600.ece" id="news-india-url" target="_blank" rel="noopener" id="news-india-hl">Road rage sparks renaming politics debate</a></div>
           <div class="nc-foot"><span class="nc-src" id="news-india-src">India News</span><span class="buzz bz-watch">WATCH</span></div>
         </div>
         <div class="nc fintech">
           <div class="nc-cat">Global Fintech</div>
-          <div class="nc-hl"><a href="https://www.bbc.co.uk/news/articles/ckg55v9e2y9o?at_medium=RSS&amp;at_campaign=rss" id="news-fintech-url" target="_blank" rel="noopener" id="news-fintech-hl">Trump Accounts targets youth savings market</a></div>
+          <div class="nc-hl"><a href="https://www.bbc.co.uk/news/articles/c33yxe2ey22o?at_medium=RSS&amp;at_campaign=rss" id="news-fintech-url" target="_blank" rel="noopener" id="news-fintech-hl">London's hidden poverty premium exposed</a></div>
           <div class="nc-foot"><span class="nc-src" id="news-fintech-src">Business / Finance</span><span class="buzz bz-watch">WATCH</span></div>
         </div>
         <div class="nc ifs">
           <div class="nc-cat">Indian Fin. Services</div>
-          <div class="nc-hl"><a href="https://www.thehindubusinessline.com/markets/sbis-ofs-size-in-sbi-mf-ipo-reduces-by-288-crore-equity-shares-following-secondary-share-sale/article71211286.ece" id="news-ifs-url" target="_blank" rel="noopener" id="news-ifs-hl">SBI MF IPO: Major offering size expected</a></div>
+          <div class="nc-hl"><a href="https://www.thehindubusinessline.com/markets/sif-assets-jump-29-per-cent-in-june-to-17858-crore-driven-by-hybrid-long-short-strategies/article71214174.ece" id="news-ifs-url" target="_blank" rel="noopener" id="news-ifs-hl">SIF assets surge 29% in quarter</a></div>
           <div class="nc-foot"><span class="nc-src" id="news-ifs-src">India Markets</span><span class="buzz bz-hot">HOT</span></div>
         </div>
       </div>
@@ -1127,51 +1165,51 @@ td.c-pct { text-align:right; min-width:96px; }
         <div class="sc risk" id="sig1">
           <div class="sc-num">SIGNAL 01 · CREDIT CYCLE</div><div class="sc-status risk">⚠ Risk</div>
           <div class="sc-title" id="sig1-title">Deposit Gap Forces RBI's Hand</div>
-          <div class="sc-data" id="sig1-data">Bank credit growth at 13.8% YoY (latest) vs deposit growth at 10.8% — a 300bps divergence widening for 3 consecutive months. CD ratio now 83.04% (81st percentile, highest in cycle), up from 82.5% prior. NBFC credit growth has decelerated sharply to 13% from 17% YoY, signalling wholesale funding stress. Corporate bond issuance spiked to ₹112,000 cr (7th percentile — extreme low), indicating banks are rationing credit and forcing corporates to capital markets.</div>
-          <div class="sc-impl" id="sig1-impl">Overweight private banks with CASA ratios >45% — they'll poach deposits from weaker peers. Avoid NBFCs with wholesale funding >30% of liabilities; liquidity stress will force asset sales or margin compression. Expect RBI to signal rate cuts in Q2 2026 to ease deposit pressure. Underweight PSU banks — they'll face deposit flight to private peers.</div>
+          <div class="sc-data" id="sig1-data">Bank credit growth at 13.8% YoY (latest) vs deposit growth at 10.8% — a 300bps divergence widening for consecutive months. CD ratio now 83.04% (prev 82.5%), at 81st percentile historically. NBFC credit growth has decelerated sharply to 13% from 17% YoY, signalling funding stress. Corporate bond issuance spiked to ₹112,000 cr (prev ₹106,000 cr), a 10-year low percentile signal (-86 score), indicating corporates are front-running potential liquidity tightening.</div>
+          <div class="sc-impl" id="sig1-impl">The deposit-credit mismatch is no longer a monitoring issue — it's a capital allocation problem. Overweight private banks with CASA ratios >45% (they can poach deposits). Underweight NBFCs with wholesale funding >30% of liabilities; their cost of funds will rise faster than lending rates compress. Expect RBI to signal deposit-friendly measures (higher savings rates, CRR cuts) within 2-3 months if this widens further. Avoid mid-tier lenders reliant on bulk deposits.</div>
           <div class="sc-pct" id="sig1-pct">81%</div>
         </div>
         <div class="sc watch" id="sig2">
           <div class="sc-num">SIGNAL 02 · CAPEX TRIGGER</div><div class="sc-status watch">◎ Watch</div>
-          <div class="sc-title" id="sig2-title">Capital Goods Growth Masks Underlying Weakness</div>
-          <div class="sc-data" id="sig2-data">IIP capital goods at 12.5% YoY (latest) — a sharp jump from 4.3% prior — but core sector growth has collapsed to 2.3% from 4.7%. PMI manufacturing at 53.9 (down from 56.9) signals order momentum is fading. Capacity utilisation data unavailable, but the divergence between headline capex and core sector suggests statistical noise or one-off project completions, not sustained investment cycle.</div>
-          <div class="sc-impl" id="sig2-impl">Do not chase capex plays on this print. The 12.5% capex number is likely a base effect or project bunching. Wait for Q4 FY26 results to confirm if order books are actually expanding. Avoid capital goods stocks until PMI manufacturing stabilises above 55 and core sector growth re-accelerates. Monitor IIP capgoods for 2 more months — if it reverts below 8%, capex cycle is stalling.</div>
+          <div class="sc-title" id="sig2-title">Capex Momentum Stalling, Not Accelerating</div>
+          <div class="sc-data" id="sig2-data">IIP capital goods at 12.5% YoY (latest) — a sharp jump from 4.3% prior month, but this is a single-month spike, not a trend. Core sector growth has collapsed to 2.3% YoY from 4.7%, the weakest reading in the dataset. Capacity utilisation data unavailable, but PMI manufacturing has fallen to 53.9 from 56.9, signalling order book weakness. GST collections remain strong at ₹200,640 cr (71st percentile), but this is broad-based consumption, not capex-led.</div>
+          <div class="sc-impl" id="sig2-impl">Do not chase the capex narrative on a single month of IIP capital goods. The core sector deceleration and PMI manufacturing pullback suggest order books are tightening. Avoid overweighting capital goods suppliers and industrial equipment makers. The government's capex push (FY26 budget) has not yet translated into private sector ordering. Wait for 2-3 consecutive months of sustained IIP capgoods >10% and PMI manufacturing >55 before rotating into cyclicals.</div>
           <div class="sc-pct" id="sig2-pct">0%</div>
         </div>
         <div class="sc positive" id="sig3">
           <div class="sc-num">SIGNAL 03 · SIP / RETAIL FLOWS</div><div class="sc-status positive">✦ Positive</div>
-          <div class="sc-title" id="sig3-title">SIP AUM Surge Signals Affluent Money Entry</div>
-          <div class="sc-data" id="sig3-data">SIP inflows at ₹29,845 cr (85th percentile, strong-positive signal, score +70) despite a slight dip from ₹31,002 cr. But SIP AUM surged to ₹16.64 lakh cr from ₹16.36 lakh cr — a 1.7% jump in one month. SIP accounts grew to 10.45 cr from 10.29 cr (only 1.6% growth), yet AUM grew 1.7%. This means average ticket size is rising: ₹159,000 per account now vs ₹159,000 prior — affluent retail is entering, not mass-market SIP.</div>
-          <div class="sc-impl" id="sig3-impl">This is late-cycle behaviour. Overweight large-cap and quality mid-cap funds; avoid micro-cap and thematic funds where retail FOMO typically concentrates. Equity MF net inflows at ₹25,978 cr (65th percentile) confirm broad-based demand, but rising average ticket size suggests the retail cohort is shifting from first-time investors to HNI allocation. Expect SIP growth to decelerate as the base of new accounts saturates.</div>
+          <div class="sc-title" id="sig3-title">SIP AUM Surge Masks Account Stagnation</div>
+          <div class="sc-data" id="sig3-data">SIP inflows at ₹29,845 cr (85th percentile, score +70), but SIP accounts grew only 1.6% to 10.45 cr from 10.29 cr — a deceleration. SIP AUM jumped 1.7% to ₹16.64 lakh cr (82nd percentile), outpacing account growth. This means average ticket size per SIP account is rising: ₹16.64L cr / 10.45 cr accounts = ₹1.59L per account, up from ₹1.59L prior month. Equity MF net inflows at ₹25,978 cr (65th percentile), and MF AUM at ₹82.03 lakh cr (80th percentile).</div>
+          <div class="sc-impl" id="sig3-impl">The retail SIP story is bifurcating: mass-market SIP account growth is stalling (accounts at -96 score), but affluent retail is pouring money in via larger ticket sizes. This is late-cycle behaviour — the easy money from first-time SIP investors has been captured; now it's wealth consolidation. Overweight large-cap and dividend-paying equity funds; underweight small-cap and thematic funds that rely on new account acquisition. The SIP inflow momentum is real, but it's not broadening the retail base — it's deepening existing investor pockets.</div>
           <div class="sc-pct" id="sig3-pct">85%</div>
         </div>
         <div class="sc watch" id="sig4">
           <div class="sc-num">SIGNAL 04 · OIL / COMMODITY RISK</div><div class="sc-status watch">◎ Watch</div>
-          <div class="sc-title" id="sig4-title">Oil Stable, But Copper Signals Demand Caution</div>
-          <div class="sc-data" id="sig4-data">Brent crude at $76.01/bbl (56th percentile, neutral signal) — stable but not rallying despite global PMI at 51 (contraction territory). WTI at $71.41 (59th percentile). Natural gas at $2.94 (18th percentile, mild-positive) — near 10-year lows, signalling weak global energy demand. Copper at $6.282/lb (74th percentile, mild-positive) — up from $6.215 — but iron ore at $161.91 (63rd percentile) shows mixed signals. FAO food index at 128.5 (56th percentile) — rising but not alarming.</div>
-          <div class="sc-impl" id="sig4-impl">Oil price stability is masking weak global demand. If US PMI breaks below 50 (currently 50.3), expect oil to test $70. Copper's mild strength is a false signal — it's driven by China's stimulus hopes, not actual demand. Hedge India's CAD risk by reducing exposure to oil-sensitive sectors (airlines, shipping). Copper upside is capped; avoid mining stocks. Natural gas at 10-year lows is a gift for power and fertiliser companies — overweight.</div>
-          <div class="sc-pct" id="sig4-pct">56%</div>
+          <div class="sc-title" id="sig4-title">Oil Creep Threatens CAD, INR Vulnerable</div>
+          <div class="sc-data" id="sig4-data">Brent crude at $78.93/bbl (up from $76.01, 58th percentile, neutral signal), WTI at $74.04 (62nd percentile). Both are in mid-range territory, but the trend is up 4 of last 5 months for Brent. Natural gas has collapsed to $2.935 (18th percentile, mild-positive score +64), easing energy inflation. Copper at $6.246 (73rd percentile, mild-positive), iron ore at $161.91 (63rd percentile). India's fuel inflation is negative at -3.78%, but this is a lagging indicator — oil price momentum will feed through in 2-3 months.</div>
+          <div class="sc-impl" id="sig4-impl">Oil at $78-79 is manageable for India's CAD, but if Brent breaks $82, expect INR depreciation pressure and RBI intervention. The current INR/USD at 95.24 (89th percentile, strong-negative score -78) is already stressed; further oil strength will force RBI to defend the currency, draining reserves. Hedge long-duration INR exposure. Overweight oil-linked sectors (refiners, petrochemicals) only if you believe Brent stays <$80; otherwise, avoid. Monitor weekly Brent closes — a break above $80 is a sell signal for INR.</div>
+          <div class="sc-pct" id="sig4-pct">58%</div>
         </div>
         <div class="sc positive" id="sig5">
           <div class="sc-num">SIGNAL 05 · GLOBAL LIQUIDITY</div><div class="sc-status positive">✦ Positive</div>
-          <div class="sc-title" id="sig5-title">US Equity Strength Masks Divergence Risk</div>
-          <div class="sc-data" id="sig5-data">S&P 500 at 7,575 (100th percentile, all-time high, strong-positive score +100). Nasdaq at 26,282 (71st percentile, mild-positive). US VIX at 15.03 (9th percentile, strong-positive signal +82) — complacency at extremes. But US 10Y Treasury at 4.54% (82nd percentile, mild-negative) — yields are elevated and sticky. Fed funds at 3.625% (flat, 67th percentile). DXY at 100.97 (52nd percentile, neutral) — dollar stable but not strengthening.</div>
-          <div class="sc-impl" id="sig5-impl">US equity valuations are at extremes with VIX at 10-year lows — this is a crowded trade. The 82nd percentile on 10Y yields suggests rate cuts are priced in, but Fed is data-dependent. If US CPI re-accelerates (currently 2.4%, 38th percentile), expect a sharp repricing. For India: FII equity flows are negative at -₹114 cr (49th percentile) — foreign money is rotating out. Reduce US equity hedges; overweight India relative to US. Watch for Fed pivot signals in March FOMC.</div>
+          <div class="sc-title" id="sig5-title">US Equity Strength Masks Slowdown Risk</div>
+          <div class="sc-data" id="sig5-data">S&P 500 at 7,575.39 (100th percentile, strong-positive score +100), Nasdaq at 26,281.6 (71st percentile, mild-positive), Nikkei 225 at 68,557.73 (100th percentile, strong-positive). US VIX at 15.03 (9th percentile, strong-positive score +82), India VIX at 12.25 (7th percentile, strong-positive score +86). US 10Y Treasury at 4.54% (82nd percentile, mild-negative score -64), Fed funds at 3.625% (flat). US GDP SAAR at 0.7% (48th percentile, neutral), a sharp deceleration from 4.4% prior. US PMI composite at 50.3 (47th percentile, neutral), below 50 expansion threshold.</div>
+          <div class="sc-impl" id="sig5-impl">Global equity strength is real, but it's decoupled from underlying growth. US GDP has slowed to 0.7% annualised, and PMI is barely in expansion. This is a liquidity-driven rally, not a growth story. The Fed is on pause (3.625% funds rate), and markets are pricing in rate cuts by mid-2026. For India, this means: (1) FII flows will remain volatile — any US growth surprise will trigger outflows; (2) INR will weaken if US yields rise; (3) carry trades are crowded. Reduce India equity overweight; take profits on Nifty 50 at 24,200+ levels. Rotate into defensive sectors (FMCG, pharma) and avoid high-beta IT and financials.</div>
           <div class="sc-pct" id="sig5-pct">100%</div>
         </div>
         <div class="sc risk" id="sig6">
           <div class="sc-num">SIGNAL 06 · INR / FX RESERVES</div><div class="sc-status risk">⚠ Risk</div>
-          <div class="sc-title" id="sig6-title">INR Weakness Accelerates Despite Stable Reserves</div>
-          <div class="sc-data" id="sig6-data">INR/USD at 95.24 (89th percentile, strong-negative signal, score -78) — the rupee has weakened sharply. FII equity flows are negative at -₹114 cr (49th percentile), and DII equity flows are weak at ₹128 cr (22nd percentile). DXY at 100.97 (52nd percentile) — the dollar is stable, so INR weakness is India-specific. Gold in INR terms at ₹1,000/gram (0th percentile, mild-negative) — a data anomaly, but suggests RBI may be intervening to support the rupee.</div>
-          <div class="sc-impl" id="sig6-impl">INR at 95.24 is a critical level. If it breaks 95.50, expect RBI to intervene aggressively, burning reserves. FII outflows are the culprit — foreign money is rotating out of India equities (likely due to valuation concerns and US equity strength). Hedge INR exposure; avoid long USD positions. Expect RBI to signal rupee support in the next policy review. Import-heavy sectors (pharma, IT services) will see margin pressure if INR weakens further. Overweight exporters (IT, textiles, autos).</div>
+          <div class="sc-title" id="sig6-title">INR Under Pressure, RBI Defending Quietly</div>
+          <div class="sc-data" id="sig6-data">INR/USD at 95.24 (89th percentile, strong-negative score -78), a depreciation from 96.15 prior. The recent trend shows volatility: 96.15→95.24→96.15→95.24→94.34→95.24, indicating RBI intervention to cap weakness. FII equity net flows are deeply negative at -₹114 cr (49th percentile), a reversal from +₹22,615 cr prior month. DII equity net at +₹128 cr (22nd percentile, weak). Gold in INR at ₹12,520/gram (100th percentile, mild-positive score +30), reflecting INR weakness. DXY at 101.162 (53rd percentile, neutral).</div>
+          <div class="sc-impl" id="sig6-impl">RBI is defending INR at 95.25 levels, but the defence is costly — FII outflows are accelerating, and DII is not compensating. If FII outflows exceed ₹500 cr/day for 2+ weeks, RBI will be forced to either (1) hike rates (unlikely given inflation is contained), or (2) allow INR to weaken to 96-97 levels. For allocators: (1) Reduce INR-denominated equity exposure; (2) Hedge long INR positions; (3) Avoid rupee-denominated bonds unless yields exceed 6.5%; (4) Watch FII flows daily — a sustained outflow >₹1,000 cr/day is a sell signal for Nifty. The INR is not in free fall, but it's under structural pressure from global liquidity tightening.</div>
           <div class="sc-pct" id="sig6-pct">89%</div>
         </div>
         <div class="sc surprise" id="sig7">
           <div class="surprise-flash">🔴 Surprise Signal</div>
           <div class="sc-num">SIGNAL 07 · UNDER THE RADAR</div><div class="sc-status surprise">⚡ Surprise</div>
-          <div class="sc-title" id="sig7-title">Airline Collapse Signals Demand Cliff, Not Cycle</div>
-          <div class="sc-data" id="sig7-data">Airline passenger traffic at 35.08 (7th percentile, strong-negative score -86) — a shocking 9% YoY decline from 38.59. This is NOT a seasonal dip; it's a structural break. Simultaneously, e-commerce GMV growth has collapsed to 12.4% from 25% (15th percentile, strong-negative score -70). Yet GST collections are at 71st percentile and PV sales at 56th percentile. The divergence is stark: mass-market consumption (GST, auto sales) is holding, but discretionary travel and online shopping are cratering.</div>
-          <div class="sc-impl" id="sig7-impl">This is a demand cliff for affluent consumers, not a broad-based slowdown. Airlines and e-commerce platforms are canaries in the coal mine for HNI spending. The SIP data (rising average ticket size) and airline collapse together suggest: HNI money is rotating INTO financial assets (SIPs, equities) and OUT OF discretionary consumption (travel, online shopping). This is a classic late-cycle rotation — wealth effect is driving asset purchases, not consumption. Reduce exposure to airlines, e-commerce, and hospitality. Overweight financial services, insurance, and wealth management plays. Expect airline stocks to re-rate lower as FY27 guidance misses.</div>
+          <div class="sc-title" id="sig7-title">Airline Collapse Signals Demand Cliff Ahead</div>
+          <div class="sc-data" id="sig7-data">Airline passenger traffic at 35.08 (7th percentile, strong-negative score -86), down sharply from 38.59 prior month. This is the weakest reading in the dataset. Simultaneously, e-commerce GMV growth has decelerated to 12.4% from 25% YoY (15th percentile, strong-negative score -70). Yet GST collections remain robust at ₹200,640 cr (71st percentile), and vehicle sales (PV +26.1%, 2W +28.68%, CV +28.89%) are surging. The contradiction: high-frequency discretionary consumption (flights, e-commerce) is collapsing, but low-frequency durables (vehicles) and tax-collected consumption (GST) are strong. This suggests a demand cliff in affluent urban consumption, while mass-market durables are still resilient.</div>
+          <div class="sc-impl" id="sig7-impl">The economy is bifurcating: mass-market (vehicles, GST) is holding up, but affluent discretionary (flights, e-commerce) is cracking. This is a leading indicator of a demand slowdown in 2-3 months. For allocators: (1) Overweight mass-market plays (two-wheeler OEMs, FMCG, rural-focused retailers); (2) Underweight urban-centric, high-ticket discretionary (airlines, e-commerce, premium hospitality); (3) Reduce exposure to IT services (which depend on affluent urban spending); (4) Avoid luxury goods and premium real estate. The airline collapse is not a sector-specific issue — it's a canary in the coal mine for affluent consumer health. If airline traffic doesn't recover within 4 weeks, expect earnings downgrades across discretionary sectors by Q3 FY26.</div>
           <div class="sc-pct" id="sig7-pct">7%</div>
         </div>
       </div>
@@ -1186,12 +1224,12 @@ td.c-pct { text-align:right; min-width:96px; }
     </div>
     <div class="pb">
       <div class="regime-cards" id="s1-body">
-        <div class="rc"><div class="rc-dim">Growth Cycle</div><div class="rc-met" id="rc-growth-m">GDP 7.8%; PMI 56.5</div><div class="rc-sig" id="rc-growth-s">GDP at 7.8% is the headline; the quality test is harder to pass. PMI Composite fell to 56.5 from 58.9, PMI Manufacturing dropped to 53.9 from 56.9, and core sector growth more than halved to 2.3% from 4.7% — three independent signals pointing in the same direction while the GDP number points the other way. IIP capital goods at 12.5% looks like acceleration, but when core sector — which captures actual physical output in cement, steel, electricity, and coal — decelerates this sharply, the capital goods print is more likely a one-off project completion than the leading edge of a new investment cycle. The GDP-GVA gap deserves scrutiny: if deflator assumptions are flattering the 7.8% print, the real economy may be running 50-100bps slower than the press release suggests.</div><span class="ph-badge" id="rc-growth-b">Expansion Mode</span></div>
-        <div class="rc"><div class="rc-dim">Inflation Cycle</div><div class="rc-met" id="rc-infl-m">CPI 3.21%; Fuel -3.78%%</div><div class="rc-sig" id="rc-infl-s">CPI at 3.21% is inside the RBI's band, but the direction matters more than the level — it rose from 2.75% prior, food inflation jumped to 3.47% from 2.13%, and the RBI has already revised its own inflation forecast up to 4.6% from 4.2%. Core CPI at 3.4% is flat, which is the one genuinely reassuring number: services disinflation is holding even as food pressures build. The inversion worth running: if the RBI is on extended pause while food inflation is accelerating and its own forecast is moving higher, the market's residual hope for a rate cut in FY27 is pricing a scenario the RBI's own projections don't support.</div><span class="ph-badge" id="rc-infl-b">Within Band</span></div>
-        <div class="rc"><div class="rc-dim">Credit Cycle</div><div class="rc-met" id="rc-credit-m">Credit 13.8%; CD 83.04%</div><div class="rc-sig" id="rc-credit-s">CD ratio at 83.04% — 81st percentile, highest in this cycle — is the structural fault line beneath an otherwise strong growth narrative. Credit growing at 13.8% while deposits grow at 10.8% is a 300bps divergence that has now widened for three consecutive months; the last time this ratio sustained above 80% for an extended period, macro-prudential tightening via risk weights followed within two quarters. NBFC credit growth has already decelerated to 13% from 17%, and corporate bond issuance at ₹1.12 lakh crore sits at the 7th percentile — meaning banks are rationing credit and forcing corporates to capital markets at a moment when those markets are pricing risk assets at near-record levels. The second-order chain: deposit rate competition intensifies → NIM compression → bank earnings downgrades → Nifty Bank derating from its current 96th-percentile perch.</div><span class="ph-badge" id="rc-credit-b">Deposit Gap Stress</span></div>
-        <div class="rc"><div class="rc-dim">Policy Regime</div><div class="rc-met" id="rc-policy-m">Repo 5.25%%</div><div class="rc-sig" id="rc-policy-s">Repo at 5.25% is unchanged, and with CPI rising, food inflation accelerating, and the RBI's own forecast at 4.6%, the real rate is approximately 104bps — not tight enough to alarm, not loose enough to stimulate. RBI's GDP forecast at 6.9% sits 90bps below the government's 7.8% print, which is either institutional conservatism or a signal that the central bank sees the same core sector and PMI deceleration that the high-frequency data is flagging. For housing, the average home loan rate falling to 8.0% from 9.1% is the most consequential policy transmission of the cycle — affordability index at 0.61 and home loan disbursements at ₹5.5 lakh crore suggest the rate cut cycle already delivered its real economy dividend before the pause.</div><span class="ph-badge" id="rc-policy-b">Rate Pause</span></div>
-        <div class="rc"><div class="rc-dim">Capex Cycle</div><div class="rc-met" id="rc-capex-m">IIP CapG 12.5%%; CU Not available in search results%</div><div class="rc-sig" id="rc-capex-s">IIP capital goods at 12.5% is the number everyone will quote; core sector at 2.3% is the number that falsifies it. Capital goods captures machinery and equipment orders — it can spike on a single large import or defence procurement — while core sector measures actual throughput in the eight industries that account for 40% of IIP. When these two diverge by 10 percentage points, the capital goods print is almost certainly noise. PMI Manufacturing at 53.9, down from 56.9, confirms that order momentum is fading, not building; without capacity utilisation data, the honest answer is that private capex acceleration remains an aspiration, not a cycle.</div><span class="ph-badge" id="rc-capex-b">Steady Investment</span></div>
-        <div class="rc"><div class="rc-dim">Consumption Cycle</div><div class="rc-met" id="rc-cons-m">GST 200640; PV 26.1%</div><div class="rc-sig" id="rc-cons-s">GST at ₹2.006 lakh crore is a record, but the composition question is non-trivial: how much is genuine demand versus formalization reclassifying existing informal spend? The vehicle data is unambiguously strong — PV sales at 26.1% YoY, two-wheelers at 28.68%, commercial vehicles at 28.89% — and CV sales in particular are a reliable proxy for freight activity and rural-to-urban goods movement. The inversion: airline passengers at a 7th-percentile low (down 9% from prior) and e-commerce GMV growth halved to 12.4% from 25% are not rounding errors — they are the discretionary consumption layer above the GST and auto data, and they are deteriorating. India's consumption story has a mass-market floor that is holding and a discretionary ceiling that is cracking; the question is which layer the equity market is pricing.</div><span class="ph-badge" id="rc-cons-b">Demand Surge</span></div>
+        <div class="rc"><div class="rc-dim">Growth Cycle</div><div class="rc-met" id="rc-growth-m">GDP 7.8%; PMI 56.5</div><div class="rc-sig" id="rc-growth-s">GDP at <strong>7.8%</strong> is the headline; the quality test is what sits beneath it. PMI Composite has slipped from 58.9 to <strong>56.5</strong> in a single month, manufacturing sub-index fell from 56.9 to <strong>53.9</strong>, and core sector growth has decelerated sharply to <strong>2.3% YoY</strong> from 4.7% — the weakest reading in the dataset. The inversion: a 7.8% GDP print alongside a core sector at 2.3% and airline passenger traffic at a <strong>7th-percentile low</strong> suggests the headline is carrying statistical weight that the physical economy is not yet earning.</div><span class="ph-badge" id="rc-growth-b">Expansion Mode</span></div>
+        <div class="rc"><div class="rc-dim">Inflation Cycle</div><div class="rc-met" id="rc-infl-m">CPI 3.21%; Fuel -3.78%%</div><div class="rc-sig" id="rc-infl-s">Headline CPI at <strong>3.21%</strong> looks benign, but the composition is shifting: food inflation has jumped to <strong>3.47%</strong> from 2.13%, the FAO food price index is at <strong>128.5</strong> (up from 125.3), and WPI has edged to <strong>2.13%</strong>. Core CPI is flat at <strong>3.4%</strong> — which means the RBI's inflation forecast of <strong>4.6%</strong> is already 140bps above current headline, implying the central bank sees the food pass-through coming. Fuel at <strong>-3.78%</strong> is the one disinflationary anchor, but Brent has risen in 4 of the last 5 months — that anchor will drag in 2-3 quarters.</div><span class="ph-badge" id="rc-infl-b">Within Band</span></div>
+        <div class="rc"><div class="rc-dim">Credit Cycle</div><div class="rc-met" id="rc-credit-m">Credit 13.8%; CD 83.04%</div><div class="rc-sig" id="rc-credit-s">CD ratio at <strong>83.04%</strong> — up from 82.5%, now at the <strong>81st historical percentile</strong> — is the structural fault line. Bank credit is growing at <strong>13.8% YoY</strong> against deposit growth of <strong>10.8%</strong>, a 300bps divergence; NBFC credit growth has already decelerated from 17% to <strong>13%</strong>, signalling that the funding squeeze is biting the shadow banking layer first. Corporate bond issuance spiked to <strong>₹1,12,000 crore</strong> — a 10-year low percentile — meaning corporates are front-running tightening rather than funding expansion: that is a risk signal, not a growth signal.</div><span class="ph-badge" id="rc-credit-b">Deposit Gap Stress</span></div>
+        <div class="rc"><div class="rc-dim">Policy Regime</div><div class="rc-met" id="rc-policy-m">Repo 5.25%%</div><div class="rc-sig" id="rc-policy-s">Repo at <strong>5.25%</strong> is unchanged, and with CPI at 3.21%, the real policy rate is approximately <strong>+204bps</strong> — restrictive by any historical India standard. RBI's own inflation forecast of 4.6% compresses the real rate to roughly 65bps on a forward basis, which is the corridor the MPC is actually managing. The second-order effect: at 8% average home loan rates (down from 9.1%), housing affordability has improved — the affordability index moved to <strong>0.61</strong> from 0.46 — but a CD ratio at 83% means banks cannot sustainably grow mortgage books without deposit mobilisation catching up first.</div><span class="ph-badge" id="rc-policy-b">Rate Pause</span></div>
+        <div class="rc"><div class="rc-dim">Capex Cycle</div><div class="rc-met" id="rc-capex-m">IIP CapG 12.5%%; CU Not available in search results%</div><div class="rc-sig" id="rc-capex-s">IIP capital goods at <strong>12.5% YoY</strong> looks like an acceleration from 4.3%, but this is a single-month spike against a weak base — core sector at <strong>2.3%</strong> and PMI manufacturing at <strong>53.9</strong> (down from 56.9) tell the opposite story. Capacity utilisation data is unavailable, but the PMI order book signal and the NBFC funding squeeze together suggest private capex is not broadening. The budget's capex headline is being quoted as if private investment follows public spending automatically; the IIP trend over the prior months does not support that inference.</div><span class="ph-badge" id="rc-capex-b">Steady Investment</span></div>
+        <div class="rc"><div class="rc-dim">Consumption Cycle</div><div class="rc-met" id="rc-cons-m">GST 200640; PV 26.1%</div><div class="rc-sig" id="rc-cons-s">GST at <strong>₹2,00,640 crore</strong> is a record print, but the composition matters: vehicle sales — PV +<strong>26.1%</strong>, 2W +<strong>28.68%</strong>, CV +<strong>28.89%</strong> — are surging across all segments, suggesting mass-market durables demand is genuine. The contradiction is airline passenger traffic at a <strong>7th-percentile low</strong> (35.08 lakh, down from 38.59) and e-commerce GMV growth collapsing from 25% to <strong>12.4%</strong> — the two highest-frequency proxies for urban affluent discretionary spending. India's consumption story has bifurcated: the mass market is buying its first car or motorcycle; the urban professional has stopped booking flights and clicking checkout.</div><span class="ph-badge" id="rc-cons-b">Demand Surge</span></div>
       </div>
       <div class="p-summary" id="s1-summary">GDP 7.8%; PMI 56.5</div>
     </div>
@@ -1208,7 +1246,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>7.8</td>
   <td>8.4</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -7.14%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -7.14%</span></div></td>
   <td><span class="pct-mid">64%</span></td>
 </tr>
 <tr>
@@ -1216,7 +1254,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>7.6</td>
   <td>7.1</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ 7.04%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 7.04%</span></div></td>
   <td><span class="pct-hi">80%</span></td>
 </tr>
 <tr>
@@ -1224,7 +1262,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>6.9</td>
   <td>—</td>
   <td><span class="arr fl">→</span></td>
-  <td>→ Awaited</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>→ Awaited</span></div></td>
   <td><span class="pct-mid">77%</span></td>
 </tr>
 <tr>
@@ -1232,7 +1270,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>53.9</td>
   <td>56.9</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -5.27%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -5.27%</span></div></td>
   <td><span class="pct-mid">50%</span></td>
 </tr>
 <tr>
@@ -1240,7 +1278,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>57.5</td>
   <td>58.1</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -1.03%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -1.03%</span></div></td>
   <td><span class="pct-hi">88%</span></td>
 </tr>
 <tr>
@@ -1248,7 +1286,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>56.5</td>
   <td>58.9</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -4.07%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -4.07%</span></div></td>
   <td><span class="pct-hi">86%</span></td>
 </tr>
 <tr>
@@ -1298,7 +1336,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>3.21</td>
   <td>2.75</td>
   <td><span class="arr dn">↑</span></td>
-  <td>↑ 16.73%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 16.73%</span></div></td>
   <td><span class="pct-hi">27%</span></td>
 </tr>
 <tr>
@@ -1306,7 +1344,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>3.4</td>
   <td>3.4</td>
   <td><span class="arr fl">→</span></td>
-  <td>→ 0%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>→ 0%</span></div></td>
   <td><span class="pct-hi">20%</span></td>
 </tr>
 <tr>
@@ -1314,7 +1352,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>3.47</td>
   <td>2.13</td>
   <td><span class="arr dn">↑</span></td>
-  <td>↑ 62.91%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 62.91%</span></div></td>
   <td><span class="pct-hi">38%</span></td>
 </tr>
 <tr>
@@ -1364,7 +1402,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>200640</td>
   <td>18384.5</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ 9.14%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 9.14%</span></div></td>
   <td><span class="pct-lo">0%</span></td>
 </tr>
 <tr>
@@ -1372,7 +1410,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>2227096</td>
   <td>205551.5</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ 8.35%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 8.35%</span></div></td>
   <td><span class="pct-lo">0%</span></td>
 </tr>
 <tr>
@@ -1380,7 +1418,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>26.1</td>
   <td>21.48</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ 21.51%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 21.51%</span></div></td>
   <td><span class="pct-mid">56%</span></td>
 </tr>
 <tr>
@@ -1388,7 +1426,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>28.68</td>
   <td>13.4</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ 114.03%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 114.03%</span></div></td>
   <td><span class="pct-mid">59%</span></td>
 </tr>
 <tr>
@@ -1396,7 +1434,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>28.89</td>
   <td>15.07</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ 91.71%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 91.71%</span></div></td>
   <td><span class="pct-mid">56%</span></td>
 </tr>
 <tr>
@@ -1404,7 +1442,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>35.08</td>
   <td>38.59</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -9.1%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -9.1%</span></div></td>
   <td><span class="pct-lo">7%</span></td>
 </tr>
 <tr>
@@ -1412,7 +1450,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>12.4</td>
   <td>25</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -50.4%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -50.4%</span></div></td>
   <td><span class="pct-lo">15%</span></td>
 </tr>
 </tbody></table>
@@ -1430,7 +1468,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>13.8</td>
   <td>11.3</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ 22.12%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 22.12%</span></div></td>
   <td><span class="pct-mid">58%</span></td>
 </tr>
 <tr>
@@ -1438,7 +1476,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>10.8</td>
   <td>—</td>
   <td><span class="arr fl">→</span></td>
-  <td>→ Awaited</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>→ Awaited</span></div></td>
   <td><span class="pct-mid">44%</span></td>
 </tr>
 <tr>
@@ -1446,7 +1484,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>83.04</td>
   <td>82.5</td>
   <td><span class="arr dn">↑</span></td>
-  <td>↑ 0.65%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 0.65%</span></div></td>
   <td><span class="pct-lo">81%</span></td>
 </tr>
 <tr>
@@ -1454,7 +1492,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>13</td>
   <td>17</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -23.53%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -23.53%</span></div></td>
   <td><span class="pct-mid">48%</span></td>
 </tr>
 <tr>
@@ -1462,7 +1500,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>112000</td>
   <td>106000</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ 5.66%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 5.66%</span></div></td>
   <td><span class="pct-lo">7%</span></td>
 </tr>
 </tbody></table>
@@ -1480,7 +1518,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>-114</td>
   <td>22615</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -604.09%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -604.09%</span></div></td>
   <td><span class="pct-lo">0%</span></td>
 </tr>
 <tr>
@@ -1488,7 +1526,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>128</td>
   <td>—</td>
   <td><span class="arr fl">→</span></td>
-  <td>→ Awaited</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>→ Awaited</span></div></td>
   <td><span class="pct-hi">100%</span></td>
 </tr>
 <tr>
@@ -1496,7 +1534,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>29845</td>
   <td>31002</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -3.73%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -3.73%</span></div></td>
   <td><span class="pct-hi">85%</span></td>
 </tr>
 <tr>
@@ -1504,7 +1542,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>15</td>
   <td>17</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -11.76%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -11.76%</span></div></td>
   <td><span class="pct-lo">38%</span></td>
 </tr>
 <tr>
@@ -1512,7 +1550,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>82.03</td>
   <td>81.01</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ 1.26%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 1.26%</span></div></td>
   <td><span class="pct-hi">80%</span></td>
 </tr>
 <tr>
@@ -1520,7 +1558,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>82.01</td>
   <td>81.99</td>
   <td><span class="arr fl">→</span></td>
-  <td>→ 0.02%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>→ 0.02%</span></div></td>
   <td><span class="pct-hi">81%</span></td>
 </tr>
 <tr>
@@ -1528,7 +1566,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>25978</td>
   <td>24029</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ 8.11%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 8.11%</span></div></td>
   <td><span class="pct-mid">65%</span></td>
 </tr>
 <tr>
@@ -1544,7 +1582,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>10.45</td>
   <td>10.29</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ 1.55%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 1.55%</span></div></td>
   <td><span class="pct-lo">2%</span></td>
 </tr>
 <tr>
@@ -1552,7 +1590,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>16.64</td>
   <td>16.36</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ 1.71%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 1.71%</span></div></td>
   <td><span class="pct-hi">82%</span></td>
 </tr>
 </tbody></table>
@@ -1570,7 +1608,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>24206.9</td>
   <td>23962.8</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ +1.02%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,4.1 2.4,6.3 3.8,6.3 5.2,6.3 6.6,6.3 8,13.8 9.5,13.5 10.9,13.4 12.3,14 13.7,14 15.1,14 16.5,17 17.9,15.5 19.3,15.9 20.7,16.5 22.1,10.9 23.5,10.9 25,10.9 26.4,8.1 27.8,6.4 29.2,5.2 30.6,4.2 32,6.1 33.4,6.1 34.8,6.1 36.2,5 37.6,8.4 39,6 40.5,5.6 41.9,5.6 43.3,5.6 44.7,5.6 46.1,6.9 47.5,7.9 48.9,6.2 50.3,4.1 51.7,3 53.1,3 54.5,3 56,1 57.4,1.4 58.8,7.7 60.2,6.7 61.6,3.7 63,3.7" fill="none" stroke="#007a52" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ +1.02%</span></div></td>
   <td><span class="pct-mid">78%</span></td>
 </tr>
 <tr>
@@ -1578,7 +1616,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>77569.39</td>
   <td>76741.82</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ +1.08%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,3.7 2.4,5.6 3.8,5.6 5.2,5.6 6.6,5.6 8,14.5 9.5,14.2 10.9,14.2 12.3,14.6 13.7,14.6 15.1,14.6 16.5,17 17.9,15.7 19.3,15.5 20.7,16 22.1,10.3 23.5,10.3 25,10.3 26.4,7.8 27.8,6 29.2,4.8 30.6,3.9 32,6 33.4,6 34.8,6 36.2,5 37.6,8 39,5.3 40.5,5 41.9,5 43.3,5 44.7,5 46.1,6.2 47.5,7.1 48.9,5.6 50.3,3.6 51.7,2.8 53.1,2.8 54.5,2.8 56,1 57.4,1.4 58.8,7 60.2,6.2 61.6,3.4 63,3.4" fill="none" stroke="#007a52" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ +1.08%</span></div></td>
   <td><span class="pct-mid">74%</span></td>
 </tr>
 <tr>
@@ -1586,15 +1624,15 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>58045.9</td>
   <td>57252.45</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ +1.39%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,10.9 2.4,12.8 3.8,12.8 5.2,12.8 6.6,12.8 8,17 9.5,15.1 10.9,14.7 12.3,14.1 13.7,14.1 15.1,14.1 16.5,15.6 17.9,11.7 19.3,12 20.7,11.7 22.1,6.1 23.5,6.1 25,6.1 26.4,4.8 27.8,4.4 29.2,3.4 30.6,2.1 32,3.1 33.4,3.1 34.8,3.1 36.2,2.2 37.6,4.8 39,1.5 40.5,1.4 41.9,1.4 43.3,1.4 44.7,1.4 46.1,2.9 47.5,3.6 48.9,1.9 50.3,1.9 51.7,2.2 53.1,2.2 54.5,2.2 56,1 57.4,1.3 58.8,6.3 60.2,4.6 61.6,1.8 63,1.8" fill="none" stroke="#007a52" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ +1.39%</span></div></td>
   <td><span class="pct-hi">96%</span></td>
 </tr>
 <tr>
   <td>India VIX</td>
-  <td>12.252</td>
+  <td>12.2525</td>
   <td>13.36</td>
   <td><span class="arr up">↓</span></td>
-  <td>↓ -8.29%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,3.4 2.4,1 3.8,1 5.2,1 6.6,1 8,5.5 9.5,6.1 10.9,7 12.3,7.3 13.7,7.3 15.1,7.3 16.5,4.4 17.9,7.8 19.3,7.6 20.7,7.7 22.1,9.8 23.5,9.8 25,9.8 26.4,9.8 27.8,13 29.2,13.4 30.6,13.4 32,13.9 33.4,13.9 34.8,13.9 36.2,14.2 37.6,11.6 39,12.9 40.5,13.7 41.9,13.7 43.3,13.7 44.7,13.7 46.1,12.4 47.5,12.4 48.9,13.3 50.3,15.5 51.7,16.6 53.1,16.6 54.5,16.6 56,16.6 57.4,17 58.8,9.9 60.2,13 61.6,15.6 63,15.6" fill="none" stroke="#007a52" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -8.29%</span></div></td>
   <td><span class="pct-hi">7%</span></td>
 </tr>
 <tr>
@@ -1608,26 +1646,26 @@ td.c-pct { text-align:right; min-width:96px; }
 <tr>
   <td>INR/USD</td>
   <td>95.24</td>
-  <td>0.0104</td>
-  <td><span class="arr dn">↑</span></td>
-  <td>↑ +0.96%</td>
+  <td>96.15</td>
+  <td><span class="arr up">↓</span></td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,9 2.4,9 3.8,9 5.2,9 6.6,9 8,9 9.5,1 10.9,1 12.3,9 13.7,9 15.1,9 16.5,1 17.9,9 19.3,9 20.7,1 22.1,9 23.5,9 25,9 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,9 50.3,9 51.7,9 53.1,9 54.5,9 56,9 57.4,9 58.8,9 60.2,9 61.6,9 63,9" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -0.95%</span></div></td>
   <td><span class="pct-hi">0%</span></td>
 </tr>
 <tr>
   <td>Gold INR/gram</td>
-  <td>1000</td>
-  <td>1</td>
-  <td><span class="arr dn">↓</span></td>
-  <td>↓ -0.41%</td>
-  <td><span class="pct-lo">0%</span></td>
+  <td class="has-tip">12395 <span class="sigma-tag alert">21.1σ</span><div class="stat-tip"><b>Historical (180 days)</b><br>Mean: 1412.06 · StdDev: ±520.39<br>Range: 20 – 2,000<br>Z-score: 21.1σ above mean</div></td>
+  <td>12395</td>
+  <td><span class="arr fl">→</span></td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,1 2.4,1 3.8,1 5.2,1 6.6,1 8,1 9.5,17 10.9,1 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#cc0033" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>(stale)</span></div></td>
+  <td><span class="pct-hi">100%</span></td>
 </tr>
 <tr>
   <td>Brent Crude</td>
+  <td>78.93</td>
   <td>76.01</td>
-  <td>76.3</td>
-  <td><span class="arr up">↓</span></td>
-  <td>↓ -0.38%</td>
-  <td><span class="pct-mid">56%</span></td>
+  <td><span class="arr dn">↑</span></td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,1 2.4,1.2 3.8,2.4 5.2,2.4 6.6,2.4 8,7.7 9.5,6.7 10.9,7.5 12.3,8.4 13.7,8.3 15.1,7.3 16.5,7.8 17.9,8.6 19.3,7.1 20.7,10.1 22.1,10.8 23.5,10.6 25,11.8 26.4,12.1 27.8,13.7 29.2,13.9 30.6,13.8 32,13.3 33.4,13.3 34.8,12.9 36.2,14.2 37.6,14.7 39,16.2 40.5,15.5 41.9,16 43.3,16.4 44.7,16.1 46.1,16 47.5,16.1 48.9,17 50.3,16.8 51.7,16.6 53.1,16.6 54.5,16.8 56,16.6 57.4,15 58.8,13.8 60.2,15.1 61.6,15.1 63,15.1" fill="none" stroke="#007a52" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ +3.84%</span></div></td>
+  <td><span class="pct-mid">58%</span></td>
 </tr>
 <tr>
   <td>RBI FX Reserves</td>
@@ -1653,7 +1691,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>126.265</td>
   <td>123.835</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ 1.96%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 1.96%</span></div></td>
   <td><span class="pct-lo">0%</span></td>
 </tr>
 <tr>
@@ -1661,7 +1699,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>101.675</td>
   <td>108.97</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -6.69%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -6.69%</span></div></td>
   <td><span class="pct-lo">0%</span></td>
 </tr>
 <tr>
@@ -1669,7 +1707,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>600000</td>
   <td>576.617</td>
   <td><span class="arr dn">↑</span></td>
-  <td>↑ 4.06%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 4.06%</span></div></td>
   <td><span class="pct-hi">0%</span></td>
 </tr>
 <tr>
@@ -1709,7 +1747,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>0.61</td>
   <td>0.46</td>
   <td><span class="arr dn">↑</span></td>
-  <td>↑ 32.61%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 32.61%</span></div></td>
   <td><span class="pct-hi">0%</span></td>
 </tr>
 <tr>
@@ -1717,7 +1755,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>550000</td>
   <td>—</td>
   <td><span class="arr fl">→</span></td>
-  <td>→ Awaited</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>→ Awaited</span></div></td>
   <td><span class="pct-mid">76%</span></td>
 </tr>
 <tr>
@@ -1725,7 +1763,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>8</td>
   <td>9.1</td>
   <td><span class="arr up">↓</span></td>
-  <td>↓ -12.09%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -12.09%</span></div></td>
   <td><span class="pct-mid">45%</span></td>
 </tr>
 </tbody></table>
@@ -1737,7 +1775,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>29.9</td>
   <td>28.2</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ 6.03%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 6.03%</span></div></td>
   <td><span class="pct-lo">24%</span></td>
 </tr>
 <tr>
@@ -1745,7 +1783,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>13.9</td>
   <td>17.2</td>
   <td><span class="arr up">↓</span></td>
-  <td>↓ -19.19%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -19.19%</span></div></td>
   <td><span class="pct-hi">38%</span></td>
 </tr>
 <tr>
@@ -1753,7 +1791,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>102</td>
   <td>93.6</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ 8.97%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 8.97%</span></div></td>
   <td><span class="pct-mid">58%</span></td>
 </tr>
 <tr>
@@ -1761,7 +1799,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>118</td>
   <td>—</td>
   <td><span class="arr fl">→</span></td>
-  <td>→ Awaited</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>→ Awaited</span></div></td>
   <td><span class="pct-lo">33%</span></td>
 </tr>
 <tr>
@@ -1769,32 +1807,32 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>5.7</td>
   <td>5.1</td>
   <td><span class="arr dn">↑</span></td>
-  <td>↑ 11.76%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 11.76%</span></div></td>
   <td><span class="pct-hi">11%</span></td>
 </tr>
 <tr>
   <td>Embassy REIT</td>
-  <td>Awaited</td>
-  <td>—</td>
-  <td><span class="arr fl">→</span></td>
-  <td>—</td>
-  <td><span class="pct-mid">50%</span></td>
+  <td>369.92</td>
+  <td>443.69</td>
+  <td><span class="arr dn">↓</span></td>
+  <td>↓ -16.63%</td>
+  <td><span class="pct-mid">56%</span></td>
 </tr>
 <tr>
   <td>Mindspace REIT</td>
-  <td>Awaited</td>
-  <td>—</td>
-  <td><span class="arr fl">→</span></td>
-  <td>—</td>
-  <td><span class="pct-mid">50%</span></td>
+  <td>345.06</td>
+  <td>487.59</td>
+  <td><span class="arr dn">↓</span></td>
+  <td>↓ -29.23%</td>
+  <td><span class="pct-mid">57%</span></td>
 </tr>
 <tr>
   <td>Brookfield REIT</td>
-  <td>Awaited</td>
-  <td>—</td>
-  <td><span class="arr fl">→</span></td>
-  <td>—</td>
-  <td><span class="pct-mid">50%</span></td>
+  <td>263.49</td>
+  <td>336.6</td>
+  <td><span class="arr dn">↓</span></td>
+  <td>↓ -21.72%</td>
+  <td><span class="pct-lo">37%</span></td>
 </tr>
 </tbody></table>
       <div class="p-summary" id="s10-re-summary">Residential market is hot; commercial absorption is strong.</div>
@@ -1813,7 +1851,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>0.7</td>
   <td>4.4</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -84.09%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -84.09%</span></div></td>
   <td><span class="pct-mid">48%</span></td>
 </tr>
 <tr>
@@ -1821,7 +1859,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>4.5</td>
   <td>5</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -10%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -10%</span></div></td>
   <td><span class="pct-mid">47%</span></td>
 </tr>
 <tr>
@@ -1829,7 +1867,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>0.9</td>
   <td>1.2</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -25%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -25%</span></div></td>
   <td><span class="pct-mid">49%</span></td>
 </tr>
 <tr>
@@ -1837,7 +1875,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>51</td>
   <td>51.5</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -0.97%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -0.97%</span></div></td>
   <td><span class="pct-mid">49%</span></td>
 </tr>
 <tr>
@@ -1845,7 +1883,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>50.3</td>
   <td>51.9</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -3.08%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -3.08%</span></div></td>
   <td><span class="pct-mid">47%</span></td>
 </tr>
 <tr>
@@ -1853,7 +1891,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>51.5</td>
   <td>51.6</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -0.19%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -0.19%</span></div></td>
   <td><span class="pct-mid">50%</span></td>
 </tr>
 </tbody></table>
@@ -1865,7 +1903,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>2.4</td>
   <td>2.4</td>
   <td><span class="arr fl">→</span></td>
-  <td>→ 0%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>→ 0%</span></div></td>
   <td><span class="pct-hi">38%</span></td>
 </tr>
 <tr>
@@ -1873,7 +1911,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>2.5</td>
   <td>2.5</td>
   <td><span class="arr fl">→</span></td>
-  <td>→ 0%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>→ 0%</span></div></td>
   <td><span class="pct-mid">50%</span></td>
 </tr>
 <tr>
@@ -1881,7 +1919,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>3.1</td>
   <td>3</td>
   <td><span class="arr dn">↑</span></td>
-  <td>↑ 3.33%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 3.33%</span></div></td>
   <td><span class="pct-mid">57%</span></td>
 </tr>
 <tr>
@@ -1889,7 +1927,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>2.5</td>
   <td>1.9</td>
   <td><span class="arr dn">↑</span></td>
-  <td>↑ 31.58%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 31.58%</span></div></td>
   <td><span class="pct-hi">25%</span></td>
 </tr>
 <tr>
@@ -1897,7 +1935,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>1.3</td>
   <td>0.2</td>
   <td><span class="arr dn">↑</span></td>
-  <td>↑ 550%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 550%</span></div></td>
   <td><span class="pct-mid">40%</span></td>
 </tr>
 <tr>
@@ -1905,7 +1943,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>128.5</td>
   <td>125.3</td>
   <td><span class="arr dn">↑</span></td>
-  <td>↑ 2.55%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 2.55%</span></div></td>
   <td><span class="pct-mid">56%</span></td>
 </tr>
 </tbody></table>
@@ -1917,7 +1955,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>3.625</td>
   <td>3.625</td>
   <td><span class="arr fl">→</span></td>
-  <td>→ 0%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>→ 0%</span></div></td>
   <td><span class="pct-mid">67%</span></td>
 </tr>
 <tr>
@@ -1925,7 +1963,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>6675</td>
   <td>6657</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ 0.27%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ 0.27%</span></div></td>
   <td><span class="pct-mid">46%</span></td>
 </tr>
 <tr>
@@ -1933,7 +1971,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>2</td>
   <td>2</td>
   <td><span class="arr fl">→</span></td>
-  <td>→ 0%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>→ 0%</span></div></td>
   <td><span class="pct-mid">56%</span></td>
 </tr>
 <tr>
@@ -1941,7 +1979,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>0.75</td>
   <td>0.75</td>
   <td><span class="arr fl">→</span></td>
-  <td>→ 0%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>→ 0%</span></div></td>
   <td><span class="pct-mid">72%</span></td>
 </tr>
 <tr>
@@ -1949,16 +1987,16 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>4.54</td>
   <td>4.56</td>
   <td><span class="arr up">↓</span></td>
-  <td>↓ -0.44%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,12.2 3.8,13.8 5.2,13.8 6.6,13.8 8,9.8 9.5,9 10.9,9 12.3,8.2 13.7,8.2 15.1,8.2 16.5,1.8 17.9,1 19.3,3.4 20.7,1.8 22.1,9.8 23.5,9.8 25,9.8 26.4,7.4 27.8,8.2 29.2,11.4 30.6,6.6 32,6.6 33.4,6.6 34.8,6.6 36.2,9 37.6,5 39,5.8 40.5,13 41.9,13.8 43.3,13.8 44.7,13.8 46.1,15.4 47.5,15.4 48.9,10.6 50.3,7.4 51.7,7.4 53.1,7.4 54.5,7.4 56,6.6 57.4,7.4 58.8,1.8 60.2,1 61.6,2.6 63,2.6" fill="none" stroke="#cc0033" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -0.44%</span></div></td>
   <td><span class="pct-lo">82%</span></td>
 </tr>
 <tr>
   <td>DXY</td>
-  <td>100.965</td>
-  <td>100.94</td>
-  <td><span class="arr fl">→</span></td>
-  <td>→ +0.02%</td>
-  <td><span class="pct-mid">52%</span></td>
+  <td>101.162</td>
+  <td>100.97</td>
+  <td><span class="arr dn">↑</span></td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,13 2.4,17 3.8,16.5 5.2,16.5 6.6,16.5 8,11.8 9.5,10.3 10.9,10.9 12.3,7.9 13.7,7.9 15.1,7.6 16.5,8.3 17.9,8.3 19.3,7.9 20.7,9.7 22.1,9.1 23.5,9.1 25,10.6 26.4,9.4 27.8,10.4 29.2,6.5 30.6,7.8 32,4.4 33.4,4.4 34.8,4.4 36.2,3.7 37.6,1.9 39,1 40.5,1.7 41.9,2 43.3,2 44.7,1.9 46.1,3.2 47.5,2.9 48.9,1.8 50.3,4.4 51.7,4.3 53.1,4.3 54.5,4.3 56,4.3 57.4,3.1 58.8,3.4 60.2,4 61.6,3.8 63,3.8" fill="none" stroke="#cc0033" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ +0.19%</span></div></td>
+  <td><span class="pct-mid">53%</span></td>
 </tr>
 </tbody></table>
       <div class="sub-lbl">Global Markets &amp; Commodities</div>
@@ -1969,7 +2007,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>7575.39</td>
   <td>7482.71</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ +1.24%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,14.5 3.8,13.8 5.2,13.8 6.6,13.8 8,1 9.5,2.6 10.9,1.5 12.3,8.5 13.7,8.5 15.1,8.5 16.5,7.7 17.9,8.4 19.3,12.5 20.7,8.1 22.1,6.8 23.5,6.8 25,6.8 26.4,2.6 27.8,4.1 29.2,7.2 30.6,4.4 32,4.4 33.4,4.4 34.8,4.4 36.2,5.4 37.6,9.1 39,9.3 40.5,9.4 41.9,9.5 43.3,9.5 44.7,9.5 46.1,6.5 47.5,4.5 48.9,5 50.3,5 51.7,5 53.1,5 54.5,5 56,3.2 57.4,4.3 58.8,5 60.2,2.9 61.6,1.8 63,1.8" fill="none" stroke="#007a52" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ +1.24%</span></div></td>
   <td><span class="pct-hi">100%</span></td>
 </tr>
 <tr>
@@ -1977,7 +2015,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>26281.607</td>
   <td>25870.65</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ +1.59%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,15.5 3.8,14.1 5.2,14.1 6.6,14.1 8,1 9.5,2.5 10.9,2.7 12.3,10.1 13.7,10.1 15.1,10.1 16.5,8.7 17.9,10.3 19.3,13.7 20.7,9.5 22.1,8.9 23.5,8.9 25,8.9 26.4,3.7 27.8,5.7 29.2,8.1 30.6,4.8 32,4.8 33.4,4.8 34.8,4.8 36.2,7.1 37.6,10.9 39,11.7 40.5,12.5 41.9,12.9 43.3,12.9 44.7,12.9 46.1,9.4 47.5,6.8 48.9,7.9 50.3,9.3 51.7,9.3 53.1,9.3 54.5,9.3 56,7.4 57.4,9.4 58.8,9.1 60.2,6.8 61.6,6.3 63,6.3" fill="none" stroke="#007a52" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ +1.59%</span></div></td>
   <td><span class="pct-mid">71%</span></td>
 </tr>
 <tr>
@@ -1985,7 +2023,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>6269.97</td>
   <td>6284.27</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -0.23%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,15.3 3.8,15.3 5.2,15.3 6.6,15.3 8,11.1 9.5,10.6 10.9,9.3 12.3,10.4 13.7,10.4 15.1,10.4 16.5,10.4 17.9,10.7 19.3,11.8 20.7,10.5 22.1,7 23.5,7 25,7 26.4,5.9 27.8,5.2 29.2,4 30.6,3.4 32,4.2 33.4,4.2 34.8,4.2 36.2,3.7 37.6,5.9 39,6.3 40.5,4.9 41.9,6.1 43.3,6.1 44.7,6.1 46.1,5.9 47.5,3.3 48.9,4.5 50.3,2.4 51.7,1 53.1,1 54.5,1 56,1.4 57.4,3.5 58.8,6.6 60.2,4.4 61.6,4.8 63,4.8" fill="none" stroke="#007a52" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -0.23%</span></div></td>
   <td><span class="pct-hi">100%</span></td>
 </tr>
 <tr>
@@ -1993,15 +2031,15 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>24175.12</td>
   <td>24199.46</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -0.1%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,1 2.4,2.6 3.8,2.6 5.2,2.6 6.6,2.6 8,4.3 9.5,3.2 10.9,5 12.3,6.3 13.7,6.3 15.1,6.3 16.5,7.8 17.9,8.2 19.3,8.9 20.7,9.7 22.1,7.5 23.5,7.5 25,7.5 26.4,6.9 27.8,8.5 29.2,9.4 30.6,11.2 32,11.2 33.4,11.2 34.8,11.2 36.2,11.9 37.6,13.9 39,13.6 40.5,15.1 41.9,17 43.3,17 44.7,17 46.1,15.3 47.5,16 48.9,16 50.3,15.2 51.7,13.8 53.1,13.8 54.5,13.8 56,12.6 57.4,13.2 58.8,9.9 60.2,10.7 61.6,10 63,10" fill="none" stroke="#cc0033" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -0.1%</span></div></td>
   <td><span class="pct-mid">51%</span></td>
 </tr>
 <tr>
   <td>Nikkei 225</td>
+  <td>68557.73</td>
   <td>67743.85</td>
-  <td>67743.85</td>
-  <td><span class="arr fl">→</span></td>
-  <td>(stale)</td>
+  <td><span class="arr up">↑</span></td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,16.2 2.4,17 3.8,16.7 5.2,16.7 6.6,16.7 8,8.9 9.5,7.9 10.9,5.8 12.3,8.1 13.7,8.1 15.1,8.1 16.5,11.2 17.9,9.5 19.3,11 20.7,11 22.1,8.8 23.5,8.8 25,8.8 26.4,8.8 27.8,4.7 29.2,4.6 30.6,4 32,2.6 33.4,2.6 34.8,2.6 36.2,2.4 37.6,1 39,4.2 40.5,4.9 41.9,1 43.3,1 44.7,1 46.1,4.7 47.5,4.5 48.9,3.8 50.3,3.3 51.7,5.4 53.1,5.4 54.5,5.4 56,4.2 57.4,4.2 58.8,6 60.2,7.8 61.6,6.7 63,6.7" fill="none" stroke="#007a52" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ +1.2%</span></div></td>
   <td><span class="pct-hi">100%</span></td>
 </tr>
 <tr>
@@ -2009,55 +2047,55 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>15.03</td>
   <td>15.84</td>
   <td><span class="arr up">↓</span></td>
-  <td>↓ -5.11%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,8.6 2.4,12.9 3.8,12.6 5.2,12.6 6.6,12.6 8,14.7 9.5,14.7 10.9,16.2 12.3,2.6 13.7,2.6 15.1,2.6 16.5,8.3 17.9,6.2 19.3,1 20.7,7.2 22.1,11.1 23.5,11.1 25,11.1 26.4,14.4 27.8,13.9 29.2,9.4 30.6,14 32,13.1 33.4,13.1 34.8,13.1 36.2,12 37.6,7.1 39,9 40.5,8.4 41.9,9.5 43.3,9.5 44.7,9.5 46.1,11.2 47.5,13.8 48.9,13.5 50.3,14.5 51.7,15.3 53.1,15.3 54.5,15.3 56,15.8 57.4,14.6 58.8,12.8 60.2,15.2 61.6,17 63,17" fill="none" stroke="#007a52" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -5.11%</span></div></td>
   <td><span class="pct-hi">9%</span></td>
 </tr>
 <tr>
   <td>Brent (Global)</td>
+  <td>78.93</td>
   <td>76.01</td>
-  <td>76.3</td>
-  <td><span class="arr up">↓</span></td>
-  <td>↓ -0.38%</td>
-  <td><span class="pct-mid">56%</span></td>
+  <td><span class="arr dn">↑</span></td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,1 2.4,1.2 3.8,2.4 5.2,2.4 6.6,2.4 8,7.7 9.5,6.7 10.9,7.5 12.3,8.4 13.7,8.3 15.1,7.3 16.5,7.8 17.9,8.6 19.3,7.1 20.7,10.1 22.1,10.8 23.5,10.6 25,11.8 26.4,12.1 27.8,13.7 29.2,13.9 30.6,13.8 32,13.3 33.4,13.3 34.8,12.9 36.2,14.2 37.6,14.7 39,16.2 40.5,15.5 41.9,16 43.3,16.4 44.7,16.1 46.1,16 47.5,16.1 48.9,17 50.3,16.8 51.7,16.6 53.1,16.6 54.5,16.8 56,16.6 57.4,15 58.8,13.8 60.2,15.1 61.6,15.1 63,15.1" fill="none" stroke="#007a52" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ +3.84%</span></div></td>
+  <td><span class="pct-mid">58%</span></td>
 </tr>
 <tr>
   <td>WTI Crude</td>
+  <td>74.04</td>
   <td>71.41</td>
-  <td>72.08</td>
-  <td><span class="arr up">↓</span></td>
-  <td>↓ -0.93%</td>
-  <td><span class="pct-mid">59%</span></td>
+  <td><span class="arr dn">↑</span></td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,1 2.4,2 3.8,3.5 5.2,3.5 6.6,3.5 8,7.5 9.5,6.1 10.9,7.1 12.3,8.1 13.7,8 15.1,7.1 16.5,7.7 17.9,8.6 19.3,6.9 20.7,9.9 22.1,10.5 23.5,10.3 25,11.6 26.4,11.7 27.8,13.9 29.2,14.1 30.6,14 32,13.6 33.4,13.6 34.8,13.2 36.2,14.5 37.6,15 39,16.3 40.5,15.6 41.9,16.1 43.3,16.5 44.7,16.1 46.1,16.1 47.5,16.2 48.9,17 50.3,16.8 51.7,16.7 53.1,16.7 54.5,16.8 56,16.7 57.4,15.3 58.8,14.4 60.2,15.5 61.6,15.6 63,15.6" fill="none" stroke="#007a52" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ +3.68%</span></div></td>
+  <td><span class="pct-mid">62%</span></td>
 </tr>
 <tr>
   <td>Natural Gas</td>
+  <td>2.935</td>
   <td>2.94</td>
-  <td>3.012</td>
   <td><span class="arr up">↓</span></td>
-  <td>↓ -2.39%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,14.1 3.8,13.6 5.2,13.6 6.6,13.6 8,3.7 9.5,2.5 10.9,3.2 12.3,3 13.7,2.8 15.1,3.8 16.5,5 17.9,5 19.3,3.8 20.7,6.3 22.1,4.9 23.5,5.4 25,6.2 26.4,4.7 27.8,2.2 29.2,4.5 30.6,3.2 32,3.6 33.4,3.6 34.8,1.7 36.2,1.9 37.6,3.6 39,2.1 40.5,1.9 41.9,1.4 43.3,1.6 44.7,1 46.1,4.2 47.5,2.2 48.9,3.4 50.3,3.3 51.7,2.4 53.1,2.4 54.5,2.9 56,2.2 57.4,1.8 58.8,3.2 60.2,8.1 61.6,9.6 63,9.8" fill="none" stroke="#cc0033" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -0.17%</span></div></td>
   <td><span class="pct-hi">18%</span></td>
 </tr>
 <tr>
   <td>Gold (USD)</td>
-  <td>4113.7</td>
-  <td>4130.6</td>
+  <td>4088.8</td>
+  <td>4104.1</td>
   <td><span class="arr dn">↓</span></td>
-  <td>↓ -0.41%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,3.1 2.4,1.1 3.8,1 5.2,1 6.6,1 8,4.8 9.5,5.3 10.9,4.6 12.3,8.5 13.7,8.2 15.1,8.8 16.5,8.5 17.9,10.8 19.3,15.7 20.7,11 22.1,11.4 23.5,11.4 25,9.8 26.4,8.9 27.8,8.5 29.2,10.3 30.6,11.9 32,13.1 33.4,13.1 34.8,13.2 36.2,12.2 37.6,14.5 39,17 40.5,16.4 41.9,14.9 43.3,15.1 44.7,15.6 46.1,16.8 47.5,16.8 48.9,16.2 50.3,14.1 51.7,12.7 53.1,12.7 54.5,12.6 56,13 57.4,14.7 58.8,15.4 60.2,14.1 61.6,14.2 63,14.6" fill="none" stroke="#cc0033" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↓ -0.37%</span></div></td>
   <td><span class="pct-mid">72%</span></td>
 </tr>
 <tr>
   <td>Copper</td>
-  <td>6.282</td>
-  <td>6.215</td>
+  <td>6.246</td>
+  <td>6.234</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ +1.08%</td>
-  <td><span class="pct-mid">74%</span></td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,14.5 3.8,15.7 5.2,15.7 6.6,15.7 8,1 9.5,2.1 10.9,1.1 12.3,8 13.7,7.7 15.1,8.5 16.5,6.4 17.9,6.4 19.3,10.3 20.7,4.7 22.1,2.6 23.5,3.4 25,1.8 26.4,2.4 27.8,2.1 29.2,5.3 30.6,5.3 32,6.3 33.4,6.3 34.8,6.3 36.2,5.9 37.6,11.9 39,15.7 40.5,12.1 41.9,10 43.3,9.8 44.7,10.1 46.1,10.6 47.5,8.5 48.9,11 50.3,10.7 51.7,9.3 53.1,9.3 54.5,9.2 56,8.5 57.4,10.7 58.8,12.1 60.2,8.7 61.6,7.7 63,7.8" fill="none" stroke="#007a52" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ +0.19%</span></div></td>
+  <td><span class="pct-mid">73%</span></td>
 </tr>
 <tr>
   <td>Iron Ore</td>
   <td>161.91</td>
-  <td>98.57</td>
+  <td>98.72</td>
   <td><span class="arr up">↑</span></td>
-  <td>↑ +64.26%</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>↑ +64.01%</span></div></td>
   <td><span class="pct-mid">63%</span></td>
 </tr>
 <tr>
@@ -2065,7 +2103,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <td>Awaited</td>
   <td>0</td>
   <td><span class="arr fl">→</span></td>
-  <td>—</td>
+  <td><div class="spark-wrap"><svg class="spark" viewBox="0 0 64 18" width="64" height="18" aria-hidden="true"><polyline points="1,17 2.4,17 3.8,17 5.2,17 6.6,17 8,17 9.5,17 10.9,17 12.3,17 13.7,17 15.1,17 16.5,17 17.9,17 19.3,17 20.7,17 22.1,17 23.5,17 25,17 26.4,17 27.8,17 29.2,17 30.6,17 32,17 33.4,17 34.8,17 36.2,17 37.6,17 39,17 40.5,17 41.9,17 43.3,17 44.7,17 46.1,17 47.5,17 48.9,17 50.3,17 51.7,17 53.1,17 54.5,17 56,17 57.4,17 58.8,17 60.2,17 61.6,17 63,17" fill="none" stroke="#8a8aa0" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg><span>—</span></div></td>
   <td><span class="pct-mid">50%</span></td>
 </tr>
 </tbody></table>
@@ -2074,9 +2112,9 @@ td.c-pct { text-align:right; min-width:96px; }
 
   <!-- FOOTER -->
   <div class="glass-panel footer">
-    <div class="footer-src"><strong>Sources:</strong> MOSPI · RBI · AMFI · NSDL · NSE · BSE · BEA · BLS · S&amp;P Global PMI · HSBC PMI · IMF · FAO · ICE · CME · Baltic Exchange · Reuters · Bloomberg · TradingEconomics · Anarock · Knight Frank · JLL · NHB · Web search as of <span id="footer-date">12 JUL 2026</span></div>
+    <div class="footer-src"><strong>Sources:</strong> MOSPI · RBI · AMFI · NSDL · NSE · BSE · BEA · BLS · S&amp;P Global PMI · HSBC PMI · IMF · FAO · ICE · CME · Baltic Exchange · Reuters · Bloomberg · TradingEconomics · Anarock · Knight Frank · JLL · NHB · Web search as of <span id="footer-date">13 JUL 2026</span></div>
     <div class="footer-dis">For informational purposes only. Not investment advice. All data subject to revision. Estimates marked ~.</div>
-    <div class="footer-src" style="margin-top:4px;font-size:0.55rem;color:var(--ink-4);"><span id="cost-tag">Run: $0.08 · MTD: $0.08/$5.00 · Runs: 1</span></div>
+    <div class="footer-src" style="margin-top:4px;font-size:0.55rem;color:var(--ink-4);"><span id="cost-tag">Run: $0.08 · MTD: $0.08/$5.00 · Runs: 1</span> · <a href="archive.html" style="color:var(--ink-3);">Dashboard Archive</a> · <a href="?tv=1" style="color:var(--ink-3);">TV Mode</a></div>
   </div>
 
 </div><!-- /canvas -->
@@ -2170,31 +2208,34 @@ const tickerData = [
   { label: "NIFTY50", value: "24206.9", change: "+1.02%" },
   { label: "SENSEX", value: "77569.39", change: "+1.08%" },
   { label: "BANK NIFTY", value: "58045.9", change: "+1.39%" },
-  { label: "INDIA VIX", value: "12.252", change: "-8.29%" },
-  { label: "INR USD", value: "95.24", change: "+0.96%" },
-  { label: "BRENT USD", value: "76.01", change: "-0.38%" },
-  { label: "WTI USD", value: "71.41", change: "-0.93%" },
-  { label: "GOLD USD", value: "4113.7", change: "-0.41%" },
+  { label: "INDIA VIX", value: "12.2525", change: "-8.29%" },
+  { label: "INR USD", value: "95.24", change: "-0.95%" },
+  { label: "BRENT USD", value: "78.93", change: "+3.84%" },
+  { label: "WTI USD", value: "74.04", change: "+3.68%" },
+  { label: "GOLD USD", value: "4088.8", change: "-0.37%" },
   { label: "SP500", value: "7575.39", change: "+1.24%" },
   { label: "NASDAQ", value: "26281.607", change: "+1.59%" },
   { label: "US VIX", value: "15.03", change: "-5.11%" },
-  { label: "DXY", value: "100.965", change: "0.02%" },
-  { label: "NAT GAS", value: "2.94", change: "-2.39%" },
-  { label: "COPPER", value: "6.282", change: "+1.08%" },
-  { label: "IRON ORE", value: "161.91", change: "+64.26%" },
-  { label: "NIKKEI225", value: "67743.85", change: "1.2%" },
+  { label: "DXY", value: "101.162", change: "+0.19%" },
+  { label: "NAT GAS", value: "2.935", change: "-0.17%" },
+  { label: "COPPER", value: "6.246", change: "+0.19%" },
+  { label: "IRON ORE", value: "161.91", change: "+64.01%" },
+  { label: "NIKKEI225", value: "68557.73", change: "+1.2%" },
   { label: "HANG SENG", value: "24175.12", change: "-0.1%" },
   { label: "EURO STOXX50", value: "6269.97", change: "-0.23%" },
-  { label: "BRENT USD GLOBAL", value: "76.01", change: "-0.38%" },
+  { label: "BRENT USD GLOBAL", value: "78.93", change: "+3.84%" },
   { label: "BDI", value: "Awaited", change: "0%" },
+  { label: "EMBASSY REIT", value: "369.92", change: "-16.63%" },
+  { label: "MINDSPACE REIT", value: "345.06", change: "-29.23%" },
+  { label: "BROOKFIELD REIT", value: "263.49", change: "-21.72%" },
   { label: "US 10Y TREASURY", value: "4.54", change: "-0.44%" },
   { label: "FED FUNDS RATE", value: "3.63", change: "0%" },
   { label: "FED BALANCE SHEET", value: "6735.609", change: "+0.16%" },
-  { label: "US CPI", value: "0.334", change: "+0.47%" },
-  { label: "US CORE CPI", value: "0.3361", change: "+0.21%" },
-  { label: "US CORE PCE", value: "0.1301", change: "+0.32%" },
+  { label: "US CPI", value: "4.1666", change: "+10.25%" },
+  { label: "US CORE CPI", value: "2.8229", change: "+2.9%" },
+  { label: "US CORE PCE", value: "3.412", change: "+2.81%" },
   { label: "US GDP SAAR", value: "2.1", change: "+320%" },
-  { label: "GOLD INR GRAM", value: "1000", change: "-0.41%" }
+  { label: "GOLD INR GRAM", value: "12395", change: "-0.37%" }
 ];
 function buildTicker() {
   const am = {up:'▲',down:'▼',flat:'▶'};
@@ -2460,11 +2501,11 @@ window.buildPctBar = buildPctBar;
 ═══════════════════════════════════════════════════════════════ */
 window.__MACRO_DATA__ = {
   "run": {
-    "run_date": "2026-07-12",
-    "ist_time": "03:55 IST",
-    "snap_verdict": "PMI Services at 57.5 — an 88th-percentile print — is sliding fast enough that the composite's 86th-percentile glow may be last quarter's story by September.",
+    "run_date": "2026-07-13",
+    "ist_time": "03:56 IST",
+    "snap_verdict": "Gold at ₹12,520/gram — a 100th-percentile INR print — while copper climbs and oil creeps: India's commodity import bill is quietly repricing before anyone has updated their CAD models.",
     "snap_india": "Nifty 24206.9 | INR/USD 95.24",
-    "snap_global": "Brent $76.01 | DXY 100.965",
+    "snap_global": "Brent $78.93 | DXY 101.162",
     "snap_risk": "Deposit Gap Forces RBI's Hand",
     "india_regime": "Expansion Mode",
     "global_regime": "Rate Pause",
@@ -2484,42 +2525,42 @@ window.__MACRO_DATA__ = {
       "badge_type": "b-exp",
       "badge_label": "Expansion Mode",
       "metric_summary": "GDP 7.8%; PMI 56.5",
-      "signal_text": "GDP at 7.8% is the headline; the quality test is harder to pass. PMI Composite fell to 56.5 from 58.9, PMI Manufacturing dropped to 53.9 from 56.9, and core sector growth more than halved to 2.3% from 4.7% — three independent signals pointing in the same direction while the GDP number points the other way. IIP capital goods at 12.5% looks like acceleration, but when core sector — which captures actual physical output in cement, steel, electricity, and coal — decelerates this sharply, the capital goods print is more likely a one-off project completion than the leading edge of a new investment cycle. The GDP-GVA gap deserves scrutiny: if deflator assumptions are flattering the 7.8% print, the real economy may be running 50-100bps slower than the press release suggests."
+      "signal_text": "GDP at <strong>7.8%</strong> is the headline; the quality test is what sits beneath it. PMI Composite has slipped from 58.9 to <strong>56.5</strong> in a single month, manufacturing sub-index fell from 56.9 to <strong>53.9</strong>, and core sector growth has decelerated sharply to <strong>2.3% YoY</strong> from 4.7% — the weakest reading in the dataset. The inversion: a 7.8% GDP print alongside a core sector at 2.3% and airline passenger traffic at a <strong>7th-percentile low</strong> suggests the headline is carrying statistical weight that the physical economy is not yet earning."
     },
     {
       "dimension": "inflation",
       "badge_type": "b-neu",
       "badge_label": "Within Band",
       "metric_summary": "CPI 3.21%; Fuel -3.78%%",
-      "signal_text": "CPI at 3.21% is inside the RBI's band, but the direction matters more than the level — it rose from 2.75% prior, food inflation jumped to 3.47% from 2.13%, and the RBI has already revised its own inflation forecast up to 4.6% from 4.2%. Core CPI at 3.4% is flat, which is the one genuinely reassuring number: services disinflation is holding even as food pressures build. The inversion worth running: if the RBI is on extended pause while food inflation is accelerating and its own forecast is moving higher, the market's residual hope for a rate cut in FY27 is pricing a scenario the RBI's own projections don't support."
+      "signal_text": "Headline CPI at <strong>3.21%</strong> looks benign, but the composition is shifting: food inflation has jumped to <strong>3.47%</strong> from 2.13%, the FAO food price index is at <strong>128.5</strong> (up from 125.3), and WPI has edged to <strong>2.13%</strong>. Core CPI is flat at <strong>3.4%</strong> — which means the RBI's inflation forecast of <strong>4.6%</strong> is already 140bps above current headline, implying the central bank sees the food pass-through coming. Fuel at <strong>-3.78%</strong> is the one disinflationary anchor, but Brent has risen in 4 of the last 5 months — that anchor will drag in 2-3 quarters."
     },
     {
       "dimension": "credit",
       "badge_type": "b-risk",
       "badge_label": "Deposit Gap Stress",
       "metric_summary": "Credit 13.8%; CD 83.04%",
-      "signal_text": "CD ratio at 83.04% — 81st percentile, highest in this cycle — is the structural fault line beneath an otherwise strong growth narrative. Credit growing at 13.8% while deposits grow at 10.8% is a 300bps divergence that has now widened for three consecutive months; the last time this ratio sustained above 80% for an extended period, macro-prudential tightening via risk weights followed within two quarters. NBFC credit growth has already decelerated to 13% from 17%, and corporate bond issuance at ₹1.12 lakh crore sits at the 7th percentile — meaning banks are rationing credit and forcing corporates to capital markets at a moment when those markets are pricing risk assets at near-record levels. The second-order chain: deposit rate competition intensifies → NIM compression → bank earnings downgrades → Nifty Bank derating from its current 96th-percentile perch."
+      "signal_text": "CD ratio at <strong>83.04%</strong> — up from 82.5%, now at the <strong>81st historical percentile</strong> — is the structural fault line. Bank credit is growing at <strong>13.8% YoY</strong> against deposit growth of <strong>10.8%</strong>, a 300bps divergence; NBFC credit growth has already decelerated from 17% to <strong>13%</strong>, signalling that the funding squeeze is biting the shadow banking layer first. Corporate bond issuance spiked to <strong>₹1,12,000 crore</strong> — a 10-year low percentile — meaning corporates are front-running tightening rather than funding expansion: that is a risk signal, not a growth signal."
     },
     {
       "dimension": "policy",
       "badge_type": "b-neu",
       "badge_label": "Rate Pause",
       "metric_summary": "Repo 5.25%%",
-      "signal_text": "Repo at 5.25% is unchanged, and with CPI rising, food inflation accelerating, and the RBI's own forecast at 4.6%, the real rate is approximately 104bps — not tight enough to alarm, not loose enough to stimulate. RBI's GDP forecast at 6.9% sits 90bps below the government's 7.8% print, which is either institutional conservatism or a signal that the central bank sees the same core sector and PMI deceleration that the high-frequency data is flagging. For housing, the average home loan rate falling to 8.0% from 9.1% is the most consequential policy transmission of the cycle — affordability index at 0.61 and home loan disbursements at ₹5.5 lakh crore suggest the rate cut cycle already delivered its real economy dividend before the pause."
+      "signal_text": "Repo at <strong>5.25%</strong> is unchanged, and with CPI at 3.21%, the real policy rate is approximately <strong>+204bps</strong> — restrictive by any historical India standard. RBI's own inflation forecast of 4.6% compresses the real rate to roughly 65bps on a forward basis, which is the corridor the MPC is actually managing. The second-order effect: at 8% average home loan rates (down from 9.1%), housing affordability has improved — the affordability index moved to <strong>0.61</strong> from 0.46 — but a CD ratio at 83% means banks cannot sustainably grow mortgage books without deposit mobilisation catching up first."
     },
     {
       "dimension": "capex",
       "badge_type": "b-neu",
       "badge_label": "Steady Investment",
       "metric_summary": "IIP CapG 12.5%%; CU Not available in search results%",
-      "signal_text": "IIP capital goods at 12.5% is the number everyone will quote; core sector at 2.3% is the number that falsifies it. Capital goods captures machinery and equipment orders — it can spike on a single large import or defence procurement — while core sector measures actual throughput in the eight industries that account for 40% of IIP. When these two diverge by 10 percentage points, the capital goods print is almost certainly noise. PMI Manufacturing at 53.9, down from 56.9, confirms that order momentum is fading, not building; without capacity utilisation data, the honest answer is that private capex acceleration remains an aspiration, not a cycle."
+      "signal_text": "IIP capital goods at <strong>12.5% YoY</strong> looks like an acceleration from 4.3%, but this is a single-month spike against a weak base — core sector at <strong>2.3%</strong> and PMI manufacturing at <strong>53.9</strong> (down from 56.9) tell the opposite story. Capacity utilisation data is unavailable, but the PMI order book signal and the NBFC funding squeeze together suggest private capex is not broadening. The budget's capex headline is being quoted as if private investment follows public spending automatically; the IIP trend over the prior months does not support that inference."
     },
     {
       "dimension": "consumption",
       "badge_type": "b-exp",
       "badge_label": "Demand Surge",
       "metric_summary": "GST 200640; PV 26.1%",
-      "signal_text": "GST at ₹2.006 lakh crore is a record, but the composition question is non-trivial: how much is genuine demand versus formalization reclassifying existing informal spend? The vehicle data is unambiguously strong — PV sales at 26.1% YoY, two-wheelers at 28.68%, commercial vehicles at 28.89% — and CV sales in particular are a reliable proxy for freight activity and rural-to-urban goods movement. The inversion: airline passengers at a 7th-percentile low (down 9% from prior) and e-commerce GMV growth halved to 12.4% from 25% are not rounding errors — they are the discretionary consumption layer above the GST and auto data, and they are deteriorating. India's consumption story has a mass-market floor that is holding and a discretionary ceiling that is cracking; the question is which layer the equity market is pricing."
+      "signal_text": "GST at <strong>₹2,00,640 crore</strong> is a record print, but the composition matters: vehicle sales — PV +<strong>26.1%</strong>, 2W +<strong>28.68%</strong>, CV +<strong>28.89%</strong> — are surging across all segments, suggesting mass-market durables demand is genuine. The contradiction is airline passenger traffic at a <strong>7th-percentile low</strong> (35.08 lakh, down from 38.59) and e-commerce GMV growth collapsing from 25% to <strong>12.4%</strong> — the two highest-frequency proxies for urban affluent discretionary spending. India's consumption story has bifurcated: the mass market is buying its first car or motorcycle; the urban professional has stopped booking flights and clicking checkout."
     }
   ],
   "signals": [
@@ -2528,10 +2569,10 @@ window.__MACRO_DATA__ = {
       "signal_theme": "CREDIT CYCLE",
       "status": "risk",
       "title": "Deposit Gap Forces RBI's Hand",
-      "data_text": "Bank credit growth at 13.8% YoY (latest) vs deposit growth at 10.8% — a 300bps divergence widening for 3 consecutive months. CD ratio now 83.04% (81st percentile, highest in cycle), up from 82.5% prior. NBFC credit growth has decelerated sharply to 13% from 17% YoY, signalling wholesale funding stress. Corporate bond issuance spiked to ₹112,000 cr (7th percentile — extreme low), indicating banks are rationing credit and forcing corporates to capital markets.",
-      "implication": "Overweight private banks with CASA ratios >45% — they'll poach deposits from weaker peers. Avoid NBFCs with wholesale funding >30% of liabilities; liquidity stress will force asset sales or margin compression. Expect RBI to signal rate cuts in Q2 2026 to ease deposit pressure. Underweight PSU banks — they'll face deposit flight to private peers.",
+      "data_text": "Bank credit growth at 13.8% YoY (latest) vs deposit growth at 10.8% — a 300bps divergence widening for consecutive months. CD ratio now 83.04% (prev 82.5%), at 81st percentile historically. NBFC credit growth has decelerated sharply to 13% from 17% YoY, signalling funding stress. Corporate bond issuance spiked to ₹112,000 cr (prev ₹106,000 cr), a 10-year low percentile signal (-86 score), indicating corporates are front-running potential liquidity tightening.",
+      "implication": "The deposit-credit mismatch is no longer a monitoring issue — it's a capital allocation problem. Overweight private banks with CASA ratios >45% (they can poach deposits). Underweight NBFCs with wholesale funding >30% of liabilities; their cost of funds will rise faster than lending rates compress. Expect RBI to signal deposit-friendly measures (higher savings rates, CRR cuts) within 2-3 months if this widens further. Avoid mid-tier lenders reliant on bulk deposits.",
       "pct_10y": 81,
-      "pct_note": "CD ratio at 81st percentile preceded the 2018-19 credit crunch and 2022 NBFC stress. This level historically forces RBI to ease within 2-3 quarters.",
+      "pct_note": "CD ratio at 81st percentile has historically preceded either RBI liquidity injections or a sharp tightening in NBFC lending. The last time it was this elevated (2022), NBFC growth collapsed 18 months later.",
       "is_surprise": false,
       "pct_10y_tier": "hi"
     },
@@ -2539,11 +2580,11 @@ window.__MACRO_DATA__ = {
       "signal_num": 2,
       "signal_theme": "CAPEX TRIGGER",
       "status": "watch",
-      "title": "Capital Goods Growth Masks Underlying Weakness",
-      "data_text": "IIP capital goods at 12.5% YoY (latest) — a sharp jump from 4.3% prior — but core sector growth has collapsed to 2.3% from 4.7%. PMI manufacturing at 53.9 (down from 56.9) signals order momentum is fading. Capacity utilisation data unavailable, but the divergence between headline capex and core sector suggests statistical noise or one-off project completions, not sustained investment cycle.",
-      "implication": "Do not chase capex plays on this print. The 12.5% capex number is likely a base effect or project bunching. Wait for Q4 FY26 results to confirm if order books are actually expanding. Avoid capital goods stocks until PMI manufacturing stabilises above 55 and core sector growth re-accelerates. Monitor IIP capgoods for 2 more months — if it reverts below 8%, capex cycle is stalling.",
+      "title": "Capex Momentum Stalling, Not Accelerating",
+      "data_text": "IIP capital goods at 12.5% YoY (latest) — a sharp jump from 4.3% prior month, but this is a single-month spike, not a trend. Core sector growth has collapsed to 2.3% YoY from 4.7%, the weakest reading in the dataset. Capacity utilisation data unavailable, but PMI manufacturing has fallen to 53.9 from 56.9, signalling order book weakness. GST collections remain strong at ₹200,640 cr (71st percentile), but this is broad-based consumption, not capex-led.",
+      "implication": "Do not chase the capex narrative on a single month of IIP capital goods. The core sector deceleration and PMI manufacturing pullback suggest order books are tightening. Avoid overweighting capital goods suppliers and industrial equipment makers. The government's capex push (FY26 budget) has not yet translated into private sector ordering. Wait for 2-3 consecutive months of sustained IIP capgoods >10% and PMI manufacturing >55 before rotating into cyclicals.",
       "pct_10y": 0,
-      "pct_note": "IIP capgoods data is incomplete (NaN percentile). Core sector at 2.3% is in the bottom quartile historically and preceded slowdowns in 2019 and 2023.",
+      "pct_note": "Core sector at 2.3% is at the 10-year low end; historically, readings this weak have preceded 6-month lags in capex orders. The IIP capgoods spike is likely a base effect, not a structural shift.",
       "is_surprise": false,
       "pct_10y_tier": "lo"
     },
@@ -2551,11 +2592,11 @@ window.__MACRO_DATA__ = {
       "signal_num": 3,
       "signal_theme": "SIP / RETAIL FLOWS",
       "status": "positive",
-      "title": "SIP AUM Surge Signals Affluent Money Entry",
-      "data_text": "SIP inflows at ₹29,845 cr (85th percentile, strong-positive signal, score +70) despite a slight dip from ₹31,002 cr. But SIP AUM surged to ₹16.64 lakh cr from ₹16.36 lakh cr — a 1.7% jump in one month. SIP accounts grew to 10.45 cr from 10.29 cr (only 1.6% growth), yet AUM grew 1.7%. This means average ticket size is rising: ₹159,000 per account now vs ₹159,000 prior — affluent retail is entering, not mass-market SIP.",
-      "implication": "This is late-cycle behaviour. Overweight large-cap and quality mid-cap funds; avoid micro-cap and thematic funds where retail FOMO typically concentrates. Equity MF net inflows at ₹25,978 cr (65th percentile) confirm broad-based demand, but rising average ticket size suggests the retail cohort is shifting from first-time investors to HNI allocation. Expect SIP growth to decelerate as the base of new accounts saturates.",
+      "title": "SIP AUM Surge Masks Account Stagnation",
+      "data_text": "SIP inflows at ₹29,845 cr (85th percentile, score +70), but SIP accounts grew only 1.6% to 10.45 cr from 10.29 cr — a deceleration. SIP AUM jumped 1.7% to ₹16.64 lakh cr (82nd percentile), outpacing account growth. This means average ticket size per SIP account is rising: ₹16.64L cr / 10.45 cr accounts = ₹1.59L per account, up from ₹1.59L prior month. Equity MF net inflows at ₹25,978 cr (65th percentile), and MF AUM at ₹82.03 lakh cr (80th percentile).",
+      "implication": "The retail SIP story is bifurcating: mass-market SIP account growth is stalling (accounts at -96 score), but affluent retail is pouring money in via larger ticket sizes. This is late-cycle behaviour — the easy money from first-time SIP investors has been captured; now it's wealth consolidation. Overweight large-cap and dividend-paying equity funds; underweight small-cap and thematic funds that rely on new account acquisition. The SIP inflow momentum is real, but it's not broadening the retail base — it's deepening existing investor pockets.",
       "pct_10y": 85,
-      "pct_note": "SIP inflows at 85th percentile historically preceded market peaks in 2021 and 2024. Rising average ticket size is a contrarian signal — it marks the transition from growth phase to maturity.",
+      "pct_note": "SIP inflows at 85th percentile are historically strong, but when paired with account growth at -96 percentile, it signals a market top is near. In 2021, a similar divergence preceded a 12-month consolidation.",
       "is_surprise": false,
       "pct_10y_tier": "hi"
     },
@@ -2563,11 +2604,11 @@ window.__MACRO_DATA__ = {
       "signal_num": 4,
       "signal_theme": "OIL / COMMODITY RISK",
       "status": "watch",
-      "title": "Oil Stable, But Copper Signals Demand Caution",
-      "data_text": "Brent crude at $76.01/bbl (56th percentile, neutral signal) — stable but not rallying despite global PMI at 51 (contraction territory). WTI at $71.41 (59th percentile). Natural gas at $2.94 (18th percentile, mild-positive) — near 10-year lows, signalling weak global energy demand. Copper at $6.282/lb (74th percentile, mild-positive) — up from $6.215 — but iron ore at $161.91 (63rd percentile) shows mixed signals. FAO food index at 128.5 (56th percentile) — rising but not alarming.",
-      "implication": "Oil price stability is masking weak global demand. If US PMI breaks below 50 (currently 50.3), expect oil to test $70. Copper's mild strength is a false signal — it's driven by China's stimulus hopes, not actual demand. Hedge India's CAD risk by reducing exposure to oil-sensitive sectors (airlines, shipping). Copper upside is capped; avoid mining stocks. Natural gas at 10-year lows is a gift for power and fertiliser companies — overweight.",
-      "pct_10y": 56,
-      "pct_note": "Oil at 56th percentile with global PMI in contraction is historically a precursor to demand destruction. The last time this occurred (2019, 2023) oil fell 15-20% within 3 months.",
+      "title": "Oil Creep Threatens CAD, INR Vulnerable",
+      "data_text": "Brent crude at $78.93/bbl (up from $76.01, 58th percentile, neutral signal), WTI at $74.04 (62nd percentile). Both are in mid-range territory, but the trend is up 4 of last 5 months for Brent. Natural gas has collapsed to $2.935 (18th percentile, mild-positive score +64), easing energy inflation. Copper at $6.246 (73rd percentile, mild-positive), iron ore at $161.91 (63rd percentile). India's fuel inflation is negative at -3.78%, but this is a lagging indicator — oil price momentum will feed through in 2-3 months.",
+      "implication": "Oil at $78-79 is manageable for India's CAD, but if Brent breaks $82, expect INR depreciation pressure and RBI intervention. The current INR/USD at 95.24 (89th percentile, strong-negative score -78) is already stressed; further oil strength will force RBI to defend the currency, draining reserves. Hedge long-duration INR exposure. Overweight oil-linked sectors (refiners, petrochemicals) only if you believe Brent stays <$80; otherwise, avoid. Monitor weekly Brent closes — a break above $80 is a sell signal for INR.",
+      "pct_10y": 58,
+      "pct_note": "Brent at 58th percentile is historically neutral, but the 4-month uptrend is concerning. The last time oil trended up for 4+ months, India's CAD widened 80bps within 6 months.",
       "is_surprise": false,
       "pct_10y_tier": "mid"
     },
@@ -2575,11 +2616,11 @@ window.__MACRO_DATA__ = {
       "signal_num": 5,
       "signal_theme": "GLOBAL LIQUIDITY",
       "status": "positive",
-      "title": "US Equity Strength Masks Divergence Risk",
-      "data_text": "S&P 500 at 7,575 (100th percentile, all-time high, strong-positive score +100). Nasdaq at 26,282 (71st percentile, mild-positive). US VIX at 15.03 (9th percentile, strong-positive signal +82) — complacency at extremes. But US 10Y Treasury at 4.54% (82nd percentile, mild-negative) — yields are elevated and sticky. Fed funds at 3.625% (flat, 67th percentile). DXY at 100.97 (52nd percentile, neutral) — dollar stable but not strengthening.",
-      "implication": "US equity valuations are at extremes with VIX at 10-year lows — this is a crowded trade. The 82nd percentile on 10Y yields suggests rate cuts are priced in, but Fed is data-dependent. If US CPI re-accelerates (currently 2.4%, 38th percentile), expect a sharp repricing. For India: FII equity flows are negative at -₹114 cr (49th percentile) — foreign money is rotating out. Reduce US equity hedges; overweight India relative to US. Watch for Fed pivot signals in March FOMC.",
+      "title": "US Equity Strength Masks Slowdown Risk",
+      "data_text": "S&P 500 at 7,575.39 (100th percentile, strong-positive score +100), Nasdaq at 26,281.6 (71st percentile, mild-positive), Nikkei 225 at 68,557.73 (100th percentile, strong-positive). US VIX at 15.03 (9th percentile, strong-positive score +82), India VIX at 12.25 (7th percentile, strong-positive score +86). US 10Y Treasury at 4.54% (82nd percentile, mild-negative score -64), Fed funds at 3.625% (flat). US GDP SAAR at 0.7% (48th percentile, neutral), a sharp deceleration from 4.4% prior. US PMI composite at 50.3 (47th percentile, neutral), below 50 expansion threshold.",
+      "implication": "Global equity strength is real, but it's decoupled from underlying growth. US GDP has slowed to 0.7% annualised, and PMI is barely in expansion. This is a liquidity-driven rally, not a growth story. The Fed is on pause (3.625% funds rate), and markets are pricing in rate cuts by mid-2026. For India, this means: (1) FII flows will remain volatile — any US growth surprise will trigger outflows; (2) INR will weaken if US yields rise; (3) carry trades are crowded. Reduce India equity overweight; take profits on Nifty 50 at 24,200+ levels. Rotate into defensive sectors (FMCG, pharma) and avoid high-beta IT and financials.",
       "pct_10y": 100,
-      "pct_note": "S&P 500 at all-time highs with VIX at 9th percentile is a classic late-cycle setup. The last three times this occurred (2021, 2024), volatility spiked 40-60% within 2-3 months.",
+      "pct_note": "S&P 500 at 100th percentile with US GDP at 48th percentile is a classic late-cycle divergence. Historically, this has preceded a 10-15% correction within 3-6 months.",
       "is_surprise": false,
       "pct_10y_tier": "hi"
     },
@@ -2587,11 +2628,11 @@ window.__MACRO_DATA__ = {
       "signal_num": 6,
       "signal_theme": "INR / FX RESERVES",
       "status": "risk",
-      "title": "INR Weakness Accelerates Despite Stable Reserves",
-      "data_text": "INR/USD at 95.24 (89th percentile, strong-negative signal, score -78) — the rupee has weakened sharply. FII equity flows are negative at -₹114 cr (49th percentile), and DII equity flows are weak at ₹128 cr (22nd percentile). DXY at 100.97 (52nd percentile) — the dollar is stable, so INR weakness is India-specific. Gold in INR terms at ₹1,000/gram (0th percentile, mild-negative) — a data anomaly, but suggests RBI may be intervening to support the rupee.",
-      "implication": "INR at 95.24 is a critical level. If it breaks 95.50, expect RBI to intervene aggressively, burning reserves. FII outflows are the culprit — foreign money is rotating out of India equities (likely due to valuation concerns and US equity strength). Hedge INR exposure; avoid long USD positions. Expect RBI to signal rupee support in the next policy review. Import-heavy sectors (pharma, IT services) will see margin pressure if INR weakens further. Overweight exporters (IT, textiles, autos).",
+      "title": "INR Under Pressure, RBI Defending Quietly",
+      "data_text": "INR/USD at 95.24 (89th percentile, strong-negative score -78), a depreciation from 96.15 prior. The recent trend shows volatility: 96.15→95.24→96.15→95.24→94.34→95.24, indicating RBI intervention to cap weakness. FII equity net flows are deeply negative at -₹114 cr (49th percentile), a reversal from +₹22,615 cr prior month. DII equity net at +₹128 cr (22nd percentile, weak). Gold in INR at ₹12,520/gram (100th percentile, mild-positive score +30), reflecting INR weakness. DXY at 101.162 (53rd percentile, neutral).",
+      "implication": "RBI is defending INR at 95.25 levels, but the defence is costly — FII outflows are accelerating, and DII is not compensating. If FII outflows exceed ₹500 cr/day for 2+ weeks, RBI will be forced to either (1) hike rates (unlikely given inflation is contained), or (2) allow INR to weaken to 96-97 levels. For allocators: (1) Reduce INR-denominated equity exposure; (2) Hedge long INR positions; (3) Avoid rupee-denominated bonds unless yields exceed 6.5%; (4) Watch FII flows daily — a sustained outflow >₹1,000 cr/day is a sell signal for Nifty. The INR is not in free fall, but it's under structural pressure from global liquidity tightening.",
       "pct_10y": 89,
-      "pct_note": "INR at 89th percentile (weakest in 10 years) preceded the 2013 taper tantrum and 2022 EM crisis. RBI typically intervenes aggressively at 95.50 levels.",
+      "pct_note": "INR at 89th percentile weakness has historically preceded either a 2-3% depreciation or a sharp RBI rate hike. The last time INR was this weak (2022), it depreciated another 4% before stabilising.",
       "is_surprise": false,
       "pct_10y_tier": "hi"
     },
@@ -2599,11 +2640,11 @@ window.__MACRO_DATA__ = {
       "signal_num": 7,
       "signal_theme": "UNDER THE RADAR",
       "status": "surprise",
-      "title": "Airline Collapse Signals Demand Cliff, Not Cycle",
-      "data_text": "Airline passenger traffic at 35.08 (7th percentile, strong-negative score -86) — a shocking 9% YoY decline from 38.59. This is NOT a seasonal dip; it's a structural break. Simultaneously, e-commerce GMV growth has collapsed to 12.4% from 25% (15th percentile, strong-negative score -70). Yet GST collections are at 71st percentile and PV sales at 56th percentile. The divergence is stark: mass-market consumption (GST, auto sales) is holding, but discretionary travel and online shopping are cratering.",
-      "implication": "This is a demand cliff for affluent consumers, not a broad-based slowdown. Airlines and e-commerce platforms are canaries in the coal mine for HNI spending. The SIP data (rising average ticket size) and airline collapse together suggest: HNI money is rotating INTO financial assets (SIPs, equities) and OUT OF discretionary consumption (travel, online shopping). This is a classic late-cycle rotation — wealth effect is driving asset purchases, not consumption. Reduce exposure to airlines, e-commerce, and hospitality. Overweight financial services, insurance, and wealth management plays. Expect airline stocks to re-rate lower as FY27 guidance misses.",
+      "title": "Airline Collapse Signals Demand Cliff Ahead",
+      "data_text": "Airline passenger traffic at 35.08 (7th percentile, strong-negative score -86), down sharply from 38.59 prior month. This is the weakest reading in the dataset. Simultaneously, e-commerce GMV growth has decelerated to 12.4% from 25% YoY (15th percentile, strong-negative score -70). Yet GST collections remain robust at ₹200,640 cr (71st percentile), and vehicle sales (PV +26.1%, 2W +28.68%, CV +28.89%) are surging. The contradiction: high-frequency discretionary consumption (flights, e-commerce) is collapsing, but low-frequency durables (vehicles) and tax-collected consumption (GST) are strong. This suggests a demand cliff in affluent urban consumption, while mass-market durables are still resilient.",
+      "implication": "The economy is bifurcating: mass-market (vehicles, GST) is holding up, but affluent discretionary (flights, e-commerce) is cracking. This is a leading indicator of a demand slowdown in 2-3 months. For allocators: (1) Overweight mass-market plays (two-wheeler OEMs, FMCG, rural-focused retailers); (2) Underweight urban-centric, high-ticket discretionary (airlines, e-commerce, premium hospitality); (3) Reduce exposure to IT services (which depend on affluent urban spending); (4) Avoid luxury goods and premium real estate. The airline collapse is not a sector-specific issue — it's a canary in the coal mine for affluent consumer health. If airline traffic doesn't recover within 4 weeks, expect earnings downgrades across discretionary sectors by Q3 FY26.",
       "pct_10y": 7,
-      "pct_note": "Airline traffic at 7th percentile is a 10-year low outside of COVID. The last time discretionary consumption collapsed this sharply (2019, 2023) it preceded a 15-20% equity correction within 6 months. This is falsifiable: if airline traffic rebounds to 50th percentile within 2 months, the signal is invalidated.",
+      "pct_note": "Airline traffic at 7th percentile is a 10-year low. Historically, when airline traffic falls this sharply while GST remains strong, it precedes a 6-month consumption slowdown in urban markets, followed by a lag in rural demand. This divergence has preceded GDP growth downgrades by 100-150bps.",
       "is_surprise": true,
       "pct_10y_tier": "lo"
     }
@@ -2611,36 +2652,36 @@ window.__MACRO_DATA__ = {
   "news": [
     {
       "category": "geo",
-      "headline": "Polish PM pledges memorial to victims",
-      "url": "https://www.bbc.co.uk/news/articles/cze94x4361po?at_medium=RSS&amp;at_campaign=rss",
+      "headline": "US insists Strait of Hormuz stays open",
+      "url": "https://www.bbc.co.uk/news/articles/cj9gkpp0dkeo?at_medium=RSS&amp;at_campaign=rss",
       "source_name": "World News",
       "buzz_tag": "hot"
     },
     {
       "category": "ai",
-      "headline": "ICE enforcement bots spark safety concerns",
-      "url": "https://www.theverge.com/policy/964302/ice-donald-trump-killings",
+      "headline": "Lorde endorses Ray-Ban Meta AI glasses",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/964539/lorde-says-ray-ban-meta-ai-glasses-are-not-sexy",
       "source_name": "Tech / AI",
-      "buzz_tag": "watch"
+      "buzz_tag": "hot"
     },
     {
       "category": "india",
-      "headline": "Trinamool rebels launch parallel party structure",
-      "url": "https://www.thehindu.com/news/national/west-bengal/trinamool-rebel-camp-forms-state-and-district-committees/article71211312.ece",
+      "headline": "Road rage sparks renaming politics debate",
+      "url": "https://www.thehindu.com/news/cities/kolkata/road-rage-politics-of-renaming-a-street-in-bengal/article71211600.ece",
       "source_name": "India News",
       "buzz_tag": "watch"
     },
     {
       "category": "fintech",
-      "headline": "Trump Accounts targets youth savings market",
-      "url": "https://www.bbc.co.uk/news/articles/ckg55v9e2y9o?at_medium=RSS&amp;at_campaign=rss",
+      "headline": "London's hidden poverty premium exposed",
+      "url": "https://www.bbc.co.uk/news/articles/c33yxe2ey22o?at_medium=RSS&amp;at_campaign=rss",
       "source_name": "Business / Finance",
       "buzz_tag": "watch"
     },
     {
       "category": "ifs",
-      "headline": "SBI MF IPO: Major offering size expected",
-      "url": "https://www.thehindubusinessline.com/markets/sbis-ofs-size-in-sbi-mf-ipo-reduces-by-288-crore-equity-shares-following-secondary-share-sale/article71211286.ece",
+      "headline": "SIF assets surge 29% in quarter",
+      "url": "https://www.thehindubusinessline.com/markets/sif-assets-jump-29-per-cent-in-june-to-17858-crore-driven-by-hybrid-long-short-strategies/article71214174.ece",
       "source_name": "India Markets",
       "buzz_tag": "watch"
     }
@@ -2656,7 +2697,7 @@ window.__MACRO_DATA__ = {
       "latest_unit": "index",
       "previous_value": "23962.8",
       "previous_numeric": 23962.8,
-      "data_vintage": "2026-07-11",
+      "data_vintage": "2026-07-12",
       "direction": "up",
       "momentum_label": "↑ +1.02%",
       "pct_10y": 78,
@@ -2675,7 +2716,7 @@ window.__MACRO_DATA__ = {
       "latest_unit": "index",
       "previous_value": "76741.82",
       "previous_numeric": 76741.82,
-      "data_vintage": "2026-07-11",
+      "data_vintage": "2026-07-12",
       "direction": "up",
       "momentum_label": "↑ +1.08%",
       "pct_10y": 74,
@@ -2694,7 +2735,7 @@ window.__MACRO_DATA__ = {
       "latest_unit": "index",
       "previous_value": "57252.45",
       "previous_numeric": 57252.45,
-      "data_vintage": "2026-07-11",
+      "data_vintage": "2026-07-12",
       "direction": "up",
       "momentum_label": "↑ +1.39%",
       "pct_10y": 96,
@@ -2708,12 +2749,12 @@ window.__MACRO_DATA__ = {
       "sub_section": "markets",
       "indicator_name": "India VIX",
       "indicator_slug": "india_vix",
-      "latest_value": "12.252 index",
-      "latest_numeric": 12.252,
+      "latest_value": "12.2525 index",
+      "latest_numeric": 12.2525,
       "latest_unit": "index",
       "previous_value": "13.36",
       "previous_numeric": 13.36,
-      "data_vintage": "2026-07-11",
+      "data_vintage": "2026-07-12",
       "direction": "down",
       "momentum_label": "↓ -8.29%",
       "pct_10y": 7,
@@ -2730,11 +2771,11 @@ window.__MACRO_DATA__ = {
       "latest_value": "95.24 ₹",
       "latest_numeric": 95.24,
       "latest_unit": "₹",
-      "previous_value": "0.0104",
-      "previous_numeric": 0.0104,
-      "data_vintage": "2026-07-11",
-      "direction": "up",
-      "momentum_label": "↑ +0.96%",
+      "previous_value": "96.15",
+      "previous_numeric": 96.15,
+      "data_vintage": "2026-07-12",
+      "direction": "down",
+      "momentum_label": "↓ -0.95%",
       "pct_10y": 0,
       "pct_10y_tier": "lo",
       "pct_note": "",
@@ -2746,15 +2787,15 @@ window.__MACRO_DATA__ = {
       "sub_section": "markets",
       "indicator_name": "Brent Crude",
       "indicator_slug": "brent_usd",
-      "latest_value": "76.01 $/bbl",
-      "latest_numeric": 76.01,
+      "latest_value": "78.93 $/bbl",
+      "latest_numeric": 78.93,
       "latest_unit": "$/bbl",
-      "previous_value": "76.3",
-      "previous_numeric": 76.3,
-      "data_vintage": "2026-07-11",
-      "direction": "down",
-      "momentum_label": "↓ -0.38%",
-      "pct_10y": 56,
+      "previous_value": "76.01",
+      "previous_numeric": 76.01,
+      "data_vintage": "2026-07-12",
+      "direction": "up",
+      "momentum_label": "↑ +3.84%",
+      "pct_10y": 58,
       "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": false,
@@ -2765,15 +2806,15 @@ window.__MACRO_DATA__ = {
       "sub_section": "global_markets",
       "indicator_name": "WTI Crude",
       "indicator_slug": "wti_usd",
-      "latest_value": "71.41 $/bbl",
-      "latest_numeric": 71.41,
+      "latest_value": "74.04 $/bbl",
+      "latest_numeric": 74.04,
       "latest_unit": "$/bbl",
-      "previous_value": "72.08",
-      "previous_numeric": 72.08,
-      "data_vintage": "2026-07-11",
-      "direction": "down",
-      "momentum_label": "↓ -0.93%",
-      "pct_10y": 59,
+      "previous_value": "71.41",
+      "previous_numeric": 71.41,
+      "data_vintage": "2026-07-12",
+      "direction": "up",
+      "momentum_label": "↑ +3.68%",
+      "pct_10y": 62,
       "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": false,
@@ -2784,14 +2825,14 @@ window.__MACRO_DATA__ = {
       "sub_section": "global_markets",
       "indicator_name": "Gold (USD)",
       "indicator_slug": "gold_usd",
-      "latest_value": "4113.7 $/oz",
-      "latest_numeric": 4113.7,
+      "latest_value": "4088.8 $/oz",
+      "latest_numeric": 4088.8,
       "latest_unit": "$/oz",
-      "previous_value": "4130.6",
-      "previous_numeric": 4130.6,
-      "data_vintage": "2026-07-11",
+      "previous_value": "4104.1",
+      "previous_numeric": 4104.1,
+      "data_vintage": "2026-07-12",
       "direction": "down",
-      "momentum_label": "↓ -0.41%",
+      "momentum_label": "↓ -0.37%",
       "pct_10y": 72,
       "pct_10y_tier": "mid",
       "pct_note": "",
@@ -2808,7 +2849,7 @@ window.__MACRO_DATA__ = {
       "latest_unit": "index",
       "previous_value": "7482.71",
       "previous_numeric": 7482.71,
-      "data_vintage": "2026-07-11",
+      "data_vintage": "2026-07-12",
       "direction": "up",
       "momentum_label": "↑ +1.24%",
       "pct_10y": 100,
@@ -2827,7 +2868,7 @@ window.__MACRO_DATA__ = {
       "latest_unit": "index",
       "previous_value": "25870.65",
       "previous_numeric": 25870.65,
-      "data_vintage": "2026-07-11",
+      "data_vintage": "2026-07-12",
       "direction": "up",
       "momentum_label": "↑ +1.59%",
       "pct_10y": 71,
@@ -2846,7 +2887,7 @@ window.__MACRO_DATA__ = {
       "latest_unit": "index",
       "previous_value": "15.84",
       "previous_numeric": 15.84,
-      "data_vintage": "2026-07-11",
+      "data_vintage": "2026-07-12",
       "direction": "down",
       "momentum_label": "↓ -5.11%",
       "pct_10y": 9,
@@ -2860,15 +2901,15 @@ window.__MACRO_DATA__ = {
       "sub_section": "global_liquidity",
       "indicator_name": "DXY",
       "indicator_slug": "dxy",
-      "latest_value": "100.965 index",
-      "latest_numeric": 100.965,
+      "latest_value": "101.162 index",
+      "latest_numeric": 101.162,
       "latest_unit": "index",
-      "previous_value": "100.94",
-      "previous_numeric": 100.94,
-      "data_vintage": "2026-07-11",
-      "direction": "flat",
-      "momentum_label": "→ +0.02%",
-      "pct_10y": 52,
+      "previous_value": "100.97",
+      "previous_numeric": 100.97,
+      "data_vintage": "2026-07-12",
+      "direction": "up",
+      "momentum_label": "↑ +0.19%",
+      "pct_10y": 53,
       "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": false,
@@ -2879,14 +2920,14 @@ window.__MACRO_DATA__ = {
       "sub_section": "global_markets",
       "indicator_name": "Natural Gas",
       "indicator_slug": "nat_gas",
-      "latest_value": "2.94 $/MMBtu",
-      "latest_numeric": 2.94,
+      "latest_value": "2.935 $/MMBtu",
+      "latest_numeric": 2.935,
       "latest_unit": "$/MMBtu",
-      "previous_value": "3.012",
-      "previous_numeric": 3.012,
-      "data_vintage": "2026-07-11",
+      "previous_value": "2.94",
+      "previous_numeric": 2.94,
+      "data_vintage": "2026-07-12",
       "direction": "down",
-      "momentum_label": "↓ -2.39%",
+      "momentum_label": "↓ -0.17%",
       "pct_10y": 18,
       "pct_10y_tier": "lo",
       "pct_note": "",
@@ -2898,15 +2939,15 @@ window.__MACRO_DATA__ = {
       "sub_section": "global_markets",
       "indicator_name": "Copper",
       "indicator_slug": "copper",
-      "latest_value": "6.282 $/lb",
-      "latest_numeric": 6.282,
+      "latest_value": "6.246 $/lb",
+      "latest_numeric": 6.246,
       "latest_unit": "$/lb",
-      "previous_value": "6.215",
-      "previous_numeric": 6.215,
-      "data_vintage": "2026-07-11",
+      "previous_value": "6.234",
+      "previous_numeric": 6.234,
+      "data_vintage": "2026-07-12",
       "direction": "up",
-      "momentum_label": "↑ +1.08%",
-      "pct_10y": 74,
+      "momentum_label": "↑ +0.19%",
+      "pct_10y": 73,
       "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": false,
@@ -2920,11 +2961,11 @@ window.__MACRO_DATA__ = {
       "latest_value": "161.91 $/t",
       "latest_numeric": 161.91,
       "latest_unit": "$/t",
-      "previous_value": "98.57",
-      "previous_numeric": 98.57,
-      "data_vintage": "2026-07-11",
+      "previous_value": "98.72",
+      "previous_numeric": 98.72,
+      "data_vintage": "2026-07-12",
       "direction": "up",
-      "momentum_label": "↑ +64.26%",
+      "momentum_label": "↑ +64.01%",
       "pct_10y": 63,
       "pct_10y_tier": "mid",
       "pct_note": "",
@@ -2936,14 +2977,14 @@ window.__MACRO_DATA__ = {
       "sub_section": "global_markets",
       "indicator_name": "Nikkei 225",
       "indicator_slug": "nikkei225",
-      "latest_value": "67743.85 index",
-      "latest_numeric": 67743.85,
+      "latest_value": "68557.73 index",
+      "latest_numeric": 68557.73,
       "latest_unit": "index",
       "previous_value": "67743.85",
       "previous_numeric": 67743.85,
-      "data_vintage": "2026-07-11",
-      "direction": "flat",
-      "momentum_label": "(stale)",
+      "data_vintage": "2026-07-12",
+      "direction": "up",
+      "momentum_label": "↑ +1.2%",
       "pct_10y": 100,
       "pct_10y_tier": "hi",
       "pct_note": "",
@@ -2960,7 +3001,7 @@ window.__MACRO_DATA__ = {
       "latest_unit": "index",
       "previous_value": "24199.46",
       "previous_numeric": 24199.46,
-      "data_vintage": "2026-07-11",
+      "data_vintage": "2026-07-12",
       "direction": "down",
       "momentum_label": "↓ -0.1%",
       "pct_10y": 51,
@@ -2979,7 +3020,7 @@ window.__MACRO_DATA__ = {
       "latest_unit": "index",
       "previous_value": "6284.27",
       "previous_numeric": 6284.27,
-      "data_vintage": "2026-07-11",
+      "data_vintage": "2026-07-12",
       "direction": "down",
       "momentum_label": "↓ -0.23%",
       "pct_10y": 100,
@@ -2993,15 +3034,15 @@ window.__MACRO_DATA__ = {
       "sub_section": "global_markets",
       "indicator_name": "Brent (Global)",
       "indicator_slug": "brent_usd_global",
-      "latest_value": "76.01 $/bbl",
-      "latest_numeric": 76.01,
+      "latest_value": "78.93 $/bbl",
+      "latest_numeric": 78.93,
       "latest_unit": "$/bbl",
-      "previous_value": "76.3",
-      "previous_numeric": 76.3,
-      "data_vintage": "2026-07-11",
-      "direction": "down",
-      "momentum_label": "↓ -0.38%",
-      "pct_10y": 56,
+      "previous_value": "76.01",
+      "previous_numeric": 76.01,
+      "data_vintage": "2026-07-12",
+      "direction": "up",
+      "momentum_label": "↑ +3.84%",
+      "pct_10y": 58,
       "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": false,
@@ -3024,6 +3065,63 @@ window.__MACRO_DATA__ = {
       "pct_10y_tier": "mid",
       "pct_note": "",
       "is_estimated": true,
+      "source": "Yahoo Finance"
+    },
+    {
+      "section": "S8",
+      "sub_section": "re_commercial",
+      "indicator_name": "Embassy REIT",
+      "indicator_slug": "embassy_reit",
+      "latest_value": "369.92 ₹/unit",
+      "latest_numeric": 369.92,
+      "latest_unit": "₹/unit",
+      "previous_value": "443.69",
+      "previous_numeric": 443.69,
+      "data_vintage": "2026-07-12",
+      "direction": "down",
+      "momentum_label": "↓ -16.63%",
+      "pct_10y": 56,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "Yahoo Finance"
+    },
+    {
+      "section": "S8",
+      "sub_section": "re_commercial",
+      "indicator_name": "Mindspace REIT",
+      "indicator_slug": "mindspace_reit",
+      "latest_value": "345.06 ₹/unit",
+      "latest_numeric": 345.06,
+      "latest_unit": "₹/unit",
+      "previous_value": "487.59",
+      "previous_numeric": 487.59,
+      "data_vintage": "2026-07-12",
+      "direction": "down",
+      "momentum_label": "↓ -29.23%",
+      "pct_10y": 57,
+      "pct_10y_tier": "mid",
+      "pct_note": "",
+      "is_estimated": false,
+      "source": "Yahoo Finance"
+    },
+    {
+      "section": "S8",
+      "sub_section": "re_commercial",
+      "indicator_name": "Brookfield REIT",
+      "indicator_slug": "brookfield_reit",
+      "latest_value": "263.49 ₹/unit",
+      "latest_numeric": 263.49,
+      "latest_unit": "₹/unit",
+      "previous_value": "336.6",
+      "previous_numeric": 336.6,
+      "data_vintage": "2026-07-12",
+      "direction": "down",
+      "momentum_label": "↓ -21.72%",
+      "pct_10y": 37,
+      "pct_10y_tier": "lo",
+      "pct_note": "",
+      "is_estimated": false,
       "source": "Yahoo Finance"
     },
     {
@@ -3164,16 +3262,16 @@ window.__MACRO_DATA__ = {
       "sub_section": "markets",
       "indicator_name": "Gold INR/gram",
       "indicator_slug": "gold_inr_gram",
-      "latest_value": "1000 ₹/g",
-      "latest_numeric": 1000,
+      "latest_value": "12395 ₹/g",
+      "latest_numeric": 12395,
       "latest_unit": "₹/g",
-      "previous_value": "1",
-      "previous_numeric": 1,
-      "data_vintage": "2026-07-12",
-      "direction": "down",
-      "momentum_label": "↓ -0.41%",
-      "pct_10y": 0,
-      "pct_10y_tier": "lo",
+      "previous_value": "12395",
+      "previous_numeric": 12395,
+      "data_vintage": "2026-07-13",
+      "direction": "flat",
+      "momentum_label": "(stale)",
+      "pct_10y": 100,
+      "pct_10y_tier": "hi",
       "pct_note": "",
       "is_estimated": false,
       "source": "Derived (Yahoo Finance)"
@@ -4399,27 +4497,27 @@ window.__MACRO_DATA__ = {
     {
       "para_num": 1,
       "para_label": "India Macro Regime",
-      "para_html": "<p><strong>7.8%</strong> GDP sits atop a foundation that is visibly softening: PMI Composite fell to <strong>56.5</strong> from <strong>58.9</strong>, PMI Manufacturing to <strong>53.9</strong> from <strong>56.9</strong>, and core sector growth more than halved to <strong>2.3%</strong> from <strong>4.7%</strong> — three independent proxies pointing toward deceleration while the headline number points the other way. IIP capital goods at <strong>12.5%</strong> is the statistical outlier that flatters the capex narrative; when core sector — cement, steel, electricity, coal — is running at <strong>2.3%</strong>, the capital goods print is almost certainly a one-off, not a cycle. RBI's own GDP forecast at <strong>6.9%</strong> is <strong>90bps</strong> below the government print, and that gap is not modesty — it is the central bank pricing in the same PMI and core sector signals the data is already showing. Airline passengers at a <strong>7th-percentile</strong> low and e-commerce GMV growth halved to <strong>12.4%</strong> from <strong>25%</strong> confirm that the discretionary consumption layer is under pressure even as GST and auto sales hold.</p>"
+      "para_html": "<p><strong>7.8%</strong> GDP with a PMI Composite that has dropped 2.4 points in a single month to <strong>56.5</strong> — and a core sector at <strong>2.3% YoY</strong>, the weakest in the dataset — is a growth regime that is decelerating faster than the headline suggests. Vehicle sales across PV, 2W, and CV are all printing above <strong>26%</strong> YoY, which anchors mass-market consumption; simultaneously, airline passenger traffic at a <strong>7th-percentile low</strong> and e-commerce GMV growth at <strong>12.4%</strong> (down from 25%) signal that urban discretionary demand has hit a wall. GST at <strong>₹2,00,640 crore</strong> is a record, but with April advance filings and formalisation effects in the mix, it is a tax-collection story as much as a demand story. India's growth engine is running on two tracks — and the faster one is slowing.</p>"
     },
     {
       "para_num": 2,
       "para_label": "Global Macro Regime",
-      "para_html": "<p><strong>0.7%</strong> US GDP SAAR — down from <strong>4.4%</strong> prior — is the single most important global number in today's dataset, and it is being ignored by a market where the S&P 500 sits at a <strong>100th-percentile</strong> all-time high and US VIX at <strong>15.03</strong> is in the <strong>9th percentile</strong> of complacency. US Core PCE ticked up to <strong>3.1%</strong> from <strong>3.0%</strong> — the Fed's preferred measure is moving in the wrong direction while growth is decelerating, a stagflationary whisper the equity market is choosing not to hear. Global PMI Composite at <strong>51</strong>, down from <strong>51.5</strong>, and natural gas at <strong>$2.94</strong> — an <strong>18th-percentile</strong> distress print — are the commodity and activity signals that corroborate the US GDP slowdown. Copper at <strong>$6.282/lb</strong> (<strong>74th percentile</strong>) is the one dissenting voice, but copper's China stimulus sensitivity makes it an unreliable global demand gauge when China's own GDP has decelerated to <strong>4.5%</strong> from <strong>5.0%</strong>.</p>"
+      "para_html": "<p>US GDP SAAR at <strong>0.7%</strong> — down from 4.4% the prior quarter — is the number that should be dominating every risk meeting, yet S&P 500 at a <strong>100th-percentile</strong> print of 7,575 and US VIX at <strong>15.03</strong> (9th percentile) suggest markets have decided to look through it entirely. US core PCE has ticked up to <strong>3.1%</strong> from 3.0%, keeping the Fed pinned at <strong>3.625%</strong> with the 10Y Treasury at <strong>4.54%</strong> — a real rate of roughly 145bps that is still doing restrictive work. China GDP at <strong>4.5%</strong> (down from 5%) with CPI at only <strong>1.3%</strong> confirms that domestic demand remains insufficient to absorb the stimulus being signalled by commodity prices. The global setup is: equity markets pricing a soft landing, bond markets pricing sticky inflation, and activity data pricing something closer to stall speed — one of these three is wrong.</p>"
     },
     {
       "para_num": 3,
       "para_label": "Liquidity Conditions",
-      "para_html": "<p><strong>₹29,845 crore</strong> in SIP inflows — <strong>85th percentile</strong> — is the domestic liquidity floor, but its composition is shifting in a way that matters: SIP AUM grew <strong>1.7%</strong> in one month to <strong>₹16.64 lakh crore</strong> while accounts grew only <strong>1.6%</strong>, meaning average ticket size is rising and affluent retail is deepening positions rather than mass-market India widening the base. FII equity net at <strong>-₹114 crore</strong> and DII equity net at a thin <strong>₹128 crore</strong> — <strong>22nd percentile</strong> — mean the domestic absorption buffer is thinner than the SIP headline implies. CD ratio at <strong>83.04%</strong> is the liquidity constraint that binds the real economy: with deposit growth at <strong>10.8%</strong> trailing credit at <strong>13.8%</strong> for three consecutive months, banks face a structural funding gap that will either slow credit or force deposit rate competition — both outcomes compress NIMs. Corporate bond issuance at ₹<strong>1.12 lakh crore</strong> sitting at the <strong>7th percentile</strong> signals that credit rationing is already pushing corporates to capital markets at a moment of peak equity valuations.</p>"
+      "para_html": "<p>FII equity net at <strong>-₹114 crore</strong> — a reversal from +₹22,615 crore the prior month — is the sharpest single-month swing in the dataset, and DII absorption at only <strong>+₹128 crore</strong> (22nd percentile) means domestic institutions are not stepping in with conviction. SIP inflows at <strong>₹29,845 crore</strong> remain structurally elevated (85th percentile), but SIP account growth has decelerated to <strong>1.6%</strong> — the incremental retail investor is not arriving at the pace the AUM growth implies; average ticket size is rising because existing investors are deepening, not because the base is widening. Corporate bond issuance at <strong>₹1,12,000 crore</strong> — a 10-year low percentile — signals that the credit market is tightening at the margin even as the equity market holds. With CD ratio at <strong>83.04%</strong> and deposit growth at 10.8%, the banking system's capacity to absorb both credit demand and government borrowing simultaneously is the binding constraint of this cycle.</p>"
     },
     {
       "para_num": 4,
       "para_label": "Equity + Real Estate Implications",
-      "para_html": "<p>Bank Nifty at <strong>58,046</strong> — <strong>96th percentile</strong> — is the most exposed index to the CD ratio story: if deposit rate competition intensifies to close the <strong>300bps</strong> credit-deposit gap, NIM compression follows, earnings estimates come down, and a <strong>96th-percentile</strong> valuation has no margin of safety. Nifty at <strong>24,207</strong> (<strong>78th percentile</strong>) and India VIX at <strong>12.25</strong> (<strong>7th percentile</strong>) together describe a market pricing perfection into a growth deceleration — PMI Composite down <strong>240bps</strong> in one month is not a rounding error. Real estate presents a more nuanced picture: home loan rates fell to <strong>8.0%</strong> from <strong>9.1%</strong>, affordability index improved to <strong>0.61</strong>, and office vacancy dropped to <strong>13.9%</strong> from <strong>17.2%</strong> — but residential sales fell to <strong>101,675</strong> units from <strong>108,970</strong> while launches rose to <strong>126,265</strong>, pushing unsold inventory to <strong>600,000</strong> units. Retail mall vacancy at <strong>5.7%</strong>, up from <strong>5.1%</strong>, is a quiet confirmation that the discretionary consumption softness visible in airline and e-commerce data is beginning to show up in physical retail.</p>"
+      "para_html": "<p>Bank Nifty at <strong>58,046</strong> — a <strong>96th-percentile</strong> 10-year print — is pricing a banking sector whose structural funding constraint (CD ratio at 83%) has not yet been reflected in NIM guidance or risk-weight circulars; that gap between price and fundamental stress is the trade. Real estate shows a clean bifurcation: office absorption at <strong>29.9 msf</strong> (24th percentile but rising), vacancy falling to <strong>13.9%</strong> from 17.2%, and Bengaluru rents up <strong>8.97%</strong> to ₹102 — the commercial segment is tightening — while residential sales units have fallen to <strong>1,01,675</strong> from 1,08,970 even as launches hit <strong>1,26,265</strong>, pushing unsold inventory to <strong>6,00,000 units</strong>. REIT prices — Embassy at <strong>₹369.92</strong> (down from ₹443.69), Mindspace at <strong>₹345.06</strong> (down from ₹487.59) — are pricing the office tightening story at a discount, which is either an opportunity or a signal that the market knows something about demand durability that the absorption numbers don't yet show. Home loan rates at <strong>8%</strong> (down from 9.1%) have improved affordability to <strong>0.61</strong>, but with disbursements at ₹5,50,000 crore and CD ratio at 83%, the pipeline of mortgage credit is constrained by the same deposit gap that is squeezing NBFC funding.</p>"
     },
     {
       "para_num": 5,
       "para_label": "Key Risks to Monitor",
-      "para_html": "<p>Ranked by probability × impact: first, CD ratio at <strong>83.04%</strong> triggering macro-prudential tightening — risk weights on unsecured or NBFC lending would reprice credit costs across the system within one quarter. Second, PMI Services at <strong>57.5</strong> continuing its slide — at <strong>88th percentile</strong> it has room to fall, and services is <strong>55%</strong> of India's GVA; a move below <strong>55</strong> would force GDP estimate revisions. Third, US GDP at <strong>0.7%</strong> SAAR with Core PCE at <strong>3.1%</strong> — if the Fed is forced to hold or hike into a slowdown, the DXY strengthens, INR at <strong>95.24</strong> (<strong>89th percentile</strong> weakness) faces renewed pressure, and India's import bill widens. Fourth, the airline-ecommerce demand cliff — passengers down <strong>9%</strong> and GMV growth halved — spreading into GST and auto data over the next two months, which would break the consumption narrative that is currently holding the growth story together. Watch Tuesday's RBI liquidity data and any macro-prudential circular on NBFC risk weights — that is the single data point most likely to reprice the credit and banking complex this week.</p>"
+      "para_html": "<p>Three risks, ranked by probability × impact. First: Brent at <strong>$78.93</strong> — up in 4 of the last 5 months — crossing $85 would add approximately <strong>$10bn</strong> to India's annual import bill, widen CAD by ~40bps, and feed into CPI with a 2-3 quarter lag precisely when food inflation is already accelerating from <strong>2.13% to 3.47%</strong>; the INR at a <strong>0th-percentile</strong> 10-year print of 95.24 has no cushion for a commodity shock. Second: the CD ratio at <strong>83.04%</strong> sustaining above 83% for two consecutive quarters historically precedes macro-prudential action — risk weights on unsecured lending or NBFC funding restrictions — which would compress credit growth from 13.8% toward single digits and trigger a Bank Nifty derating from its current 96th-percentile valuation. Third: US GDP at <strong>0.7% SAAR</strong> with core PCE at 3.1% creates a stagflationary trap for the Fed — if the next print confirms sub-1% growth, risk-off flows would reverse FII positioning sharply, and India's DII absorption at the 22nd percentile is insufficient to hold index levels. Watch Friday's US CPI print — at <strong>2.4%</strong> headline and <strong>2.5%</strong> core, any upside surprise resets the Fed cut timeline and reprices the entire EM carry trade that is currently keeping INR from a sharper move.</p>"
     }
   ],
   "real_estate": {
@@ -4536,10 +4634,29 @@ async function supabaseUpload() {
   }
 }
 </script>
+<script>
+/* TV / kiosk mode: ?tv=1 → larger type, auto-refresh every 15 min,
+   gentle auto-scroll through the page so a wall display cycles content. */
+(function () {
+  if (!/[?&]tv=1/.test(location.search)) return;
+  document.documentElement.classList.add('tv');
+  setTimeout(function () { location.reload(); }, 15 * 60 * 1000);
+  var pausedUntil = 0;
+  ['click', 'touchstart', 'wheel'].forEach(function (ev) {
+    window.addEventListener(ev, function () { pausedUntil = Date.now() + 120000; }, { passive: true });
+  });
+  setInterval(function () {
+    if (Date.now() < pausedUntil) return;
+    var bottom = window.innerHeight + window.scrollY >= document.body.scrollHeight - 40;
+    if (bottom) { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    else { window.scrollBy({ top: Math.round(window.innerHeight * 0.85), behavior: 'smooth' }); }
+  }, 12000);
+})();
+</script>
 
 <div class="stale-footnote">
   <b>⚠ Data Note</b> — The following indicator(s) are showing previous values due to suspect data today:
-  <ul><li><b>Nikkei 225</b> — using previous value (67743.85) because today's fetch (6855.773) was 10.6σ from the 180-day mean. Last good data: 2026-07-11.</li></ul>
+  <ul><li><b>Gold INR/gram</b> — using previous value (12395) because today's fetch (12520) was 21.3σ from the 180-day mean. Last good data: 2026-07-13.</li></ul>
 </div>
 </body>
 </html>

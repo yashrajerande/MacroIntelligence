@@ -4,10 +4,11 @@
  * Template IDs are locked to macro-intelligence-light.html v1.0.0.
  */
 
-import { readFileSync, writeFileSync, mkdirSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { SLUG_MAP } from '../../../src/utils/indicator-schema.js';
+import { isInversePolarity } from '../../../src/utils/polarity.js';
 import { row, fillId, fillTbody, fillMacroData, fillTickerData } from './skills/template-filler.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -371,6 +372,28 @@ export class DashboardRenderer {
       'brent_usd_global', 'wti_usd', 'nat_gas', 'gold_usd', 'copper', 'iron_ore', 'bdi',
     ]));
 
+    // ── Top movers strip: biggest polarity-aware daily moves ─────────
+    const movers = Object.entries(allRaw)
+      .filter(([slug, r]) =>
+        SLUG_MAP[slug] &&
+        typeof r.value === 'number' &&
+        typeof r.change_pct === 'number' &&
+        !r.fetch_error &&
+        Math.abs(r.change_pct) >= 0.5)
+      .sort((a, b) => Math.abs(b[1].change_pct) - Math.abs(a[1].change_pct))
+      .slice(0, 5);
+    if (movers.length >= 2) {
+      const chips = movers.map(([slug, r]) => {
+        const meta = SLUG_MAP[slug];
+        const good = isInversePolarity(slug) ? r.change_pct < 0 : r.change_pct > 0;
+        const sign = r.change_pct > 0 ? '+' : '';
+        return `<div class="mover ${good ? 'good' : 'bad'}"><b>${meta.indicator_name}</b>` +
+          `<span class="mv-val">${r.value_str || r.value}</span>` +
+          `<span class="mv-chg">${sign}${r.change_pct}%</span></div>`;
+      }).join('');
+      html = fillId(html, 'top-movers', `<span class="movers-lbl">Top Movers</span>${chips}`);
+    }
+
     // ── Fill __MACRO_DATA__ JSON ─────────────────────────────────────
     html = fillMacroData(html, macroDataObj);
 
@@ -405,6 +428,43 @@ export class DashboardRenderer {
     mkdirSync(join(ROOT, 'output'), { recursive: true });
     writeFileSync(outputPath, html, 'utf-8');
     writeFileSync(indexPath,  html, 'utf-8'); // GitHub Pages stable URL
+
+    // ── Archive index: browsable list of every published dashboard ──
+    const dated = readdirSync(join(ROOT, 'output'))
+      .filter(f => /^macro-dashboard-\d{4}-\d{2}-\d{2}\.html$/.test(f))
+      .sort()
+      .reverse();
+    const byMonth = {};
+    for (const f of dated) {
+      const d = f.slice(16, 26); // YYYY-MM-DD
+      const month = new Date(d + 'T00:00:00Z')
+        .toLocaleDateString('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+      (byMonth[month] ||= []).push({ file: f, date: d });
+    }
+    const monthBlocks = Object.entries(byMonth).map(([month, entries]) => {
+      const links = entries.map(e => {
+        const label = new Date(e.date + 'T00:00:00Z')
+          .toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' });
+        return `<a href="${e.file}">${label}</a>`;
+      }).join('');
+      return `<h2>${month}</h2><div class="days">${links}</div>`;
+    }).join('\n');
+    const archiveHtml = `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MacroIntelligence — Dashboard Archive</title>
+<style>
+  body{font-family:-apple-system,'Segoe UI',sans-serif;max-width:820px;margin:0 auto;padding:40px 20px;background:#f5f6fa;color:#1d1d2b;}
+  h1{font-size:1.3rem;letter-spacing:0.02em;} h2{font-size:0.85rem;color:#666;margin:26px 0 10px;text-transform:uppercase;letter-spacing:0.1em;}
+  .days{display:flex;flex-wrap:wrap;gap:8px;}
+  .days a{padding:8px 14px;background:#fff;border:1px solid rgba(0,0,60,0.1);border-radius:8px;text-decoration:none;color:#1a00cc;font-size:0.82rem;}
+  .days a:hover{background:#eef;}
+  .back{font-size:0.8rem;}
+</style></head><body>
+<p class="back"><a href="index.html">← Today's dashboard</a></p>
+<h1>📚 Dashboard Archive — ${dated.length} editions</h1>
+${monthBlocks}
+</body></html>`;
+    writeFileSync(join(ROOT, 'output', 'archive.html'), archiveHtml, 'utf-8');
 
     const latency = Date.now() - start;
     console.log(`[DashboardRenderer] Done in ${latency}ms → ${outputPath}`);

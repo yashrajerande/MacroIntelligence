@@ -14,6 +14,7 @@ import { INDICATOR_SCHEMA, SLUG_MAP, HISTORICAL_RANGES, INDICATOR_FRESHNESS, INV
 import { normalizeValue, normalizeAllIndicators } from './src/utils/unit-normalizer.js';
 import { classifyAll } from './agents/Analysis/RegimeClassifier/skills/regime-logic.js';
 import { row, fillId, fillTbody } from './agents/Production/DashboardRenderer/skills/template-filler.js';
+import { trendSuffix } from './src/utils/trend-context.js';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -248,6 +249,33 @@ assert(inverseDownRow.includes('pct-hi'), `Inverse lo tier should have class "pc
 const testHtml = '<span id="test-val">placeholder</span>';
 const filled = fillId(testHtml, 'test-val', 'Brent $109.32 | DXY 99.92');
 assert(filled.includes('Brent $109.32'), `fillId should preserve dollar amounts`);
+
+// --- Sparklines
+const sparkSeries = Array.from({ length: 10 }, (_, i) => ({ d: `2026-07-0${(i % 9) + 1}`, v: 100 + i * 2 }));
+const sparkRow = row('Nifty 50', '23000', '22800', 'up', '↑ +0.88%', 72, 'mid', 'nifty50', 23000,
+  { mean: 110, stddev: 6, min: 100, max: 118, series: sparkSeries });
+assert(sparkRow.includes('class="spark"'), `Row with series must render a sparkline SVG`);
+assert(sparkRow.includes('#007a52'), `Rising positive-polarity sparkline must be green`);
+const sparkRowInv = row('CPI Headline', '4.2', '5.1', 'down', '', 30, 'lo', 'cpi_headline', 4.2,
+  { mean: 4.5, stddev: 0.3, min: 4, max: 5.2, series: sparkSeries });
+assert(sparkRowInv.includes('#cc0033'), `Rising inverse-polarity sparkline must be red`);
+const noSparkRow = row('Nifty 50', '23000', '22800', 'up', '↑ +0.88%', 72, 'mid', 'nifty50', 23000,
+  { mean: 110, stddev: 6, min: 100, max: 118 });
+assert(!noSparkRow.includes('class="spark"'), `Row without series must not render a sparkline`);
+
+// --- Trend context
+const trendRanges = {
+  gst_month: { series: [
+    { d: '2026-04-01', v: 158000 }, { d: '2026-04-02', v: 158000 },  // consecutive dup collapses
+    { d: '2026-05-01', v: 161000 }, { d: '2026-06-01', v: 164000 }, { d: '2026-07-01', v: 168000 },
+  ] },
+};
+const suffix = trendSuffix('gst_month', trendRanges);
+assert(suffix.includes('recent:'), `trendSuffix must emit a recent: sequence, got "${suffix}"`);
+assert(suffix.includes('rising 3 in a row'), `4 distinct rising prints = "rising 3 in a row", got "${suffix}"`);
+assert(!suffix.includes('158000→158000'), `Consecutive duplicate prints must collapse`);
+assert(trendSuffix('gst_month', null) === '', `trendSuffix without ranges must return ''`);
+assert(trendSuffix('unknown_slug', trendRanges) === '', `trendSuffix for unknown slug must return ''`);
 // The content between > and </ should be the new value, not contain duplicate id=
 const filledContent = filled.match(/id="test-val"[^>]*>([\s\S]*?)<\//)?.[1] || '';
 assert(!filledContent.includes('id='), `fillId content should not contain leaked id= attribute`);

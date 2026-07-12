@@ -22,6 +22,7 @@ import {
   recordHook,
   buildHookContext,
 } from '../../../src/utils/hook-writer.js';
+import { trendSuffix, TREND_GUIDANCE } from '../../../src/utils/trend-context.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const persona = readFileSync(join(__dirname, 'Persona.md'), 'utf-8');
@@ -58,9 +59,10 @@ Bear: ${allData.scenarios.data.bear.name} — ${allData.scenarios.data.bear.desc
       ...allData.macroData.data.indicators,
       ...(allData.reData?.data?.indicators || {}),
     };
+    const dynamicRanges = allData.dynamicRanges || null;
     const indicatorSummary = Object.entries(allIndicators)
       .filter(([, v]) => v.value !== null && v.value !== undefined && v.value_str !== 'Awaited')
-      .map(([slug, v]) => `${slug}: ${v.value_str || v.value} (prev: ${v.previous ?? '—'}, ${v.direction || 'flat'}, 10y pct: ${v.pct_10y ?? '—'}%)`)
+      .map(([slug, v]) => `${slug}: ${v.value_str || v.value} (prev: ${v.previous ?? '—'}, ${v.direction || 'flat'}, 10y pct: ${v.pct_10y ?? '—'}%)${trendSuffix(slug, dynamicRanges)}`)
       .join('\n');
 
     // ── Hook Writer Skill: freshness + anti-repetition context ──
@@ -91,6 +93,7 @@ SCENARIOS:
 ${scenarioSummary}
 
 ALL ${Object.keys(allIndicators).length} INDICATORS:
+${TREND_GUIDANCE}
 ${indicatorSummary}
 
 ───────────────────────────────────────────

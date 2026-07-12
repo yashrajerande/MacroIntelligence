@@ -596,6 +596,41 @@ td.c-pct { text-align:right; min-width:96px; }
 .stale-footnote ul { margin:8px 0 0 16px; padding:0; }
 .stale-footnote li { margin-bottom:4px; }
 
+/* ── Sparklines (trend cell) ── */
+.spark-wrap { display:flex; flex-direction:column; align-items:flex-end; gap:2px; }
+.spark-wrap span { font-size:0.68rem; }
+.spark { display:block; }
+
+/* ── Top movers strip ── */
+#top-movers:empty { display:none; }
+.movers { display:flex; gap:10px; flex-wrap:wrap; margin:14px 0 4px; align-items:center; }
+.movers-lbl { font-family:var(--mono); font-size:0.60rem; font-weight:600; letter-spacing:0.16em; color:var(--ink-3); text-transform:uppercase; margin-right:2px; }
+.mover { display:flex; align-items:baseline; gap:7px; padding:7px 13px; background:#fff; border:1px solid rgba(0,0,60,0.08); border-radius:10px; font-size:0.76rem; }
+.mover b { font-weight:600; color:var(--ink-1); }
+.mover .mv-val { font-family:var(--mono); color:var(--ink-2); }
+.mover .mv-chg { font-family:var(--mono); font-weight:700; font-size:0.70rem; }
+.mover.good .mv-chg { color:#007a52; }
+.mover.bad  .mv-chg { color:#cc0033; }
+
+/* ── TV / kiosk mode (?tv=1) ── */
+html.tv { font-size:22px; }
+html.tv .sidenav, html.tv .footer-dis, html.tv #audio-panel { display:none !important; }
+html.tv body { padding-bottom:40px; }
+html.tv .cmd-verdict { font-size:1.5em; line-height:1.35; }
+html.tv .dt td, html.tv .dt th { padding:14px 0; }
+
+/* ── Mobile: sidenav becomes a horizontal sticky chip bar (was hidden) ── */
+@media (max-width: 768px) {
+  .sidenav {
+    display:flex !important; position:sticky; top:0; left:0; z-index:150;
+    flex-direction:row; overflow-x:auto; -webkit-overflow-scrolling:touch;
+    width:100%; height:auto; padding:8px 10px; gap:6px;
+    background:rgba(255,255,255,0.92); backdrop-filter:blur(12px);
+    border-bottom:1px solid rgba(0,0,60,0.08);
+  }
+  .sidenav a { white-space:nowrap; flex:0 0 auto; }
+}
+
 .sub-lbl {
   font-family:var(--mono);
   font-size:0.58rem;
@@ -1000,6 +1035,9 @@ td.c-pct { text-align:right; min-width:96px; }
     </div>
   </div>
 
+  <!-- TOP MOVERS — biggest daily moves, filled by DashboardRenderer -->
+  <div class="movers" id="top-movers"></div>
+
   <!-- 60-SECOND MACRO AUDIO — HERO PLAYER -->
   <div id="audio-panel" style="display:none;margin:12px 0 16px;padding:24px 28px;background:#fff;border-radius:20px;border:1px solid rgba(0,0,0,0.06);box-shadow:0 2px 8px rgba(0,0,0,0.04);">
     <div style="display:flex;align-items:center;gap:6px;margin-bottom:14px;">
@@ -1397,7 +1435,7 @@ td.c-pct { text-align:right; min-width:96px; }
   <div class="glass-panel footer">
     <div class="footer-src"><strong>Sources:</strong> MOSPI · RBI · AMFI · NSDL · NSE · BSE · BEA · BLS · S&amp;P Global PMI · HSBC PMI · IMF · FAO · ICE · CME · Baltic Exchange · Reuters · Bloomberg · TradingEconomics · Anarock · Knight Frank · JLL · NHB · Web search as of <span id="footer-date"></span></div>
     <div class="footer-dis">For informational purposes only. Not investment advice. All data subject to revision. Estimates marked ~.</div>
-    <div class="footer-src" style="margin-top:4px;font-size:0.55rem;color:var(--ink-4);"><span id="cost-tag"></span></div>
+    <div class="footer-src" style="margin-top:4px;font-size:0.55rem;color:var(--ink-4);"><span id="cost-tag"></span> · <a href="archive.html" style="color:var(--ink-3);">Dashboard Archive</a> · <a href="?tv=1" style="color:var(--ink-3);">TV Mode</a></div>
   </div>
 
 </div><!-- /canvas -->
@@ -2016,6 +2054,25 @@ async function supabaseUpload() {
     console.error('[Supabase sync]', err);
   }
 }
+</script>
+<script>
+/* TV / kiosk mode: ?tv=1 → larger type, auto-refresh every 15 min,
+   gentle auto-scroll through the page so a wall display cycles content. */
+(function () {
+  if (!/[?&]tv=1/.test(location.search)) return;
+  document.documentElement.classList.add('tv');
+  setTimeout(function () { location.reload(); }, 15 * 60 * 1000);
+  var pausedUntil = 0;
+  ['click', 'touchstart', 'wheel'].forEach(function (ev) {
+    window.addEventListener(ev, function () { pausedUntil = Date.now() + 120000; }, { passive: true });
+  });
+  setInterval(function () {
+    if (Date.now() < pausedUntil) return;
+    var bottom = window.innerHeight + window.scrollY >= document.body.scrollHeight - 40;
+    if (bottom) { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    else { window.scrollBy({ top: Math.round(window.innerHeight * 0.85), behavior: 'smooth' }); }
+  }, 12000);
+})();
 </script>
 </body>
 </html>

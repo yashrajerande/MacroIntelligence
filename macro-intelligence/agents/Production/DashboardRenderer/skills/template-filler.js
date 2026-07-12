@@ -10,9 +10,40 @@
 import { isInversePolarity } from '../../../../src/utils/polarity.js';
 
 /**
+ * Render a compact inline-SVG sparkline from a {d, v} series.
+ * Pure string generation — no charting library, ~350 bytes per row.
+ * Color reflects polarity-aware trend: green = improving, red = worsening.
+ */
+export function sparkline(series, inverse) {
+  if (!Array.isArray(series) || series.length < 3) return '';
+  const vals = series.map(p => p.v).filter(Number.isFinite);
+  if (vals.length < 3) return '';
+
+  const W = 64, H = 18, PAD = 1;
+  const min = Math.min(...vals), max = Math.max(...vals);
+  const span = max - min || 1;
+  const step = (W - 2 * PAD) / (vals.length - 1);
+  const pts = vals.map((v, i) => {
+    const x = PAD + i * step;
+    const y = H - PAD - ((v - min) / span) * (H - 2 * PAD);
+    return `${Math.round(x * 10) / 10},${Math.round(y * 10) / 10}`;
+  }).join(' ');
+
+  const rising = vals[vals.length - 1] > vals[0];
+  const improving = inverse ? !rising : rising;
+  const flat = vals[vals.length - 1] === vals[0];
+  const color = flat ? '#8a8aa0' : improving ? '#007a52' : '#cc0033';
+
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true">` +
+    `<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.4" ` +
+    `stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/></svg>`;
+}
+
+/**
  * Generate a table row HTML string.
  * For negative-polarity indicators, arrow colors are flipped (up=red, down=green).
  * When dynamic stats exist and |z-score| > 2, a sigma tag + hover tooltip is added.
+ * When a trailing series exists, a sparkline renders above the momentum label.
  */
 export function row(label, value, previous, direction, momentum, pct10y, tier, slug, numericValue, stats) {
   const inverse = slug ? isInversePolarity(slug) : false;
@@ -55,12 +86,19 @@ export function row(label, value, previous, direction, momentum, pct10y, tier, s
     }
   }
 
+  // Sparkline stacked above the momentum label in the same cell —
+  // no template column changes needed.
+  const spark = sparkline(stats?.series, inverse);
+  const momCell = spark
+    ? `<div class="spark-wrap">${spark}<span>${momentum || '—'}</span></div>`
+    : (momentum || '—');
+
   return `<tr>
   <td>${label}</td>
   <td${tdClass}>${value ?? 'Awaited'}${sigmaHtml}</td>
   <td>${previous ?? '—'}</td>
   <td><span class="${arrClass}">${arrChar}</span></td>
-  <td>${momentum || '—'}</td>
+  <td>${momCell}</td>
   <td><span class="${tierClass}">${pct10y !== undefined ? pct10y + '%' : '~'}</span></td>
 </tr>`;
 }

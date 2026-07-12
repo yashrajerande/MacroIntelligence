@@ -8,6 +8,7 @@
 const LOOKBACK_DAYS = 180;
 const MIN_DATA_POINTS = 10;
 const PAGE_SIZE = 1000;
+const SERIES_POINTS = 45;   // trailing observations kept per slug for sparklines/LLM context
 
 async function fetchPage(url, serviceKey, offset) {
   const pageUrl = `${url}&offset=${offset}&limit=${PAGE_SIZE}`;
@@ -34,7 +35,7 @@ export async function fetchDynamicRanges() {
   const cutoffStr = cutoff.toISOString().slice(0, 10);
 
   const baseUrl = `${supabaseUrl}/rest/v1/macro_indicators` +
-    `?select=indicator_slug,latest_numeric` +
+    `?select=indicator_slug,latest_numeric,run_date` +
     `&run_date=gte.${cutoffStr}` +
     `&latest_numeric=not.is.null` +
     `&order=run_date`;
@@ -50,16 +51,18 @@ export async function fetchDynamicRanges() {
     }
 
     const bySlug = {};
-    for (const { indicator_slug, latest_numeric } of allRows) {
+    for (const { indicator_slug, latest_numeric, run_date } of allRows) {
       if (latest_numeric === null || latest_numeric === undefined) continue;
       if (!bySlug[indicator_slug]) bySlug[indicator_slug] = [];
-      bySlug[indicator_slug].push(latest_numeric);
+      bySlug[indicator_slug].push({ d: run_date, v: latest_numeric });
     }
 
     const ranges = {};
-    for (const [slug, values] of Object.entries(bySlug)) {
-      if (values.length < MIN_DATA_POINTS) continue;
+    for (const [slug, points] of Object.entries(bySlug)) {
+      if (points.length < MIN_DATA_POINTS) continue;
 
+      // rows arrive ordered by run_date; dedupe consecutive same-date rows
+      const values = points.map(p => p.v);
       const n   = values.length;
       const min = Math.min(...values);
       const max = Math.max(...values);
@@ -67,7 +70,11 @@ export async function fetchDynamicRanges() {
       const variance = values.reduce((s, v) => s + (v - mean) ** 2, 0) / n;
       const stddev = Math.sqrt(variance);
 
-      ranges[slug] = { mean, stddev, min, max, count: n };
+      // series: last SERIES_POINTS observations, oldest → newest, for
+      // sparklines and LLM trend context. Kept compact on purpose.
+      const series = points.slice(-SERIES_POINTS);
+
+      ranges[slug] = { mean, stddev, min, max, count: n, series };
     }
 
     console.log(

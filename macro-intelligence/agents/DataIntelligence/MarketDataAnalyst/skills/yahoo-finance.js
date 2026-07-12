@@ -24,6 +24,9 @@ const SYMBOL_MAP = {
   euro_stoxx50:    '^STOXX50E',
   brent_usd_global:'BZ=F',
   bdi:             '^BDI',
+  embassy_reit:    'EMBASSY.NS',
+  mindspace_reit:  'MINDSPACE.NS',
+  brookfield_reit: 'BIRET.NS',
 };
 
 function computeDirection(current, previous) {

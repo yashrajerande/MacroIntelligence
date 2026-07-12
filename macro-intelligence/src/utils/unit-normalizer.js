@@ -116,39 +116,55 @@ function isInRange(slug, value) {
  * @param {number|null} value — raw numeric value
  * @returns {{ value: number|null, corrected: boolean, correction_note: string }}
  */
-export function normalizeValue(slug, value) {
+/**
+ * API sources deliver values in known units — scale-hunting them can only
+ * corrupt good data (e.g., a real Nikkei 68,257 forced into a stale static
+ * range). Only LLM-extracted values may be rescaled by hard rules or the
+ * generic scale-factor search. Inversions still apply to all sources
+ * (Yahoo's INRUSD=X genuinely quotes USD-per-INR).
+ */
+function isApiSource(source) {
+  return typeof source === 'string' &&
+    (source === 'FRED' || source.includes('Yahoo Finance'));
+}
+
+export function normalizeValue(slug, value, source) {
   if (value === null || value === undefined || typeof value !== 'number' || isNaN(value)) {
-    return { value, corrected: false, correction_note: '' };
+    return { value, corrected: false, correction_note: '', kind: 'none' };
   }
 
-  // 1. ALWAYS check hard rules first — they detect known unit confusions
-  //    even when the value accidentally falls within the (wide) range.
-  const hard = HARD_RULES[slug];
-  if (hard && hard.detect(value)) {
-    const fixed = hard.fix(value);
-    if (fixed === null) {
-      return { value: null, corrected: true, correction_note: hard.note };
-    }
-    if (isInRange(slug, fixed)) {
-      return { value: fixed, corrected: true, correction_note: hard.note };
+  const fromApi = isApiSource(source);
+
+  // 1. Hard rules — known unit confusions in LLM-extracted values only.
+  if (!fromApi) {
+    const hard = HARD_RULES[slug];
+    if (hard && hard.detect(value)) {
+      const fixed = hard.fix(value);
+      if (fixed === null) {
+        return { value: null, corrected: true, correction_note: hard.note, kind: 'hard' };
+      }
+      if (isInRange(slug, fixed)) {
+        return { value: fixed, corrected: true, correction_note: hard.note, kind: 'hard' };
+      }
     }
   }
 
-  // 2. ALWAYS check inversion rules — e.g., INR/USD inverted
+  // 2. Inversion rules apply to every source — e.g., INR/USD inverted.
   const inv = INVERSION_RULES[slug];
   if (inv && inv.detect(value)) {
     const fixed = inv.fix(value);
     if (isInRange(slug, fixed)) {
-      return { value: fixed, corrected: true, correction_note: inv.note };
+      return { value: fixed, corrected: true, correction_note: inv.note, kind: 'inversion' };
     }
   }
 
-  // 3. If already in range after hard/inversion checks, no correction needed
-  if (isInRange(slug, value)) {
-    return { value, corrected: false, correction_note: '' };
+  // 3. In range, or API-sourced — leave it alone. Out-of-range API values
+  //    are real market moves; the validator's dynamic stats judge them.
+  if (fromApi || isInRange(slug, value)) {
+    return { value, corrected: false, correction_note: '', kind: 'none' };
   }
 
-  // 3. Generic scale-factor detection using p50 as anchor
+  // 4. Generic scale-factor detection using p50 as anchor (LLM values only)
   const range = HISTORICAL_RANGES[slug];
   if (range && range.p50) {
     for (const factor of SCALE_FACTORS) {
@@ -162,6 +178,7 @@ export function normalizeValue(slug, value) {
             value: Math.round(candidate * 10000) / 10000,
             corrected: true,
             correction_note: `Scaled by ${factor}x to fit expected range [${range.min}, ${range.max}]`,
+            kind: 'scale',
           };
         }
       }
@@ -169,7 +186,7 @@ export function normalizeValue(slug, value) {
   }
 
   // No correction found — return original
-  return { value, corrected: false, correction_note: '' };
+  return { value, corrected: false, correction_note: '', kind: 'none' };
 }
 
 /**
@@ -185,7 +202,7 @@ export function normalizeAllIndicators(indicators) {
   for (const [slug, ind] of Object.entries(indicators)) {
     if (!ind || ind.value === null || ind.value === undefined) continue;
 
-    const result = normalizeValue(slug, ind.value);
+    const result = normalizeValue(slug, ind.value, ind.source);
     if (result.corrected) {
       const from = ind.value;
       ind.value = result.value;
@@ -194,6 +211,24 @@ export function normalizeAllIndicators(indicators) {
         ind.is_estimated = true;
         ind.direction = 'flat';
       }
+
+      // Inversions change the scale AND the direction semantics: bring
+      // previous onto the same scale and recompute change/direction,
+      // otherwise the "Previous" column shows 0.0104 next to 95.24.
+      if (result.kind === 'inversion' && typeof ind.previous === 'number') {
+        const inv = INVERSION_RULES[slug];
+        if (inv && inv.detect(ind.previous)) {
+          ind.previous = inv.fix(ind.previous);
+        }
+        if (ind.previous) {
+          const changePct = Math.round(((ind.value - ind.previous) / Math.abs(ind.previous)) * 10000) / 100;
+          ind.change_pct = changePct;
+          ind.direction = changePct > 0.1 ? 'up' : changePct < -0.1 ? 'down' : 'flat';
+          const arrow = ind.direction === 'up' ? '↑' : ind.direction === 'down' ? '↓' : '→';
+          ind.momentum_label = `${arrow} ${changePct >= 0 ? '+' : ''}${changePct}%`;
+        }
+      }
+
       corrections.push({
         slug,
         from,

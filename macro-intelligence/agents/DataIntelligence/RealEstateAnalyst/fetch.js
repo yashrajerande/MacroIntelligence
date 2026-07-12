@@ -6,12 +6,15 @@ import { fetchRealEstateData } from './skills/re-search.js';
 import { extractIndicator } from '../../DataIntelligence/MacroDataAnalyst/skills/data-extractor.js';
 import { scorePct10y } from '../../Analysis/SignalDetector/skills/signal-scoring.js';
 
+// REITs (embassy/mindspace/brookfield) intentionally absent: they are real
+// NSE tickers fetched by MarketDataAnalyst via Yahoo. Emitting them here
+// would override those quotes with LLM estimates in the orchestrator merge.
 const RE_SLUGS = [
   're_launches_units', 're_sales_units', 're_unsold_inventory',
   'hpi_mumbai', 'hpi_delhi', 'hpi_bengaluru', 'hpi_hyderabad',
   'affordability_index', 'home_loan_disbursements', 'avg_home_loan_rate',
   'office_absorption', 'office_vacancy', 'rent_bengaluru', 'rent_mumbai',
-  'retail_mall_vacancy', 'embassy_reit', 'mindspace_reit', 'brookfield_reit',
+  'retail_mall_vacancy',
 ];
 
 export class RealEstateAnalyst {
@@ -26,13 +29,7 @@ export class RealEstateAnalyst {
       const raw = result.data[slug] || null;
       const extracted = extractIndicator(raw, slug);
       const scored = scorePct10y(slug, extracted.value);
-      indicators[slug] = {
-        ...extracted,
-        ...scored,
-        is_estimated: ['embassy_reit', 'mindspace_reit', 'brookfield_reit'].includes(slug)
-          ? true
-          : extracted.is_estimated,
-      };
+      indicators[slug] = { ...extracted, ...scored };
     }
 
     const latency = Date.now() - start;

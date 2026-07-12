@@ -22,11 +22,8 @@ Each key maps to { value (index number), previous (number), source (string), vin
 Each key maps to { value (number), previous (number), source (string), vintage (string) }.
 avg_home_loan_rate in %, affordability_index as ratio, disbursements in INR crore.`,
   },
-  {
-    query: 'Embassy REIT Mindspace REIT Brookfield India REIT unit price NAV yield 2026',
-    extract: `Return JSON with keys: embassy_reit, mindspace_reit, brookfield_reit.
-Each key maps to { value (INR per unit), previous (number), source (string), vintage (string) }.`,
-  },
+  // REIT unit prices now come from Yahoo Finance (EMBASSY.NS, MINDSPACE.NS,
+  // BIRET.NS) via MarketDataAnalyst — real daily quotes, no LLM estimation.
   {
     query: 'India Grade-A office space absorption vacancy rent Bengaluru Mumbai 2026 Knight Frank JLL',
     extract: `Return JSON with keys: office_absorption, office_vacancy, rent_bengaluru, rent_mumbai, retail_mall_vacancy.

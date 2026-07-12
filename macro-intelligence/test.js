@@ -156,6 +156,33 @@ assert(batchResult.corrected === 2, `Batch should correct 2 indicators, got ${ba
 assert(mockIndicators.gst_month.value === 200640, `Batch: gst_month should be 200640`);
 assert(mockIndicators.nifty50.value === 23000, `Batch: nifty50 should remain 23000`);
 
+// --- API-source guard: Yahoo/FRED values have known units — never rescale
+const nikkeiApi = normalizeValue('nikkei225', 68257, 'Yahoo Finance');
+assert(nikkeiApi.corrected === false && nikkeiApi.value === 68257,
+  `nikkei225 68257 from Yahoo must pass through untouched, got ${nikkeiApi.value}`);
+const cpiApi = normalizeValue('us_cpi', 332.4, 'FRED');
+assert(cpiApi.corrected === false && cpiApi.value === 332.4,
+  `us_cpi from FRED must never be scale-fabricated, got ${cpiApi.value}`);
+const goldDerived = normalizeValue('gold_inr_gram', 13816, 'Derived (Yahoo Finance)');
+assert(goldDerived.corrected === false,
+  `derived gold_inr_gram must not be rescaled, got ${JSON.stringify(goldDerived)}`);
+
+// --- Inversion still applies to API sources (Yahoo INRUSD=X is USD-per-INR)
+const inrApi = normalizeValue('inr_usd', 0.0105, 'Yahoo Finance');
+assert(inrApi.corrected === true && inrApi.value > 90 && inrApi.value < 100,
+  `inr_usd from Yahoo must still invert, got ${inrApi.value}`);
+
+// --- Inversion must also fix previous/direction in batch mode
+const invBatch = {
+  inr_usd: { value: 0.0105, value_str: '0.0105', previous: 0.0106, direction: 'down', source: 'Yahoo Finance' },
+};
+normalizeAllIndicators(invBatch);
+assert(invBatch.inr_usd.value > 90, `Batch inversion: value must be INR-per-USD scale`);
+assert(invBatch.inr_usd.previous > 90,
+  `Batch inversion: previous must be inverted to same scale, got ${invBatch.inr_usd.previous}`);
+assert(invBatch.inr_usd.direction === 'up',
+  `Batch inversion: rupee weakening (0.0106→0.0105 USD/INR) must show direction=up on INR/USD scale, got ${invBatch.inr_usd.direction}`);
+
 // ═══════════════════════════════════════════════════════════════════
 // 4. REGIME CLASSIFIER (PURE CODE)
 // ═══════════════════════════════════════════════════════════════════

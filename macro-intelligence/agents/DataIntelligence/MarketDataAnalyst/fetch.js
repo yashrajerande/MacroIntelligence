@@ -22,9 +22,11 @@ export class MarketDataAnalyst {
     // Merge: FRED overrides Yahoo for overlapping keys (more authoritative for rates)
     const prices = { ...yahooPrices, ...fredPrices };
 
-    // Compute gold_inr_gram from gold_usd and inr_usd
+    // Compute gold_inr_gram from gold_usd and inr_usd.
+    // Yahoo INRUSD=X quotes USD-per-INR (~0.01); we need INR-per-USD (~90+).
     if (prices.gold_usd && prices.inr_usd && prices.gold_usd.value && prices.inr_usd.value) {
-      const goldInrPerGram = (prices.gold_usd.value * prices.inr_usd.value) / 31.1035;
+      const inrPerUsd = prices.inr_usd.value < 1 ? 1 / prices.inr_usd.value : prices.inr_usd.value;
+      const goldInrPerGram = (prices.gold_usd.value * inrPerUsd) / 31.1035;
       prices.gold_inr_gram = {
         value: Math.round(goldInrPerGram),
         value_str: String(Math.round(goldInrPerGram)),

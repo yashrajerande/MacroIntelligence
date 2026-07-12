@@ -3,14 +3,17 @@
  * Requires FRED_API_KEY environment variable.
  */
 
+// units: FRED transformation applied server-side ('pc1' = percent change
+// from year ago — turns index levels into YoY %, matching the schema).
+// transform: local unit conversion applied after fetch (known units, no guessing).
 const SERIES_MAP = {
-  us_10y_treasury:  'DGS10',
-  fed_funds_rate:   'FEDFUNDS',
-  fed_balance_sheet:'WALCL',
-  us_cpi:           'CPIAUCSL',
-  us_core_cpi:      'CPILFESL',
-  us_core_pce:      'PCEPILFE',
-  us_gdp_saar:      'A191RL1Q225SBEA',
+  us_10y_treasury:  { id: 'DGS10' },
+  fed_funds_rate:   { id: 'FEDFUNDS' },
+  fed_balance_sheet:{ id: 'WALCL', transform: v => v / 1000 },  // $ millions → $ billions
+  us_cpi:           { id: 'CPIAUCSL', units: 'pc1' },
+  us_core_cpi:      { id: 'CPILFESL', units: 'pc1' },
+  us_core_pce:      { id: 'PCEPILFE', units: 'pc1' },
+  us_gdp_saar:      { id: 'A191RL1Q225SBEA' },
 };
 
 function computeDirection(current, previous) {
@@ -21,8 +24,9 @@ function computeDirection(current, previous) {
   return 'flat';
 }
 
-async function fetchSeries(seriesId, apiKey) {
-  const url = `https://api.stlouisfed.org/fred/series/observations?series_id=${seriesId}&sort_order=desc&limit=2&api_key=${apiKey}&file_type=json`;
+async function fetchSeries(spec, apiKey) {
+  const unitsParam = spec.units ? `&units=${spec.units}` : '';
+  const url = `https://api.stlouisfed.org/fred/series/observations?series_id=${spec.id}&sort_order=desc&limit=2&api_key=${apiKey}&file_type=json${unitsParam}`;
 
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 10000);
@@ -36,8 +40,10 @@ async function fetchSeries(seriesId, apiKey) {
     const obs = data.observations;
     if (!obs || obs.length === 0) throw new Error('No observations');
 
-    const latest = parseFloat(obs[0].value);
-    const previous = obs.length > 1 ? parseFloat(obs[1].value) : latest;
+    const xform = spec.transform || (v => v);
+    const round4 = v => Math.round(v * 10000) / 10000;
+    const latest = round4(xform(parseFloat(obs[0].value)));
+    const previous = obs.length > 1 ? round4(xform(parseFloat(obs[1].value))) : latest;
     const changePct = previous !== 0
       ? Math.round(((latest - previous) / Math.abs(previous)) * 10000) / 100
       : 0;
@@ -75,7 +81,7 @@ export async function fetchAllFred() {
 
   const entries = Object.entries(SERIES_MAP);
   const results = await Promise.allSettled(
-    entries.map(([, seriesId]) => fetchSeries(seriesId, apiKey))
+    entries.map(([, spec]) => fetchSeries(spec, apiKey))
   );
 
   const prices = {};

@@ -89,17 +89,18 @@ export function shouldSkipDataIntelligence(isoDate) {
  */
 export function readCache() {
   if (!existsSync(CACHE_PATH)) {
-    return { indicators: {}, last_updated: {}, supabase_snapshot: {} };
+    return { indicators: {}, last_updated: {}, last_changed: {}, supabase_snapshot: {} };
   }
   try {
     const raw = JSON.parse(readFileSync(CACHE_PATH, 'utf-8'));
     return {
       indicators:        raw.indicators        || {},
       last_updated:      raw.last_updated      || {},
+      last_changed:      raw.last_changed      || {},
       supabase_snapshot: raw.supabase_snapshot  || {},
     };
   } catch {
-    return { indicators: {}, last_updated: {}, supabase_snapshot: {} };
+    return { indicators: {}, last_updated: {}, last_changed: {}, supabase_snapshot: {} };
   }
 }
 
@@ -136,11 +137,42 @@ export function getCachedIndicators(currentDate) {
  */
 export function updateCache(freshIndicators, currentDate) {
   const cache = readCache();
+  let kept = 0;
   for (const [slug, value] of Object.entries(freshIndicators)) {
+    // A failed fetch (fetch_error sentinel or null value) must never
+    // clobber a previously-good cached value — keep the old one and do
+    // NOT stamp it fresh, so freshness rules can still trigger a refetch.
+    const failed = value && (value.fetch_error || value.value === null || value.value === undefined);
+    const oldGood = cache.indicators[slug] &&
+      cache.indicators[slug].value !== null &&
+      cache.indicators[slug].value !== undefined &&
+      !cache.indicators[slug].fetch_error;
+    if (failed && oldGood) {
+      kept++;
+      continue;
+    }
+
+    // Track when the numeric value last actually changed — used by the
+    // hook-writer to re-admit quarterly indicators in their release window.
+    const oldVal = cache.indicators[slug]?.value;
+    if (value && typeof value.value === 'number' && value.value !== oldVal) {
+      cache.last_changed[slug] = currentDate;
+    }
+
     cache.indicators[slug]   = value;
     cache.last_updated[slug] = currentDate;
   }
+  if (kept > 0) {
+    console.log(`[DataCache] Kept previous values for ${kept} indicator(s) with failed fetches`);
+  }
   writeCache(cache);
+}
+
+/**
+ * Returns the date each slug's numeric value last changed (or {} if unknown).
+ */
+export function getLastChanged() {
+  return readCache().last_changed;
 }
 
 /**

@@ -115,10 +115,18 @@ iframe{border:0;width:100%;height:100%;display:block;}
 <script>
 const tabs = document.querySelectorAll('nav a');
 const frame = document.getElementById('frame');
+const initial = new URL(location.href).searchParams.get('tab');
+if (initial === 'conglomerates') {
+  tabs.forEach(x => x.classList.remove('active'));
+  document.getElementById('tab-cong').classList.add('active');
+  frame.src = 'macro-intelligence/output/conglomerates/index.html';
+}
 tabs.forEach(t => t.addEventListener('click', () => {
   tabs.forEach(x => x.classList.remove('active'));
   t.classList.add('active');
   frame.src = t.dataset.src;
+  const which = t.id === 'tab-cong' ? 'conglomerates' : 'macro';
+  history.replaceState({}, '', '?tab=' + which);
 }));
 </script>
 </body>

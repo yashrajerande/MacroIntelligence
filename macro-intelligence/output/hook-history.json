@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "14 JUN 2026",
-      "verdict_line": "Nikkei at an all-time high of 66,020 while US GDP printed 0.7% SAAR — global equities are pricing a soft landing that the world's largest economy is not delivering.",
-      "themes": [
-        "gdp_growth"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "sip_accounts",
-        "nat_gas",
-        "us_10y_treasury"
-      ]
-    },
-    {
       "date": "15 JUN 2026",
       "verdict_line": "Bank Nifty at a 10-year high of 56,815 while the CD ratio sits at 83% and corporate bond issuance hits a 7th-percentile panic floor — the equity market is pricing banking health that the funding structure does not support.",
       "themes": [
@@ -434,6 +420,21 @@
         "nat_gas",
         "sip_accounts",
         "copper"
+      ]
+    },
+    {
+      "date": "14 JUL 2026",
+      "verdict_line": "US 10Y at 4.56% — an 82nd-percentile print rising 3 of the last 5 periods — is the carry-trade tripwire that India's 96th-percentile Bank Nifty hasn't priced.",
+      "themes": [
+        "markets"
+      ],
+      "slugs": [
+        "nikkei225",
+        "us_10y_treasury",
+        "nat_gas",
+        "sip_accounts",
+        "copper",
+        "bank_nifty"
       ]
     }
   ]

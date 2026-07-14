@@ -1,22 +1,6 @@
 {
   "entries": [
     {
-      "date": "15 JUN 2026",
-      "verdict_line": "Bank Nifty at a 10-year high of 56,815 while the CD ratio sits at 83% and corporate bond issuance hits a 7th-percentile panic floor — the equity market is pricing banking health that the funding structure does not support.",
-      "themes": [
-        "credit_deposit",
-        "markets"
-      ],
-      "slugs": [
-        "sp500",
-        "nikkei225",
-        "euro_stoxx50",
-        "bank_nifty",
-        "india_vix",
-        "cd_ratio"
-      ]
-    },
-    {
       "date": "16 JUN 2026",
       "verdict_line": "Iron ore at $161.91/tonne — a 21% single-period surge — while e-commerce GMV growth halved to 12.4% and airline traffic fell 9.1%; the commodity market is pricing a demand boom that India's own consumers are not delivering.",
       "themes": [
@@ -435,6 +419,20 @@
         "sip_accounts",
         "copper",
         "bank_nifty"
+      ]
+    },
+    {
+      "date": "15 JUL 2026",
+      "verdict_line": "Airline passengers collapsed 9.1% MoM to a 7th-percentile low while vehicle sales surged 26% — India's consumption story has split in two, and only one half is real.",
+      "themes": [
+        "consumption"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "airline_pax",
+        "nat_gas",
+        "us_10y_treasury"
       ]
     }
   ]

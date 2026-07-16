@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "17 JUN 2026",
-      "verdict_line": "S&P 500 at an all-time high of 7,511 while US GDP prints 0.7% SAAR — global equity markets are pricing a recovery that the world's largest economy has already stopped delivering.",
-      "themes": [
-        "markets",
-        "gdp_growth"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "sp500",
-        "us_vix",
-        "bank_nifty"
-      ]
-    },
-    {
       "date": "18 JUN 2026",
       "verdict_line": "Natural gas at a decade-low ₹3.16 while US core PCE ticks up to 3.1% — the Fed's inflation problem and the world's energy glut are pulling in opposite directions, and one of them is wrong.",
       "themes": [
@@ -423,6 +408,20 @@
       "date": "16 JUL 2026",
       "verdict_line": "SIP accounts at a 2nd-percentile low while AUM hits ₹16.64 lakh cr — India's equity cult is deepening among the wealthy and quietly abandoning the mass investor.",
       "themes": [],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "nat_gas",
+        "sip_accounts",
+        "us_10y_treasury"
+      ]
+    },
+    {
+      "date": "17 JUL 2026",
+      "verdict_line": "Euro Stoxx 50 at a 10-year high while US GDP prints 0.7% SAAR — global equities are pricing a soft landing that the underlying economy has already left behind.",
+      "themes": [
+        "gdp_growth"
+      ],
       "slugs": [
         "nikkei225",
         "euro_stoxx50",

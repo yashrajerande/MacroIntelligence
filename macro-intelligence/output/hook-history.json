@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "18 JUN 2026",
-      "verdict_line": "Natural gas at a decade-low ₹3.16 while US core PCE ticks up to 3.1% — the Fed's inflation problem and the world's energy glut are pulling in opposite directions, and one of them is wrong.",
-      "themes": [
-        "inflation"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "nat_gas",
-        "sip_accounts",
-        "us_10y_treasury",
-        "us_core_pce"
-      ]
-    },
-    {
       "date": "19 JUN 2026",
       "verdict_line": "SIP inflows fell sequentially for the first time in 8 months to ₹29,845 cr — even as MF AUM hit ₹82 lakh crore; retail is still in, but the marginal buyer is quietly stepping back.",
       "themes": [
@@ -428,6 +413,18 @@
         "nat_gas",
         "sip_accounts",
         "us_10y_treasury"
+      ]
+    },
+    {
+      "date": "18 JUL 2026",
+      "verdict_line": "Nikkei at a 10-year high yet down 4% in two sessions — global carry trades are unwinding, and India's ₹96.15 INR hasn't blinked yet.",
+      "themes": [],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "nat_gas",
+        "sip_accounts"
       ]
     }
   ]

@@ -1,22 +1,6 @@
 {
   "entries": [
     {
-      "date": "19 JUN 2026",
-      "verdict_line": "SIP inflows fell sequentially for the first time in 8 months to ₹29,845 cr — even as MF AUM hit ₹82 lakh crore; retail is still in, but the marginal buyer is quietly stepping back.",
-      "themes": [
-        "flows"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "nat_gas",
-        "sip_accounts",
-        "us_10y_treasury",
-        "sip_inflows",
-        "mf_aum"
-      ]
-    },
-    {
       "date": "20 JUN 2026",
       "verdict_line": "US 10-year at 4.49% — an 81st-percentile print — while the Fed holds at 3.625% and core PCE ticks to 3.1%; the carry trade that funded EM inflows is repricing, and India's ₹22,729 cr FII swing in a single month is the first casualty.",
       "themes": [
@@ -425,6 +409,21 @@
         "us_10y_treasury",
         "nat_gas",
         "sip_accounts"
+      ]
+    },
+    {
+      "date": "19 JUL 2026",
+      "verdict_line": "S&P 500 at a 100th-percentile high yet down 1.5% in a session — global risk appetite is cracking precisely when India's FII flows swung from +₹22,615 cr to -₹114 cr.",
+      "themes": [
+        "markets",
+        "flows"
+      ],
+      "slugs": [
+        "sp500",
+        "nikkei225",
+        "euro_stoxx50",
+        "india_vix",
+        "bank_nifty"
       ]
     }
   ]

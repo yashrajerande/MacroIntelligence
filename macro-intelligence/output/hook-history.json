@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "20 JUN 2026",
-      "verdict_line": "US 10-year at 4.49% — an 81st-percentile print — while the Fed holds at 3.625% and core PCE ticks to 3.1%; the carry trade that funded EM inflows is repricing, and India's ₹22,729 cr FII swing in a single month is the first casualty.",
-      "themes": [
-        "flows"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "nat_gas",
-        "sip_accounts"
-      ]
-    },
-    {
       "date": "21 JUN 2026",
       "verdict_line": "Airline passenger traffic fell 8.5% MoM to 35 million — a 7th-percentile print in non-seasonal March — while mass-market GST and auto sales surge; India's affluent consumer is quietly stepping off the escalator.",
       "themes": [
@@ -424,6 +410,18 @@
         "euro_stoxx50",
         "india_vix",
         "bank_nifty"
+      ]
+    },
+    {
+      "date": "20 JUL 2026",
+      "verdict_line": "Nikkei down 4% in two sessions from a 10-year high — the carry trade is unwinding in Tokyo, and India's INR at 96.15 hasn't moved yet.",
+      "themes": [],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "nat_gas",
+        "sip_accounts"
       ]
     }
   ]

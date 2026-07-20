@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "21 JUN 2026",
-      "verdict_line": "Airline passenger traffic fell 8.5% MoM to 35 million — a 7th-percentile print in non-seasonal March — while mass-market GST and auto sales surge; India's affluent consumer is quietly stepping off the escalator.",
-      "themes": [
-        "consumption"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "nat_gas",
-        "sip_accounts"
-      ]
-    },
-    {
       "date": "22 JUN 2026",
       "verdict_line": "Nikkei at a 10-year high while US GDP prints 0.7% SAAR and India's PMI composite slips 240bps — global equity is pricing a growth acceleration that no major economy's output data is delivering.",
       "themes": [
@@ -422,6 +408,21 @@
         "us_10y_treasury",
         "nat_gas",
         "sip_accounts"
+      ]
+    },
+    {
+      "date": "21 JUL 2026",
+      "verdict_line": "WTI up $3.5 in six weeks to $82.58 while US GDP prints 0.7% SAAR — oil is pricing a demand that the world's largest economy has already stopped producing.",
+      "themes": [
+        "oil",
+        "gdp_growth"
+      ],
+      "slugs": [
+        "nikkei225",
+        "nat_gas",
+        "us_10y_treasury",
+        "sip_accounts",
+        "wti_usd"
       ]
     }
   ]

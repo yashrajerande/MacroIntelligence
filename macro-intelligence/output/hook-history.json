@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "22 JUN 2026",
-      "verdict_line": "Nikkei at a 10-year high while US GDP prints 0.7% SAAR and India's PMI composite slips 240bps — global equity is pricing a growth acceleration that no major economy's output data is delivering.",
-      "themes": [
-        "gdp_growth"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "sip_accounts",
-        "nat_gas",
-        "pmi_composite"
-      ]
-    },
-    {
       "date": "23 JUN 2026",
       "verdict_line": "India VIX at an 8th-percentile 12.84 while Bank Nifty hits a 96th-percentile high — the market is pricing perfection into banks whose deposit tanks are running 300bps behind their credit engines.",
       "themes": [
@@ -423,6 +408,21 @@
         "us_10y_treasury",
         "sip_accounts",
         "wti_usd"
+      ]
+    },
+    {
+      "date": "22 JUL 2026",
+      "verdict_line": "Copper up 3.7% in a session while US PMI prints 50.3 — industrial metals are pricing a recovery that the world's largest economy has already stopped delivering.",
+      "themes": [
+        "gdp_growth"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "sp500",
+        "bank_nifty",
+        "us_vix",
+        "copper"
       ]
     }
   ]

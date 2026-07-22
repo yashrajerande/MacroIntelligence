@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "23 JUN 2026",
-      "verdict_line": "India VIX at an 8th-percentile 12.84 while Bank Nifty hits a 96th-percentile high — the market is pricing perfection into banks whose deposit tanks are running 300bps behind their credit engines.",
-      "themes": [
-        "credit_deposit",
-        "markets"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "sp500",
-        "india_vix",
-        "bank_nifty"
-      ]
-    },
-    {
       "date": "24 JUN 2026",
       "verdict_line": "Copper down 3.6% to $6.13/lb while iron ore surges 60% — industrial metals are sending contradictory signals, and one of them is lying about the global growth cycle.",
       "themes": [],
@@ -423,6 +408,20 @@
         "bank_nifty",
         "us_vix",
         "copper"
+      ]
+    },
+    {
+      "date": "23 JUL 2026",
+      "verdict_line": "Airline passenger traffic at a 7th-percentile low while vehicle sales surge 26% — India's consumption story is bifurcating, and the weaker half is the one that travels.",
+      "themes": [
+        "consumption"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "sp500",
+        "bank_nifty",
+        "india_vix"
       ]
     }
   ]

@@ -1,7 +1,7 @@
 {
   "months": {
     "2026-07": {
-      "total_usd": 0.8455,
+      "total_usd": 0.92,
       "runs": [
         {
           "date": "2026-07-13",
@@ -68,9 +68,15 @@
           "run_id": "32aec470-366a-417f-b24d-dc076261efaf",
           "cost_usd": 0.0764,
           "timestamp": "2026-07-22T22:36:13.426Z"
+        },
+        {
+          "date": "2026-07-24",
+          "run_id": "76b602a9-f7d7-4a49-b00e-9b7d97645914",
+          "cost_usd": 0.0745,
+          "timestamp": "2026-07-23T22:33:32.422Z"
         }
       ]
     }
   },
-  "lifetime_usd": 0.8455
+  "lifetime_usd": 0.92
 }

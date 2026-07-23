@@ -1,19 +1,6 @@
 {
   "entries": [
     {
-      "date": "24 JUN 2026",
-      "verdict_line": "Copper down 3.6% to $6.13/lb while iron ore surges 60% — industrial metals are sending contradictory signals, and one of them is lying about the global growth cycle.",
-      "themes": [],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "nat_gas",
-        "sip_accounts",
-        "copper",
-        "iron_ore"
-      ]
-    },
-    {
       "date": "25 JUN 2026",
       "verdict_line": "S&P 500 at an all-time high yesterday, down 1.5% today — global equity is pricing perfection while US GDP prints 0.7% SAAR and every major index rolls over simultaneously.",
       "themes": [
@@ -415,6 +402,20 @@
       "verdict_line": "Airline passenger traffic at a 7th-percentile low while vehicle sales surge 26% — India's consumption story is bifurcating, and the weaker half is the one that travels.",
       "themes": [
         "consumption"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "sp500",
+        "bank_nifty",
+        "india_vix"
+      ]
+    },
+    {
+      "date": "24 JUL 2026",
+      "verdict_line": "US 10Y at 4.67% — an 84th-percentile print — is repricing global carry trades while India's Bank Nifty sits at a 93rd-percentile high on a funding structure that cannot survive the spillover.",
+      "themes": [
+        "markets"
       ],
       "slugs": [
         "nikkei225",

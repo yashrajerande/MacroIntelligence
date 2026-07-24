@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "25 JUN 2026",
-      "verdict_line": "S&P 500 at an all-time high yesterday, down 1.5% today — global equity is pricing perfection while US GDP prints 0.7% SAAR and every major index rolls over simultaneously.",
-      "themes": [
-        "markets",
-        "gdp_growth"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "sp500",
-        "bank_nifty",
-        "us_vix"
-      ]
-    },
-    {
       "date": "26 JUN 2026",
       "verdict_line": "Natural gas up 1.4% to $3.27 while copper surges 3% to $6.12 — industrial inputs are repricing before India's fuel deflation turns, and the INR at 94.34 has no cushion when the lag closes.",
       "themes": [],
@@ -423,6 +408,18 @@
         "sp500",
         "bank_nifty",
         "india_vix"
+      ]
+    },
+    {
+      "date": "25 JUL 2026",
+      "verdict_line": "SIP accounts grew just 1.6% — a 2nd-percentile crawl — while inflows hit ₹29,845 cr; India's retail equity story is deepening, not widening, and that distinction matters for the next correction.",
+      "themes": [],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "nat_gas",
+        "sip_accounts"
       ]
     }
   ]

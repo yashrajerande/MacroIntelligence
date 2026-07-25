@@ -1,19 +1,6 @@
 {
   "entries": [
     {
-      "date": "26 JUN 2026",
-      "verdict_line": "Natural gas up 1.4% to $3.27 while copper surges 3% to $6.12 — industrial inputs are repricing before India's fuel deflation turns, and the INR at 94.34 has no cushion when the lag closes.",
-      "themes": [],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "sip_accounts",
-        "nat_gas",
-        "us_10y_treasury",
-        "copper"
-      ]
-    },
-    {
       "date": "27 JUN 2026",
       "verdict_line": "SIP accounts at a decade-low 2nd percentile while AUM hits ₹16.64 tr — India's mutual fund engine is concentrating into fewer, wealthier hands, and the retail democratisation story is quietly reversing.",
       "themes": [],
@@ -420,6 +407,21 @@
         "us_10y_treasury",
         "nat_gas",
         "sip_accounts"
+      ]
+    },
+    {
+      "date": "26 JUL 2026",
+      "verdict_line": "US 10Y at 4.71% — a 4-of-5 rising streak — is the rate that breaks India's carry arithmetic, yet India VIX at a 9th-percentile low says nobody has priced it.",
+      "themes": [
+        "markets"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "nat_gas",
+        "sip_accounts",
+        "india_vix"
       ]
     }
   ]

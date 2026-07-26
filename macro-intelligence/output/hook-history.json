@@ -1,18 +1,6 @@
 {
   "entries": [
     {
-      "date": "27 JUN 2026",
-      "verdict_line": "SIP accounts at a decade-low 2nd percentile while AUM hits ₹16.64 tr — India's mutual fund engine is concentrating into fewer, wealthier hands, and the retail democratisation story is quietly reversing.",
-      "themes": [],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "sip_accounts",
-        "nat_gas",
-        "us_10y_treasury"
-      ]
-    },
-    {
       "date": "28 JUN 2026",
       "verdict_line": "US 10Y at 4.4% — a 79th-percentile print falling while core PCE ticks up to 3.1% — the bond market is pricing Fed cuts that the Fed's own inflation data won't permit.",
       "themes": [
@@ -422,6 +410,20 @@
         "nat_gas",
         "sip_accounts",
         "india_vix"
+      ]
+    },
+    {
+      "date": "27 JUL 2026",
+      "verdict_line": "Nikkei at a 100th-percentile high sheds 2.7% in a session — Tokyo's unwind is the canary; India's VIX at a 9th-percentile low says the cage door is still open.",
+      "themes": [
+        "markets"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "nat_gas",
+        "sip_accounts"
       ]
     }
   ]

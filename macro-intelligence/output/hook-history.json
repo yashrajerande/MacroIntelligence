@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "28 JUN 2026",
-      "verdict_line": "US 10Y at 4.4% — a 79th-percentile print falling while core PCE ticks up to 3.1% — the bond market is pricing Fed cuts that the Fed's own inflation data won't permit.",
-      "themes": [
-        "inflation"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "sip_accounts",
-        "nat_gas",
-        "us_10y_treasury"
-      ]
-    },
-    {
       "date": "29 JUN 2026",
       "verdict_line": "Airline passenger traffic at a 7th-percentile 35.08 million while vehicle sales surge 26–29% — India's consumption story is bifurcating, and the segment that can't be faked by GST formalization is pointing down.",
       "themes": [
@@ -424,6 +410,21 @@
         "us_10y_treasury",
         "nat_gas",
         "sip_accounts"
+      ]
+    },
+    {
+      "date": "28 JUL 2026",
+      "verdict_line": "Natural gas at a 16th-percentile low while iron ore jumps 21% — global commodity markets are sending contradictory demand signals, and India's import bill is caught in the crossfire.",
+      "themes": [
+        "oil"
+      ],
+      "slugs": [
+        "nikkei225",
+        "us_10y_treasury",
+        "nat_gas",
+        "sip_accounts",
+        "airline_pax",
+        "iron_ore"
       ]
     }
   ]

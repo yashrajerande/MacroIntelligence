@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "29 JUN 2026",
-      "verdict_line": "Airline passenger traffic at a 7th-percentile 35.08 million while vehicle sales surge 26–29% — India's consumption story is bifurcating, and the segment that can't be faked by GST formalization is pointing down.",
-      "themes": [
-        "consumption"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "airline_pax",
-        "sip_accounts",
-        "nat_gas"
-      ]
-    },
-    {
       "date": "30 JUN 2026",
       "verdict_line": "Nikkei at a 100th-percentile all-time high while US GDP prints 0.7% SAAR — global equities are levitating on liquidity, not growth, and the landing will not be soft.",
       "themes": [
@@ -425,6 +411,23 @@
         "sip_accounts",
         "airline_pax",
         "iron_ore"
+      ]
+    },
+    {
+      "date": "29 JUL 2026",
+      "verdict_line": "PMI Services at an 88th-percentile high while e-commerce GMV growth halved to 12.4% — India's service economy is thriving for the affluent and stalling for everyone else.",
+      "themes": [
+        "gdp_growth",
+        "consumption"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "nat_gas",
+        "sip_accounts",
+        "pmi_services",
+        "ecom_gmv_growth"
       ]
     }
   ]

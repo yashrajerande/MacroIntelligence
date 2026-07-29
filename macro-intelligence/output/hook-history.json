@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "30 JUN 2026",
-      "verdict_line": "Nikkei at a 100th-percentile all-time high while US GDP prints 0.7% SAAR — global equities are levitating on liquidity, not growth, and the landing will not be soft.",
-      "themes": [
-        "gdp_growth"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "nat_gas",
-        "sip_accounts",
-        "us_10y_treasury"
-      ]
-    },
-    {
       "date": "01 JUL 2026",
       "verdict_line": "Euro Stoxx 50 and S&P 500 both at 100th-percentile highs while US GDP prints 0.7% SAAR — global equities are pricing a recovery that no growth data has yet authorised.",
       "themes": [
@@ -428,6 +414,22 @@
         "sip_accounts",
         "pmi_services",
         "ecom_gmv_growth"
+      ]
+    },
+    {
+      "date": "30 JUL 2026",
+      "verdict_line": "US GDP at 0.7% SAAR while S&P 500 hits a 100th-percentile high — the gap between price and growth is the widest since the 2021 liquidity bubble, and copper at $6.37 says the real economy disagrees.",
+      "themes": [
+        "markets",
+        "gdp_growth"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "nat_gas",
+        "copper",
+        "sp500"
       ]
     }
   ]

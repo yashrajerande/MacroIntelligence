@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "01 JUL 2026",
-      "verdict_line": "Euro Stoxx 50 and S&P 500 both at 100th-percentile highs while US GDP prints 0.7% SAAR — global equities are pricing a recovery that no growth data has yet authorised.",
-      "themes": [
-        "markets",
-        "gdp_growth"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "sp500",
-        "bank_nifty",
-        "us_vix"
-      ]
-    },
-    {
       "date": "02 JUL 2026",
       "verdict_line": "US 10Y at 4.44% — an 80th-percentile yield rising while US GDP prints 0.7% SAAR — the bond market is tightening what the Fed refuses to, and India's ₹95.24 INR has no rate defence.",
       "themes": [
@@ -430,6 +415,19 @@
         "nat_gas",
         "copper",
         "sp500"
+      ]
+    },
+    {
+      "date": "31 JUL 2026",
+      "verdict_line": "Airline passengers fell 9% MoM to a 7th-percentile low while PV sales surged 26.1% — India's consumption story is bifurcating, and the fault line runs straight through the middle class.",
+      "themes": [],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "nat_gas",
+        "sip_accounts",
+        "airline_pax"
       ]
     }
   ]

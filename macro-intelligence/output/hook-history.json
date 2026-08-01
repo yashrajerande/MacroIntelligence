@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "03 JUL 2026",
-      "verdict_line": "India VIX at a 7th-percentile 12.29 while Bank Nifty flatlines at a 96th-percentile high — the market is pricing perfection into a credit system where deposits are losing the race to loans by 300bps.",
-      "themes": [
-        "markets"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "sp500",
-        "india_vix",
-        "us_vix",
-        "bank_nifty"
-      ]
-    },
-    {
       "date": "04 JUL 2026",
       "verdict_line": "Copper at $6.224 — a 73rd-percentile print rising while US GDP prints 0.7% SAAR — the metal is pricing a China stimulus bounce, not a global recovery, and India's capex narrative is borrowing someone else's signal.",
       "themes": [
@@ -427,6 +412,21 @@
         "us_10y_treasury",
         "nat_gas",
         "sip_accounts"
+      ]
+    },
+    {
+      "date": "02 AUG 2026",
+      "verdict_line": "SIP inflows at ₹29,845 cr are 85th-percentile strong — but account growth at a 2nd-percentile crawl means India's equity cult is deepening among the already-invested, not widening.",
+      "themes": [
+        "flows"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "sip_accounts",
+        "copper",
+        "sip_inflows"
       ]
     }
   ]

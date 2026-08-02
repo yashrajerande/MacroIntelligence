@@ -1,22 +1,6 @@
 {
   "entries": [
     {
-      "date": "04 JUL 2026",
-      "verdict_line": "Copper at $6.224 — a 73rd-percentile print rising while US GDP prints 0.7% SAAR — the metal is pricing a China stimulus bounce, not a global recovery, and India's capex narrative is borrowing someone else's signal.",
-      "themes": [
-        "gdp_growth",
-        "capex",
-        "global_macro"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "nat_gas",
-        "sip_accounts",
-        "copper"
-      ]
-    },
-    {
       "date": "05 JUL 2026",
       "verdict_line": "SIP accounts growing at a 2nd-percentile crawl while AUM hits 82nd-percentile highs — retail India is deepening existing wallets, not widening the base, and that distinction matters for the next market correction.",
       "themes": [],
@@ -427,6 +411,20 @@
         "sip_accounts",
         "copper",
         "sip_inflows"
+      ]
+    },
+    {
+      "date": "03 AUG 2026",
+      "verdict_line": "US 10Y at 4.68% — an 84th-percentile print while US GDP prints 0.7% SAAR — means the world's risk-free rate is priced for growth that no longer exists.",
+      "themes": [
+        "gdp_growth"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "sip_accounts",
+        "copper"
       ]
     }
   ]

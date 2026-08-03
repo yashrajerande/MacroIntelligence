@@ -1,18 +1,6 @@
 {
   "entries": [
     {
-      "date": "05 JUL 2026",
-      "verdict_line": "SIP accounts growing at a 2nd-percentile crawl while AUM hits 82nd-percentile highs — retail India is deepening existing wallets, not widening the base, and that distinction matters for the next market correction.",
-      "themes": [],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "nat_gas",
-        "sip_accounts",
-        "us_10y_treasury"
-      ]
-    },
-    {
       "date": "06 JUL 2026",
       "verdict_line": "Iron ore at $161.91 — a 65% single-session surge to a 63rd-percentile print — is either the most important China stimulus signal of 2026 or the most dangerous head-fake for India's capex narrative.",
       "themes": [
@@ -425,6 +413,20 @@
         "us_10y_treasury",
         "sip_accounts",
         "copper"
+      ]
+    },
+    {
+      "date": "04 AUG 2026",
+      "verdict_line": "Bank Nifty at a 97th-percentile high while corporate bond issuance hits a 7th-percentile panic print — the market is pricing banking strength that the funding structure cannot sustain.",
+      "themes": [
+        "markets"
+      ],
+      "slugs": [
+        "bank_nifty",
+        "nikkei225",
+        "euro_stoxx50",
+        "sp500",
+        "india_vix"
       ]
     }
   ]

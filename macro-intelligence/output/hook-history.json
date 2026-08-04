@@ -1,22 +1,6 @@
 {
   "entries": [
     {
-      "date": "06 JUL 2026",
-      "verdict_line": "Iron ore at $161.91 — a 65% single-session surge to a 63rd-percentile print — is either the most important China stimulus signal of 2026 or the most dangerous head-fake for India's capex narrative.",
-      "themes": [
-        "capex",
-        "global_macro"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "nat_gas",
-        "sip_accounts",
-        "us_10y_treasury",
-        "iron_ore"
-      ]
-    },
-    {
       "date": "07 JUL 2026",
       "verdict_line": "Airline passengers down 9.1% MoM to a 7th-percentile low while GST prints ₹2.01 lakh crore — India's consumption story has two floors, and the one carrying the weight just cracked.",
       "themes": [
@@ -427,6 +411,22 @@
         "euro_stoxx50",
         "sp500",
         "india_vix"
+      ]
+    },
+    {
+      "date": "05 AUG 2026",
+      "verdict_line": "Copper at $6.63 — a 79th-percentile print — and iron ore at $161.91 both rising while US GDP prints 0.7% SAAR: industrial metals are pricing a recovery the data refuses to confirm.",
+      "themes": [
+        "gdp_growth"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "nat_gas",
+        "sip_accounts",
+        "copper",
+        "iron_ore"
       ]
     }
   ]

@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "07 JUL 2026",
-      "verdict_line": "Airline passengers down 9.1% MoM to a 7th-percentile low while GST prints ₹2.01 lakh crore — India's consumption story has two floors, and the one carrying the weight just cracked.",
-      "themes": [
-        "consumption"
-      ],
-      "slugs": [
-        "euro_stoxx50",
-        "airline_pax",
-        "nat_gas",
-        "sip_accounts",
-        "copper"
-      ]
-    },
-    {
       "date": "08 JUL 2026",
       "verdict_line": "SIP inflows slipped to ₹29,845 cr while FII equity net flipped to -₹114 cr — domestic liquidity is still the floor, but it just got thinner.",
       "themes": [
@@ -427,6 +413,20 @@
         "sip_accounts",
         "copper",
         "iron_ore"
+      ]
+    },
+    {
+      "date": "06 AUG 2026",
+      "verdict_line": "Nikkei at a 100th-percentile high while US GDP prints 0.7% SAAR — global equities are pricing a recovery that the underlying economy has not yet written.",
+      "themes": [
+        "gdp_growth"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "nat_gas",
+        "copper"
       ]
     }
   ]

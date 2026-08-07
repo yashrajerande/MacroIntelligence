@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "08 JUL 2026",
-      "verdict_line": "SIP inflows slipped to ₹29,845 cr while FII equity net flipped to -₹114 cr — domestic liquidity is still the floor, but it just got thinner.",
-      "themes": [
-        "flows"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "sip_accounts",
-        "nat_gas",
-        "sip_inflows",
-        "fii_equity_net"
-      ]
-    },
-    {
       "date": "09 JUL 2026",
       "verdict_line": "Nikkei at a 100th-percentile high while printing 6,681 — a data anomaly or the sharpest single-session dislocation in a decade — and Bank Nifty's 94th-percentile perch looks lonelier by the hour.",
       "themes": [
@@ -427,6 +412,22 @@
         "us_10y_treasury",
         "nat_gas",
         "copper"
+      ]
+    },
+    {
+      "date": "07 AUG 2026",
+      "verdict_line": "India VIX at a 7th-percentile low while airline passengers collapse to a 7th-percentile low — complacency and consumption are cracking in unison, and the market hasn't noticed.",
+      "themes": [
+        "markets"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "sp500",
+        "us_vix",
+        "bank_nifty",
+        "airline_pax",
+        "india_vix"
       ]
     }
   ]

@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "09 JUL 2026",
-      "verdict_line": "Nikkei at a 100th-percentile high while printing 6,681 — a data anomaly or the sharpest single-session dislocation in a decade — and Bank Nifty's 94th-percentile perch looks lonelier by the hour.",
-      "themes": [
-        "markets"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "bank_nifty",
-        "india_vix",
-        "nat_gas"
-      ]
-    },
-    {
       "date": "10 JUL 2026",
       "verdict_line": "Natural gas at $3.01 — an 18th-percentile distress print — is the one commodity telling the truth about global demand while copper and iron ore perform their China stimulus pantomime.",
       "themes": [
@@ -428,6 +414,21 @@
         "bank_nifty",
         "airline_pax",
         "india_vix"
+      ]
+    },
+    {
+      "date": "08 AUG 2026",
+      "verdict_line": "US 10Y at 4.69% — an 84th-percentile yield while US GDP prints 0.7% SAAR — is repricing every carry trade that funded EM inflows; India's FII reversal from +₹22,615 cr to -₹114 cr in a single period is the first tremor.",
+      "themes": [
+        "gdp_growth",
+        "flows"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "nat_gas",
+        "sip_accounts"
       ]
     }
   ]

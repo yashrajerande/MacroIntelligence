@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "10 JUL 2026",
-      "verdict_line": "Natural gas at $3.01 — an 18th-percentile distress print — is the one commodity telling the truth about global demand while copper and iron ore perform their China stimulus pantomime.",
-      "themes": [
-        "global_macro"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "nat_gas",
-        "sip_accounts",
-        "copper",
-        "iron_ore"
-      ]
-    },
-    {
       "date": "11 JUL 2026",
       "verdict_line": "India VIX at a 7th-percentile low while FII equity net flips to -₹114 cr — the market is pricing serenity precisely when the smart money is quietly leaving the room.",
       "themes": [
@@ -429,6 +414,21 @@
         "us_10y_treasury",
         "nat_gas",
         "sip_accounts"
+      ]
+    },
+    {
+      "date": "09 AUG 2026",
+      "verdict_line": "Natural gas at a 15th-percentile low cuts India's LNG import bill — but airline passengers at a 7th-percentile collapse say the consumer funding that bill is already spent.",
+      "themes": [
+        "oil"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "nat_gas",
+        "us_10y_treasury",
+        "sip_accounts",
+        "airline_pax"
       ]
     }
   ]

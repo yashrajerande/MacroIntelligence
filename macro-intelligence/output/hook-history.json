@@ -1,22 +1,6 @@
 {
   "entries": [
     {
-      "date": "11 JUL 2026",
-      "verdict_line": "India VIX at a 7th-percentile low while FII equity net flips to -₹114 cr — the market is pricing serenity precisely when the smart money is quietly leaving the room.",
-      "themes": [
-        "markets",
-        "flows"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "bank_nifty",
-        "india_vix",
-        "nat_gas",
-        "fii_equity_net"
-      ]
-    },
-    {
       "date": "12 JUL 2026",
       "verdict_line": "PMI Services at 57.5 — an 88th-percentile print — is sliding fast enough that the composite's 86th-percentile glow may be last quarter's story by September.",
       "themes": [
@@ -429,6 +413,18 @@
         "us_10y_treasury",
         "sip_accounts",
         "airline_pax"
+      ]
+    },
+    {
+      "date": "10 AUG 2026",
+      "verdict_line": "Gold in INR at an all-time ₹13,472/gram while SIP accounts grow at a 2nd-percentile crawl — India's savers are fleeing paper assets faster than new investors are entering them.",
+      "themes": [],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "sip_accounts",
+        "copper"
       ]
     }
   ]

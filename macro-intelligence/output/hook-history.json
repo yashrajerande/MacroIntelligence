@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "12 JUL 2026",
-      "verdict_line": "PMI Services at 57.5 — an 88th-percentile print — is sliding fast enough that the composite's 86th-percentile glow may be last quarter's story by September.",
-      "themes": [
-        "gdp_growth"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "nat_gas",
-        "sip_accounts",
-        "pmi_services"
-      ]
-    },
-    {
       "date": "13 JUL 2026",
       "verdict_line": "Gold at ₹12,520/gram — a 100th-percentile INR print — while copper climbs and oil creeps: India's commodity import bill is quietly repricing before anyone has updated their CAD models.",
       "themes": [
@@ -425,6 +411,22 @@
         "us_10y_treasury",
         "sip_accounts",
         "copper"
+      ]
+    },
+    {
+      "date": "11 AUG 2026",
+      "verdict_line": "Euro Stoxx 50 at a 100th-percentile high while eurozone GDP prints 0.9% — European equities are pricing a prosperity the continent's output has not earned.",
+      "themes": [
+        "gdp_growth",
+        "global_macro"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "nat_gas",
+        "sip_accounts",
+        "ez_gdp"
       ]
     }
   ]

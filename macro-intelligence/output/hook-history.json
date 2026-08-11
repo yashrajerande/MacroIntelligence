@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "13 JUL 2026",
-      "verdict_line": "Gold at ₹12,520/gram — a 100th-percentile INR print — while copper climbs and oil creeps: India's commodity import bill is quietly repricing before anyone has updated their CAD models.",
-      "themes": [
-        "oil"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "nat_gas",
-        "sip_accounts",
-        "copper"
-      ]
-    },
-    {
       "date": "14 JUL 2026",
       "verdict_line": "US 10Y at 4.56% — an 82nd-percentile print rising 3 of the last 5 periods — is the carry-trade tripwire that India's 96th-percentile Bank Nifty hasn't priced.",
       "themes": [
@@ -427,6 +413,21 @@
         "nat_gas",
         "sip_accounts",
         "ez_gdp"
+      ]
+    },
+    {
+      "date": "12 AUG 2026",
+      "verdict_line": "Bank Nifty at a 95th-percentile high while FII equity flows swung ₹22,729 cr negative in a single period — the market is pricing a banking cycle the deposit base cannot fund.",
+      "themes": [
+        "markets",
+        "flows"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "sp500",
+        "bank_nifty",
+        "india_vix"
       ]
     }
   ]

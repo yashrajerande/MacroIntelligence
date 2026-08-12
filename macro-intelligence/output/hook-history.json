@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "14 JUL 2026",
-      "verdict_line": "US 10Y at 4.56% — an 82nd-percentile print rising 3 of the last 5 periods — is the carry-trade tripwire that India's 96th-percentile Bank Nifty hasn't priced.",
-      "themes": [
-        "markets"
-      ],
-      "slugs": [
-        "nikkei225",
-        "us_10y_treasury",
-        "nat_gas",
-        "sip_accounts",
-        "copper",
-        "bank_nifty"
-      ]
-    },
-    {
       "date": "15 JUL 2026",
       "verdict_line": "Airline passengers collapsed 9.1% MoM to a 7th-percentile low while vehicle sales surged 26% — India's consumption story has split in two, and only one half is real.",
       "themes": [
@@ -428,6 +413,22 @@
         "sp500",
         "bank_nifty",
         "india_vix"
+      ]
+    },
+    {
+      "date": "13 AUG 2026",
+      "verdict_line": "Iron ore at 161.91 — up 70% from 95.08 — while India's core sector prints 2.3% YoY; the commodity is screaming capex, the output is whispering doubt.",
+      "themes": [
+        "gdp_growth",
+        "capex"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "nat_gas",
+        "sip_accounts",
+        "iron_ore"
       ]
     }
   ]

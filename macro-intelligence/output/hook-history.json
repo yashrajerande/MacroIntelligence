@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "15 JUL 2026",
-      "verdict_line": "Airline passengers collapsed 9.1% MoM to a 7th-percentile low while vehicle sales surged 26% — India's consumption story has split in two, and only one half is real.",
-      "themes": [
-        "consumption"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "airline_pax",
-        "nat_gas",
-        "us_10y_treasury"
-      ]
-    },
-    {
       "date": "16 JUL 2026",
       "verdict_line": "SIP accounts at a 2nd-percentile low while AUM hits ₹16.64 lakh cr — India's equity cult is deepening among the wealthy and quietly abandoning the mass investor.",
       "themes": [],
@@ -429,6 +415,22 @@
         "nat_gas",
         "sip_accounts",
         "iron_ore"
+      ]
+    },
+    {
+      "date": "14 AUG 2026",
+      "verdict_line": "Copper at a 78th-percentile $6.59/lb while India's core sector prints 2.3% — the industrial metal is pricing a capex cycle the domestic output data flatly refuses to confirm.",
+      "themes": [
+        "gdp_growth",
+        "capex"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "nat_gas",
+        "us_10y_treasury",
+        "sip_accounts",
+        "copper"
       ]
     }
   ]

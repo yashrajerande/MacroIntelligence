@@ -1,18 +1,6 @@
 {
   "entries": [
     {
-      "date": "16 JUL 2026",
-      "verdict_line": "SIP accounts at a 2nd-percentile low while AUM hits ₹16.64 lakh cr — India's equity cult is deepening among the wealthy and quietly abandoning the mass investor.",
-      "themes": [],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "nat_gas",
-        "sip_accounts",
-        "us_10y_treasury"
-      ]
-    },
-    {
       "date": "17 JUL 2026",
       "verdict_line": "Euro Stoxx 50 at a 10-year high while US GDP prints 0.7% SAAR — global equities are pricing a soft landing that the underlying economy has already left behind.",
       "themes": [
@@ -431,6 +419,20 @@
         "us_10y_treasury",
         "sip_accounts",
         "copper"
+      ]
+    },
+    {
+      "date": "15 AUG 2026",
+      "verdict_line": "Nikkei at a 100th-percentile 68,714 while US GDP prints 0.7% SAAR — global equities are pricing a growth cycle the underlying economies have stopped delivering.",
+      "themes": [
+        "gdp_growth"
+      ],
+      "slugs": [
+        "nikkei225",
+        "sp500",
+        "us_vix",
+        "bank_nifty",
+        "india_vix"
       ]
     }
   ]

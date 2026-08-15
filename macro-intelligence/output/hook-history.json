@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "17 JUL 2026",
-      "verdict_line": "Euro Stoxx 50 at a 10-year high while US GDP prints 0.7% SAAR — global equities are pricing a soft landing that the underlying economy has already left behind.",
-      "themes": [
-        "gdp_growth"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "nat_gas",
-        "sip_accounts",
-        "us_10y_treasury"
-      ]
-    },
-    {
       "date": "18 JUL 2026",
       "verdict_line": "Nikkei at a 10-year high yet down 4% in two sessions — global carry trades are unwinding, and India's ₹96.15 INR hasn't blinked yet.",
       "themes": [],
@@ -433,6 +419,21 @@
         "us_vix",
         "bank_nifty",
         "india_vix"
+      ]
+    },
+    {
+      "date": "16 AUG 2026",
+      "verdict_line": "India VIX at a 6th-percentile 11.31 while FII flows swung ₹22,729 cr negative — the market is pricing serenity the foreign money is quietly exiting.",
+      "themes": [
+        "markets",
+        "flows"
+      ],
+      "slugs": [
+        "nikkei225",
+        "sp500",
+        "bank_nifty",
+        "india_vix",
+        "us_vix"
       ]
     }
   ]

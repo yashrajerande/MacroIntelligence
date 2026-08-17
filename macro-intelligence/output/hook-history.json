@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "19 JUL 2026",
-      "verdict_line": "S&P 500 at a 100th-percentile high yet down 1.5% in a session — global risk appetite is cracking precisely when India's FII flows swung from +₹22,615 cr to -₹114 cr.",
-      "themes": [
-        "markets",
-        "flows"
-      ],
-      "slugs": [
-        "sp500",
-        "nikkei225",
-        "euro_stoxx50",
-        "india_vix",
-        "bank_nifty"
-      ]
-    },
-    {
       "date": "20 JUL 2026",
       "verdict_line": "Nikkei down 4% in two sessions from a 10-year high — the carry trade is unwinding in Tokyo, and India's INR at 96.15 hasn't moved yet.",
       "themes": [],
@@ -436,6 +421,18 @@
         "us_10y_treasury",
         "sip_accounts",
         "copper"
+      ]
+    },
+    {
+      "date": "18 AUG 2026",
+      "verdict_line": "US 10Y at 4.68% — an 84th-percentile print, still climbing — while India's SIP accounts grow at a 2nd-percentile crawl; the carry trade that funds domestic equity optimism is thinning at both ends.",
+      "themes": [],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "nat_gas",
+        "us_10y_treasury",
+        "sip_accounts"
       ]
     }
   ]

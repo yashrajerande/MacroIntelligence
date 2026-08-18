@@ -1,18 +1,6 @@
 {
   "entries": [
     {
-      "date": "20 JUL 2026",
-      "verdict_line": "Nikkei down 4% in two sessions from a 10-year high — the carry trade is unwinding in Tokyo, and India's INR at 96.15 hasn't moved yet.",
-      "themes": [],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "nat_gas",
-        "sip_accounts"
-      ]
-    },
-    {
       "date": "21 JUL 2026",
       "verdict_line": "WTI up $3.5 in six weeks to $82.58 while US GDP prints 0.7% SAAR — oil is pricing a demand that the world's largest economy has already stopped producing.",
       "themes": [
@@ -432,6 +420,20 @@
         "euro_stoxx50",
         "nat_gas",
         "us_10y_treasury",
+        "sip_accounts"
+      ]
+    },
+    {
+      "date": "19 AUG 2026",
+      "verdict_line": "Nikkei reversing a five-month, 100th-percentile rally in a single session — while US 10Y holds 4.72% — is the carry-trade unwind the Nifty hasn't priced yet.",
+      "themes": [
+        "markets"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "nat_gas",
         "sip_accounts"
       ]
     }

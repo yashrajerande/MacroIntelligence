@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "21 JUL 2026",
-      "verdict_line": "WTI up $3.5 in six weeks to $82.58 while US GDP prints 0.7% SAAR — oil is pricing a demand that the world's largest economy has already stopped producing.",
-      "themes": [
-        "oil",
-        "gdp_growth"
-      ],
-      "slugs": [
-        "nikkei225",
-        "nat_gas",
-        "us_10y_treasury",
-        "sip_accounts",
-        "wti_usd"
-      ]
-    },
-    {
       "date": "22 JUL 2026",
       "verdict_line": "Copper up 3.7% in a session while US PMI prints 50.3 — industrial metals are pricing a recovery that the world's largest economy has already stopped delivering.",
       "themes": [
@@ -435,6 +420,21 @@
         "us_10y_treasury",
         "nat_gas",
         "sip_accounts"
+      ]
+    },
+    {
+      "date": "20 AUG 2026",
+      "verdict_line": "SIP inflows at ₹29,845 cr mask a 2nd-percentile account growth of 0.16 cr — India's retail equity story is deepening wallets, not widening participation.",
+      "themes": [
+        "flows"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "nat_gas",
+        "sip_accounts",
+        "sip_inflows"
       ]
     }
   ]

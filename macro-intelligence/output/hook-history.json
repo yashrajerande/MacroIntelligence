@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "22 JUL 2026",
-      "verdict_line": "Copper up 3.7% in a session while US PMI prints 50.3 — industrial metals are pricing a recovery that the world's largest economy has already stopped delivering.",
-      "themes": [
-        "gdp_growth"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "sp500",
-        "bank_nifty",
-        "us_vix",
-        "copper"
-      ]
-    },
-    {
       "date": "23 JUL 2026",
       "verdict_line": "Airline passenger traffic at a 7th-percentile low while vehicle sales surge 26% — India's consumption story is bifurcating, and the weaker half is the one that travels.",
       "themes": [
@@ -435,6 +420,20 @@
         "nat_gas",
         "sip_accounts",
         "sip_inflows"
+      ]
+    },
+    {
+      "date": "21 AUG 2026",
+      "verdict_line": "Brent at $93 — rising 4 of 5 periods — while airline traffic hits a 7th-percentile 35 million; India's demand story has two completely different endings depending on which proxy you trust.",
+      "themes": [
+        "oil"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "nat_gas",
+        "us_10y_treasury",
+        "wti_usd"
       ]
     }
   ]

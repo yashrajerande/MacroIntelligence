@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "23 JUL 2026",
-      "verdict_line": "Airline passenger traffic at a 7th-percentile low while vehicle sales surge 26% — India's consumption story is bifurcating, and the weaker half is the one that travels.",
-      "themes": [
-        "consumption"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "sp500",
-        "bank_nifty",
-        "india_vix"
-      ]
-    },
-    {
       "date": "24 JUL 2026",
       "verdict_line": "US 10Y at 4.67% — an 84th-percentile print — is repricing global carry trades while India's Bank Nifty sits at a 93rd-percentile high on a funding structure that cannot survive the spillover.",
       "themes": [
@@ -434,6 +420,18 @@
         "nat_gas",
         "us_10y_treasury",
         "wti_usd"
+      ]
+    },
+    {
+      "date": "22 AUG 2026",
+      "verdict_line": "Euro Stoxx50 at a 100th-percentile 6,462 while falling five consecutive periods — global equities are celebrating a party the fundamentals stopped attending.",
+      "themes": [],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "nat_gas",
+        "sip_accounts"
       ]
     }
   ]

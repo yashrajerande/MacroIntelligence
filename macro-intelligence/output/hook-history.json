@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "24 JUL 2026",
-      "verdict_line": "US 10Y at 4.67% — an 84th-percentile print — is repricing global carry trades while India's Bank Nifty sits at a 93rd-percentile high on a funding structure that cannot survive the spillover.",
-      "themes": [
-        "markets"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "sp500",
-        "bank_nifty",
-        "india_vix"
-      ]
-    },
-    {
       "date": "25 JUL 2026",
       "verdict_line": "SIP accounts grew just 1.6% — a 2nd-percentile crawl — while inflows hit ₹29,845 cr; India's retail equity story is deepening, not widening, and that distinction matters for the next correction.",
       "themes": [],
@@ -432,6 +418,21 @@
         "us_10y_treasury",
         "nat_gas",
         "sip_accounts"
+      ]
+    },
+    {
+      "date": "23 AUG 2026",
+      "verdict_line": "PMI Services at 57.5 — an 88th-percentile print, yet falling for the second period — while airline traffic sits at a 7th-percentile 35 million; India's services expansion is a headline the ground data is quietly contradicting.",
+      "themes": [
+        "gdp_growth"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "nat_gas",
+        "sip_accounts",
+        "pmi_services"
       ]
     }
   ]

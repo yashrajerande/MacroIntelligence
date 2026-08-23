@@ -1,18 +1,6 @@
 {
   "entries": [
     {
-      "date": "25 JUL 2026",
-      "verdict_line": "SIP accounts grew just 1.6% — a 2nd-percentile crawl — while inflows hit ₹29,845 cr; India's retail equity story is deepening, not widening, and that distinction matters for the next correction.",
-      "themes": [],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "nat_gas",
-        "sip_accounts"
-      ]
-    },
-    {
       "date": "26 JUL 2026",
       "verdict_line": "US 10Y at 4.71% — a 4-of-5 rising streak — is the rate that breaks India's carry arithmetic, yet India VIX at a 9th-percentile low says nobody has priced it.",
       "themes": [
@@ -433,6 +421,21 @@
         "nat_gas",
         "sip_accounts",
         "pmi_services"
+      ]
+    },
+    {
+      "date": "24 AUG 2026",
+      "verdict_line": "Bank Nifty at a 96th-percentile 57,762 while FII equity flows reversed ₹22,729 cr in a single month — the market is pricing a banking boom the deposit base cannot fund.",
+      "themes": [
+        "markets",
+        "flows"
+      ],
+      "slugs": [
+        "sp500",
+        "nikkei225",
+        "euro_stoxx50",
+        "bank_nifty",
+        "india_vix"
       ]
     }
   ]

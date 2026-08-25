@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "27 JUL 2026",
-      "verdict_line": "Nikkei at a 100th-percentile high sheds 2.7% in a session — Tokyo's unwind is the canary; India's VIX at a 9th-percentile low says the cage door is still open.",
-      "themes": [
-        "markets"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "nat_gas",
-        "sip_accounts"
-      ]
-    },
-    {
       "date": "28 JUL 2026",
       "verdict_line": "Natural gas at a 16th-percentile low while iron ore jumps 21% — global commodity markets are sending contradictory demand signals, and India's import bill is caught in the crossfire.",
       "themes": [
@@ -435,6 +421,20 @@
         "us_10y_treasury",
         "nat_gas",
         "airline_pax"
+      ]
+    },
+    {
+      "date": "26 AUG 2026",
+      "verdict_line": "Copper at an 80th-percentile $6.71/lb rising four of five periods while US GDP prints 0.7% SAAR — the metals market is pricing a global recovery the economy hasn't delivered.",
+      "themes": [
+        "gdp_growth"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "copper",
+        "us_10y_treasury",
+        "nat_gas"
       ]
     }
   ]

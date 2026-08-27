@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "28 JUL 2026",
-      "verdict_line": "Natural gas at a 16th-percentile low while iron ore jumps 21% — global commodity markets are sending contradictory demand signals, and India's import bill is caught in the crossfire.",
-      "themes": [
-        "oil"
-      ],
-      "slugs": [
-        "nikkei225",
-        "us_10y_treasury",
-        "nat_gas",
-        "sip_accounts",
-        "airline_pax",
-        "iron_ore"
-      ]
-    },
-    {
       "date": "29 JUL 2026",
       "verdict_line": "PMI Services at an 88th-percentile high while e-commerce GMV growth halved to 12.4% — India's service economy is thriving for the affluent and stalling for everyone else.",
       "themes": [
@@ -435,6 +420,22 @@
         "copper",
         "us_10y_treasury",
         "nat_gas"
+      ]
+    },
+    {
+      "date": "27 AUG 2026",
+      "verdict_line": "India VIX at a 5th-percentile 10.6 while US 10Y yields hold at 4.64% — the market is pricing serenity India's airline and e-commerce data have already disproved.",
+      "themes": [
+        "markets",
+        "consumption"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "sp500",
+        "us_vix",
+        "bank_nifty",
+        "india_vix"
       ]
     }
   ]

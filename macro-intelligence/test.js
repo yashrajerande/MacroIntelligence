@@ -15,6 +15,9 @@ import { normalizeValue, normalizeAllIndicators } from './src/utils/unit-normali
 import { classifyAll } from './agents/Analysis/RegimeClassifier/skills/regime-logic.js';
 import { row, fillId, fillTbody } from './agents/Production/DashboardRenderer/skills/template-filler.js';
 import { trendSuffix } from './src/utils/trend-context.js';
+import { computeImpulse, classifyQuadrant, QUADRANT_LABELS } from './src/utils/credit-impulse.js';
+import { MARKET_SLUGS, RE_SLUGS, LEVERAGE_SLUGS } from './src/utils/data-cache.js';
+import { LeverageAnalyzer } from './agents/Analysis/LeverageAnalyzer/analyze.js';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -45,12 +48,12 @@ function assert(condition, msg) {
 describe('Schema Integrity');
 
 const schemaKeys = Object.keys(INDICATOR_SCHEMA);
-assert(schemaKeys.length === 97, `Expected 97 indicators, got ${schemaKeys.length}`);
+assert(schemaKeys.length === 117, `Expected 117 indicators, got ${schemaKeys.length}`);
 
 const REQUIRED_FIELDS = ['name', 'section', 'sub_section', 'unit', 'unit_desc', 'data_type', 'expected_range', 'p50', 'inverse', 'frequency'];
 const VALID_DATA_TYPES = new Set(['percentage', 'index', 'currency', 'count', 'ratio', 'price']);
 const VALID_FREQUENCIES = new Set(['daily', 'monthly', 'quarterly']);
-const VALID_SECTIONS = new Set(['S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9']);
+const VALID_SECTIONS = new Set(['S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S11']);
 
 for (const [slug, def] of Object.entries(INDICATOR_SCHEMA)) {
   for (const field of REQUIRED_FIELDS) {
@@ -70,10 +73,10 @@ for (const [slug, def] of Object.entries(INDICATOR_SCHEMA)) {
 // ═══════════════════════════════════════════════════════════════════
 describe('Derived Exports');
 
-assert(Object.keys(SLUG_MAP).length === 97, `SLUG_MAP should have 97 entries, got ${Object.keys(SLUG_MAP).length}`);
-assert(Object.keys(HISTORICAL_RANGES).length === 97, `HISTORICAL_RANGES should have 97 entries, got ${Object.keys(HISTORICAL_RANGES).length}`);
-assert(Object.keys(INDICATOR_FRESHNESS).length === 97, `INDICATOR_FRESHNESS should have 97 entries, got ${Object.keys(INDICATOR_FRESHNESS).length}`);
-assert(VALID_SLUGS.length === 97, `VALID_SLUGS should have 97 entries, got ${VALID_SLUGS.length}`);
+assert(Object.keys(SLUG_MAP).length === 117, `SLUG_MAP should have 117 entries, got ${Object.keys(SLUG_MAP).length}`);
+assert(Object.keys(HISTORICAL_RANGES).length === 117, `HISTORICAL_RANGES should have 117 entries, got ${Object.keys(HISTORICAL_RANGES).length}`);
+assert(Object.keys(INDICATOR_FRESHNESS).length === 117, `INDICATOR_FRESHNESS should have 117 entries, got ${Object.keys(INDICATOR_FRESHNESS).length}`);
+assert(VALID_SLUGS.length === 117, `VALID_SLUGS should have 117 entries, got ${VALID_SLUGS.length}`);
 assert(INVERSE_INDICATORS.size > 20, `INVERSE_INDICATORS should have 20+ entries, got ${INVERSE_INDICATORS.size}`);
 
 // Every schema slug must appear in all derived exports
@@ -322,9 +325,11 @@ if (template) {
   }
 
   // Tbody IDs for data tables
-  for (const tbody of ['s2-body', 's3-body', 's4-body', 's5-body', 's6-body', 's7-body', 's8-growth', 's8-inflation', 's8-liquidity', 's8-markets', 's10-residential', 's10-commercial']) {
+  for (const tbody of ['s2-body', 's3-body', 's4-body', 's5-body', 's6-body', 's7-body', 's8-growth', 's8-inflation', 's8-liquidity', 's8-markets', 's10-residential', 's10-commercial', 's11-countries', 's11-sectoral']) {
     assert(template.includes(`id="${tbody}"`), `Template missing tbody id="${tbody}"`);
   }
+  assert(template.includes('id="s11-leverage-summary"'), `Template missing leverage summary panel id="s11-leverage-summary"`);
+  assert(template.includes('id="s11-panel"'), `Template missing S11 leverage panel id="s11-panel"`);
 
   // No Supabase upload button element (JS function may still exist in script)
   assert(!template.includes('onclick="supabaseUpload()"'), `Template should not contain Supabase upload button element`);
@@ -386,7 +391,7 @@ for (const slug of MUST_BE_QUARTERLY) {
 const dailyCount = Object.values(INDICATOR_FRESHNESS).filter(f => f === 'daily').length;
 const monthlyCount = Object.values(INDICATOR_FRESHNESS).filter(f => f === 'monthly').length;
 const quarterlyCount = Object.values(INDICATOR_FRESHNESS).filter(f => f === 'quarterly').length;
-assert(dailyCount + monthlyCount + quarterlyCount === 97, `Frequency counts should sum to 97, got ${dailyCount + monthlyCount + quarterlyCount}`);
+assert(dailyCount + monthlyCount + quarterlyCount === 117, `Frequency counts should sum to 117, got ${dailyCount + monthlyCount + quarterlyCount}`);
 
 // ═══════════════════════════════════════════════════════════════════
 // 9. VOICE BROADCASTER
@@ -782,6 +787,91 @@ assert(todayCtx.text.includes('credit_deposit'),
 const cdInCandidates = todayCandidates.find(c => c.slug === 'cd_ratio');
 assert(cdInCandidates === undefined,
   `Banned/quarterly cd_ratio must be HARD-FILTERED out of candidates (got ${JSON.stringify(cdInCandidates)})`);
+
+// ═══════════════════════════════════════════════════════════════════
+// LEVERAGE / CREDIT IMPULSE (Steve Keen / Minsky framework)
+// ═══════════════════════════════════════════════════════════════════
+describe('Leverage & Credit Impulse');
+
+// --- Schema/slug-set consistency (single-source-of-truth guard) ---
+const s11Slugs = Object.entries(INDICATOR_SCHEMA).filter(([, s]) => s.section === 'S11').map(([slug]) => slug);
+assert(s11Slugs.length === 20, `Expected 20 S11 leverage indicators, got ${s11Slugs.length}`);
+for (const slug of s11Slugs) {
+  assert(LEVERAGE_SLUGS.has(slug), `S11 schema slug "${slug}" missing from LEVERAGE_SLUGS in data-cache.js`);
+}
+for (const slug of LEVERAGE_SLUGS) {
+  assert(INDICATOR_SCHEMA[slug]?.section === 'S11', `LEVERAGE_SLUGS entry "${slug}" must be an S11 schema slug`);
+}
+// MARKET_SLUGS/RE_SLUGS/LEVERAGE_SLUGS must be mutually exclusive so cache
+// routing in orchestrate.js never double-classifies a slug.
+for (const slug of LEVERAGE_SLUGS) {
+  assert(!MARKET_SLUGS.has(slug) && !RE_SLUGS.has(slug), `"${slug}" must not overlap MARKET_SLUGS/RE_SLUGS`);
+}
+
+// --- computeImpulse: maturity gating ---
+const noHistory = computeImpulse('quarterly', []);
+assert(noHistory.maturity === 'building' && noHistory.yoyGrowth === null,
+  `Empty series must report maturity:'building' with no yoyGrowth`);
+
+// 5 distinct quarterly prints → enough for ONE yoy read, not yet impulse
+const fivePrints = ['2024-01-01','2024-04-01','2024-07-01','2024-10-01','2025-01-01']
+  .map((d, i) => ({ d, v: 40 + i * 2 }));
+const fiveResult = computeImpulse('quarterly', fivePrints);
+assert(fiveResult.maturity === 'building', `5 prints should still be 'building' (impulse needs 9)`);
+assert(fiveResult.yoyGrowth !== null, `5 prints should already yield a yoyGrowth read, got null`);
+assert(Math.abs(fiveResult.yoyGrowth - 20) < 0.01, `yoyGrowth should be (48-40)/40=20%, got ${fiveResult.yoyGrowth}`);
+
+// 9 distinct quarterly prints → impulse matures
+const ninePrints = Array.from({ length: 9 }, (_, i) => ({ d: `202${Math.floor(i/4)}-0${(i%4)*3+1}-01`, v: 40 + i * 2 }));
+const nineResult = computeImpulse('quarterly', ninePrints);
+assert(nineResult.maturity === 'ready', `9 prints should mature the impulse, got '${nineResult.maturity}'`);
+assert(nineResult.impulse !== null, `Mature impulse must be a number, got null`);
+
+// Consecutive-duplicate daily snapshots must collapse before counting prints
+const dailyDupSeries = [];
+for (let i = 0; i < 9; i++) {
+  const v = 40 + i * 2;
+  for (let d = 0; d < 30; d++) dailyDupSeries.push({ d: `day-${i}-${d}`, v }); // 30 identical daily rows per print
+}
+const dupResult = computeImpulse('quarterly', dailyDupSeries);
+assert(dupResult.printsAvailable === 9, `270 daily rows of 9 distinct values must collapse to 9 prints, got ${dupResult.printsAvailable}`);
+assert(dupResult.maturity === 'ready', `Deduped series should still mature normally`);
+
+// --- classifyQuadrant: the four Minsky reads ---
+assert(classifyQuadrant(85, -1.0) === 'danger', `High level + decelerating must be 'danger'`);
+assert(classifyQuadrant(85, 1.0) === 'ponzi-drift', `High level + accelerating must be 'ponzi-drift'`);
+assert(classifyQuadrant(30, 1.0) === 'expansion', `Low level + accelerating must be 'expansion'`);
+assert(classifyQuadrant(30, -1.0) === 'deleveraging', `Low level + decelerating must be 'deleveraging'`);
+assert(classifyQuadrant(50, 0) === 'steady', `Mid level + flat impulse must be 'steady'`);
+assert(classifyQuadrant(85, null) === 'high-level (impulse building)',
+  `High level with no impulse yet must flag as building, not silently 'steady'`);
+for (const q of ['danger', 'ponzi-drift', 'expansion', 'deleveraging', 'steady']) {
+  assert(QUADRANT_LABELS[q], `QUADRANT_LABELS must define a label for quadrant "${q}"`);
+}
+
+// --- row() flagLabel rendering ---
+const flaggedRow = row('India Household Debt/GDP', '42', '41', 'up', '', 85, 'hi', 'india_hh_debt_gdp', 42, null, 'Danger — high debt, decelerating');
+assert(flaggedRow.includes('row-flag'), `Row with flagLabel must render a .row-flag chip`);
+assert(flaggedRow.includes('Danger'), `Row must include the flag text`);
+const unflaggedRow = row('Nifty 50', '23000', '22800', 'up', '', 72, 'mid', 'nifty50', 23000, null, undefined);
+assert(!unflaggedRow.includes('row-flag'), `Row without flagLabel must not render a chip`);
+
+// --- LeverageAnalyzer: end-to-end with synthetic data ---
+const leverageIndicators = {};
+for (const slug of s11Slugs) {
+  leverageIndicators[slug] = { value: INDICATOR_SCHEMA[slug].p50, pct_10y: 50, direction: 'flat' };
+}
+leverageIndicators.india_hh_debt_gdp.pct_10y = 90; // force a high level for the danger-path test
+const leverageResult = new LeverageAnalyzer().analyze(leverageIndicators, {
+  india_hh_debt_gdp: { series: ninePrints.map(p => ({ d: p.d, v: p.v })) },
+});
+assert(leverageResult.data.countries.length === 6, `LeverageAnalyzer must produce 6 countries, got ${leverageResult.data.countries.length}`);
+assert(leverageResult.data.sectors.length === 8, `LeverageAnalyzer must produce 8 sectors, got ${leverageResult.data.sectors.length}`);
+assert(typeof leverageResult.data.narrative === 'string' && leverageResult.data.narrative.length > 0,
+  `LeverageAnalyzer must always produce a non-empty deterministic narrative`);
+const indiaHH = leverageResult.data.countries.find(c => c.country === 'India').household;
+assert(indiaHH.levelPct === 90, `India household level percentile must pass through, got ${indiaHH.levelPct}`);
+assert(indiaHH.maturity === 'ready', `India household impulse should mature from the 9-print synthetic series`);
 
 // ═══════════════════════════════════════════════════════════════════
 // RESULTS

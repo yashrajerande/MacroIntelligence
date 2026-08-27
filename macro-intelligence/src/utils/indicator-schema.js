@@ -162,6 +162,40 @@ const INDICATOR_SCHEMA = {
   copper:                { name: 'Copper',                   section: 'S9', sub_section: 'global_markets',   unit: '$/lb',  unit_desc: 'USD per pound',          data_type: 'price',      expected_range: [1.5, 8],         p50: 4.2,   inverse: false, frequency: 'daily' },
   iron_ore:              { name: 'Iron Ore',                 section: 'S9', sub_section: 'global_markets',   unit: '$/t',   unit_desc: 'USD per metric tonne',   data_type: 'price',      expected_range: [50, 260],        p50: 115,   inverse: false, frequency: 'daily' },
   bdi:                   { name: 'Baltic Dry Index',         section: 'S9', sub_section: 'global_markets',   unit: 'index', unit_desc: 'freight rate index',     data_type: 'index',      expected_range: [250, 6000],      p50: 1600,  inverse: false, frequency: 'daily' },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // S11 — PRIVATE DEBT & LEVERAGE (Steve Keen / Minsky framework)
+  //
+  // Levels (debt-to-GDP) tell you how much dry tinder exists; the credit
+  // impulse (computed in agents/Analysis/LeverageAnalyzer — the 2nd
+  // derivative of debt, i.e. change in the YoY growth rate) tells you
+  // whether new borrowing is accelerating or decelerating, which is what
+  // actually drives demand and precedes shocks. inverse:true on levels
+  // (higher debt/GDP = more fragile); sectoral credit growth rates are
+  // inverse:false (growth is reported as expansionary in isolation —
+  // fragility only shows up via the level+impulse combination).
+  // ═══════════════════════════════════════════════════════════════════
+  india_hh_debt_gdp:     { name: 'India Household Debt/GDP', section: 'S11', sub_section: 'leverage_countries', unit: '%', unit_desc: 'percent of GDP', data_type: 'percentage', expected_range: [20, 70],  p50: 42,  inverse: true, frequency: 'quarterly' },
+  india_corp_debt_gdp:   { name: 'India Corporate Debt/GDP', section: 'S11', sub_section: 'leverage_countries', unit: '%', unit_desc: 'percent of GDP', data_type: 'percentage', expected_range: [30, 90],  p50: 55,  inverse: true, frequency: 'quarterly' },
+  us_hh_debt_gdp:        { name: 'US Household Debt/GDP',    section: 'S11', sub_section: 'leverage_countries', unit: '%', unit_desc: 'percent of GDP', data_type: 'percentage', expected_range: [50, 100], p50: 75,  inverse: true, frequency: 'quarterly' },
+  us_corp_debt_gdp:      { name: 'US Corporate Debt/GDP',    section: 'S11', sub_section: 'leverage_countries', unit: '%', unit_desc: 'percent of GDP', data_type: 'percentage', expected_range: [50, 110], p50: 78,  inverse: true, frequency: 'quarterly' },
+  china_hh_debt_gdp:     { name: 'China Household Debt/GDP', section: 'S11', sub_section: 'leverage_countries', unit: '%', unit_desc: 'percent of GDP', data_type: 'percentage', expected_range: [30, 90],  p50: 62,  inverse: true, frequency: 'quarterly' },
+  china_corp_debt_gdp:   { name: 'China Corporate Debt/GDP', section: 'S11', sub_section: 'leverage_countries', unit: '%', unit_desc: 'percent of GDP', data_type: 'percentage', expected_range: [90, 200], p50: 150, inverse: true, frequency: 'quarterly' },
+  japan_hh_debt_gdp:     { name: 'Japan Household Debt/GDP',   section: 'S11', sub_section: 'leverage_countries', unit: '%', unit_desc: 'percent of GDP', data_type: 'percentage', expected_range: [40, 90],  p50: 68,  inverse: true, frequency: 'quarterly' },
+  japan_corp_debt_gdp:   { name: 'Japan Corporate Debt/GDP',   section: 'S11', sub_section: 'leverage_countries', unit: '%', unit_desc: 'percent of GDP', data_type: 'percentage', expected_range: [80, 150], p50: 115, inverse: true, frequency: 'quarterly' },
+  ez_hh_debt_gdp:        { name: 'Eurozone Household Debt/GDP', section: 'S11', sub_section: 'leverage_countries', unit: '%', unit_desc: 'percent of GDP', data_type: 'percentage', expected_range: [40, 80],  p50: 55,  inverse: true, frequency: 'quarterly' },
+  ez_corp_debt_gdp:      { name: 'Eurozone Corporate Debt/GDP', section: 'S11', sub_section: 'leverage_countries', unit: '%', unit_desc: 'percent of GDP', data_type: 'percentage', expected_range: [70, 140], p50: 110, inverse: true, frequency: 'quarterly' },
+  uk_hh_debt_gdp:        { name: 'UK Household Debt/GDP',    section: 'S11', sub_section: 'leverage_countries', unit: '%', unit_desc: 'percent of GDP', data_type: 'percentage', expected_range: [50, 100], p50: 78,  inverse: true, frequency: 'quarterly' },
+  uk_corp_debt_gdp:      { name: 'UK Corporate Debt/GDP',    section: 'S11', sub_section: 'leverage_countries', unit: '%', unit_desc: 'percent of GDP', data_type: 'percentage', expected_range: [50, 110], p50: 75,  inverse: true, frequency: 'quarterly' },
+
+  india_credit_industry_yoy:  { name: 'Bank Credit — Industry YoY',      section: 'S11', sub_section: 'leverage_india_sectoral', unit: '%', unit_desc: 'percent YoY', data_type: 'percentage', expected_range: [-15, 30], p50: 8,  inverse: false, frequency: 'monthly' },
+  india_credit_services_yoy:  { name: 'Bank Credit — Services YoY',      section: 'S11', sub_section: 'leverage_india_sectoral', unit: '%', unit_desc: 'percent YoY', data_type: 'percentage', expected_range: [-15, 35], p50: 15, inverse: false, frequency: 'monthly' },
+  india_credit_personal_yoy:  { name: 'Bank Credit — Personal Loans YoY', section: 'S11', sub_section: 'leverage_india_sectoral', unit: '%', unit_desc: 'percent YoY', data_type: 'percentage', expected_range: [-10, 35], p50: 16, inverse: false, frequency: 'monthly' },
+  india_credit_agri_yoy:      { name: 'Bank Credit — Agriculture YoY',   section: 'S11', sub_section: 'leverage_india_sectoral', unit: '%', unit_desc: 'percent YoY', data_type: 'percentage', expected_range: [-10, 25], p50: 10, inverse: false, frequency: 'monthly' },
+  india_credit_housing_yoy:   { name: 'Bank Credit — Housing Loans YoY', section: 'S11', sub_section: 'leverage_india_sectoral', unit: '%', unit_desc: 'percent YoY', data_type: 'percentage', expected_range: [-10, 30], p50: 14, inverse: false, frequency: 'monthly' },
+  india_credit_vehicle_yoy:   { name: 'Bank Credit — Vehicle Loans YoY', section: 'S11', sub_section: 'leverage_india_sectoral', unit: '%', unit_desc: 'percent YoY', data_type: 'percentage', expected_range: [-15, 35], p50: 12, inverse: false, frequency: 'monthly' },
+  india_credit_creditcard_yoy:{ name: 'Bank Credit — Credit Card YoY',   section: 'S11', sub_section: 'leverage_india_sectoral', unit: '%', unit_desc: 'percent YoY', data_type: 'percentage', expected_range: [-15, 50], p50: 22, inverse: false, frequency: 'monthly' },
+  india_credit_nbfc_yoy:      { name: 'Bank Credit to NBFCs YoY',        section: 'S11', sub_section: 'leverage_india_sectoral', unit: '%', unit_desc: 'percent YoY', data_type: 'percentage', expected_range: [-20, 40], p50: 15, inverse: false, frequency: 'monthly' },
 };
 
 // ── Derived exports for backward compatibility ──────────────────────

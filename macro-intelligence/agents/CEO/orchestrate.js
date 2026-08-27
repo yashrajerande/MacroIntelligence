@@ -3,8 +3,8 @@
  * Pipeline coordinator. No data logic. Pure control flow.
  *
  * Execution Sequence:
- *   1. DataIntelligence: MarketDataAnalyst → MacroDataAnalyst → RealEstateAnalyst
- *   2. Analysis: RegimeClassifier → SignalDetector → ScenarioPlanner
+ *   1. DataIntelligence: MarketDataAnalyst → MacroDataAnalyst → RealEstateAnalyst → LeverageAnalyst
+ *   2. Analysis: RegimeClassifier → SignalDetector → ScenarioPlanner → LeverageAnalyzer
  *   3. Editorial: NewsCurator (parallel) + ExecutiveSummaryWriter
  *   4. Production: DashboardRenderer → Validator
  *   5. Infrastructure: SupabaseWriter → GitPublisher
@@ -13,15 +13,20 @@
 import { getISTDate } from '../../src/utils/ist-date.js';
 import { RunLogger } from './run-log.js';
 import { checkBudget, recordRunCost, getCostSummary } from '../../src/utils/cost-ledger.js';
-import { shouldSkipDataIntelligence, getCachedIndicators, updateCache, checkWebSearchNeeded } from '../../src/utils/data-cache.js';
+import {
+  shouldSkipDataIntelligence, getCachedIndicators, updateCache, checkWebSearchNeeded,
+  MARKET_SLUGS, RE_SLUGS, LEVERAGE_SLUGS,
+} from '../../src/utils/data-cache.js';
 import { normalizeAllIndicators } from '../../src/utils/unit-normalizer.js';
 
 import { MarketDataAnalyst }      from '../DataIntelligence/MarketDataAnalyst/fetch.js';
 import { MacroDataAnalyst }       from '../DataIntelligence/MacroDataAnalyst/fetch.js';
 import { RealEstateAnalyst }      from '../DataIntelligence/RealEstateAnalyst/fetch.js';
+import { LeverageAnalyst }        from '../DataIntelligence/LeverageAnalyst/fetch.js';
 import { RegimeClassifier }       from '../Analysis/RegimeClassifier/classify.js';
 import { SignalDetector }         from '../Analysis/SignalDetector/detect.js';
 import { ScenarioPlanner }        from '../Analysis/ScenarioPlanner/plan.js';
+import { LeverageAnalyzer }       from '../Analysis/LeverageAnalyzer/analyze.js';
 import { ExecutiveSummaryWriter } from '../Editorial/ExecutiveSummaryWriter/write.js';
 import { NewsCurator }            from '../Editorial/NewsCurator/curate.js';
 import { DashboardRenderer }      from '../Production/DashboardRenderer/render.js';
@@ -62,7 +67,7 @@ async function run() {
     // ── STEP 1: DATA INTELLIGENCE ──────────────────────────────────
     logger.phase('DataIntelligence');
 
-    let marketData, macroData, reData;
+    let marketData, macroData, reData, leverageData;
     const skipDI = shouldSkipDataIntelligence(isoDate);
     const cachedMeta = { model: 'none', latency_ms: 0, tokens: { input: 0, output: 0 } };
 
@@ -70,20 +75,21 @@ async function run() {
       // Weekend/holiday — use ALL cached data
       console.log('  ⏭ Weekend/holiday — using cached data from last trading day');
       const cached = getCachedIndicators(isoDate);
-      const marketPrices = {}, macroInds = {}, reInds = {};
-      const MARKET_SLUGS = new Set(['nifty50','sensex','bank_nifty','india_vix','inr_usd','gold_usd','gold_inr_gram','brent_usd','sp500','nasdaq','us_vix','dxy','nat_gas','copper','iron_ore','nikkei225','hang_seng','euro_stoxx50','brent_usd_global','wti_usd','bdi','us_10y_treasury','gsec_10y','rbi_fx_reserves']);
-      const RE_SLUGS = new Set(['re_launches_units','re_sales_units','re_unsold_inventory','hpi_mumbai','hpi_delhi','hpi_bengaluru','hpi_hyderabad','affordability_index','home_loan_disbursements','avg_home_loan_rate','office_absorption','office_vacancy','rent_bengaluru','rent_mumbai','retail_mall_vacancy','embassy_reit','mindspace_reit','brookfield_reit']);
+      const marketPrices = {}, macroInds = {}, reInds = {}, leverageInds = {};
       for (const [slug, val] of Object.entries(cached)) {
         if (MARKET_SLUGS.has(slug)) marketPrices[slug] = val;
         else if (RE_SLUGS.has(slug)) reInds[slug] = val;
+        else if (LEVERAGE_SLUGS.has(slug)) leverageInds[slug] = val;
         else macroInds[slug] = val;
       }
-      marketData = { data: { generated_at: new Date().toISOString(), run_date: isoDate, prices: marketPrices }, meta: cachedMeta };
-      macroData  = { data: { generated_at: new Date().toISOString(), run_date: isoDate, indicators: macroInds }, meta: cachedMeta };
-      reData     = { data: { generated_at: new Date().toISOString(), run_date: isoDate, indicators: reInds }, meta: cachedMeta };
+      marketData   = { data: { generated_at: new Date().toISOString(), run_date: isoDate, prices: marketPrices }, meta: cachedMeta };
+      macroData    = { data: { generated_at: new Date().toISOString(), run_date: isoDate, indicators: macroInds }, meta: cachedMeta };
+      reData       = { data: { generated_at: new Date().toISOString(), run_date: isoDate, indicators: reInds }, meta: cachedMeta };
+      leverageData = { data: { generated_at: new Date().toISOString(), run_date: isoDate, indicators: leverageInds }, meta: cachedMeta };
       logger.agent('MarketDataAnalyst', cachedMeta);
       logger.agent('MacroDataAnalyst', cachedMeta);
       logger.agent('RealEstateAnalyst', cachedMeta);
+      logger.agent('LeverageAnalyst', cachedMeta);
     } else {
       // ── Market prices: ALWAYS fetch (free via Yahoo/FRED) ──────
       marketData = await withRetry(
@@ -92,10 +98,10 @@ async function run() {
       );
       logger.agent('MarketDataAnalyst', marketData.meta);
 
-      // ── Macro + RE: only web_search when indicators are STALE ──
+      // ── Macro + RE + Leverage: only web_search when indicators are STALE ──
       const wsCheck = checkWebSearchNeeded(isoDate);
       console.log(`  ℹ Cache: ${wsCheck.cachedCount} indicators cached, ${wsCheck.staleSlugs.length} stale`);
-      console.log(`  ℹ Macro refresh needed: ${wsCheck.needsMacroRefresh} | RE refresh needed: ${wsCheck.needsRERefresh}`);
+      console.log(`  ℹ Macro refresh needed: ${wsCheck.needsMacroRefresh} | RE refresh needed: ${wsCheck.needsRERefresh} | Leverage refresh needed: ${wsCheck.needsLeverageRefresh}`);
 
       if (wsCheck.needsMacroRefresh) {
         macroData = await withRetry(
@@ -107,10 +113,8 @@ async function run() {
         console.log('  ⏭ MacroDataAnalyst — all indicators fresh in cache, skipping web_search ($0.50 saved)');
         const cached = getCachedIndicators(isoDate);
         const macroInds = {};
-        const RE_SLUGS = new Set(['re_launches_units','re_sales_units','re_unsold_inventory','hpi_mumbai','hpi_delhi','hpi_bengaluru','hpi_hyderabad','affordability_index','home_loan_disbursements','avg_home_loan_rate','office_absorption','office_vacancy','rent_bengaluru','rent_mumbai','retail_mall_vacancy','embassy_reit','mindspace_reit','brookfield_reit']);
-        const MARKET_SLUGS = new Set(['nifty50','sensex','bank_nifty','india_vix','inr_usd','gold_usd','gold_inr_gram','brent_usd','sp500','nasdaq','us_vix','dxy','nat_gas','copper','iron_ore','nikkei225','hang_seng','euro_stoxx50','brent_usd_global','wti_usd','bdi','us_10y_treasury','gsec_10y','rbi_fx_reserves']);
         for (const [slug, val] of Object.entries(cached)) {
-          if (!MARKET_SLUGS.has(slug) && !RE_SLUGS.has(slug)) macroInds[slug] = val;
+          if (!MARKET_SLUGS.has(slug) && !RE_SLUGS.has(slug) && !LEVERAGE_SLUGS.has(slug)) macroInds[slug] = val;
         }
         macroData = { data: { generated_at: new Date().toISOString(), run_date: isoDate, indicators: macroInds }, meta: cachedMeta };
         logger.agent('MacroDataAnalyst', cachedMeta);
@@ -126,7 +130,6 @@ async function run() {
         console.log('  ⏭ RealEstateAnalyst — all RE indicators fresh in cache, skipping web_search ($0.30 saved)');
         const cached = getCachedIndicators(isoDate);
         const reInds = {};
-        const RE_SLUGS = new Set(['re_launches_units','re_sales_units','re_unsold_inventory','hpi_mumbai','hpi_delhi','hpi_bengaluru','hpi_hyderabad','affordability_index','home_loan_disbursements','avg_home_loan_rate','office_absorption','office_vacancy','rent_bengaluru','rent_mumbai','retail_mall_vacancy','embassy_reit','mindspace_reit','brookfield_reit']);
         for (const [slug, val] of Object.entries(cached)) {
           if (RE_SLUGS.has(slug)) reInds[slug] = val;
         }
@@ -134,14 +137,32 @@ async function run() {
         logger.agent('RealEstateAnalyst', cachedMeta);
       }
 
+      if (wsCheck.needsLeverageRefresh) {
+        leverageData = await withRetry(
+          () => new LeverageAnalyst().fetch(isoDate),
+          'LeverageAnalyst', logger
+        );
+        logger.agent('LeverageAnalyst', leverageData.meta);
+      } else {
+        console.log('  ⏭ LeverageAnalyst — all leverage indicators fresh in cache, skipping web_search ($0.30 saved)');
+        const cached = getCachedIndicators(isoDate);
+        const leverageInds = {};
+        for (const [slug, val] of Object.entries(cached)) {
+          if (LEVERAGE_SLUGS.has(slug)) leverageInds[slug] = val;
+        }
+        leverageData = { data: { generated_at: new Date().toISOString(), run_date: isoDate, indicators: leverageInds }, meta: cachedMeta };
+        logger.agent('LeverageAnalyst', cachedMeta);
+      }
+
       // Normalize units
       console.log('\n  ── Unit Normalization ──');
       normalizeAllIndicators(marketData.data.prices);
       if (wsCheck.needsMacroRefresh) normalizeAllIndicators(macroData.data.indicators);
       if (wsCheck.needsRERefresh) normalizeAllIndicators(reData.data.indicators);
+      if (wsCheck.needsLeverageRefresh) normalizeAllIndicators(leverageData.data.indicators);
 
       // Update cache with all data (fresh + cached)
-      const allFresh = { ...marketData.data.prices, ...macroData.data.indicators, ...reData.data.indicators };
+      const allFresh = { ...marketData.data.prices, ...macroData.data.indicators, ...reData.data.indicators, ...leverageData.data.indicators };
       updateCache(allFresh, isoDate);
       console.log(`  ✓ Cache updated: ${Object.keys(allFresh).length} indicators`);
     }
@@ -153,7 +174,7 @@ async function run() {
     // sparklines in the renderer, and z-score bounds in the validator.
     const dynamicRanges = await fetchDynamicRanges();
 
-    const allData = { marketData, macroData, reData, isoDate, dateStr, dynamicRanges };
+    const allData = { marketData, macroData, reData, leverageData, isoDate, dateStr, dynamicRanges };
 
     const regime = await withRetry(
       () => new RegimeClassifier().classify(allData),
@@ -172,6 +193,15 @@ async function run() {
       'ScenarioPlanner', logger
     );
     logger.agent('ScenarioPlanner', scenarios.meta);
+
+    // Pure code, no LLM — computes the Keen/Minsky credit-impulse read from
+    // accumulated history. Never throws (no external calls), so no retry needed.
+    const allIndicatorsForLeverage = {
+      ...marketData.data.prices, ...macroData.data.indicators,
+      ...reData.data.indicators, ...leverageData.data.indicators,
+    };
+    const leverage = new LeverageAnalyzer().analyze(allIndicatorsForLeverage, dynamicRanges);
+    logger.agent('LeverageAnalyzer', leverage.meta);
 
     // ── STEP 3: EDITORIAL ───────────────────────────────────────────
     logger.phase('Editorial');
@@ -221,7 +251,7 @@ async function run() {
     const costSummary = getCostSummary(isoDate, thisRunCost);
 
     const { html, macroDataObj, outputPath, indexPath } = new DashboardRenderer().render({
-      ...allData, regime, signals, scenarios, news, execSummary, costSummary, dynamicRanges,
+      ...allData, regime, signals, scenarios, news, execSummary, costSummary, dynamicRanges, leverage,
     });
     logger.agent('DashboardRenderer', { model: 'none', latency_ms: 0, tokens: { input: 0, output: 0 } });
 

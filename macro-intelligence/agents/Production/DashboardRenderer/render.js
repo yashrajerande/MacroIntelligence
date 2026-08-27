@@ -9,6 +9,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { SLUG_MAP } from '../../../src/utils/indicator-schema.js';
 import { isInversePolarity } from '../../../src/utils/polarity.js';
+import { QUADRANT_LABELS } from '../../../src/utils/credit-impulse.js';
 import { row, fillId, fillTbody, fillMacroData, fillTickerData } from './skills/template-filler.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -81,9 +82,9 @@ export class DashboardRenderer {
     html = html.replace('%%RABBIT_HOLE_URL%%', rabbitHoleUrl);
 
     const {
-      marketData, macroData, reData,
+      marketData, macroData, reData, leverageData,
       regime, signals, scenarios, news, execSummary,
-      dateStr, isoDate, dynamicRanges,
+      dateStr, isoDate, dynamicRanges, leverage,
     } = allData;
 
     // ── Merge all raw indicators ─────────────────────────────────────
@@ -91,6 +92,7 @@ export class DashboardRenderer {
       ...marketData.data.prices,
       ...macroData.data.indicators,
       ...reData.data.indicators,
+      ...leverageData.data.indicators,
     };
 
     // ── Sanitize: swap suspect values for previous data ─────────────
@@ -206,6 +208,7 @@ export class DashboardRenderer {
         reit_vs_gsec_spread_bps: reitVsGsecBps,
         key_risk_note:           keyRiskNote,
       },
+      leverage: leverage.data,
     };
 
     // ── Fill template slot-IDs ───────────────────────────────────────
@@ -295,6 +298,24 @@ export class DashboardRenderer {
     // Real estate summary text
     html = fillId(html, 's10-re-summary', reSummaryText);
 
+    // ── Minsky quadrant flags (Leverage section only) ────────────────
+    // Only surface a chip for the reads worth a second glance — steady/
+    // still-accumulating-history states stay chip-free to avoid noise.
+    const NOTABLE_QUADRANTS = new Set(['danger', 'ponzi-drift', 'expansion', 'deleveraging', 'high-level (impulse building)']);
+    const leverageFlags = {};
+    if (leverage?.data) {
+      for (const c of leverage.data.countries) {
+        for (const leg of [c.household, c.corporate]) {
+          if (leg.quadrant && NOTABLE_QUADRANTS.has(leg.quadrant)) {
+            leverageFlags[leg.slug] = QUADRANT_LABELS[leg.quadrant].label;
+          }
+        }
+      }
+      for (const s of leverage.data.sectors) {
+        if (s.flag === 'watch') leverageFlags[s.slug] = 'Ponzi-drift watch — elevated & accelerating';
+      }
+    }
+
     // ── Fill data tables ─────────────────────────────────────────────
     const makeRows = (slugs) => slugs.map(slug => {
       const ind = allRaw[slug] || {};
@@ -312,6 +333,7 @@ export class DashboardRenderer {
         slug,
         ind.value,
         stats,
+        leverageFlags[slug],
       );
     }).join('\n');
 
@@ -371,6 +393,19 @@ export class DashboardRenderer {
       'sp500', 'nasdaq', 'euro_stoxx50', 'hang_seng', 'nikkei225', 'us_vix',
       'brent_usd_global', 'wti_usd', 'nat_gas', 'gold_usd', 'copper', 'iron_ore', 'bdi',
     ]));
+
+    // S11 Private Debt & Leverage (Steve Keen / Minsky framework)
+    html = fillTbody(html, 's11-countries', makeRows([
+      'india_hh_debt_gdp', 'india_corp_debt_gdp', 'us_hh_debt_gdp', 'us_corp_debt_gdp',
+      'china_hh_debt_gdp', 'china_corp_debt_gdp', 'japan_hh_debt_gdp', 'japan_corp_debt_gdp',
+      'ez_hh_debt_gdp', 'ez_corp_debt_gdp', 'uk_hh_debt_gdp', 'uk_corp_debt_gdp',
+    ]));
+    html = fillTbody(html, 's11-sectoral', makeRows([
+      'india_credit_industry_yoy', 'india_credit_services_yoy', 'india_credit_personal_yoy',
+      'india_credit_agri_yoy', 'india_credit_housing_yoy', 'india_credit_vehicle_yoy',
+      'india_credit_creditcard_yoy', 'india_credit_nbfc_yoy',
+    ]));
+    html = fillId(html, 's11-leverage-summary', leverage.data.narrative);
 
     // ── Top movers strip: biggest polarity-aware daily moves ─────────
     const movers = Object.entries(allRaw)

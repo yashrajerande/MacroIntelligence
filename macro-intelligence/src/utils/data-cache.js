@@ -13,6 +13,33 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..', '..');
 const CACHE_PATH = join(ROOT, 'output', 'data-cache.json');
 
+// ── Domain slug sets — single source of truth ────────────────────────
+// (Previously duplicated 3x across orchestrate.js; consolidated here so
+// adding a new domain means editing one place, not three.)
+export const MARKET_SLUGS = new Set([
+  'nifty50','sensex','bank_nifty','india_vix','inr_usd','gold_usd','gold_inr_gram',
+  'brent_usd','sp500','nasdaq','us_vix','dxy','nat_gas','copper','iron_ore',
+  'nikkei225','hang_seng','euro_stoxx50','brent_usd_global','wti_usd','bdi',
+  'us_10y_treasury','gsec_10y','rbi_fx_reserves','embassy_reit','mindspace_reit','brookfield_reit',
+]);
+
+export const RE_SLUGS = new Set([
+  're_launches_units','re_sales_units','re_unsold_inventory',
+  'hpi_mumbai','hpi_delhi','hpi_bengaluru','hpi_hyderabad',
+  'affordability_index','home_loan_disbursements','avg_home_loan_rate',
+  'office_absorption','office_vacancy','rent_bengaluru','rent_mumbai',
+  'retail_mall_vacancy',
+]);
+
+export const LEVERAGE_SLUGS = new Set([
+  'india_hh_debt_gdp','india_corp_debt_gdp','us_hh_debt_gdp','us_corp_debt_gdp',
+  'china_hh_debt_gdp','china_corp_debt_gdp','japan_hh_debt_gdp','japan_corp_debt_gdp',
+  'ez_hh_debt_gdp','ez_corp_debt_gdp','uk_hh_debt_gdp','uk_corp_debt_gdp',
+  'india_credit_industry_yoy','india_credit_services_yoy','india_credit_personal_yoy',
+  'india_credit_agri_yoy','india_credit_housing_yoy','india_credit_vehicle_yoy',
+  'india_credit_creditcard_yoy','india_credit_nbfc_yoy',
+]);
+
 // ── Indian market holidays for 2026 (hardcoded) ────────────────────
 // Major national & exchange holidays.
 const INDIAN_HOLIDAYS_2026 = new Set([
@@ -197,23 +224,11 @@ export function getStaleSlugs(currentDate) {
  */
 export function checkWebSearchNeeded(currentDate) {
   const cache = readCache();
-  const MARKET_SLUGS = new Set([
-    'nifty50','sensex','bank_nifty','india_vix','inr_usd','gold_usd','gold_inr_gram',
-    'brent_usd','sp500','nasdaq','us_vix','dxy','nat_gas','copper','iron_ore',
-    'nikkei225','hang_seng','euro_stoxx50','brent_usd_global','wti_usd','bdi',
-    'us_10y_treasury','gsec_10y','rbi_fx_reserves','embassy_reit','mindspace_reit','brookfield_reit',
-  ]);
-  const RE_SLUGS = new Set([
-    're_launches_units','re_sales_units','re_unsold_inventory',
-    'hpi_mumbai','hpi_delhi','hpi_bengaluru','hpi_hyderabad',
-    'affordability_index','home_loan_disbursements','avg_home_loan_rate',
-    'office_absorption','office_vacancy','rent_bengaluru','rent_mumbai',
-    'retail_mall_vacancy',
-  ]);
 
   const allStale = getStaleSlugs(currentDate);
-  const staleMacro = allStale.filter(s => !MARKET_SLUGS.has(s) && !RE_SLUGS.has(s));
+  const staleMacro = allStale.filter(s => !MARKET_SLUGS.has(s) && !RE_SLUGS.has(s) && !LEVERAGE_SLUGS.has(s));
   const staleRE = allStale.filter(s => RE_SLUGS.has(s));
+  const staleLeverage = allStale.filter(s => LEVERAGE_SLUGS.has(s));
 
   // Count how many non-market indicators we have cached
   const cachedNonMarket = Object.keys(cache.indicators).filter(s => !MARKET_SLUGS.has(s)).length;
@@ -221,7 +236,8 @@ export function checkWebSearchNeeded(currentDate) {
   return {
     needsMacroRefresh: staleMacro.length > 0 || cachedNonMarket < 40,
     needsRERefresh: staleRE.length > 0 || Object.keys(cache.indicators).filter(s => RE_SLUGS.has(s)).length < 10,
-    staleSlugs: [...staleMacro, ...staleRE],
+    needsLeverageRefresh: staleLeverage.length > 0 || Object.keys(cache.indicators).filter(s => LEVERAGE_SLUGS.has(s)).length < LEVERAGE_SLUGS.size,
+    staleSlugs: [...staleMacro, ...staleRE, ...staleLeverage],
     cachedCount: Object.keys(cache.indicators).length,
   };
 }

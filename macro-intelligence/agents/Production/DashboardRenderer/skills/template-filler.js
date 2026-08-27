@@ -16,7 +16,14 @@ import { isInversePolarity } from '../../../../src/utils/polarity.js';
  */
 export function sparkline(series, inverse) {
   if (!Array.isArray(series) || series.length < 3) return '';
-  const vals = series.map(p => p.v).filter(Number.isFinite);
+  // Collapse consecutive equal values first — daily snapshots of a
+  // monthly/quarterly indicator repeat the same print for weeks, which
+  // would otherwise draw a long flat run instead of the real trend shape.
+  const vals = [];
+  for (const p of series) {
+    if (!Number.isFinite(p.v)) continue;
+    if (vals.length === 0 || vals[vals.length - 1] !== p.v) vals.push(p.v);
+  }
   if (vals.length < 3) return '';
 
   const W = 64, H = 18, PAD = 1;
@@ -44,8 +51,10 @@ export function sparkline(series, inverse) {
  * For negative-polarity indicators, arrow colors are flipped (up=red, down=green).
  * When dynamic stats exist and |z-score| > 2, a sigma tag + hover tooltip is added.
  * When a trailing series exists, a sparkline renders above the momentum label.
+ * An optional flagLabel renders a small chip next to the row label — used by
+ * the Leverage section to mark the Minsky quadrant read for that indicator.
  */
-export function row(label, value, previous, direction, momentum, pct10y, tier, slug, numericValue, stats) {
+export function row(label, value, previous, direction, momentum, pct10y, tier, slug, numericValue, stats, flagLabel) {
   const inverse = slug ? isInversePolarity(slug) : false;
 
   // Flip arrow semantics for inverse indicators
@@ -78,7 +87,7 @@ export function row(label, value, previous, direction, momentum, pct10y, tier, s
       const fmt = (n) => Number.isInteger(n) ? n.toLocaleString() : n.toFixed(2);
       sigmaHtml = ` <span class="${tagClass}">${zLabel}</span>` +
         `<div class="stat-tip">` +
-        `<b>Historical (180 days)</b><br>` +
+        `<b>Historical</b><br>` +
         `Mean: ${fmt(stats.mean)} · StdDev: ±${fmt(stats.stddev)}<br>` +
         `Range: ${fmt(stats.min)} – ${fmt(stats.max)}<br>` +
         `Z-score: ${absZ.toFixed(1)}σ ${dir} mean</div>`;
@@ -93,8 +102,10 @@ export function row(label, value, previous, direction, momentum, pct10y, tier, s
     ? `<div class="spark-wrap">${spark}<span>${momentum || '—'}</span></div>`
     : (momentum || '—');
 
+  const flagHtml = flagLabel ? ` <span class="row-flag">${flagLabel}</span>` : '';
+
   return `<tr>
-  <td>${label}</td>
+  <td>${label}${flagHtml}</td>
   <td${tdClass}>${value ?? 'Awaited'}${sigmaHtml}</td>
   <td>${previous ?? '—'}</td>
   <td><span class="${arrClass}">${arrChar}</span></td>

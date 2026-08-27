@@ -5,7 +5,15 @@
  * Falls back to null (triggering static ranges) if Supabase is unavailable.
  */
 
-const LOOKBACK_DAYS = 180;
+import { LEVERAGE_SLUGS } from '../../../../src/utils/data-cache.js';
+
+// Quarterly/monthly leverage series (Steve Keen credit-impulse framework)
+// need ~2 years of distinct prints to compute a mature impulse — daily
+// snapshots mean 45 trailing rows barely spans one quarter, so those
+// specific slugs keep their FULL point list within the lookback window.
+// Bounded naturally by how long the project has been running, so this
+// costs nothing until there's genuinely 2 years of history to keep.
+const LOOKBACK_DAYS = 760;
 const MIN_DATA_POINTS = 10;
 const PAGE_SIZE = 1000;
 const SERIES_POINTS = 45;   // trailing observations kept per slug for sparklines/LLM context
@@ -71,8 +79,9 @@ export async function fetchDynamicRanges() {
       const stddev = Math.sqrt(variance);
 
       // series: last SERIES_POINTS observations, oldest → newest, for
-      // sparklines and LLM trend context. Kept compact on purpose.
-      const series = points.slice(-SERIES_POINTS);
+      // sparklines and LLM trend context. Kept compact on purpose — except
+      // leverage slugs, which need the full window for impulse maturity.
+      const series = LEVERAGE_SLUGS.has(slug) ? points : points.slice(-SERIES_POINTS);
 
       ranges[slug] = { mean, stddev, min, max, count: n, series };
     }

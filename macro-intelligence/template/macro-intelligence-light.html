@@ -576,6 +576,7 @@ td.c-pct { text-align:right; min-width:96px; }
 .sigma-tag { font-size:0.56rem; font-weight:700; padding:1px 5px; border-radius:3px; margin-left:5px; letter-spacing:0.02em; vertical-align:middle; cursor:help; }
 .sigma-tag.warn  { background:rgba(184,92,0,0.12); color:#b85c00; }
 .sigma-tag.alert { background:rgba(204,0,51,0.12); color:#cc0033; }
+.row-flag { font-size:0.58rem; font-weight:600; padding:2px 7px; border-radius:9px; margin-left:6px; letter-spacing:0.01em; vertical-align:middle; background:rgba(26,0,204,0.08); color:#4a3fd6; white-space:nowrap; }
 .has-tip { position:relative; }
 .stat-tip {
   display:none; position:absolute; right:0; bottom:calc(100% + 6px); z-index:200;
@@ -1010,6 +1011,7 @@ html.tv .dt td, html.tv .dt th { padding:14px 0; }
   <div class="nav-div"></div>
   <a class="nav-item" href="#s8-panel"><div class="nav-icon">🏘️</div><div class="nav-label">Realty</div></a>
   <a class="nav-item" href="#s9-panel"><div class="nav-icon">🌍</div><div class="nav-label">Global</div></a>
+  <a class="nav-item" href="#s11-panel"><div class="nav-icon">⚖️</div><div class="nav-label">Leverage</div></a>
 </nav>
 
 <!-- ── CANVAS ────────────────────────────────────── -->
@@ -1427,6 +1429,42 @@ html.tv .dt td, html.tv .dt th { padding:14px 0; }
         <tr><td class="c-ind">Copper</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
         <tr><td class="c-ind">Iron Ore</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
         <tr><td class="c-ind">Baltic Dry Index</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <!-- S11 PRIVATE DEBT & LEVERAGE (Steve Keen / Minsky framework) -->
+  <div class="glass-panel" id="s11-panel">
+    <div class="ph" onclick="togglePanel('s11-panel')"><div class="ph-left"><div class="ph-num">S11</div><div class="ph-flag">⚖️</div><div class="ph-title">Private Debt &amp; Leverage</div></div><div class="ph-right"><div class="ph-chev">▾</div></div></div>
+    <div class="pb">
+      <div class="p-summary" id="s11-leverage-summary"><!-- FILL --></div>
+      <div class="sub-lbl">Country Levels — Household &amp; Corporate Debt/GDP</div>
+      <table class="dt"><thead><tr><th>Indicator</th><th>Latest</th><th>Previous</th><th>▲▼</th><th>Momentum</th><th>10Y %ile</th></tr></thead>
+      <tbody id="s11-countries">
+        <tr><td class="c-ind">India Household Debt/GDP</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
+        <tr><td class="c-ind">India Corporate Debt/GDP</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
+        <tr><td class="c-ind">US Household Debt/GDP</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
+        <tr><td class="c-ind">US Corporate Debt/GDP</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
+        <tr><td class="c-ind">China Household Debt/GDP</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
+        <tr><td class="c-ind">China Corporate Debt/GDP</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
+        <tr><td class="c-ind">Japan Household Debt/GDP</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
+        <tr><td class="c-ind">Japan Corporate Debt/GDP</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
+        <tr><td class="c-ind">Eurozone Household Debt/GDP</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
+        <tr><td class="c-ind">Eurozone Corporate Debt/GDP</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
+        <tr><td class="c-ind">UK Household Debt/GDP</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
+        <tr><td class="c-ind">UK Corporate Debt/GDP</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
+      </tbody></table>
+      <div class="sub-lbl">India Sectoral Bank Credit Growth (YoY %)</div>
+      <table class="dt"><thead><tr><th>Indicator</th><th>Latest</th><th>Previous</th><th>▲▼</th><th>Momentum</th><th>10Y %ile</th></tr></thead>
+      <tbody id="s11-sectoral">
+        <tr><td class="c-ind">Bank Credit — Industry YoY</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
+        <tr><td class="c-ind">Bank Credit — Services YoY</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
+        <tr><td class="c-ind">Bank Credit — Personal Loans YoY</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
+        <tr><td class="c-ind">Bank Credit — Agriculture YoY</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
+        <tr><td class="c-ind">Bank Credit — Housing Loans YoY</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
+        <tr><td class="c-ind">Bank Credit — Vehicle Loans YoY</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
+        <tr><td class="c-ind">Bank Credit — Credit Card YoY</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
+        <tr><td class="c-ind">Bank Credit to NBFCs YoY</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
       </tbody></table>
     </div>
   </div>

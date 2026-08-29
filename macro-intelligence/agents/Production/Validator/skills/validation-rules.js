@@ -258,12 +258,19 @@ export function runAllChecks(html, macroData, expectedDate, dynamicRanges) {
       errors.push(`L2: indicator "${slug}" vintage "${vintage}" is in the future (run_date=${expectedDate})`);
     }
   }
-  if (missingVintageCount > 15) {
-    errors.push(`L2: ${missingVintageCount} indicators have missing/Awaited vintage (max 15)`);
-  } else if (missingVintageCount > 8) {
+  // Thresholds scale with total indicator count instead of a fixed number —
+  // hardcoded 15/8 were calibrated for the original 97-indicator schema and
+  // silently became too strict every time a new LLM-sourced section (e.g.
+  // S11 leverage's 20 indicators) was added, since more web-search-derived
+  // indicators means more normal day-to-day vintage gaps.
+  const errorThreshold = Math.round(indicators.length * 0.15);
+  const warnThreshold  = Math.round(indicators.length * 0.08);
+  if (missingVintageCount > errorThreshold) {
+    errors.push(`L2: ${missingVintageCount} indicators have missing/Awaited vintage (max ${errorThreshold})`);
+  } else if (missingVintageCount > warnThreshold) {
     warnings.push(`L2: ${missingVintageCount} indicator(s) with missing vintage`);
   }
-  // <= 8 missing vintages is normal (LLM extraction doesn't always include dates)
+  // A modest fraction missing is normal (LLM extraction doesn't always include dates)
 
   // ── LAYER 3: SCHEMA VALIDATION ─────────────────────────────────────
   // Check required fields on each data contract element

@@ -1,23 +1,6 @@
 {
   "entries": [
     {
-      "date": "29 JUL 2026",
-      "verdict_line": "PMI Services at an 88th-percentile high while e-commerce GMV growth halved to 12.4% — India's service economy is thriving for the affluent and stalling for everyone else.",
-      "themes": [
-        "gdp_growth",
-        "consumption"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "nat_gas",
-        "sip_accounts",
-        "pmi_services",
-        "ecom_gmv_growth"
-      ]
-    },
-    {
       "date": "30 JUL 2026",
       "verdict_line": "US GDP at 0.7% SAAR while S&P 500 hits a 100th-percentile high — the gap between price and growth is the widest since the 2021 liquidity bubble, and copper at $6.37 says the real economy disagrees.",
       "themes": [
@@ -436,6 +419,18 @@
         "us_vix",
         "bank_nifty",
         "india_vix"
+      ]
+    },
+    {
+      "date": "30 AUG 2026",
+      "verdict_line": "US 10Y at 4.67% — an 84th-percentile yield — while global equities hit simultaneous all-time highs; someone is catastrophically wrong about the cost of capital.",
+      "themes": [],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "nat_gas",
+        "sip_accounts"
       ]
     }
   ]

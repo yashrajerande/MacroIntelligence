@@ -1,22 +1,6 @@
 {
   "entries": [
     {
-      "date": "30 JUL 2026",
-      "verdict_line": "US GDP at 0.7% SAAR while S&P 500 hits a 100th-percentile high — the gap between price and growth is the widest since the 2021 liquidity bubble, and copper at $6.37 says the real economy disagrees.",
-      "themes": [
-        "markets",
-        "gdp_growth"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "nat_gas",
-        "copper",
-        "sp500"
-      ]
-    },
-    {
       "date": "31 JUL 2026",
       "verdict_line": "Airline passengers fell 9% MoM to a 7th-percentile low while PV sales surged 26.1% — India's consumption story is bifurcating, and the fault line runs straight through the middle class.",
       "themes": [],
@@ -431,6 +415,19 @@
         "us_10y_treasury",
         "nat_gas",
         "sip_accounts"
+      ]
+    },
+    {
+      "date": "31 AUG 2026",
+      "verdict_line": "SIP AUM at ₹16.64 lakh cr while new accounts grew at a 2nd-percentile 1.6% MoM — India's equity rally is being funded by deeper pockets, not wider participation.",
+      "themes": [],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "nat_gas",
+        "sip_accounts",
+        "sip_aum"
       ]
     }
   ]

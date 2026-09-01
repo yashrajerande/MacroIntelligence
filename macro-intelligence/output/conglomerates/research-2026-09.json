@@ -1,0 +1,771 @@
+{
+  "data": {
+    "window_start": "2026-08-01",
+    "window_end": "2026-09-01",
+    "findings": [
+      {
+        "group": "Reliance",
+        "window_start": "2026-08-01",
+        "window_end": "2026-09-01",
+        "no_material_movement": true,
+        "moves": [],
+        "context_signals": {
+          "leverage_color": "stable",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 730
+          },
+          "latency_ms": 10210
+        }
+      },
+      {
+        "group": "Tata",
+        "window_start": "2026-08-01",
+        "window_end": "2026-09-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-08-12",
+            "category": "leadership",
+            "headline": "Tata Sons Chairman N. Chandrasekaran announces non-renewal of term",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Bloomberg, Business Standard",
+            "raw_evidence": "<cite index=\"11-1,11-4\">Natarajan Chandrasekaran, chairman of Tata Sons, said he will step down when his term ends in February 2027</cite>. <cite index=\"12-9\">The proposal to extend his term had been pending for six months and was not carried through because one of the Board Members did not support it</cite>."
+          },
+          {
+            "date": "2026-08-24",
+            "category": "M&A",
+            "headline": "TCS subsidiary acquires MHP for €320 million; Porsche partnership €1.25 billion",
+            "value_inr_cr": 2640,
+            "value_usd_mn": 320,
+            "value_status": "confirmed",
+            "source": "Screener.in",
+            "raw_evidence": "<cite index=\"29-2,29-3\">TCS subsidiary to acquire MHP for €320 million; Porsche deal includes €1.25 billion five-year strategic partnership announced on Aug. 24, 2026</cite>."
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "stressed",
+          "succession_color": "contested",
+          "regulatory_color": "unknown"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 1124
+          },
+          "latency_ms": 12249
+        }
+      },
+      {
+        "group": "Adani",
+        "window_start": "2026-08-01",
+        "window_end": "2026-09-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-08-26",
+            "category": "capex",
+            "headline": "Adani Energy Solutions wins ₹4,700 crore transmission project in Maharashtra",
+            "value_inr_cr": 4700,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Adani Group Press Release",
+            "raw_evidence": "<cite index=\"1-3\">Adani Energy Solutions Limited won a Rs 4,700 crore transmission project in Maharashtra for evacuation of 4,500 MW of Renewable & Storage Power on August 26, 2026</cite>"
+          },
+          {
+            "date": "2026-08-21",
+            "category": "leadership",
+            "headline": "V. Subramanian steps down as Independent Director of Adani Enterprises",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Adani Enterprises / SEBI Filing",
+            "raw_evidence": "<cite index=\"30-1\">Independent director V. Subramanian stepped down from the board at the close of business on 21 August 2026, in line with SEBI listing regulations governing independent director tenures</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "stable",
+          "succession_color": "settled",
+          "regulatory_color": "under-action"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 997
+          },
+          "latency_ms": 12490
+        }
+      },
+      {
+        "group": "Aditya Birla",
+        "window_start": "2026-08-01",
+        "window_end": "2026-09-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-08-01",
+            "category": "financing",
+            "headline": "ABRen secures $1.6bn MUFG term loan for Sprng Energy acquisition",
+            "value_inr_cr": 15317,
+            "value_usd_mn": 1600,
+            "value_status": "confirmed",
+            "source": "Yahoo Finance / MUFG",
+            "raw_evidence": "Aditya Birla Renewables secured a $1.6bn (Rs153.17bn) term loan facility from MUFG for the proposed acquisition of Solenergi Power Private, including Sprng Energy group. Agreement signed July 2026, valued at Rs173.22bn."
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "levering",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3191,
+            "output": 813
+          },
+          "latency_ms": 9415
+        }
+      },
+      {
+        "group": "Mahindra",
+        "window_start": "2026-08-01",
+        "window_end": "2026-09-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-08-09",
+            "category": "leadership",
+            "headline": "Mahindra appoints Shveta Arya as Group Chief Strategy Officer",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Mahindra Group Press Release",
+            "raw_evidence": "Mahindra Group announced the appointment of Shveta Arya as Group Chief Strategy Officer, effective September 15, 2026. She will also form part of the Senior Management of Mahindra & Mahindra Ltd and the Group Executive Board, reporting to Dr. Anish Shah, Group CEO & MD."
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "unknown",
+          "succession_color": "active",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3185,
+            "output": 811
+          },
+          "latency_ms": 9865
+        }
+      },
+      {
+        "group": "L&T",
+        "window_start": "2026-08-01",
+        "window_end": "2026-09-01",
+        "no_material_movement": true,
+        "moves": [],
+        "context_signals": {
+          "leverage_color": "stable",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 667
+          },
+          "latency_ms": 8935
+        }
+      },
+      {
+        "group": "Bharti",
+        "window_start": "2026-08-01",
+        "window_end": "2026-09-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-08-25",
+            "category": "regulatory",
+            "headline": "DoT imposes ₹1,05,000 crore penalty for subscriber verification violation",
+            "value_inr_cr": 105000,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Screener.in (citing regulatory filing)",
+            "raw_evidence": "DoT imposed Rs. 1,05,000 penalty on Bharti Airtel for June 2026 subscriber verification norms violation."
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "stable",
+          "succession_color": "settled",
+          "regulatory_color": "under-action"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 746
+          },
+          "latency_ms": 9760
+        }
+      },
+      {
+        "group": "JSW",
+        "window_start": "2026-08-01",
+        "window_end": "2026-09-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-08-07",
+            "category": "leadership",
+            "headline": "JSW Steel senior management changes: two appointments, one resignation",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "BSE Filing / InvestYwise",
+            "raw_evidence": "<cite index=\"10-1,10-2\">P P Varma appointed Executive Vice President & Plant Head - Dolvi, Salav & Anjar and S M Kumar appointed Sr. Vice President, Plant Head - Salem, effective August 7, 2026. Ashish Chandra, President-Dolvi, Salav & Anjar Works, ceased to be Senior Management due to resignation for personal reasons and career opportunities outside JSW Group.</cite>"
+          },
+          {
+            "date": "2026-08-22",
+            "category": "M&A",
+            "headline": "JSW Infrastructure acquires 100% shares of JSW Overseas FZE",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "unconfirmed",
+            "source": "Business Upturn",
+            "raw_evidence": "<cite index=\"4-1,4-2,4-6\">Agreement executed on 22nd August 2026 in continuation of announcement made on 16th January 2026 to consolidate ownership in JSW Overseas FZE, pending regulatory approvals.</cite>"
+          },
+          {
+            "date": "2026-08-07",
+            "category": "capex",
+            "headline": "JSW Energy completes 300 MW Maruti Clean Coal project",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "BSE Filing",
+            "raw_evidence": "<cite index=\"27-4\">JSW Energy Limited informed the Exchange regarding a press release dated August 07, 2026, titled 'JSW Energy Completes 300 MW Maruti Clean Coal'.</cite>"
+          },
+          {
+            "date": "2026-08-08",
+            "category": "leadership",
+            "headline": "JSW Energy appoints Sanjay Sagar as Additional Director (Non-Executive, Non-Independent)",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "BSE Filing",
+            "raw_evidence": "<cite index=\"27-4,27-5\">Board meeting held on August 08, 2026 approved appointment of Mr. Sanjay Sagar as an Additional Director (Non-Executive, Non-Independent).</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "deleveraging",
+          "succession_color": "active",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3181,
+            "output": 1333
+          },
+          "latency_ms": 13797
+        }
+      },
+      {
+        "group": "Bajaj",
+        "window_start": "2026-08-01",
+        "window_end": "2026-09-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-08-18",
+            "category": "financing",
+            "headline": "Bajaj Finance allots ₹498 crore secured NCDs at 7.79% p.a.",
+            "value_inr_cr": 498.22,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Screener.in / BSE Filing",
+            "raw_evidence": "Allotted 50,000 secured NCDs worth Rs. 498.22 crore on 18 August 2026 at 7.79% p.a., maturing 4 July 2036."
+          },
+          {
+            "date": "2026-08-06",
+            "category": "rating",
+            "headline": "Bajaj Healthcare upgraded by India Ratings on strengthened profile",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "India Ratings and Research / BSE Filing",
+            "raw_evidence": "<cite index=\"18-1,18-4\">India Ratings upgraded Bajaj Healthcare Limited's bank loan facilities' long-term rating to 'IND A' from 'IND A-' with Stable Outlook, and short-term rating to 'IND A1' from 'IND A2+'.</cite>"
+          },
+          {
+            "date": "2026-08-11",
+            "category": "leadership",
+            "headline": "Bajaj Electricals appoints Krishnan Sundaram as Chief Growth Officer",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Indian Retailer",
+            "raw_evidence": "<cite index=\"11-1,11-3\">Bajaj Electricals appointed Krishnan Sundaram as Chief Growth & New Business Officer effective August 11, 2026, to identify and expand new business opportunities.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "stable",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 1134
+          },
+          "latency_ms": 12157
+        }
+      },
+      {
+        "group": "Vedanta",
+        "window_start": "2026-08-01",
+        "window_end": "2026-09-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-07-30",
+            "category": "leadership",
+            "headline": "Arun Misra re-appointed as Executive Director and designated Group CEO",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "PSU Connect / BSE-NSE Filing",
+            "raw_evidence": "<cite index=\"14-1,14-2\">Arun Misra re-appointed as Executive Director and additionally designated as Chief Executive Officer and Key Managerial Personnel for one year from 1 August 2026 to 31 July 2027, subject to shareholder approval.</cite>"
+          },
+          {
+            "date": "2026-07-30",
+            "category": "leadership",
+            "headline": "Amarendu Prakash appointed CEO of Hindustan Zinc effective August 1, 2026",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "PSU Connect / BSE-NSE Filing",
+            "raw_evidence": "<cite index=\"18-7,18-8\">Amarendu Prakash appointed CEO – HZL and SMP effective August 01, 2026, till July 31, 2029, joining from SAIL where he served as Chairman & Managing Director.</cite>"
+          },
+          {
+            "date": "2026-07-30",
+            "category": "leadership",
+            "headline": "Prasun Kumar Mukherjee re-appointed as Non-Executive Independent Director for final one-year term",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "PSU Connect / BSE-NSE Filing",
+            "raw_evidence": "<cite index=\"14-4,14-5\">Prasun Kumar Mukherjee re-appointed as Non-Executive Independent Director for a second and final term of one year from 11 August 2026 to 10 August 2027, subject to shareholder approval.</cite>"
+          },
+          {
+            "date": "2026-08-25",
+            "category": "financing",
+            "headline": "Promoter group facility agreements rescinded after repayment; all Vedanta restrictions released",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Screener.in / BSE-NSE Filing",
+            "raw_evidence": "<cite index=\"1-4\">Promoter group facility agreements rescinded after repayment; all Vedanta restrictions stand released.</cite>"
+          },
+          {
+            "date": "2026-08-31",
+            "category": "leadership",
+            "headline": "Vedanta seeks postal ballot approval for ESOS 2026, ESPP 2026, and director reappointments",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Screener.in / BSE-NSE Filing",
+            "raw_evidence": "<cite index=\"1-2\">Vedanta seeks postal ballot approval for ESOS 2026, ESPP 2026, and Arun Misra and Prasun Mukherjee reappointments.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "deleveraging",
+          "succession_color": "settled",
+          "regulatory_color": "under-watch"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 1613
+          },
+          "latency_ms": 19036
+        }
+      },
+      {
+        "group": "Murugappa",
+        "window_start": "2026-08-01",
+        "window_end": "2026-09-01",
+        "no_material_movement": true,
+        "moves": [],
+        "context_signals": {
+          "leverage_color": "unknown",
+          "succession_color": "active",
+          "regulatory_color": "unknown"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3185,
+            "output": 701
+          },
+          "latency_ms": 9397
+        }
+      },
+      {
+        "group": "TVS",
+        "window_start": "2026-08-01",
+        "window_end": "2026-09-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-08-05",
+            "category": "M&A",
+            "headline": "TVS Motor subsidiary amalgamation scheme approved by boards",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "unconfirmed",
+            "source": "BSE/NSE Filing (SEBI Regulation 30)",
+            "raw_evidence": "<cite index=\"4-2,4-3\">TVS Motor Company intimated stock exchanges of a Composite Scheme of Amalgamation involving subsidiaries TVS Credit Services Limited and TVS Housing Finance Private Limited on August 5, 2026, following board approvals. The scheme involves a two-stage amalgamation, with STPL Trading merging into Home Credit India Finance, followed by merger of Home Credit India Finance and TVS Housing Finance into TVS Credit Services.</cite>"
+          },
+          {
+            "date": "2026-08-28",
+            "category": "leadership",
+            "headline": "Peyman Kargar appointed CEO; K.N. Radhakrishnan to transition",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Business Wire / TVS Motor Press Release",
+            "raw_evidence": "<cite index=\"9-1\">Peyman Kargar appointed Director and Chief Executive Officer of TVS Motor Company, effective January 27, 2027, succeeding K. N. Radhakrishnan, who will continue in his role until then to ensure a seamless transition.</cite> <cite index=\"9-6,9-7\">Peyman currently serves as President, International Business and brings more than three decades of global automotive leadership experience across Europe, Asia, Africa and the Middle East.</cite>"
+          },
+          {
+            "date": "2026-08-21",
+            "category": "financing",
+            "headline": "TVS Motor redeems ₹19 crore NCRPS preference shares",
+            "value_inr_cr": 19,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "BSE/NSE Filing (SEBI Regulation 60)",
+            "raw_evidence": "<cite index=\"22-1,22-2\">TVS Motor Company Limited announced August 21, 2026, as the record date for redeeming its 6% cumulative NCRPS. Eligible holders will receive ₹10 per share plus interest on September 1, 2026, after which the ISIN INE494B04019 will be deactivated.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "stable",
+          "succession_color": "active",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3181,
+            "output": 1369
+          },
+          "latency_ms": 15097
+        }
+      },
+      {
+        "group": "Sundaram",
+        "window_start": "2026-08-01",
+        "window_end": "2026-09-01",
+        "no_material_movement": true,
+        "moves": [],
+        "context_signals": {
+          "leverage_color": "unknown",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 601
+          },
+          "latency_ms": 15080
+        }
+      },
+      {
+        "group": "Godrej",
+        "window_start": "2026-08-01",
+        "window_end": "2026-09-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-08-14",
+            "category": "leadership",
+            "headline": "Pirojsha Godrej appointed Executive Chairperson of Godrej Industries",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "MarketScreener, Storyboard18, Exchange4media",
+            "raw_evidence": "Pirojsha Godrej appointed as Executive Chairperson of Godrej Industries effective August 14, 2026, succeeding Nadir Godrej upon his retirement at age 75. Board approved on August 13, 2026. Five-year tenure through August 13, 2031."
+          },
+          {
+            "date": "2026-08-24",
+            "category": "capex",
+            "headline": "Godrej Industries signs ₹20,000 crore Haryana investment pact",
+            "value_inr_cr": 20000,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "ScanX Trade",
+            "raw_evidence": "Godrej Industries Group finalized agreement on August 24, 2026, for ₹20,000 crore investment in Haryana, expected to create around 40,000 jobs. Group has already invested approximately ₹12,000 crore in the state."
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "unknown",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 944
+          },
+          "latency_ms": 11169
+        }
+      },
+      {
+        "group": "Hero",
+        "window_start": "2026-08-01",
+        "window_end": "2026-09-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-08-17",
+            "category": "leadership",
+            "headline": "Srihari Mulgund appointed Chief Strategy Officer, effective August 17",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Storyboard18, PeopleMatters",
+            "raw_evidence": "<cite index=\"9-1,9-2\">Hero MotoCorp appointed Srihari Mulgund as Chief Strategy Officer effective August 17, 2026, strengthening the two-wheeler manufacturer's leadership team as it sharpens its focus on long-term growth, technology transformation and future mobility opportunities.</cite> <cite index=\"9-3\">The appointment brings to the company an executive with more than two decades of experience spanning engineering, product development and strategic planning across multiple global automotive markets.</cite>"
+          },
+          {
+            "date": "2026-08-27",
+            "category": "M&A",
+            "headline": "Hero MotoCorp approves ₹1,758 crore acquisition of Ather Energy shares",
+            "value_inr_cr": 1758,
+            "value_usd_mn": 210,
+            "value_status": "confirmed",
+            "source": "Screener, TickerTape",
+            "raw_evidence": "<cite index=\"1-4\">Hero MotoCorp completed the purchase of 1,18,80,000 equity shares in Ather Energy Limited for a total consideration of approximately Rs 1,758 crore.</cite> <cite index=\"1-9\">The investment will increase Hero MotoCorp's stake in Ather from 29.88% to approximately 32.8% on a fully diluted basis, and is expected to be completed by September 3, 2026.</cite>"
+          },
+          {
+            "date": "2026-08-31",
+            "category": "leadership",
+            "headline": "Suresh Kumar P appointed Chief Digital & Information Officer, effective August 31",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "TickerTape, Screener",
+            "raw_evidence": "<cite index=\"1-1\">Hero MotoCorp announced the appointment of Suresh Kumar P as Chief Digital & Information Officer, effective Monday, August 31, 2026.</cite> <cite index=\"1-2\">Mr. Kumar brings nearly two decades of experience from companies including Reckitt, Pernod Ricard, and Asian Paints, and will join the company's Leadership Team and be designated as Senior Management under the Listing Regulations.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "deleveraging",
+          "succession_color": "active",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3179,
+            "output": 1323
+          },
+          "latency_ms": 12936
+        }
+      },
+      {
+        "group": "Hinduja",
+        "window_start": "2026-08-01",
+        "window_end": "2026-09-01",
+        "no_material_movement": true,
+        "moves": [],
+        "context_signals": {
+          "leverage_color": "unknown",
+          "succession_color": "unknown",
+          "regulatory_color": "unknown"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 615
+          },
+          "latency_ms": 9008
+        }
+      },
+      {
+        "group": "RPG",
+        "window_start": "2026-08-01",
+        "window_end": "2026-09-01",
+        "no_material_movement": true,
+        "moves": [],
+        "context_signals": {
+          "leverage_color": "unknown",
+          "succession_color": "unknown",
+          "regulatory_color": "unknown"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3181,
+            "output": 747
+          },
+          "latency_ms": 10906
+        }
+      },
+      {
+        "group": "Shapoorji Pallonji",
+        "window_start": "2026-08-01",
+        "window_end": "2026-09-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-08-28",
+            "category": "M&A",
+            "headline": "Tata Group explores share swap with SP for Tata Sons stake exit",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "unconfirmed",
+            "source": "Bloomberg",
+            "raw_evidence": "<cite index=\"3-1,3-2\">The Tata Group is in talks with its biggest minority shareholder on proposals to unlock liquidity, including a potential swap of shares of its listed entities, as the Shapoorji Pallonji Group seeks funds to repay costly debt. Representatives of Noel Tata are exploring the possibility where SP Group receives shares of companies such as Tata Power Co. in exchange for some or all of its 18.4% in the privately-held Tata Sons Pvt.</cite>"
+          },
+          {
+            "date": "2026-07-20",
+            "category": "financing",
+            "headline": "SP Group closes ₹15,100 crore rupee bond refinancing at 18.95% yield",
+            "value_inr_cr": 15100,
+            "value_usd_mn": 1600,
+            "value_status": "confirmed",
+            "source": "Bloomberg / Business Standard",
+            "raw_evidence": "<cite index=\"25-1\">Shapoorji Pallonji Group on Monday completed one of the country's largest private credit transactions, raising around ₹15,100 crore ($1.6 billion), in a sign that domestic investors remain willing to fund large leveraged deals despite volatile global markets.</cite> <cite index=\"25-4\">The funds will be used to refinance ₹15,500 crore in debt at Goswami Infratech, which issued the three-year zero-coupon rupee bonds that were priced to yield 18.95 per cent.</cite>"
+          },
+          {
+            "date": "2026-07-18",
+            "category": "financing",
+            "headline": "SP Group raises $650 million in three-year dollar bonds at 14.5% yield",
+            "value_inr_cr": null,
+            "value_usd_mn": 650,
+            "value_status": "confirmed",
+            "source": "Bloomberg",
+            "raw_evidence": "<cite index=\"25-7\">The group raised $650 million through a three-year dollar bond on Thursday at a yield of 14.5%.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "levering",
+          "succession_color": "unknown",
+          "regulatory_color": "under-watch"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3193,
+            "output": 1345
+          },
+          "latency_ms": 16727
+        }
+      },
+      {
+        "group": "Essar",
+        "window_start": "2026-08-01",
+        "window_end": "2026-09-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-08-05",
+            "category": "financing",
+            "headline": "Essar Energy Transition secures $400M financing from UK, European banks",
+            "value_inr_cr": 3806,
+            "value_usd_mn": 400,
+            "value_status": "confirmed",
+            "source": "Essar Group press release / Outlook Business",
+            "raw_evidence": "<cite index=\"1-2\">Essar Energy Transition announced the successful execution of $400 million in combined financing across two distinct facilities with three major banking institutions, further strengthening the company's balance sheet, enhancing working capital efficiency, and supporting its long-term growth and decarbonisation strategy.</cite> <cite index=\"26-1,26-5,26-6\">The financing package includes an amendment and expansion of its Receivables Purchase Agreement (RPA), increasing the facility from $150 million to $350 million, with NatWest (RBS Invoice Finance) as a new lending partner alongside ABN AMRO and Natixis CIB.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "deleveraging",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 842
+          },
+          "latency_ms": 10797
+        }
+      },
+      {
+        "group": "Welspun",
+        "window_start": "2026-08-01",
+        "window_end": "2026-09-01",
+        "no_material_movement": true,
+        "moves": [],
+        "context_signals": {
+          "leverage_color": "deleveraging",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3185,
+            "output": 904
+          },
+          "latency_ms": 11185
+        }
+      },
+      {
+        "group": "Piramal",
+        "window_start": "2026-08-01",
+        "window_end": "2026-09-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-08-28",
+            "category": "financing",
+            "headline": "Piramal Finance raises ₹2,100 crore via QIP at ₹2,110 per share",
+            "value_inr_cr": 2100,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Screener.in / IndianWeb2.com",
+            "raw_evidence": "<cite index=\"2-5\">Piramal Finance allotted 99.52 lakh shares in QIP at Rs 2,110, raising Rs 2,099.99 crore on 28 August 2026.</cite>"
+          },
+          {
+            "date": "2026-08-24",
+            "category": "financing",
+            "headline": "Piramal Finance board approves ₹1,750 crore promoter warrant issuance",
+            "value_inr_cr": 1750,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "EquityBulls / Screener.in",
+            "raw_evidence": "<cite index=\"4-1,4-3\">Board approved issuance of 82,94,000 convertible warrants to Nithyam Realty Private Limited, aggregating to ₹1,750.03 crore.</cite>"
+          },
+          {
+            "date": "2026-08-18",
+            "category": "M&A",
+            "headline": "Piramal Pharma acquires 40.67% stake in Yapan Bio for ₹76 crore",
+            "value_inr_cr": 76,
+            "value_usd_mn": 7.95,
+            "value_status": "confirmed",
+            "source": "PRNewswire / BioProcessIntl",
+            "raw_evidence": "<cite index=\"27-1\">Piramal Pharma completed acquisition of 40.67% stake in Yapan Bio for ₹76 crore INR, or $7.95M USD.</cite> <cite index=\"27-2\">PPL now owns 74% of Yapan Bio's equity, making it a subsidiary.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "deleveraging",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3185,
+            "output": 1265
+          },
+          "latency_ms": 12597
+        }
+      }
+    ]
+  },
+  "meta": {
+    "agent": "ResearchAnalyst",
+    "model": "claude-haiku-4-5-20251001",
+    "latency_ms": 252814,
+    "tokens": {
+      "input": 66859,
+      "output": 20624
+    },
+    "groups_with_moves": 14
+  }
+}

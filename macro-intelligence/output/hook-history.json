@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "01 AUG 2026",
-      "verdict_line": "WTI at $86.80 — a 74th-percentile print after a $3.21 single-session jump — arrives precisely when India's INR sits at a 10-year low; every $5 from here adds ₹7,000 cr to the monthly import bill.",
-      "themes": [
-        "oil"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "nat_gas",
-        "sip_accounts"
-      ]
-    },
-    {
       "date": "02 AUG 2026",
       "verdict_line": "SIP inflows at ₹29,845 cr are 85th-percentile strong — but account growth at a 2nd-percentile crawl means India's equity cult is deepening among the already-invested, not widening.",
       "themes": [
@@ -429,6 +415,21 @@
         "us_10y_treasury",
         "nat_gas",
         "wti_usd"
+      ]
+    },
+    {
+      "date": "02 SEP 2026",
+      "verdict_line": "Brent at $95.26 — a 5% surge in 30 days — hits India's import bill at ₹8,000 cr per $5 move while the RBI's inflation forecast of 4.6% was written at $90.",
+      "themes": [
+        "inflation",
+        "oil"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "nat_gas",
+        "sip_accounts"
       ]
     }
   ]

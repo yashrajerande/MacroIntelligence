@@ -101,14 +101,25 @@ function deterministicChecks(draft) {
 }
 
 export class CriticReviewer {
-  async review({ draft, cycleLabel }) {
+  async review({ draft, cycleLabel, priorBlockers }) {
     const start = Date.now();
 
     const deterministic = deterministicChecks(draft);
 
+    const priorBlock = priorBlockers?.length
+      ? `PREVIOUS BLOCKERS (you raised these on the prior draft — this draft is a revision):
+${priorBlockers.map(b => '- ' + b).join('\n')}
+
+For each previous blocker, FIRST verify whether the revision addressed it.
+A blocker that has been fixed must NOT be re-raised. Only raise a previous
+blocker again if the offending text is verbatim still present. New blockers
+require new defects.
+
+` : '';
+
     const prompt = `CYCLE: ${cycleLabel}
 
-DETERMINISTIC PRE-CHECK FINDINGS (already failed — do not contradict):
+${priorBlock}DETERMINISTIC PRE-CHECK FINDINGS (already failed — do not contradict):
 ${deterministic.length ? deterministic.map(b => '- ' + b).join('\n') : '(none)'}
 
 DRAFT FROM STRATEGY ADVISOR:
@@ -170,6 +181,88 @@ phrases survived. Otherwise REVISE with specific blockers.`;
         model: 'claude-sonnet-4-6',
         latency_ms: latency,
         tokens,
+      },
+    };
+  }
+
+  /**
+   * Red-pen pass. When the Advisor has exhausted its revision passes and a
+   * small number of concrete blockers remain, the critic applies its OWN
+   * fixes directly to the draft — the entity demanding the change makes the
+   * change, instead of sending the manuscript back a third time. The result
+   * must still clear the deterministic validators before publishing.
+   */
+  async applyFixes({ draft, blockers, cycleLabel }) {
+    const start = Date.now();
+
+    const prompt = `CYCLE: ${cycleLabel}
+
+You are performing the RED-PEN PASS. The StrategyAdvisor failed to apply
+these blockers after two revision attempts. You will now apply them
+yourself, directly.
+
+BLOCKERS TO APPLY (yours, from your last review):
+${blockers.map(b => '- ' + b).join('\n')}
+
+DRAFT TO EDIT:
+${JSON.stringify(draft, null, 2)}
+
+Rules — absolute:
+1. Apply EXACTLY the fixes your blockers demand. Where a blocker offers
+   replacement text, use it (or the minimal correct variant).
+2. Change NOTHING else. Every other field is copied verbatim — same
+   scores, same sentences, same numbers.
+3. Do NOT add new facts, names, numbers, or commentary.
+4. Re-emit the FULL corrected JSON with the exact same schema as the
+   draft, wrapped in <<<JSON ... >>>. No prose before or after.`;
+
+    const stream = client.messages.stream({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 32768,
+      temperature: 0,
+      system: [{ type: 'text', text: persona, cache_control: { type: 'ephemeral' } }],
+      messages: [{ role: 'user', content: prompt }],
+    });
+    const response = await stream.finalMessage();
+
+    const tokens = {
+      input: response.usage?.input_tokens || 0,
+      output: response.usage?.output_tokens || 0,
+    };
+    const text = response.content.filter(b => b.type === 'text').map(b => b.text).join('');
+
+    if (response.stop_reason === 'max_tokens') {
+      dumpRawResponse(text, response, 'redpen-truncated');
+      throw new Error('[CriticReviewer] Red-pen pass hit max_tokens. Raw saved to logs/.');
+    }
+
+    let data;
+    try {
+      data = extractJSON(text);
+    } catch (err) {
+      dumpRawResponse(text, response, 'redpen-parse-failure');
+      throw new Error(`[CriticReviewer] Red-pen JSON parse failed: ${err.message}. Raw saved to logs/.`);
+    }
+
+    // The red-pen output must itself be clean on deterministic checks.
+    const residual = deterministicChecks(data);
+    if (residual.length) {
+      throw new Error(
+        `[CriticReviewer] Red-pen output failed deterministic checks: ${residual.join(' | ')}`,
+      );
+    }
+
+    const latency = Date.now() - start;
+    console.log(`[CriticReviewer] Red-pen pass applied ${blockers.length} fixes · ${latency}ms`);
+
+    return {
+      data,
+      meta: {
+        agent: 'CriticReviewer(red-pen)',
+        model: 'claude-sonnet-4-6',
+        latency_ms: latency,
+        tokens,
+        fixes_applied: blockers.length,
       },
     };
   }

@@ -261,6 +261,7 @@ async function run() {
       console.log(`[Orchestrator] REVISE — Advisor revision pass ${rev}/${MAX_REVISIONS}.`);
       const critique = `${review.data.suggested_fixes || ''}\n\nBlockers:\n- ${(review.data.blockers || []).join('\n- ')}`;
       const revisionBase = advised.data;
+      const priorBlockers = review.data.blockers || [];
       advised = await new StrategyAdvisor().advise({
         findings: research.data.findings,
         prior: prior?.data || null,
@@ -275,14 +276,43 @@ async function run() {
       review = await new CriticReviewer().review({
         draft: advised.data,
         cycleLabel: cycle.cycleLabel,
+        priorBlockers,
       });
       meta.agents[`CriticReviewer_pass${rev + 1}`] = review.meta;
     }
 
+    // ── RED-PEN FALLBACK ──────────────────────────────────────────
+    // September 2026 deadlocked here: one concrete blocker survived both
+    // Advisor revisions (the Advisor kept failing to apply a named fix),
+    // and the whole run aborted over one number. When few concrete
+    // blockers remain, the critic applies its own fixes directly; the
+    // result must still clear the boundary validator before publishing.
+    const REDPEN_MAX_BLOCKERS = 3;
     if (review.data.verdict !== 'PASS') {
-      console.error(`[Orchestrator] Still REVISE after ${MAX_REVISIONS} revisions. Aborting publish.`);
-      console.error('Blockers:', JSON.stringify(review.data.blockers, null, 2));
-      process.exit(1);
+      const blockers = review.data.blockers || [];
+      if (blockers.length > 0 && blockers.length <= REDPEN_MAX_BLOCKERS) {
+        console.log(`[Orchestrator] ${blockers.length} blocker(s) after ${MAX_REVISIONS} revisions — red-pen pass.`);
+        const redpen = await new CriticReviewer().applyFixes({
+          draft: advised.data,
+          blockers,
+          cycleLabel: cycle.cycleLabel,
+        });
+        meta.agents.CriticReviewer_redpen = redpen.meta;
+
+        const redpenBoundary = validateCycleOutput(redpen.data);
+        if (!redpenBoundary.valid) {
+          console.error('[Orchestrator] Red-pen output failed boundary validation — aborting.');
+          for (const e of redpenBoundary.errors) console.error(`  · ${e}`);
+          process.exit(1);
+        }
+        advised = { ...advised, data: redpen.data };
+        review = { ...review, data: { ...review.data, verdict: 'PASS', redpen_applied: true } };
+        console.log('[Orchestrator] Red-pen output validated — proceeding to publish.');
+      } else {
+        console.error(`[Orchestrator] Still REVISE after ${MAX_REVISIONS} revisions (${blockers.length} blockers — too many for red-pen). Aborting publish.`);
+        console.error('Blockers:', JSON.stringify(blockers, null, 2));
+        process.exit(1);
+      }
     }
 
     // ── 4. PUBLISH ────────────────────────────────────────────────

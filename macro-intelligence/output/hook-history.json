@@ -1,19 +1,6 @@
 {
   "entries": [
     {
-      "date": "31 JUL 2026",
-      "verdict_line": "Airline passengers fell 9% MoM to a 7th-percentile low while PV sales surged 26.1% — India's consumption story is bifurcating, and the fault line runs straight through the middle class.",
-      "themes": [],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "nat_gas",
-        "sip_accounts",
-        "airline_pax"
-      ]
-    },
-    {
       "date": "01 AUG 2026",
       "verdict_line": "WTI at $86.80 — a 74th-percentile print after a $3.21 single-session jump — arrives precisely when India's INR sits at a 10-year low; every $5 from here adds ₹7,000 cr to the monthly import bill.",
       "themes": [
@@ -428,6 +415,20 @@
         "nat_gas",
         "sip_accounts",
         "sip_aum"
+      ]
+    },
+    {
+      "date": "01 SEP 2026",
+      "verdict_line": "US 10Y at 4.73% — an 85th-percentile yield rising three of five periods — while Nikkei and S&P sit at simultaneous all-time highs; the bond market and equity market cannot both be right.",
+      "themes": [
+        "markets"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "nat_gas",
+        "wti_usd"
       ]
     }
   ]

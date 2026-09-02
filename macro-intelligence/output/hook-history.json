@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "02 AUG 2026",
-      "verdict_line": "SIP inflows at ₹29,845 cr are 85th-percentile strong — but account growth at a 2nd-percentile crawl means India's equity cult is deepening among the already-invested, not widening.",
-      "themes": [
-        "flows"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "sip_accounts",
-        "copper",
-        "sip_inflows"
-      ]
-    },
-    {
       "date": "03 AUG 2026",
       "verdict_line": "US 10Y at 4.68% — an 84th-percentile print while US GDP prints 0.7% SAAR — means the world's risk-free rate is priced for growth that no longer exists.",
       "themes": [
@@ -430,6 +415,18 @@
         "us_10y_treasury",
         "nat_gas",
         "sip_accounts"
+      ]
+    },
+    {
+      "date": "03 SEP 2026",
+      "verdict_line": "Nikkei at a 100th-percentile 64,325 — down 1,890 points in a session — while US 10Y hits 4.79%; global equity complacency is meeting its rate reckoning.",
+      "themes": [],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "sip_accounts",
+        "nat_gas"
       ]
     }
   ]

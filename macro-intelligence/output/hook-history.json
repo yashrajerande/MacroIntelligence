@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "03 AUG 2026",
-      "verdict_line": "US 10Y at 4.68% — an 84th-percentile print while US GDP prints 0.7% SAAR — means the world's risk-free rate is priced for growth that no longer exists.",
-      "themes": [
-        "gdp_growth"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "sip_accounts",
-        "copper"
-      ]
-    },
-    {
       "date": "04 AUG 2026",
       "verdict_line": "Bank Nifty at a 97th-percentile high while corporate bond issuance hits a 7th-percentile panic print — the market is pricing banking strength that the funding structure cannot sustain.",
       "themes": [
@@ -427,6 +413,21 @@
         "us_10y_treasury",
         "sip_accounts",
         "nat_gas"
+      ]
+    },
+    {
+      "date": "04 SEP 2026",
+      "verdict_line": "Airline passengers collapsed 9.5% MoM to a 7th-percentile 35M while GST hit ₹2.01 lakh crore — India's affluent are grounding themselves as mass consumption flies.",
+      "themes": [
+        "consumption"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "copper",
+        "sip_accounts",
+        "nat_gas",
+        "airline_pax"
       ]
     }
   ]

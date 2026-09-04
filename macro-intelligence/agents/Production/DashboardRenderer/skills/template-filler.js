@@ -187,11 +187,18 @@ export function fillMacroData(html, macroDataObj) {
  * Replace tickerData array with live prices.
  */
 export function fillTickerData(html, marketPrices) {
-  const tickerItems = Object.entries(marketPrices).map(([slug, p]) => {
-    const label = slug.replace(/_/g, ' ').toUpperCase();
-    const sign = p.direction === 'up' ? '+' : p.direction === 'down' ? '' : '';
-    return `{ label: "${label}", value: "${p.value_str || p.value}", change: "${sign}${p.change_pct}%" }`;
-  });
+  const tickerItems = Object.entries(marketPrices)
+    // A failed fetch has nothing to show — don't render "Awaited ▶ 0%"
+    .filter(([, p]) => !p.fetch_error && p.value !== null && p.value !== undefined)
+    .map(([slug, p]) => {
+      const label = slug.replace(/_/g, ' ').toUpperCase();
+      const sign = p.direction === 'up' ? '+' : '';
+      const chg = typeof p.change_pct === 'number' ? `${sign}${p.change_pct}%` : '—';
+      // `dir` drives the template's arrow map (am[d.dir]) and color class —
+      // omitting it printed a literal "undefined" in the ticker strip.
+      const dir = p.direction === 'up' ? 'up' : p.direction === 'down' ? 'down' : 'flat';
+      return `{ label: "${label}", value: "${p.value_str || p.value}", change: "${chg}", dir: "${dir}" }`;
+    });
 
   const regex = /const tickerData\s*=\s*\[[\s\S]*?\];/;
   const replacement = `const tickerData = [\n  ${tickerItems.join(',\n  ')}\n];`;

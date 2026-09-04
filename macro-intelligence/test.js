@@ -13,7 +13,7 @@
 import { INDICATOR_SCHEMA, SLUG_MAP, HISTORICAL_RANGES, INDICATOR_FRESHNESS, INVERSE_INDICATORS, VALID_SLUGS } from './src/utils/indicator-schema.js';
 import { normalizeValue, normalizeAllIndicators } from './src/utils/unit-normalizer.js';
 import { classifyAll } from './agents/Analysis/RegimeClassifier/skills/regime-logic.js';
-import { row, fillId, fillTbody } from './agents/Production/DashboardRenderer/skills/template-filler.js';
+import { row, fillId, fillTbody, fillTickerData } from './agents/Production/DashboardRenderer/skills/template-filler.js';
 import { trendSuffix } from './src/utils/trend-context.js';
 import { computeImpulse, classifyQuadrant, QUADRANT_LABELS } from './src/utils/credit-impulse.js';
 import { MARKET_SLUGS, RE_SLUGS, LEVERAGE_SLUGS } from './src/utils/data-cache.js';
@@ -254,6 +254,24 @@ assert(inverseDownRow.includes('pct-hi'), `Inverse lo tier should have class "pc
 const testHtml = '<span id="test-val">placeholder</span>';
 const filled = fillId(testHtml, 'test-val', 'Brent $109.32 | DXY 99.92');
 assert(filled.includes('Brent $109.32'), `fillId should preserve dollar amounts`);
+
+// --- fillTickerData: generated objects must match the template's consumer
+// shape ({label, value, change, dir}) — omitting `dir` printed a literal
+// "undefined" arrow in the live ticker strip (seen in production 4 Sep).
+const tickerHtml = fillTickerData(
+  'const tickerData = [\n  {label:"X", value:"—", change:"—", dir:"flat"},\n];',
+  {
+    sensex: { value: 76152.86, value_str: '76152.86', change_pct: -0.55, direction: 'down' },
+    nifty50: { value: 23873.45, value_str: '23873.45', change_pct: 0.36, direction: 'up' },
+    bdi: { value: 0, value_str: 'Awaited', change_pct: 0, direction: 'flat', fetch_error: 'HTTP 404' },
+    no_change: { value: 5.5, value_str: '5.5', direction: 'flat' },
+  }
+);
+assert(tickerHtml.includes('dir: "down"'), `Ticker items must carry a dir field (template reads am[d.dir])`);
+assert(tickerHtml.includes('dir: "up"'), `Ticker dir must reflect direction`);
+assert(!tickerHtml.includes('undefined'), `Ticker output must never contain the string "undefined": ${tickerHtml.slice(0, 200)}`);
+assert(!tickerHtml.includes('Awaited'), `Failed fetches must be excluded from the ticker, not shown as "Awaited"`);
+assert(tickerHtml.includes('change: "—"'), `Missing change_pct must render as an em-dash, not "undefined%"`);
 
 // --- Sparklines
 const sparkSeries = Array.from({ length: 10 }, (_, i) => ({ d: `2026-07-0${(i % 9) + 1}`, v: 100 + i * 2 }));

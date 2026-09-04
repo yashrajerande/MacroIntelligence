@@ -18,6 +18,7 @@ import { trendSuffix } from './src/utils/trend-context.js';
 import { computeImpulse, classifyQuadrant, QUADRANT_LABELS } from './src/utils/credit-impulse.js';
 import { MARKET_SLUGS, RE_SLUGS, LEVERAGE_SLUGS } from './src/utils/data-cache.js';
 import { LeverageAnalyzer } from './agents/Analysis/LeverageAnalyzer/analyze.js';
+import { rankRiskSignals, getStreak } from './src/utils/risk-tracker.js';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -872,6 +873,65 @@ assert(typeof leverageResult.data.narrative === 'string' && leverageResult.data.
 const indiaHH = leverageResult.data.countries.find(c => c.country === 'India').household;
 assert(indiaHH.levelPct === 90, `India household level percentile must pass through, got ${indiaHH.levelPct}`);
 assert(indiaHH.maturity === 'ready', `India household impulse should mature from the 9-print synthetic series`);
+
+// ═══════════════════════════════════════════════════════════════════
+// TOP RISK SELECTION (severity ranking, not array position)
+// ═══════════════════════════════════════════════════════════════════
+describe('Top Risk Selection');
+
+// --- Regression guard for the exact bug reported: Sig1 (CREDIT CYCLE)
+// always wins under .find()-style "first match" selection even when a
+// LATER signal (e.g. Sig4 oil/commodity) is more extreme that day.
+const biasedSignals = [
+  { signal_num: 1, signal_theme: 'CREDIT CYCLE', status: 'risk', title: "Deposit Gap Forces RBI's Hand", pct_10y: 82, data_text: 'CD ratio 83.4%' },
+  { signal_num: 2, signal_theme: 'CAPEX TRIGGER', status: 'watch', title: 'Capex holding steady', pct_10y: 55 },
+  { signal_num: 3, signal_theme: 'SIP / RETAIL FLOWS', status: 'positive', title: 'SIP inflows strong', pct_10y: 70 },
+  { signal_num: 4, signal_theme: 'OIL / COMMODITY RISK', status: 'risk', title: 'Oil price shock brewing', pct_10y: 97, data_text: 'Brent $95.93' },
+  { signal_num: 5, signal_theme: 'GLOBAL LIQUIDITY', status: 'watch', title: 'Fed on hold', pct_10y: 50 },
+  { signal_num: 6, signal_theme: 'INR / FX RESERVES', status: 'watch', title: 'Reserves stable', pct_10y: 48 },
+  { signal_num: 7, signal_theme: 'UNDER THE RADAR', status: 'surprise', title: 'Something unexpected', pct_10y: 60 },
+];
+const rankedBiased = rankRiskSignals(biasedSignals);
+assert(rankedBiased.top.signal_theme === 'OIL / COMMODITY RISK',
+  `Old .find() bug: would always pick Sig1 (CREDIT CYCLE, 82nd %ile) over Sig4 (OIL, 97th %ile — more extreme). Got top=${rankedBiased.top.signal_theme}`);
+assert(rankedBiased.runnerUp.signal_theme === 'CREDIT CYCLE',
+  `Runner-up must be the next-most-extreme risk signal, got ${rankedBiased.runnerUp?.signal_theme}`);
+
+// --- Stable tie-break: when severity is equal, earlier array position wins
+// (deterministic, not random — avoids flapping between equally-extreme risks)
+const tiedSignals = [
+  { signal_num: 1, signal_theme: 'CREDIT CYCLE', status: 'risk', title: 'A', pct_10y: 90 },
+  { signal_num: 4, signal_theme: 'OIL / COMMODITY RISK', status: 'risk', title: 'B', pct_10y: 10 }, // same |90-50|=40 vs |10-50|=40
+];
+const rankedTied = rankRiskSignals(tiedSignals);
+assert(rankedTied.top.title === 'A', `Equal severity must tie-break to earlier array position (stable), got top="${rankedTied.top.title}"`);
+
+// --- No risk-status signal at all → null (caller falls back to 'Monitoring')
+const noRisk = rankRiskSignals([
+  { signal_num: 1, signal_theme: 'CREDIT CYCLE', status: 'watch', title: 'Fine', pct_10y: 55 },
+]);
+assert(noRisk === null, `rankRiskSignals must return null when nothing is status:'risk'`);
+
+// --- Single risk signal → no runner-up, no crash
+const singleRisk = rankRiskSignals([
+  { signal_num: 1, signal_theme: 'CREDIT CYCLE', status: 'risk', title: 'Only one', pct_10y: 90 },
+]);
+assert(singleRisk.top.title === 'Only one', `Single risk signal must still be selected`);
+assert(singleRisk.runnerUp === null, `Single risk signal must have runnerUp:null, not throw`);
+
+// --- Duplicate titles (two cards phrased identically) must not appear as
+// their own "runner-up" of themselves
+const dupTitleSignals = [
+  { signal_num: 1, signal_theme: 'CREDIT CYCLE', status: 'risk', title: 'Same headline', pct_10y: 90 },
+  { signal_num: 4, signal_theme: 'OIL / COMMODITY RISK', status: 'risk', title: 'Same headline', pct_10y: 60 },
+  { signal_num: 6, signal_theme: 'INR / FX RESERVES', status: 'risk', title: 'Different one', pct_10y: 55 },
+];
+const rankedDup = rankRiskSignals(dupTitleSignals);
+assert(rankedDup.runnerUp.title === 'Different one',
+  `Runner-up must differ in TITLE from the top pick even if an intermediate card shares it, got "${rankedDup.runnerUp?.title}"`);
+
+// --- getStreak on empty/missing history must be 0, never throw
+assert(getStreak('THEME_THAT_HAS_NEVER_WON') === 0, `getStreak for an unseen theme must be 0`);
 
 // ═══════════════════════════════════════════════════════════════════
 // RESULTS

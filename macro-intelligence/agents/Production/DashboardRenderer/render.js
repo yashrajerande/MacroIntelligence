@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url';
 import { SLUG_MAP } from '../../../src/utils/indicator-schema.js';
 import { isInversePolarity } from '../../../src/utils/polarity.js';
 import { QUADRANT_LABELS } from '../../../src/utils/credit-impulse.js';
+import { rankRiskSignals, getStreak, recordTopRisk } from '../../../src/utils/risk-tracker.js';
 import { row, fillId, fillTbody, fillMacroData, fillTickerData } from './skills/template-filler.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -150,7 +151,39 @@ export class DashboardRenderer {
     const inrVal = inrUsd.value && inrUsd.value < 1 ? (1 / inrUsd.value).toFixed(2) : inrUsd.value;
     const snapIndia   = `Nifty ${nifty.value_str || nifty.value || '—'} | INR/USD ${inrVal || '—'}`;
     const snapGlobal  = `Brent $${brent.value || '—'} | DXY ${dxy.value || '—'}`;
-    const snapRisk    = signals.data.find(s => s.status === 'risk')?.title || 'Monitoring';
+    // ── Top Risk Now: rank by severity, not array position ────────────
+    // Previously `signals.data.find(s => s.status === 'risk')` — the FIRST
+    // risk-tagged signal in a FIXED thematic order (Sig1 is always CREDIT
+    // CYCLE). Since India's CD ratio is a slow-moving structural indicator,
+    // it tends to stay 'risk'-tagged for months, so it won this slot almost
+    // every day regardless of what else was happening — a selection-bias
+    // bug, not a data problem. Now ranked by extremity (distance from the
+    // 50th percentile) via the pure rankRiskSignals(); when the same theme
+    // wins repeatedly, that persistence is shown explicitly (streak +
+    // today's number + the runner-up it beat) instead of silently
+    // repeating the headline.
+    const ranked = rankRiskSignals(signals.data);
+
+    // Plain-text title — goes into macroDataObj.run.snap_risk, which
+    // SupabaseWriter persists verbatim into the dashboard_runs column and
+    // other consumers (Telegram, Rabbit Hole) may read as plain text.
+    let snapRisk = 'Monitoring';
+    // Rich HTML (streak + evidence + runner-up) — template cell only.
+    let snapRiskHtml = 'Monitoring';
+    if (ranked) {
+      const { top, runnerUp } = ranked;
+      const streak = getStreak(top.signal_theme); // consecutive PRIOR days, not counting today
+      recordTopRisk(isoDate, top.signal_theme, top.title);
+
+      snapRisk = top.title;
+
+      const streakTag = streak >= 1 ? ` · Day ${streak + 1}` : '';
+      const evidence = top.data_text || top.pct_note || '';
+      const nextTag = runnerUp ? ` — next: ${runnerUp.title}` : '';
+
+      snapRiskHtml = `<span class="risk-main">${top.title}${streakTag}</span>` +
+        (evidence ? `<span class="risk-evidence">${evidence}${nextTag}</span>` : '');
+    }
 
     // ── Derive real estate summary ───────────────────────────────────
     const embassyRaw    = allRaw.embassy_reit || {};
@@ -217,7 +250,7 @@ export class DashboardRenderer {
     html = fillId(html, 'snap-verdict', snapVerdict);
     html = fillId(html, 'snap-india',   snapIndia);
     html = fillId(html, 'snap-global',  snapGlobal);
-    html = fillId(html, 'snap-risk',    snapRisk);
+    html = fillId(html, 'snap-risk',    snapRiskHtml);
 
     // Header / footer dates
     html = fillId(html, 'header-date', dateStr);

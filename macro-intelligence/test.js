@@ -18,7 +18,8 @@ import { trendSuffix } from './src/utils/trend-context.js';
 import { computeImpulse, classifyQuadrant, QUADRANT_LABELS } from './src/utils/credit-impulse.js';
 import { MARKET_SLUGS, RE_SLUGS, LEVERAGE_SLUGS } from './src/utils/data-cache.js';
 import { LeverageAnalyzer } from './agents/Analysis/LeverageAnalyzer/analyze.js';
-import { rankRiskSignals, getStreak } from './src/utils/risk-tracker.js';
+import { rankRiskSignals, getStreak, classifyRiskSeverity } from './src/utils/risk-tracker.js';
+import { classifyGlobalRegime } from './src/utils/global-regime.js';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -932,6 +933,61 @@ assert(rankedDup.runnerUp.title === 'Different one',
 
 // --- getStreak on empty/missing history must be 0, never throw
 assert(getStreak('THEME_THAT_HAS_NEVER_WON') === 0, `getStreak for an unseen theme must be 0`);
+
+// --- classifyRiskSeverity: regime-style badge tiers by extremity
+assert(classifyRiskSeverity(92).badge_label === 'Acute Risk', `pct_10y=92 (severity 42) must be Acute Risk`);
+assert(classifyRiskSeverity(8).badge_label === 'Acute Risk', `pct_10y=8 (severity 42, low tail) must be Acute Risk`);
+assert(classifyRiskSeverity(78).badge_label === 'Elevated Risk', `pct_10y=78 (severity 28) must be Elevated Risk`);
+assert(classifyRiskSeverity(60).badge_label === 'Emerging Risk', `pct_10y=60 (severity 10) must be Emerging Risk`);
+assert(classifyRiskSeverity(undefined).badge_label === 'Emerging Risk', `Missing pct_10y must default to Emerging Risk, not throw`);
+assert(classifyRiskSeverity(92).badge_type === 'b-risk', `Acute Risk must reuse the b-risk badge color class`);
+
+// ═══════════════════════════════════════════════════════════════════
+// GLOBAL REGIME CLASSIFIER
+// ═══════════════════════════════════════════════════════════════════
+describe('Global Regime Classifier');
+
+// --- Regression guard: "Global Regime" used to show ONLY raw Brent/DXY
+// numbers with no classification at all (and separately, macroDataObj's
+// run.global_regime field was silently reusing INDIA's policy badge).
+// classifyGlobalRegime must always return a badge + a language sentence.
+const expansionInds = {
+  us_gdp_saar: { value: 3.2, value_str: '3.2' },
+  global_pmi_composite: { value: 54, value_str: '54' },
+  us_vix: { value: 12, value_str: '12' },
+};
+const expansionRead = classifyGlobalRegime(expansionInds);
+assert(expansionRead.badge_label === 'Global Expansion', `GDP 3.2% + PMI 54 must classify as Global Expansion, got ${expansionRead.badge_label}`);
+assert(expansionRead.badge_type === 'b-exp', `Global Expansion must use the b-exp badge color`);
+assert(expansionRead.narrative.includes('3.2') && expansionRead.narrative.includes('54'),
+  `Narrative must cite the actual numbers, not just the label: "${expansionRead.narrative}"`);
+assert(expansionRead.narrative.includes('risk-on'), `VIX 12 must be described as risk-on in the narrative`);
+
+const slowdownInds = {
+  us_gdp_saar: { value: 0.4, value_str: '0.4' },
+  global_pmi_composite: { value: 49, value_str: '49' },
+  us_vix: { value: 28, value_str: '28' },
+};
+const slowdownRead = classifyGlobalRegime(slowdownInds);
+assert(slowdownRead.badge_label === 'Global Slowdown', `GDP 0.4% must classify as Global Slowdown regardless of PMI, got ${slowdownRead.badge_label}`);
+assert(slowdownRead.badge_type === 'b-risk', `Global Slowdown must use the b-risk badge color`);
+assert(slowdownRead.narrative.includes('risk-off'), `VIX 28 must be described as risk-off stress in the narrative`);
+
+const steadyInds = {
+  us_gdp_saar: { value: 1.8, value_str: '1.8' },
+  global_pmi_composite: { value: 50, value_str: '50' },
+  us_vix: { value: 18, value_str: '18' },
+};
+const steadyRead = classifyGlobalRegime(steadyInds);
+assert(steadyRead.badge_label === 'Global Steady-State', `GDP 1.8% + PMI 50 (neither expansion nor slowdown) must be Steady-State, got ${steadyRead.badge_label}`);
+assert(steadyRead.narrative.includes('neutral'), `VIX 18 (mid-range) must be described as neutral risk appetite`);
+
+// --- Missing data must degrade gracefully, never throw or show "undefined"
+const missingRead = classifyGlobalRegime({});
+assert(missingRead.badge_label === 'Global Steady-State', `Missing GDP/PMI must fall back to Steady-State, not crash`);
+assert(!missingRead.narrative.includes('undefined') && !missingRead.narrative.includes('null'),
+  `Narrative with missing data must not leak "undefined"/"null" into reader-facing text: "${missingRead.narrative}"`);
+assert(!missingRead.narrative.includes('VIX'), `No VIX data means no risk-appetite clause should be appended at all`);
 
 // ═══════════════════════════════════════════════════════════════════
 // RESULTS

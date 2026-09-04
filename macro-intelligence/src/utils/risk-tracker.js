@@ -52,6 +52,21 @@ export function rankRiskSignals(signalsData) {
   return { top, runnerUp };
 }
 
+/**
+ * Classifies a percentile into a regime-style severity badge, matching
+ * the badge_type/badge_label convention used by RegimeClassifier (b-exp/
+ * b-slow/b-risk/b-neu) — the same "language, then numbers" pattern, so
+ * the reader gets a classification word before the LLM's title, not just
+ * a bare headline.
+ * @param {number|undefined} pct10y
+ */
+export function classifyRiskSeverity(pct10y) {
+  const severity = Math.abs((pct10y ?? 50) - 50);
+  if (severity >= 40) return { badge_type: 'b-risk', badge_label: 'Acute Risk' };
+  if (severity >= 25) return { badge_type: 'b-slow', badge_label: 'Elevated Risk' };
+  return { badge_type: 'b-neu', badge_label: 'Emerging Risk' };
+}
+
 function readHistory() {
   if (!existsSync(HISTORY_PATH)) return { history: [] };
   try {

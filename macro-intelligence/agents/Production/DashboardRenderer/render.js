@@ -10,7 +10,8 @@ import { fileURLToPath } from 'url';
 import { SLUG_MAP } from '../../../src/utils/indicator-schema.js';
 import { isInversePolarity } from '../../../src/utils/polarity.js';
 import { QUADRANT_LABELS } from '../../../src/utils/credit-impulse.js';
-import { rankRiskSignals, getStreak, recordTopRisk } from '../../../src/utils/risk-tracker.js';
+import { rankRiskSignals, getStreak, recordTopRisk, classifyRiskSeverity } from '../../../src/utils/risk-tracker.js';
+import { classifyGlobalRegime } from '../../../src/utils/global-regime.js';
 import { row, fillId, fillTbody, fillMacroData, fillTickerData } from './skills/template-filler.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -138,7 +139,6 @@ export class DashboardRenderer {
     // ── Derive snap texts ────────────────────────────────────────────
     const growthRegime  = regime.data.find(r => r.dimension === 'growth') || {};
     const inflRegime    = regime.data.find(r => r.dimension === 'inflation') || {};
-    const policyRegime  = regime.data.find(r => r.dimension === 'policy') || {};
 
     const nifty   = allRaw.nifty50 || {};
     const inrUsd  = allRaw.inr_usd || {};
@@ -150,7 +150,22 @@ export class DashboardRenderer {
       || `${growthRegime.badge_label || 'Steady'} Growth | ${inflRegime.badge_label || 'Moderate'} Inflation`;
     const inrVal = inrUsd.value && inrUsd.value < 1 ? (1 / inrUsd.value).toFixed(2) : inrUsd.value;
     const snapIndia   = `Nifty ${nifty.value_str || nifty.value || '—'} | INR/USD ${inrVal || '—'}`;
-    const snapGlobal  = `Brent $${brent.value || '—'} | DXY ${dxy.value || '—'}`;
+
+    // ── Global Regime: classify, don't just print two tickers ─────────
+    // This box was labeled "Global Regime" but showed nothing but raw
+    // Brent/DXY numbers — no classification, and the badge it borrowed
+    // (`policyRegime.badge_label`) was actually India's own RBI repo-rate
+    // stance, not anything about global conditions. classifyGlobalRegime
+    // gives it a real read: growth (US GDP SAAR + global PMI) + risk
+    // appetite (VIX), same "language, then numbers" convention as the
+    // rest of the regime system.
+    const globalRegimeRead = classifyGlobalRegime(allRaw);
+    const snapGlobal = globalRegimeRead.narrative; // plain text for Supabase/JSON consumers
+    const snapGlobalHtml =
+      `<span class="ph-badge ${globalRegimeRead.badge_type}">${globalRegimeRead.badge_label}</span>` +
+      `<span class="ctrio-line">${globalRegimeRead.narrative}</span>` +
+      `<span class="ctrio-sub">Brent $${brent.value || '—'} | DXY ${dxy.value || '—'}</span>`;
+
     // ── Top Risk Now: rank by severity, not array position ────────────
     // Previously `signals.data.find(s => s.status === 'risk')` — the FIRST
     // risk-tagged signal in a FIXED thematic order (Sig1 is always CREDIT
@@ -168,10 +183,11 @@ export class DashboardRenderer {
     // SupabaseWriter persists verbatim into the dashboard_runs column and
     // other consumers (Telegram, Rabbit Hole) may read as plain text.
     let snapRisk = 'Monitoring';
-    // Rich HTML (streak + evidence + runner-up) — template cell only.
+    // Rich HTML (severity badge + streak + evidence + runner-up) — template cell only.
     let snapRiskHtml = 'Monitoring';
     if (ranked) {
       const { top, runnerUp } = ranked;
+      const severity = classifyRiskSeverity(top.pct_10y);
       const streak = getStreak(top.signal_theme); // consecutive PRIOR days, not counting today
       recordTopRisk(isoDate, top.signal_theme, top.title);
 
@@ -181,8 +197,10 @@ export class DashboardRenderer {
       const evidence = top.data_text || top.pct_note || '';
       const nextTag = runnerUp ? ` — next: ${runnerUp.title}` : '';
 
-      snapRiskHtml = `<span class="risk-main">${top.title}${streakTag}</span>` +
-        (evidence ? `<span class="risk-evidence">${evidence}${nextTag}</span>` : '');
+      snapRiskHtml =
+        `<span class="ph-badge ${severity.badge_type}">${severity.badge_label}</span>` +
+        `<span class="ctrio-line">${top.title}${streakTag}</span>` +
+        (evidence ? `<span class="ctrio-sub">${evidence}${nextTag}</span>` : '');
     }
 
     // ── Derive real estate summary ───────────────────────────────────
@@ -218,7 +236,7 @@ export class DashboardRenderer {
         snap_global:        snapGlobal,
         snap_risk:          snapRisk,
         india_regime:       growthRegime.badge_label || '',
-        global_regime:      policyRegime.badge_label || '',
+        global_regime:      globalRegimeRead.badge_label || '',
         scenario_base_prob: scenarios.data.scenario_base_prob || 0,
         scenario_base_name: scenarios.data.base?.name || '',
         scenario_base_txt:  scenarios.data.base?.description || '',
@@ -249,7 +267,7 @@ export class DashboardRenderer {
     // Snap bar
     html = fillId(html, 'snap-verdict', snapVerdict);
     html = fillId(html, 'snap-india',   snapIndia);
-    html = fillId(html, 'snap-global',  snapGlobal);
+    html = fillId(html, 'snap-global',  snapGlobalHtml);
     html = fillId(html, 'snap-risk',    snapRiskHtml);
 
     // Header / footer dates

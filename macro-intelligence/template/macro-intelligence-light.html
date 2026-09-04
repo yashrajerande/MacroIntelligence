@@ -476,8 +476,11 @@ body {
 .ctrio-lbl { font-family:var(--mono); font-size:0.58rem; font-weight:500; color:var(--ink-3); letter-spacing:0.14em; text-transform:uppercase; margin-bottom:8px; }
 .ctrio-val { font-family:var(--body); font-size:0.84rem; color:var(--ink-2); line-height:1.55; font-weight:400; }
 .ctrio-val strong { color:var(--ink-1); font-weight:700; font-family:var(--mono); font-size:0.78rem; }
-.risk-main { display:block; }
-.risk-evidence { display:block; font-family:var(--mono); font-size:0.66rem; color:var(--ink-3); margin-top:4px; line-height:1.5; }
+/* Shared by India/Global/Risk command-strip cells: a classifier badge
+   (reuses .ph-badge + .b-exp/.b-slow/.b-risk/.b-neu), a language line,
+   then a small muted numbers line — "language, then numbers". */
+.ctrio-line { display:block; margin-top:6px; }
+.ctrio-sub { display:block; font-family:var(--mono); font-size:0.66rem; color:var(--ink-3); margin-top:4px; line-height:1.5; }
 
 /* ══════════════════════════════════════════════════
    PANEL HEADER

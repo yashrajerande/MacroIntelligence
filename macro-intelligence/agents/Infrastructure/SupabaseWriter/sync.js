@@ -82,7 +82,7 @@ export class SupabaseWriter {
       badge_label:    r.badge_label,
       badge_type:     r.badge_type,
     }));
-    const regimeKey = (r) => `${r.run_date}:${r.dimension}`;
+    const regimeKey = (r) => r.dimension; // no run_date: dedup means "content changed", not "date changed"
     const { changed: changedRegime, skipped: skippedRegime } = filterChangedRows('regime_classification', regimeRows, regimeKey);
     if (changedRegime.length > 0) {
       results.regime = await upsert('regime_classification', changedRegime, supabaseUrl, serviceKey, 'run_date,dimension');
@@ -107,7 +107,7 @@ export class SupabaseWriter {
       pct_note:     s.pct_note,
       is_surprise:  s.is_surprise,
     }));
-    const sigKey = (r) => `${r.run_date}:${r.signal_num}`;
+    const sigKey = (r) => String(r.signal_num);
     const { changed: changedSigs, skipped: skippedSigs } = filterChangedRows('signal_cards', signalRows, sigKey);
     if (changedSigs.length > 0) {
       results.signals = await upsert('signal_cards', changedSigs, supabaseUrl, serviceKey, 'run_date,signal_num');
@@ -128,7 +128,7 @@ export class SupabaseWriter {
       source_name: n.source_name,
       buzz_tag:    n.buzz_tag,
     }));
-    const newsKey = (r) => `${r.run_date}:${r.category}`;
+    const newsKey = (r) => r.category;
     const { changed: changedNews, skipped: skippedNews } = filterChangedRows('news_feed', newsRows, newsKey);
     if (changedNews.length > 0) {
       results.news = await upsert('news_feed', changedNews, supabaseUrl, serviceKey, 'run_date,category');
@@ -161,7 +161,7 @@ export class SupabaseWriter {
       is_estimated:     ind.is_estimated    || false,
       source:           ind.source          || '',
     }));
-    const indKey = (r) => `${r.run_date}:${r.indicator_slug}`;
+    const indKey = (r) => r.indicator_slug;
     const { changed: changedInds, skipped: skippedInds } = filterChangedRows('macro_indicators', indicatorRows, indKey);
     if (changedInds.length > 0) {
       results.indicators = await upsert('macro_indicators', changedInds, supabaseUrl, serviceKey, 'run_date,indicator_slug');
@@ -180,7 +180,7 @@ export class SupabaseWriter {
       para_label: p.para_label,
       para_html:  p.para_html,
     }));
-    const execKey = (r) => `${r.run_date}:${r.para_num}`;
+    const execKey = (r) => String(r.para_num);
     const { changed: changedExec, skipped: skippedExec } = filterChangedRows('executive_summary', execRows, execKey);
     if (changedExec.length > 0) {
       results.exec_summary = await upsert('executive_summary', changedExec, supabaseUrl, serviceKey, 'run_date,para_num');
@@ -203,7 +203,7 @@ export class SupabaseWriter {
         reit_vs_gsec_spread_bps: re.reit_vs_gsec_spread_bps ?? null,
         key_risk_note:           re.key_risk_note           || '',
       };
-      const reKey = (r) => r.run_date;
+      const reKey = () => 'real_estate_summary';
       const { changed: changedRE } = filterChangedRows('real_estate_summary', [reRow], reKey);
       if (changedRE.length > 0) {
         results.real_estate = await upsert('real_estate_summary', reRow, supabaseUrl, serviceKey, 'run_date');

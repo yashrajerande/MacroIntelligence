@@ -7,7 +7,14 @@ export function getISTDate() {
   const override = process.env.DATE_OVERRIDE;
 
   if (override && /^\d{4}-\d{2}-\d{2}$/.test(override)) {
-    const d = new Date(override + 'T00:00:00+05:30');
+    // Pin the date parts to IST regardless of the host timezone (same
+    // technique as the no-override path). The old midnight-IST parse read
+    // LOCAL date parts, so on a UTC runner a manual backfill for
+    // 2026-04-08 silently wrote 2026-04-07 output and overwrote the real
+    // 04-07 Supabase row.
+    const d = new Date(
+      new Date(override + 'T12:00:00+05:30').toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
+    );
     return formatDate(d);
   }
 

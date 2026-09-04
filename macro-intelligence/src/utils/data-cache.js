@@ -74,6 +74,9 @@ export function isWeekendOrHoliday(isoDate) {
   const d = new Date(isoDate + 'T00:00:00Z');
   const day = d.getUTCDay(); // 0 = Sun, 6 = Sat
   if (day === 0 || day === 6) return true;
+  if (d.getUTCFullYear() > 2026) {
+    console.warn('[DataCache] Holiday table only covers 2026 — every non-weekend day is treated as a trading day. Update INDIAN_HOLIDAYS.');
+  }
   return INDIAN_HOLIDAYS_2026.has(isoDate);
 }
 
@@ -99,13 +102,17 @@ export function shouldSkipDataIntelligence(isoDate) {
   // Need at least 50% of daily indicators cached to consider it sufficient
   if (cachedDailySlugs.length < dailySlugs.length * 0.5) return false;
 
-  // Verify the cached data comes from the most recent trading day
-  // (i.e. it is not stale by freshness rules)
-  const staleCount = cachedDailySlugs.filter(
-    s => isStale(s, cache.last_updated[s], isoDate)
-  ).length;
+  // The cached data must come from a recent trading day. The old check
+  // used isStale(), whose daily threshold is >= 1 day — data stamped
+  // YESTERDAY was already "stale", so on a Saturday this always failed
+  // and the weekend/holiday cost-saving path was dead code. A <= 3-day
+  // window covers Sat/Sun and a Monday holiday following a Friday run.
+  const recentCount = cachedDailySlugs.filter(s => {
+    const days = (new Date(isoDate + 'T00:00:00Z') - new Date(cache.last_updated[s] + 'T00:00:00Z')) / 86400000;
+    return days >= 0 && days <= 3;
+  }).length;
 
-  return staleCount === 0;
+  return recentCount === cachedDailySlugs.length;
 }
 
 // ── Core cache read/write ───────────────────────────────────────────
@@ -166,24 +173,29 @@ export function updateCache(freshIndicators, currentDate) {
   const cache = readCache();
   let kept = 0;
   for (const [slug, value] of Object.entries(freshIndicators)) {
-    // A failed fetch (fetch_error sentinel or null value) must never
-    // clobber a previously-good cached value — keep the old one and do
-    // NOT stamp it fresh, so freshness rules can still trigger a refetch.
-    const failed = value && (value.fetch_error || value.value === null || value.value === undefined);
-    const oldGood = cache.indicators[slug] &&
-      cache.indicators[slug].value !== null &&
-      cache.indicators[slug].value !== undefined &&
-      !cache.indicators[slug].fetch_error;
-    if (failed && oldGood) {
-      kept++;
-      continue;
+    // A failed fetch (fetch_error sentinel or null value) must NEVER be
+    // written to the cache, whether or not a prior good value exists.
+    // Writing a null used to stamp it "fresh", which froze brand-new slugs
+    // at Awaited for a whole freshness cycle (95 days for quarterly) —
+    // 9 of the 20 leverage slugs were stuck that way in production.
+    const failed = !value || value.fetch_error || value.value === null || value.value === undefined
+      || (typeof value.value === 'number' && !Number.isFinite(value.value));
+    if (failed) {
+      if (cache.indicators[slug]) kept++;
+      continue; // stays stale/uncached → refetch keeps triggering
     }
 
-    // Track when the numeric value last actually changed — used by the
-    // hook-writer to re-admit quarterly indicators in their release window.
-    const oldVal = cache.indicators[slug]?.value;
-    if (value && typeof value.value === 'number' && value.value !== oldVal) {
-      cache.last_changed[slug] = currentDate;
+    // Track when a genuinely NEW print landed — used by the hook-writer to
+    // re-admit quarterly indicators in their release window. Requires the
+    // vintage to move too (when both sides have one): LLM-sourced values
+    // wobble a decimal day-to-day without any new release, and a bare
+    // numeric-diff check counted every wobble as a fresh print.
+    const old = cache.indicators[slug];
+    if (typeof value.value === 'number' && value.value !== old?.value) {
+      const vintageMoved = value.vintage && old?.vintage
+        ? value.vintage !== old.vintage
+        : true;
+      if (vintageMoved) cache.last_changed[slug] = currentDate;
     }
 
     cache.indicators[slug]   = value;
@@ -230,13 +242,22 @@ export function checkWebSearchNeeded(currentDate) {
   const staleRE = allStale.filter(s => RE_SLUGS.has(s));
   const staleLeverage = allStale.filter(s => LEVERAGE_SLUGS.has(s));
 
-  // Count how many non-market indicators we have cached
-  const cachedNonMarket = Object.keys(cache.indicators).filter(s => !MARKET_SLUGS.has(s)).length;
+  // Only entries with a real numeric value count as "cached" — a null
+  // sentinel must keep its domain's refresh firing, not satisfy it.
+  const usable = (s) => cache.indicators[s] && typeof cache.indicators[s].value === 'number';
+  const usableSlugs = Object.keys(cache.indicators).filter(usable);
+
+  // Scope each floor to its own domain. cachedNonMarket previously counted
+  // RE + leverage entries, so 5 real macro indicators were enough to clear
+  // a floor of 40; and the RE floor was a hardcoded 10 against 15 slugs.
+  const cachedMacro = usableSlugs.filter(s => !MARKET_SLUGS.has(s) && !RE_SLUGS.has(s) && !LEVERAGE_SLUGS.has(s)).length;
+  const cachedRE = usableSlugs.filter(s => RE_SLUGS.has(s)).length;
+  const cachedLeverage = usableSlugs.filter(s => LEVERAGE_SLUGS.has(s)).length;
 
   return {
-    needsMacroRefresh: staleMacro.length > 0 || cachedNonMarket < 40,
-    needsRERefresh: staleRE.length > 0 || Object.keys(cache.indicators).filter(s => RE_SLUGS.has(s)).length < 10,
-    needsLeverageRefresh: staleLeverage.length > 0 || Object.keys(cache.indicators).filter(s => LEVERAGE_SLUGS.has(s)).length < LEVERAGE_SLUGS.size,
+    needsMacroRefresh: staleMacro.length > 0 || cachedMacro < 40,
+    needsRERefresh: staleRE.length > 0 || cachedRE < RE_SLUGS.size,
+    needsLeverageRefresh: staleLeverage.length > 0 || cachedLeverage < LEVERAGE_SLUGS.size,
     staleSlugs: [...staleMacro, ...staleRE, ...staleLeverage],
     cachedCount: Object.keys(cache.indicators).length,
   };
@@ -244,13 +265,31 @@ export function checkWebSearchNeeded(currentDate) {
 
 // ── Supabase dedup helpers ─────────────────────────────────────────
 
+// Bump when the key/hash scheme changes — stale snapshots under the old
+// scheme are dropped wholesale on first read (the affected rows re-push
+// once, harmlessly, via upsert). v2: run_date removed from keys AND
+// hashes. Under v1, run_date was in both, so every day produced brand-new
+// keys, the dedup NEVER fired ("0 skipped" on every run since launch),
+// and the snapshot grew ~115 permanent entries per day — 8.6 MB of the
+// committed data-cache.json was dead snapshot weight.
+const SNAPSHOT_VERSION = 2;
+
 /**
  * Hash a row object into a short string for comparison.
- * Strips run_id (changes every run) and compares data fields only.
+ * Strips run_id AND run_date (both change every run/day) so the hash
+ * reflects only the data content — "changed since last push" must mean
+ * the numbers moved, not that the calendar did.
  */
 function hashRow(row) {
-  const { run_id, ...data } = row;
+  const { run_id, run_date, ...data } = row;
   return JSON.stringify(data);
+}
+
+function getSnapshot(cache) {
+  if (cache.supabase_snapshot._v !== SNAPSHOT_VERSION) {
+    cache.supabase_snapshot = { _v: SNAPSHOT_VERSION };
+  }
+  return cache.supabase_snapshot;
 }
 
 /**
@@ -262,7 +301,7 @@ function hashRow(row) {
  */
 export function filterChangedRows(table, rows, keyFn) {
   const cache = readCache();
-  const snapshot = cache.supabase_snapshot[table] || {};
+  const snapshot = getSnapshot(cache)[table] || {};
   const changed = [];
   let skipped = 0;
 
@@ -287,12 +326,13 @@ export function filterChangedRows(table, rows, keyFn) {
  */
 export function recordSnapshot(table, rows, keyFn) {
   const cache = readCache();
-  if (!cache.supabase_snapshot[table]) {
-    cache.supabase_snapshot[table] = {};
+  const snapshot = getSnapshot(cache);
+  if (!snapshot[table]) {
+    snapshot[table] = {};
   }
   for (const row of rows) {
     const key = keyFn(row);
-    cache.supabase_snapshot[table][key] = hashRow(row);
+    snapshot[table][key] = hashRow(row);
   }
   writeCache(cache);
 }

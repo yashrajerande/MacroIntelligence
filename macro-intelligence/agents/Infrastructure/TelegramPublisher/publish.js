@@ -77,8 +77,12 @@ export class TelegramPublisher {
     await sendPhoto(token, chatId, imageBuffer, caption);
 
     // ── Step 3: Send audio to Telegram ───────────────────────────────
-    const mp3Path = audioPath || join(ROOT, 'output', 'daily-broadcast.mp3');
-    if (existsSync(mp3Path)) {
+    // Only send audio generated THIS run. Falling back to the committed
+    // output/daily-broadcast.mp3 meant that when TTS was skipped (no
+    // OpenAI key) subscribers received YESTERDAY's briefing relabeled
+    // with today's date.
+    const mp3Path = audioPath || null;
+    if (mp3Path && existsSync(mp3Path)) {
       console.log('[TelegramPublisher] Sending audio to Telegram...');
       const audioBuffer = readFileSync(mp3Path);
       await sendAudio(token, chatId, audioBuffer, `60-Second Macro — ${dateStr}`,

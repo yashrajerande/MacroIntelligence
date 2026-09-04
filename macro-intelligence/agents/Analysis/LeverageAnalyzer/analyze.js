@@ -36,12 +36,16 @@ function leg(slug, allIndicators, dynamicRanges) {
   const schema = INDICATOR_SCHEMA[slug];
   const series = dynamicRanges?.[slug]?.series;
   const imp = computeImpulse(schema.frequency, series);
-  const levelPct = ind?.pct_10y ?? null;
+  // Gate on a REAL value, not just pct_10y — extractIndicator defaults
+  // pct_10y to the sentinel 50 even when value is null, which used to
+  // classify a country with NO data as "Normal debt — impulse building".
+  const hasValue = typeof ind?.value === 'number';
+  const levelPct = hasValue ? (ind.pct_10y ?? null) : null;
   const quadrant = levelPct !== null ? classifyQuadrant(levelPct, imp.impulse) : null;
   return {
     slug,
     name: schema.name,
-    level: ind?.value ?? null,
+    level: hasValue ? ind.value : null,
     levelPct,
     ...imp,
     quadrant,
@@ -69,11 +73,14 @@ export class LeverageAnalyzer {
     });
 
     // Deterministic narrative — no LLM, so this is free and always available.
-    const dangerCountries = countries.flatMap(c => [c.household, c.corporate])
-      .filter(l => l.quadrant === 'danger').map(l => l.name);
+    // "No data at all" and "building history" are DIFFERENT states and the
+    // narrative must not blur them — it used to claim series with zero
+    // data were merely "still building enough quarterly history".
+    const allLegs = countries.flatMap(c => [c.household, c.corporate]);
+    const dangerCountries = allLegs.filter(l => l.quadrant === 'danger').map(l => l.name);
     const ponziSectors = sectors.filter(s => s.flag === 'watch').map(s => s.name);
-    const maturingCount = countries.flatMap(c => [c.household, c.corporate])
-      .filter(l => l.maturity === 'building').length;
+    const noDataCount = allLegs.filter(l => l.level === null).length;
+    const maturingCount = allLegs.filter(l => l.level !== null && l.maturity === 'building').length;
 
     let narrative;
     if (dangerCountries.length > 0) {
@@ -85,7 +92,10 @@ export class LeverageAnalyzer {
       narrative += `India's ${ponziSectors.join(' and ')} lending is both elevated and still accelerating — the segment RBI's own Financial Stability Reports have repeatedly flagged. `;
     }
     if (maturingCount > 0) {
-      narrative += `${maturingCount} of ${countries.length * 2} country debt series still building enough quarterly history for a reliable impulse read (~2 years needed).`;
+      narrative += `${maturingCount} of ${allLegs.length} country debt series still building enough quarterly history for a reliable impulse read (~2 years needed). `;
+    }
+    if (noDataCount > 0) {
+      narrative += `${noDataCount} series have no data yet (source not found on recent fetches).`;
     }
 
     const latency = Date.now() - start;

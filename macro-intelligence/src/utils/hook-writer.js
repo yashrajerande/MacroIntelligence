@@ -150,6 +150,24 @@ const THEME_KEYWORDS = {
     /taper/i,
     /yen\s+carry/i,
   ],
+  // S11 Keen/Minsky section — without this theme the anti-repetition
+  // machinery was blind to all 20 leverage slugs and the writer could
+  // anchor on private-debt every day indefinitely (the exact failure
+  // this module was built to prevent).
+  leverage: [
+    /debt[\s-\/]*(to[\s-]*)?gdp/i,
+    /private\s+debt/i,
+    /household\s+debt/i,
+    /corporate\s+debt/i,
+    /credit\s+impulse/i,
+    /\bleverage\b/i,
+    /minsky/i,
+    /ponzi/i,
+    /unsecured\s+(credit|lending|loans)/i,
+    /credit\s+card\s+(growth|lending|loans)/i,
+    /personal\s+loans?\b/i,
+    /sectoral\s+credit/i,
+  ],
 };
 
 /**
@@ -239,6 +257,28 @@ const SLUG_TO_THEMES = {
   affordability_index: ['real_estate'],
   office_vacancy: ['real_estate'],
   retail_mall_vacancy: ['real_estate'],
+
+  // Leverage (S11 — Keen/Minsky private debt)
+  india_hh_debt_gdp: ['leverage'],
+  india_corp_debt_gdp: ['leverage'],
+  us_hh_debt_gdp: ['leverage', 'global_macro'],
+  us_corp_debt_gdp: ['leverage', 'global_macro'],
+  china_hh_debt_gdp: ['leverage', 'global_macro'],
+  china_corp_debt_gdp: ['leverage', 'global_macro'],
+  japan_hh_debt_gdp: ['leverage', 'global_macro'],
+  japan_corp_debt_gdp: ['leverage', 'global_macro'],
+  ez_hh_debt_gdp: ['leverage', 'global_macro'],
+  ez_corp_debt_gdp: ['leverage', 'global_macro'],
+  uk_hh_debt_gdp: ['leverage', 'global_macro'],
+  uk_corp_debt_gdp: ['leverage', 'global_macro'],
+  india_credit_industry_yoy: ['leverage', 'credit_deposit'],
+  india_credit_services_yoy: ['leverage', 'credit_deposit'],
+  india_credit_personal_yoy: ['leverage', 'credit_deposit'],
+  india_credit_agri_yoy: ['leverage', 'credit_deposit'],
+  india_credit_housing_yoy: ['leverage', 'real_estate'],
+  india_credit_vehicle_yoy: ['leverage', 'consumption'],
+  india_credit_creditcard_yoy: ['leverage', 'credit_deposit'],
+  india_credit_nbfc_yoy: ['leverage', 'credit_deposit'],
 
   // Global
   us_gdp_saar: ['global_macro'],
@@ -457,13 +497,10 @@ export function scoreHookCandidates(indicators, history) {
     if (recentSlugs.includes(slug)) novelty -= 60;
     if (slugThemes.some(t => recentThemes.includes(t))) novelty -= 30;
 
-    // Composite
-    let score = freshness * 0.40 + magnitude * 0.50 + novelty * 0.10;
-
-    // Flat or missing direction halves the score (it's not a surprise)
-    if (!ind.direction || ind.direction === 'flat') {
-      score *= 0.5;
-    }
+    // Composite. No extra flat-direction penalty here: scoreIndicator
+    // (the magnitude input) already halves flat/missing-direction scores,
+    // so a second ×0.5 quadrupled the documented penalty.
+    const score = freshness * 0.40 + magnitude * 0.50 + novelty * 0.10;
 
     scored.push({
       slug,

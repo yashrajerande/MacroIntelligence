@@ -25,14 +25,31 @@ export class MarketDataAnalyst {
     // Compute gold_inr_gram from gold_usd and inr_usd.
     // Yahoo INRUSD=X quotes USD-per-INR (~0.01); we need INR-per-USD (~90+).
     if (prices.gold_usd && prices.inr_usd && prices.gold_usd.value && prices.inr_usd.value) {
-      const inrPerUsd = prices.inr_usd.value < 1 ? 1 / prices.inr_usd.value : prices.inr_usd.value;
+      const invert = v => (typeof v === 'number' && v > 0 && v < 1 ? 1 / v : v);
+      const inrPerUsd = invert(prices.inr_usd.value);
       const goldInrPerGram = (prices.gold_usd.value * inrPerUsd) / 31.1035;
+
+      // Derive `previous` from the components' own previous values so the
+      // Previous column and change% include BOTH legs (gold and FX). The
+      // old code fabricated previous as value×0.99 and copied change_pct
+      // from gold_usd — a self-contradictory pair (displayed +3.51% next
+      // to numbers 1.01% apart) that dropped the currency move entirely.
+      const inrPerUsdPrev = invert(prices.inr_usd.previous);
+      const goldPrev = (typeof prices.gold_usd.previous === 'number' && typeof inrPerUsdPrev === 'number')
+        ? (prices.gold_usd.previous * inrPerUsdPrev) / 31.1035
+        : null;
+      const value = Math.round(goldInrPerGram);
+      const previous = goldPrev !== null ? Math.round(goldPrev) : null;
+      const changePct = previous
+        ? Math.round(((value - previous) / Math.abs(previous)) * 10000) / 100
+        : 0;
+
       prices.gold_inr_gram = {
-        value: Math.round(goldInrPerGram),
-        value_str: String(Math.round(goldInrPerGram)),
-        previous: prices.gold_inr_gram?.previous || Math.round(goldInrPerGram * 0.99),
-        change_pct: prices.gold_usd.change_pct || 0,
-        direction: prices.gold_usd.direction || 'flat',
+        value,
+        value_str: String(value),
+        previous,
+        change_pct: changePct,
+        direction: changePct > 0.1 ? 'up' : changePct < -0.1 ? 'down' : 'flat',
         source: 'Derived (Yahoo Finance)',
         vintage: isoDate,
         is_estimated: false,

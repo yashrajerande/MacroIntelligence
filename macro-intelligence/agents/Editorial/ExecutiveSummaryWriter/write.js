@@ -53,11 +53,14 @@ export class ExecutiveSummaryWriter {
 Bull: ${allData.scenarios.data.bull.name} — ${allData.scenarios.data.bull.description}
 Bear: ${allData.scenarios.data.bear.name} — ${allData.scenarios.data.bear.description}`;
 
-    // Build comprehensive indicator context for richer analysis
+    // Build comprehensive indicator context for richer analysis.
+    // API-sourced market prices LAST — they must win the overlap with the
+    // LLM web-search set (us_cpi, fed_funds_rate, etc.).
     const allIndicators = {
-      ...allData.marketData.data.prices,
       ...allData.macroData.data.indicators,
       ...(allData.reData?.data?.indicators || {}),
+      ...(allData.leverageData?.data?.indicators || {}),
+      ...allData.marketData.data.prices,
     };
     const dynamicRanges = allData.dynamicRanges || null;
     const indicatorSummary = Object.entries(allIndicators)

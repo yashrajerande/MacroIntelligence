@@ -29,10 +29,13 @@ export class SignalDetector {
   async detect(allData) {
     const start = Date.now();
 
+    // API-sourced market prices LAST — they must win the overlap with the
+    // LLM web-search set (us_cpi, fed_funds_rate, etc.).
     const allIndicators = {
-      ...allData.marketData.data.prices,
       ...allData.macroData.data.indicators,
       ...allData.reData.data.indicators,
+      ...(allData.leverageData?.data?.indicators || {}),
+      ...allData.marketData.data.prices,
     };
 
     const scored = scoreAllIndicators(allIndicators);

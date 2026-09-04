@@ -48,6 +48,7 @@ export class VoiceBroadcaster {
       return {
         scriptText: '',
         audioPath: null,
+        latestAudioPath: null, // explicit — a missing field made Telegram fall back to yesterday's committed MP3
         meta: { agent: 'VoiceBroadcaster', model: 'skipped', latency_ms: 0, tokens: { input: 0, output: 0 }, cost_usd: 0 },
       };
     }

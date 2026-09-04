@@ -65,8 +65,11 @@ const HARD_RULES = {
   },
   corp_bond_issuance: {
     detect: (v) => v > 100 && v < 10000,
-    fix:    (v) => v * 100,
-    note:   'Corp bond issuance scaled from hundreds of crore to crore',
+    // ×10, not ×100: the schema median is ₹65,000 cr, so 6,051 → 60,510
+    // lands AT the median while the old ×100 fabricated a 9× boom (the
+    // new p50 guard caught exactly this).
+    fix:    (v) => v * 10,
+    note:   'Corp bond issuance scaled ×10 to align with historical median (unit slip)',
   },
   // HPI — LLM sometimes returns YoY growth % instead of index value (base=100)
   hpi_mumbai: {
@@ -143,7 +146,14 @@ export function normalizeValue(slug, value, source) {
       if (fixed === null) {
         return { value: null, corrected: true, correction_note: hard.note, kind: 'hard' };
       }
-      if (isInRange(slug, fixed)) {
+      // Same sanity gate as the generic path: the "corrected" value must
+      // land closer to the median than the original did. Without this, a
+      // genuinely weak print (corp bonds at a real ₹9,000 cr) matched the
+      // detect window and got scaled 100× into a fabricated boom.
+      const range = HISTORICAL_RANGES[slug];
+      const closerToP50 = !range?.p50 ||
+        Math.abs(fixed - range.p50) < Math.abs(value - range.p50);
+      if (isInRange(slug, fixed) && closerToP50) {
         return { value: fixed, corrected: true, correction_note: hard.note, kind: 'hard' };
       }
     }

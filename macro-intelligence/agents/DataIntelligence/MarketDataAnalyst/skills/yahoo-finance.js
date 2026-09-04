@@ -3,6 +3,8 @@
  * No API key required. Uses unofficial chart endpoint.
  */
 
+import { getISTDate } from '../../../../src/utils/ist-date.js';
+
 const SYMBOL_MAP = {
   nifty50:         '^NSEI',
   sensex:          '^BSESN',
@@ -23,7 +25,8 @@ const SYMBOL_MAP = {
   hang_seng:       '^HSI',
   euro_stoxx50:    '^STOXX50E',
   brent_usd_global:'BZ=F',
-  bdi:             '^BDI',
+  // bdi removed: '^BDI' is not a Yahoo symbol — it 404'd on every run
+  // since launch. Listed in the validator's KNOWN_UNAVAILABLE instead.
   embassy_reit:    'EMBASSY.NS',
   mindspace_reit:  'MINDSPACE.NS',
   brookfield_reit: 'BIRET.NS',
@@ -62,13 +65,32 @@ async function fetchWithRetry(url, retries = 2) {
 }
 
 async function fetchSymbol(slug, symbol) {
-  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=2d&interval=1d`;
+  // range=5d so the close series reliably contains at least two sessions.
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=5d&interval=1d`;
   try {
     const data = await fetchWithRetry(url);
-    const meta = data.chart.result[0].meta;
+    const result = data.chart.result[0];
+    const meta = result.meta;
     const current = meta.regularMarketPrice;
-    const previous = meta.chartPreviousClose;
-    const changePct = previous !== 0
+
+    // Derive `previous` from the actual close series. meta.chartPreviousClose
+    // is the close before the CHART RANGE, not the prior session — for
+    // thinly-traded symbols (the NSE REITs, iron ore) it produced impossible
+    // one-day moves like -31% that then poisoned momentum labels AND the
+    // renderer's suspect-value substitution fallback.
+    const closes = (result.indicators?.quote?.[0]?.close || []).filter(Number.isFinite);
+    let previous;
+    if (closes.length >= 2) {
+      const last = closes[closes.length - 1];
+      // If the last close IS today's price, the prior session is one back.
+      previous = Math.abs(last - current) < 1e-9 && closes.length >= 2
+        ? closes[closes.length - 2]
+        : last;
+    } else {
+      previous = meta.chartPreviousClose;
+    }
+
+    const changePct = previous
       ? Math.round(((current - previous) / Math.abs(previous)) * 10000) / 100
       : 0;
 
@@ -79,7 +101,7 @@ async function fetchSymbol(slug, symbol) {
       change_pct: changePct,
       direction: computeDirection(current, previous),
       source: 'Yahoo Finance',
-      vintage: new Date().toISOString().split('T')[0],
+      vintage: getISTDate().isoDate, // was UTC — disagreed with run_date for pre-05:30-IST runs
       is_estimated: false,
     };
   } catch (err) {

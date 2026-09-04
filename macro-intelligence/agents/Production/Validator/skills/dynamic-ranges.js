@@ -46,7 +46,11 @@ export async function fetchDynamicRanges() {
     `?select=indicator_slug,latest_numeric,run_date` +
     `&run_date=gte.${cutoffStr}` +
     `&latest_numeric=not.is.null` +
-    `&order=run_date`;
+    // Total order required: run_date alone has ~115 tied rows per date and
+    // Postgres LIMIT/OFFSET over a non-unique sort can duplicate or skip
+    // rows across page boundaries, silently corrupting mean/stddev and
+    // the leverage series. (run_date, indicator_slug) is the table PK.
+    `&order=run_date,indicator_slug`;
 
   try {
     let allRows = [];

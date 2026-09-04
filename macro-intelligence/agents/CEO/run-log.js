@@ -92,7 +92,14 @@ export class RunLogger {
     const model    = meta.model || 'none';
     const tokens   = meta.tokens || { input: 0, output: 0 };
     const latency  = meta.latency_ms || 0;
-    const cost     = Math.round(agentCost(model, tokens) * 100000) / 100000;
+    // An agent that computes its own cost (e.g. VoiceBroadcaster's Haiku +
+    // OpenAI TTS spend) reports meta.cost_usd — honor it. The token-based
+    // estimate only knows the two Claude models, so a composite model
+    // string ("...+openai-tts-1-hd") used to fall through to the 'none'
+    // rate and the entire TTS spend vanished from the ledger.
+    const cost = typeof meta.cost_usd === 'number'
+      ? Math.round(meta.cost_usd * 100000) / 100000
+      : Math.round(agentCost(model, tokens) * 100000) / 100000;
 
     // Per-agent entry
     this.log.agents[name] = {
@@ -130,7 +137,9 @@ export class RunLogger {
   /** Record validation results */
   validation(result) {
     this.log.validation = {
-      checks_passed: result.errors.length === 0 ? 22 : 22 - result.errors.length,
+      // Layers can push one error per indicator, so clamp at 0 — this
+      // used to go negative past 22 errors.
+      checks_passed: Math.max(0, 22 - result.errors.length),
       errors: result.errors,
       warnings: result.warnings,
     };

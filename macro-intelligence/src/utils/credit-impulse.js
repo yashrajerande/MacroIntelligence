@@ -23,12 +23,34 @@
 // Monthly slugs need >=13 distinct prints for one YoY read, >=25 for impulse.
 const MIN_PRINTS = { quarterly: { yoy: 5, impulse: 9 }, monthly: { yoy: 13, impulse: 25 } };
 
-/** Collapse consecutive equal values — daily snapshots repeat between real prints. */
-function distinctPrints(series) {
+/**
+ * Collapse daily snapshots into one print per CALENDAR PERIOD (month or
+ * quarter), keeping the last observation in each period.
+ *
+ * Deduping by value (the previous approach) failed in both directions:
+ * two genuinely different quarters printing the same rounded value merged
+ * into one (index arithmetic then compared the wrong periods), and daily
+ * LLM-sourced wobble (42.6→42.5→42.6) created fake "prints" that let a
+ * quarterly series claim impulse maturity from values days apart.
+ */
+function distinctPrints(series, frequency) {
   const out = [];
+  let lastBucket = null;
   for (const p of series || []) {
     if (!Number.isFinite(p.v)) continue;
-    if (out.length === 0 || out[out.length - 1].v !== p.v) out.push(p);
+    const d = String(p.d || '');
+    const year = d.slice(0, 4);
+    const month = parseInt(d.slice(5, 7), 10);
+    if (!year || !Number.isFinite(month)) continue;
+    const bucket = frequency === 'quarterly'
+      ? `${year}-Q${Math.ceil(month / 3)}`
+      : `${year}-${String(month).padStart(2, '0')}`;
+    if (bucket === lastBucket) {
+      out[out.length - 1] = p; // keep the LAST observation in the period
+    } else {
+      out.push(p);
+      lastBucket = bucket;
+    }
   }
   return out;
 }
@@ -42,7 +64,7 @@ function distinctPrints(series) {
  */
 export function computeImpulse(frequency, series) {
   const need = MIN_PRINTS[frequency] || MIN_PRINTS.monthly;
-  const prints = distinctPrints(series);
+  const prints = distinctPrints(series, frequency);
 
   if (prints.length < need.yoy) {
     return { maturity: 'building', printsAvailable: prints.length, yoyGrowth: null, yoyGrowthPrior: null, impulse: null };

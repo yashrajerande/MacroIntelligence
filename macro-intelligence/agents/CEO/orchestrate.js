@@ -18,6 +18,7 @@ import {
   MARKET_SLUGS, RE_SLUGS, LEVERAGE_SLUGS,
 } from '../../src/utils/data-cache.js';
 import { normalizeAllIndicators } from '../../src/utils/unit-normalizer.js';
+import { scorePct10y } from '../Analysis/SignalDetector/skills/signal-scoring.js';
 
 import { MarketDataAnalyst }      from '../DataIntelligence/MarketDataAnalyst/fetch.js';
 import { MacroDataAnalyst }       from '../DataIntelligence/MacroDataAnalyst/fetch.js';
@@ -53,6 +54,18 @@ async function run() {
   const { dateStr, isoDate } = getISTDate();
   const logger = new RunLogger(isoDate);
   logger.start(dateStr);
+
+  // A failed run has still spent real API money — every exit path must
+  // charge the ledger, or a recurring failure burns the monthly budget
+  // without the cap ever binding.
+  let costRecorded = false;
+  const recordCostOnFailure = () => {
+    if (costRecorded) return;
+    try {
+      recordRunCost(isoDate, logger.estimateCost(), logger.log.run_id);
+      costRecorded = true;
+    } catch { /* ledger write is best-effort on the failure path */ }
+  };
 
   try {
     // ── BUDGET GUARD ────────────────────────────────────────────────
@@ -161,10 +174,45 @@ async function run() {
       if (wsCheck.needsRERefresh) normalizeAllIndicators(reData.data.indicators);
       if (wsCheck.needsLeverageRefresh) normalizeAllIndicators(leverageData.data.indicators);
 
-      // Update cache with all data (fresh + cached)
-      const allFresh = { ...marketData.data.prices, ...macroData.data.indicators, ...reData.data.indicators, ...leverageData.data.indicators };
+      // Update the cache with ONLY genuinely-fetched data. Feeding the
+      // cache-served branches back in re-stamped every slug's last_updated
+      // daily, so no monthly/quarterly indicator could EVER go stale again
+      // — production was serving Feb-2026 vintages as "fetched today" in
+      // September. Merge order: web-search sets first, API market prices
+      // LAST, so a Haiku-scraped number can never override a FRED/Yahoo
+      // value for the 7 overlapping US series.
+      const allFresh = {
+        ...(wsCheck.needsMacroRefresh ? macroData.data.indicators : {}),
+        ...(wsCheck.needsRERefresh ? reData.data.indicators : {}),
+        ...(wsCheck.needsLeverageRefresh ? leverageData.data.indicators : {}),
+        ...marketData.data.prices,
+      };
       updateCache(allFresh, isoDate);
-      console.log(`  ✓ Cache updated: ${Object.keys(allFresh).length} indicators`);
+      console.log(`  ✓ Cache updated: ${Object.keys(allFresh).length} freshly-fetched indicators`);
+    }
+
+    // ── Re-score percentiles AFTER normalization ─────────────────────
+    // scorePct10y used to run inside the fetchers, BEFORE the unit
+    // normalizer — so inr_usd was scored on the raw 0.0106 quote (0th
+    // percentile of [55,100]) and kept that score after inversion to
+    // 94.34. Polarity Guard 1 then rejected it as inconsistent, silently
+    // excluding the FX flagship from every signal and hook. Re-scoring
+    // here (both fetch and cache-served paths) makes pct_10y always
+    // describe the value actually displayed.
+    {
+      const rescoreAll = {
+        ...macroData.data.indicators, ...reData.data.indicators,
+        ...leverageData.data.indicators, ...marketData.data.prices,
+      };
+      for (const [slug, ind] of Object.entries(rescoreAll)) {
+        if (!ind || typeof ind.value !== 'number') continue;
+        const scored = scorePct10y(slug, ind.value);
+        if (scored) {
+          ind.pct_10y = scored.pct_10y;
+          ind.pct_10y_tier = scored.pct_10y_tier;
+          if (scored.pct_note) ind.pct_note = scored.pct_note;
+        }
+      }
     }
 
     // ── STEP 2: ANALYSIS ────────────────────────────────────────────
@@ -196,9 +244,11 @@ async function run() {
 
     // Pure code, no LLM — computes the Keen/Minsky credit-impulse read from
     // accumulated history. Never throws (no external calls), so no retry needed.
+    // API-sourced market prices spread LAST so they win the 7-slug overlap
+    // with the LLM web-search set (us_cpi, fed_funds_rate, etc.).
     const allIndicatorsForLeverage = {
-      ...marketData.data.prices, ...macroData.data.indicators,
-      ...reData.data.indicators, ...leverageData.data.indicators,
+      ...macroData.data.indicators, ...reData.data.indicators,
+      ...leverageData.data.indicators, ...marketData.data.prices,
     };
     const leverage = new LeverageAnalyzer().analyze(allIndicatorsForLeverage, dynamicRanges);
     logger.agent('LeverageAnalyzer', leverage.meta);
@@ -281,6 +331,7 @@ async function run() {
     if (!validation.valid) {
       logger.error('Validation failed', validation.errors.join('; '));
       logger.fail('Validation failed');
+      recordCostOnFailure();
       process.exit(1);
     }
 
@@ -303,6 +354,10 @@ async function run() {
         feedHealth: news.feedHealth || null,
         runStartTime,
         validation,
+        // The ledger has no entry for today yet (recordRunCost runs later,
+        // just before GitPublisher), so the cockpit needs this run's cost
+        // passed in — reading the ledger alone always showed $0.00.
+        currentRunCost: logger.estimateCost(),
       });
       cockpitPath = cockpitResult.outputPath;
       logger.agent('OpsManager', cockpitResult.meta);
@@ -325,6 +380,7 @@ async function run() {
     // the monthly budget cap never binds.
     const finalCost = logger.estimateCost();
     recordRunCost(isoDate, finalCost, logger.log.run_id);
+    costRecorded = true;
 
     // GitPublisher pushes every run — the most transient-failure-prone step.
     await withRetry(
@@ -356,6 +412,7 @@ async function run() {
   } catch (err) {
     logger.error('Pipeline failed', err.message, err.stack);
     logger.fail(err.message);
+    recordCostOnFailure();
     process.exit(1);
   }
 }

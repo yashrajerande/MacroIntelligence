@@ -10,6 +10,19 @@
 import { isInversePolarity } from '../../../../src/utils/polarity.js';
 
 /**
+ * Escape LLM/RSS-sourced text before it lands in an HTML sink. Titles,
+ * headlines and data_text come from models and third-party feeds — a
+ * stray "<" parsed as markup can break the page.
+ */
+export function escHtml(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+/**
  * Render a compact inline-SVG sparkline from a {d, v} series.
  * Pure string generation — no charting library, ~350 bytes per row.
  * Color reflects polarity-aware trend: green = improving, red = worsening.
@@ -76,7 +89,7 @@ export function row(label, value, previous, direction, momentum, pct10y, tier, s
 
   // Z-score anomaly detection
   let sigmaHtml = '';
-  let tdClass = '';
+  let hasTip = false;
   if (stats && stats.stddev > 0 && typeof numericValue === 'number') {
     const z = (numericValue - stats.mean) / stats.stddev;
     const absZ = Math.abs(z);
@@ -91,7 +104,7 @@ export function row(label, value, previous, direction, momentum, pct10y, tier, s
         `Mean: ${fmt(stats.mean)} · StdDev: ±${fmt(stats.stddev)}<br>` +
         `Range: ${fmt(stats.min)} – ${fmt(stats.max)}<br>` +
         `Z-score: ${absZ.toFixed(1)}σ ${dir} mean</div>`;
-      tdClass = ' class="has-tip"';
+      hasTip = true;
     }
   }
 
@@ -104,13 +117,23 @@ export function row(label, value, previous, direction, momentum, pct10y, tier, s
 
   const flagHtml = flagLabel ? ` <span class="row-flag">${flagLabel}</span>` : '';
 
+  // Column classes (c-ind/c-val/c-prv/c-mom/c-pct) and the pct-wrap/pct-n/
+  // pct-b/pct-f percentile-bar structure match the template's CSS contract.
+  // Bare <td>s stripped ALL column styling from every generated row, and a
+  // bare tier-class span matched no CSS rule at all (the sheet only defines
+  // descendant selectors like `.pct-hi .pct-n`), so the tier color never
+  // rendered and the polarity-flip logic above was computed then thrown away.
+  const pctCell = pct10y !== undefined
+    ? `<div class="pct-wrap ${tierClass}"><span class="pct-n">${pct10y}%</span><div class="pct-b"><div class="pct-f" style="width:${Math.max(0, Math.min(100, pct10y))}%"></div></div></div>`
+    : '~';
+
   return `<tr>
-  <td>${label}${flagHtml}</td>
-  <td${tdClass}>${value ?? 'Awaited'}${sigmaHtml}</td>
-  <td>${previous ?? '—'}</td>
+  <td class="c-ind">${label}${flagHtml}</td>
+  <td class="c-val${hasTip ? ' has-tip' : ''}">${value ?? 'Awaited'}${sigmaHtml}</td>
+  <td class="c-prv">${previous ?? '—'}</td>
   <td><span class="${arrClass}">${arrChar}</span></td>
-  <td>${momCell}</td>
-  <td><span class="${tierClass}">${pct10y !== undefined ? pct10y + '%' : '~'}</span></td>
+  <td class="c-mom">${momCell}</td>
+  <td class="c-pct">${pctCell}</td>
 </tr>`;
 }
 
@@ -177,7 +200,12 @@ export function fillTbody(html, tbodyId, rowsHtml) {
  * Replace the window.__MACRO_DATA__ scaffold with the actual data object.
  */
 export function fillMacroData(html, macroDataObj) {
-  const jsonStr = JSON.stringify(macroDataObj, null, 2);
+  // JSON.stringify does not escape "<": a headline from a third-party RSS
+  // feed (or an LLM title) containing the literal text "</script" would
+  // terminate the <script> block early, killing every inline function on
+  // the page and dumping raw JSON into the body. < is JSON-legal and
+  // parses identically.
+  const jsonStr = JSON.stringify(macroDataObj, null, 2).replace(/</g, '\\u003c');
   const regex = /window\.__MACRO_DATA__\s*=\s*\{[\s\S]*?\};\s*\/\*\s*END __MACRO_DATA__\s*\*\//;
   const replacement = `window.__MACRO_DATA__ = ${jsonStr}; /* END __MACRO_DATA__ */`;
   return html.replace(regex, replacement);
@@ -197,7 +225,10 @@ export function fillTickerData(html, marketPrices) {
       // `dir` drives the template's arrow map (am[d.dir]) and color class —
       // omitting it printed a literal "undefined" in the ticker strip.
       const dir = p.direction === 'up' ? 'up' : p.direction === 'down' ? 'down' : 'flat';
-      return `{ label: "${label}", value: "${p.value_str || p.value}", change: "${chg}", dir: "${dir}" }`;
+      // JSON.stringify, not hand-quoted interpolation: a `"` or `\` in a
+      // fetched value_str would be a syntax error killing the whole
+      // inline <script> (ticker, clock, panels, everything).
+      return JSON.stringify({ label, value: String(p.value_str || p.value), change: chg, dir });
     });
 
   const regex = /const tickerData\s*=\s*\[[\s\S]*?\];/;

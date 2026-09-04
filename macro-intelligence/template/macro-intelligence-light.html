@@ -619,7 +619,7 @@ td.c-pct { text-align:right; min-width:96px; }
 .mover.bad  .mv-chg { color:#cc0033; }
 
 /* ── TV / kiosk mode (?tv=1) ── */
-html.tv { font-size:22px; }
+html.tv { font-size:22px !important; }
 html.tv .sidenav, html.tv .footer-dis, html.tv #audio-panel { display:none !important; }
 html.tv body { padding-bottom:40px; }
 html.tv .cmd-verdict { font-size:1.5em; line-height:1.35; }
@@ -1134,27 +1134,27 @@ html.tv .dt td, html.tv .dt th { padding:14px 0; }
       <div class="news-strip">
         <div class="nc geo">
           <div class="nc-cat">Geopolitics</div>
-          <div class="nc-hl"><a href="#" id="news-geo-url" target="_blank" rel="noopener" id="news-geo-hl"><!-- FILL ≤7 words --></a></div>
+          <div class="nc-hl"><a href="#" id="news-geo-url" target="_blank" rel="noopener"><span id="news-geo-hl"><!-- FILL ≤7 words --></span></a></div>
           <div class="nc-foot"><span class="nc-src" id="news-geo-src"><!-- src --></span><span class="buzz bz-hot">HOT</span></div>
         </div>
         <div class="nc ai">
           <div class="nc-cat">AI</div>
-          <div class="nc-hl"><a href="#" id="news-ai-url" target="_blank" rel="noopener" id="news-ai-hl"><!-- FILL ≤7 words --></a></div>
+          <div class="nc-hl"><a href="#" id="news-ai-url" target="_blank" rel="noopener"><span id="news-ai-hl"><!-- FILL ≤7 words --></span></a></div>
           <div class="nc-foot"><span class="nc-src" id="news-ai-src"><!-- src --></span><span class="buzz bz-viral">VIRAL</span></div>
         </div>
         <div class="nc india">
           <div class="nc-cat">India</div>
-          <div class="nc-hl"><a href="#" id="news-india-url" target="_blank" rel="noopener" id="news-india-hl"><!-- FILL ≤7 words --></a></div>
+          <div class="nc-hl"><a href="#" id="news-india-url" target="_blank" rel="noopener"><span id="news-india-hl"><!-- FILL ≤7 words --></span></a></div>
           <div class="nc-foot"><span class="nc-src" id="news-india-src"><!-- src --></span><span class="buzz bz-watch">WATCH</span></div>
         </div>
         <div class="nc fintech">
           <div class="nc-cat">Global Fintech</div>
-          <div class="nc-hl"><a href="#" id="news-fintech-url" target="_blank" rel="noopener" id="news-fintech-hl"><!-- FILL ≤7 words --></a></div>
+          <div class="nc-hl"><a href="#" id="news-fintech-url" target="_blank" rel="noopener"><span id="news-fintech-hl"><!-- FILL ≤7 words --></span></a></div>
           <div class="nc-foot"><span class="nc-src" id="news-fintech-src"><!-- src --></span><span class="buzz bz-watch">WATCH</span></div>
         </div>
         <div class="nc ifs">
           <div class="nc-cat">Indian Fin. Services</div>
-          <div class="nc-hl"><a href="#" id="news-ifs-url" target="_blank" rel="noopener" id="news-ifs-hl"><!-- FILL ≤7 words --></a></div>
+          <div class="nc-hl"><a href="#" id="news-ifs-url" target="_blank" rel="noopener"><span id="news-ifs-hl"><!-- FILL ≤7 words --></span></a></div>
           <div class="nc-foot"><span class="nc-src" id="news-ifs-src"><!-- src --></span><span class="buzz bz-hot">HOT</span></div>
         </div>
       </div>
@@ -1500,14 +1500,25 @@ html.tv .dt td, html.tv .dt th { padding:14px 0; }
   const timeEl = document.getElementById('audio-time');
   const bar = document.getElementById('audio-bar');
 
-  // Check if audio file exists
-  const audioSrc = 'daily-broadcast.mp3';
-  fetch(audioSrc, { method: 'HEAD' }).then(r => {
-    if (r.ok) {
-      audio.src = audioSrc;
-      panel.style.display = 'block';
-    }
-  }).catch(() => {});
+  // Show the player ONLY when this page IS today's edition.
+  // daily-broadcast.mp3 is overwritten each run, so an archived page from
+  // April would otherwise play TODAY's briefing under April's data.
+  // Deferred so __MACRO_DATA__ (assigned near the bottom) is available.
+  document.addEventListener('DOMContentLoaded', function () {
+    const runDate = (window.__MACRO_DATA__ && window.__MACRO_DATA__.run && window.__MACRO_DATA__.run.run_date) || null;
+    const istToday = (function () {
+      const t = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+      return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`;
+    })();
+    if (runDate && runDate !== istToday) return; // archived edition — no audio
+    const audioSrc = 'daily-broadcast.mp3';
+    fetch(audioSrc, { method: 'HEAD' }).then(r => {
+      if (r.ok) {
+        audio.src = audioSrc;
+        panel.style.display = 'block';
+      }
+    }).catch(() => {});
+  });
 
   window.toggleAudio = function() {
     if (!audio.src) return;
@@ -1555,17 +1566,27 @@ function tick() {
 setInterval(tick,1000); tick();
 
 function setDateLabels() {
-  const ist = new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Kolkata'}));
+  // Date labels come from the RUN DATE the generator baked into
+  // __MACRO_DATA__ — NOT the viewer's clock. Using the wall clock meant
+  // every archived dashboard relabeled itself with today's date the
+  // moment it was opened, so a 5-month-old page claimed to be current.
+  const runDate = (window.__MACRO_DATA__ && window.__MACRO_DATA__.run && window.__MACRO_DATA__.run.run_date) || null;
+  const d = runDate ? new Date(runDate + 'T12:00:00+05:30') : new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Kolkata'}));
   const DAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const MO     = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const full = `${DAYS[ist.getDay()]}, ${ist.getDate()} ${MONTHS[ist.getMonth()]} ${ist.getFullYear()}`;
+  const full = `${DAYS[d.getDay()]}, ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
   document.getElementById('header-date').textContent = full.toUpperCase();
   document.getElementById('footer-date').textContent = full;
+  // gen-time stays live — it shows when the viewer loaded the page.
+  const ist = new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Kolkata'}));
   document.getElementById('gen-time').textContent   = `${pad(ist.getHours())}:${pad(ist.getMinutes())} IST`;
-  document.getElementById('cmd-date').textContent   = `INDIA & GLOBAL MACRO · ${DAYS[ist.getDay()].toUpperCase()} ${ist.getDate()} ${MO[ist.getMonth()].toUpperCase()} ${ist.getFullYear()}`;
+  document.getElementById('cmd-date').textContent   = `INDIA & GLOBAL MACRO · ${DAYS[d.getDay()].toUpperCase()} ${d.getDate()} ${MO[d.getMonth()].toUpperCase()} ${d.getFullYear()}`;
 }
-setDateLabels();
+// Deferred: __MACRO_DATA__ is assigned near the bottom of the page, after
+// this script block — an immediate call would always take the wall-clock
+// fallback and reintroduce the archived-page relabeling bug.
+document.addEventListener('DOMContentLoaded', setDateLabels);
 
 /* ── TICKER ────────────────────────────────────── */
 const tickerData = [
@@ -1748,7 +1769,10 @@ function removeMsg(msgId) {
 
 function formatAnalystMsg(text) {
   if (!text) return '';
-  return text
+  // Escape FIRST — the streamed model output goes into innerHTML, and an
+  // unescaped "<" in the reply was live markup. Markdown-ish transforms
+  // are applied to the escaped text afterwards.
+  return escHtml(text)
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     .replace(/\n\n/g, '</p><p>')
     .replace(/\n/g, '<br>')
@@ -1770,6 +1794,10 @@ function rhKeydown(event, type, id) {
 
 // Inject rabbit hole triggers into signal cards and regime cards after DOM ready
 (function injectRabbitHoles() {
+  // No edge-function URL configured → don't inject triggers at all.
+  // With RH_URL='' the chat fetched the page itself, got a 200 with no
+  // stream, and silently rendered an EMPTY analyst bubble.
+  if (!RH_URL) return;
   // Signal cards: sig1 through sig7
   for (let i = 1; i <= 7; i++) {
     const card = document.getElementById(`sig${i}`);
@@ -2104,6 +2132,7 @@ async function supabaseUpload() {
 (function () {
   if (!/[?&]tv=1/.test(location.search)) return;
   document.documentElement.classList.add('tv');
+  document.documentElement.style.fontSize = ''; // clear the font-picker's inline style, which beat the stylesheet rule
   setTimeout(function () { location.reload(); }, 15 * 60 * 1000);
   var pausedUntil = 0;
   ['click', 'touchstart', 'wheel'].forEach(function (ev) {

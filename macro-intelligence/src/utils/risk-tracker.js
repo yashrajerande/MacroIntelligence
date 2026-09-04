@@ -78,14 +78,18 @@ function readHistory() {
 }
 
 /**
- * Returns how many consecutive most-recent days (before today) the given
- * theme already won "Top Risk Now". 0 if it didn't win yesterday.
+ * Returns how many consecutive most-recent runs (before today) the given
+ * theme already won "Top Risk Now". 0 if it didn't win last time.
  * @param {string} theme — signal_theme of today's candidate
+ * @param {string} [excludeDate] — today's ISO date; a same-day re-run has
+ *        already recorded today's entry, which must not count toward the
+ *        "prior days" streak (it printed "Day N+2" on re-runs).
  */
-export function getStreak(theme) {
+export function getStreak(theme, excludeDate) {
   const { history } = readHistory();
   let streak = 0;
   for (let i = history.length - 1; i >= 0; i--) {
+    if (excludeDate && history[i].date === excludeDate) continue;
     if (history[i].theme === theme) streak++;
     else break;
   }

@@ -35,11 +35,15 @@ ECONOMIST / FT (prose craft):
 
 RULES:
 1. Keep responses under 200 words unless the user asks for more detail
-2. Always start with the Munger inversion: what would make this thesis wrong?
-3. Cite at least one high-frequency proxy (Mishra test) when discussing India data
+2. Always start with an inversion: what would make this thesis wrong?
+3. Cite at least one high-frequency proxy when discussing India data
 4. Every claim must include a specific number or date
 5. If you don't have data, say "I don't have that data point" — never hallucinate
-6. Be conversational but rigorous — the user is smart and wants depth, not fluff`;
+6. Be conversational but rigorous — the user is smart and wants depth, not fluff
+7. NEVER name Mishra, Munger, the Economist, or the FT in your replies —
+   these voices are private analytical anchors, not citations. Present
+   every conclusion as your own, unattributed. (The dashboard's validator
+   hard-errors on these names; this chat surface must hold the same line.)`;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
@@ -155,7 +159,7 @@ async function getRegimeContext(dimension: string, runDate: string): Promise<str
     .join("\n");
 
   return `REGIME: ${dimension.toUpperCase()}
-Classification: ${regime.badge_type} — ${regime.badge_label || ""}
+Classification: ${regime.badge_label || "unclassified"}
 Metrics: ${regime.metric_summary}
 
 ANALYSIS:

@@ -7,12 +7,12 @@
 import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { SLUG_MAP } from '../../../src/utils/indicator-schema.js';
+import { SLUG_MAP, INDICATOR_SCHEMA } from '../../../src/utils/indicator-schema.js';
 import { isInversePolarity } from '../../../src/utils/polarity.js';
 import { QUADRANT_LABELS } from '../../../src/utils/credit-impulse.js';
 import { rankRiskSignals, getStreak, recordTopRisk, classifyRiskSeverity } from '../../../src/utils/risk-tracker.js';
 import { classifyGlobalRegime } from '../../../src/utils/global-regime.js';
-import { row, fillId, fillTbody, fillMacroData, fillTickerData } from './skills/template-filler.js';
+import { row, fillId, fillTbody, fillMacroData, fillTickerData, escHtml } from './skills/template-filler.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..', '..', '..');
@@ -69,6 +69,10 @@ function buildIndicatorObj(slug, raw) {
     pct_note:         raw.pct_note || '',
     is_estimated:     raw.is_estimated || false,
     source:           raw.source || '',
+    // Dropped here for months — Validator Layer 1's low-confidence check
+    // was structurally unreachable and Supabase's confidence column was
+    // always null. Only meaningful when a value exists.
+    confidence:       latestNum !== null ? (raw.confidence || undefined) : undefined,
   };
 }
 
@@ -90,18 +94,26 @@ export class DashboardRenderer {
     } = allData;
 
     // ── Merge all raw indicators ─────────────────────────────────────
+    // API-sourced market prices spread LAST so they win the 7-slug
+    // overlap with the LLM web-search set (us_cpi, fed_funds_rate, etc.).
     const allRaw = {
-      ...marketData.data.prices,
       ...macroData.data.indicators,
       ...reData.data.indicators,
       ...leverageData.data.indicators,
+      ...marketData.data.prices,
     };
 
     // ── Sanitize: swap suspect values for previous data ─────────────
+    // DAILY-frequency indicators only. A monthly/quarterly series
+    // snapshotted daily has near-zero trailing stddev, so a genuine new
+    // print (credit-card growth 20% → 12%) computed as z≈8 and got
+    // silently reverted to the old value — suppressing exactly the large
+    // decelerations the Keen/Minsky section exists to surface.
     const staleIndicators = [];
     if (dynamicRanges) {
       for (const [slug, raw] of Object.entries(allRaw)) {
         if (typeof raw.value !== 'number') continue;
+        if (INDICATOR_SCHEMA[slug]?.frequency !== 'daily') continue;
         const stats = dynamicRanges[slug];
         if (!stats || !stats.stddev) continue;
 
@@ -188,31 +200,30 @@ export class DashboardRenderer {
     if (ranked) {
       const { top, runnerUp } = ranked;
       const severity = classifyRiskSeverity(top.pct_10y);
-      const streak = getStreak(top.signal_theme); // consecutive PRIOR days, not counting today
+      // Pass today's date so a same-day re-run (which already recorded an
+      // entry) doesn't count today twice and print "Day N+2".
+      const streak = getStreak(top.signal_theme, isoDate);
       recordTopRisk(isoDate, top.signal_theme, top.title);
 
       snapRisk = top.title;
 
       const streakTag = streak >= 1 ? ` · Day ${streak + 1}` : '';
       const evidence = top.data_text || top.pct_note || '';
-      const nextTag = runnerUp ? ` — next: ${runnerUp.title}` : '';
+      const nextTag = runnerUp ? ` — next: ${escHtml(runnerUp.title)}` : '';
 
       snapRiskHtml =
         `<span class="ph-badge ${severity.badge_type}">${severity.badge_label}</span>` +
-        `<span class="ctrio-line">${top.title}${streakTag}</span>` +
-        (evidence ? `<span class="ctrio-sub">${evidence}${nextTag}</span>` : '');
+        `<span class="ctrio-line">${escHtml(top.title)}${streakTag}</span>` +
+        (evidence ? `<span class="ctrio-sub">${escHtml(evidence)}${nextTag}</span>` : '');
     }
 
     // ── Derive real estate summary ───────────────────────────────────
-    const embassyRaw    = allRaw.embassy_reit || {};
-    const gsecRaw       = allRaw.gsec_10y || {};
-    const embassyYield  = embassyRaw.value ? (embassyRaw.value / 100) : null; // unit: ₹/unit → yield estimated
-    const gsecYield     = typeof gsecRaw.value === 'number' ? gsecRaw.value : null;
-
-    // Spread: approximate from raw REIT distribution yield if available
-    const reitVsGsecBps = gsecYield !== null && embassyYield !== null
-      ? Math.round((embassyYield - gsecYield) * 100)
-      : null;
+    // REIT-vs-G-Sec spread intentionally null: the old computation divided
+    // Embassy's UNIT PRICE by 100 and called it a distribution yield —
+    // ₹369.92/unit became a "3.70% yield" purely because the price was
+    // near 370. A fabricated bps figure is worse than no figure; needs a
+    // real DPU/price feed to compute honestly.
+    const reitVsGsecBps = null;
 
     const launchesDir = (allRaw.re_launches_units || {}).direction || 'flat';
     const absorbDir   = (allRaw.office_absorption || {}).direction || 'flat';
@@ -274,17 +285,30 @@ export class DashboardRenderer {
     html = fillId(html, 'header-date', dateStr);
     html = fillId(html, 'footer-date', dateStr);
 
-    // S1 badge and summary
+    // S1 badge and summary. The template hardcodes class="ph-badge b-exp"
+    // on s1-badge, so a contraction regime rendered as a green expansion
+    // pill — swap the color class to the growth regime's actual badge_type.
     const s1Badge   = `${growthRegime.badge_label || 'Steady'} — ${inflRegime.badge_label || 'Moderate'}`;
     const s1Summary = growthRegime.metric_summary || '';
+    html = html.replace(
+      /(<span class="ph-badge )[\w-]*(" id="s1-badge")/,
+      `$1${growthRegime.badge_type || 'b-neu'}$2`
+    );
     html = fillId(html, 's1-badge',   s1Badge);
     html = fillId(html, 's1-summary', s1Summary);
 
-    // Regime cards (6 dimensions)
+    // Regime cards (6 dimensions). RegimeClassifier computes badge_type
+    // (b-exp/b-slow/b-risk/b-neu) but it was dropped on the floor — every
+    // badge rendered as the same uncolored pill, so "Deposit Gap Stress"
+    // looked identical to "Expansion Mode". Inject the class too.
     for (const r of regime.data) {
       const id = DIM_ID[r.dimension] || r.dimension;
       html = fillId(html, `rc-${id}-m`, r.metric_summary || '');
       html = fillId(html, `rc-${id}-s`, r.signal_text    || '');
+      html = html.replace(
+        new RegExp(`(<span class="ph-badge)[\\w -]*(" id="rc-${id}-b")`),
+        `$1 ${r.badge_type || 'b-neu'}$2`
+      );
       html = fillId(html, `rc-${id}-b`, r.badge_label    || '');
     }
 
@@ -298,10 +322,14 @@ export class DashboardRenderer {
     for (const s of signals.data) {
       const n = s.signal_num;
       const status = s.status || 'watch';
-      html = fillId(html, `sig${n}-title`, s.title      || '');
-      html = fillId(html, `sig${n}-data`,  s.data_text  || '');
-      html = fillId(html, `sig${n}-impl`,  s.implication|| '');
-      html = fillId(html, `sig${n}-pct`,   `${s.pct_10y ?? 0}%`);
+      // escHtml: titles/data_text are LLM-generated — a stray "<" would
+      // parse as markup. The "Data:"/"10Y %ile:" prefixes restore the
+      // template's designed labels, which fillId's full-content replace
+      // was wiping out (the percentile rendered as a bare cryptic "81%").
+      html = fillId(html, `sig${n}-title`, escHtml(s.title || ''));
+      html = fillId(html, `sig${n}-data`,  `<strong>Data:</strong> ${escHtml(s.data_text || '')}`);
+      html = fillId(html, `sig${n}-impl`,  escHtml(s.implication || ''));
+      html = fillId(html, `sig${n}-pct`,   `10Y %ile: <strong>${s.pct_10y ?? 0}%</strong>`);
 
       // Update the signal card's CSS class and status badge together
       // Match: <div class="sc OLDSTATUS" id="sigN">...<div class="sc-status OLDSTATUS">OLD LABEL</div>
@@ -323,9 +351,9 @@ export class DashboardRenderer {
     // News cards — text and URL
     for (const n of news.data) {
       const cat = n.category;
-      html = fillId(html, `news-${cat}-src`, n.source_name || '');
-      // Fill headline text (the anchor element's inner content via news-{cat}-hl id)
-      html = fillId(html, `news-${cat}-hl`, n.headline || '');
+      html = fillId(html, `news-${cat}-src`, escHtml(n.source_name || ''));
+      // Fill headline text — third-party RSS content, always escaped
+      html = fillId(html, `news-${cat}-hl`, escHtml(n.headline || ''));
       // Fix href via the news-{cat}-url id (href precedes the id in template)
       const url = n.url && n.url !== '#' ? n.url : '#';
       html = html.replace(
@@ -456,16 +484,23 @@ export class DashboardRenderer {
       'india_credit_agri_yoy', 'india_credit_housing_yoy', 'india_credit_vehicle_yoy',
       'india_credit_creditcard_yoy', 'india_credit_nbfc_yoy',
     ]));
-    html = fillId(html, 's11-leverage-summary', leverage.data.narrative);
+    html = fillId(html, 's11-leverage-summary', leverage?.data?.narrative || '');
 
-    // ── Top movers strip: biggest polarity-aware daily moves ─────────
+    // ── Top movers strip: biggest polarity-aware daily MARKET moves ──
+    // Restricted to daily-frequency price/index series with a sane cap.
+    // Unrestricted, change_pct on a rate (China CPI 0.2→1.3 = "+550%") or
+    // a net-flow crossing zero (FII "-604%") permanently occupied all five
+    // slots with percent-of-a-percent artifacts.
+    const MOVER_TYPES = new Set(['price', 'index']);
     const movers = Object.entries(allRaw)
       .filter(([slug, r]) =>
-        SLUG_MAP[slug] &&
+        INDICATOR_SCHEMA[slug]?.frequency === 'daily' &&
+        MOVER_TYPES.has(INDICATOR_SCHEMA[slug]?.data_type) &&
         typeof r.value === 'number' &&
         typeof r.change_pct === 'number' &&
         !r.fetch_error &&
-        Math.abs(r.change_pct) >= 0.5)
+        Math.abs(r.change_pct) >= 0.5 &&
+        Math.abs(r.change_pct) <= 25)
       .sort((a, b) => Math.abs(b[1].change_pct) - Math.abs(a[1].change_pct))
       .slice(0, 5);
     if (movers.length >= 2) {
@@ -494,7 +529,7 @@ export class DashboardRenderer {
     // ── Inject stale-data footnote ─────────────────────────────────────
     if (staleIndicators.length > 0) {
       const items = staleIndicators.map(s =>
-        `<li><b>${s.name}</b> — using previous value (${s.previousValue}) because today's fetch (${s.badValue}) was ${s.zScore}σ from the 180-day mean. Last good data: ${s.vintage}.</li>`
+        `<li><b>${escHtml(s.name)}</b> — using previous value (${escHtml(s.previousValue)}) because today's fetch (${escHtml(s.badValue)}) was ${s.zScore}σ from the trailing mean. Last good data: ${escHtml(s.vintage)}.</li>`
       ).join('\n');
       const footnote = `
 <div class="stale-footnote">

@@ -106,7 +106,7 @@ function buildGauge(value, max, label) {
   </div>`;
 }
 
-export async function generateCockpit({ dateStr, isoDate, agentMetas, feedHealth, runStartTime, validation }) {
+export async function generateCockpit({ dateStr, isoDate, agentMetas, feedHealth, runStartTime, validation, currentRunCost }) {
   const costLedger = readJSON(join(OUTPUT_DIR, 'cost-ledger.json'));
   const hookHistory = readJSON(join(OUTPUT_DIR, 'hook-history.json'));
   const dataCache = readJSON(join(OUTPUT_DIR, 'data-cache.json'));
@@ -118,7 +118,11 @@ export async function generateCockpit({ dateStr, isoDate, agentMetas, feedHealth
   const monthData = costLedger?.months?.[currentMonth];
   const monthRuns = monthData?.runs || [];
   const mtdCost = monthData?.total_usd || 0;
-  const todayCost = monthRuns.filter(r => r.date === isoDate).reduce((sum, r) => sum + (r.cost_usd || 0), 0);
+  // The ledger has no entry for the CURRENT run yet (recordRunCost fires
+  // later), so reading it alone always showed $0.00 — add the live cost
+  // the orchestrator passes in.
+  const ledgerToday = monthRuns.filter(r => r.date === isoDate).reduce((sum, r) => sum + (r.cost_usd || 0), 0);
+  const todayCost = ledgerToday + (typeof currentRunCost === 'number' ? currentRunCost : 0);
   const budgetCap = 5.00;
 
   // Hook history
@@ -136,8 +140,10 @@ export async function generateCockpit({ dateStr, isoDate, agentMetas, feedHealth
     ? Object.values(lastUpdatedMap).sort().pop() || '—'
     : (lastUpdatedMap || '—');
 
-  // Feed health
-  const fh = feedHealth || { categories: {}, totals: { categories_ok: 0, categories_failed: 0, total_attempts: 0, avg_latency_ms: 0 } };
+  // Feed health — default must match the consumer's full shape: a missing
+  // total_failures rendered "undefined failed attempts" on exactly the
+  // day the news feeds had failed.
+  const fh = feedHealth || { categories: {}, totals: { categories_ok: 0, categories_failed: 0, total_attempts: 0, total_failures: 0, avg_latency_ms: 0 } };
 
   // Agent performance table
   const agents = agentMetas || {};
@@ -292,17 +298,21 @@ export async function generateCockpit({ dateStr, isoDate, agentMetas, feedHealth
         <tr><th>Agent</th><th>Model</th><th>Latency</th><th>Tokens (In/Out)</th><th>Cost</th><th>Status</th></tr>
         ${Object.entries(agents).map(([name, m]) => {
           const latency = m.latency_ms || 0;
-          const tokIn = m.tokens?.input || 0;
-          const tokOut = m.tokens?.output || 0;
+          // RunLogger stores FLAT input_tokens/output_tokens — reading
+          // m.tokens.* rendered "—" for every agent on every run.
+          const tokIn = m.input_tokens ?? m.tokens?.input ?? 0;
+          const tokOut = m.output_tokens ?? m.tokens?.output ?? 0;
           const cost = m.cost_usd || ((tokIn / 1000) * 0.0008 + (tokOut / 1000) * 0.001);
           const model = m.model || 'none';
+          // Real status, not hardcoded OK — a failed agent showed green.
+          const ok = (m.status || 'ok') === 'ok';
           return `<tr>
             <td style="font-weight:600;">${esc(name)}</td>
             <td class="mono">${esc(model === 'none' ? 'pure code' : model)}</td>
             <td class="mono">${latency ? latency + 'ms' : '—'}</td>
             <td class="mono">${tokIn || tokOut ? tokIn.toLocaleString() + ' / ' + tokOut.toLocaleString() : '—'}</td>
             <td class="mono">${cost > 0 ? '$' + cost.toFixed(4) : '$0'}</td>
-            <td>${buildStatusBadge(true, 'OK')}</td>
+            <td>${buildStatusBadge(ok, ok ? 'OK' : String(m.status))}</td>
           </tr>`;
         }).join('')}
       </table>
@@ -326,7 +336,7 @@ export async function generateCockpit({ dateStr, isoDate, agentMetas, feedHealth
           ${Object.entries(fh.categories || {}).map(([cat, s]) => `<tr>
             <td style="font-weight:600;">${esc(cat)}</td>
             <td>${buildStatusBadge(s.status === 'ok', s.status)}</td>
-            <td class="mono" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;">${esc(s.source_url ? new URL(s.source_url).hostname : '—')}</td>
+            <td class="mono" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;">${esc((() => { try { return s.source_url ? new URL(s.source_url).hostname : '—'; } catch { return s.source_url || '—'; } })())}</td>
             <td class="mono">${s.items || 0}</td>
             <td class="mono">${s.latency_ms || 0}ms</td>
           </tr>`).join('')}

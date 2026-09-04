@@ -16,9 +16,11 @@ const VALID_SIGNAL_STATUSES = new Set(['positive', 'risk', 'watch', 'surprise'])
 const VALID_NEWS_CATEGORIES = new Set(['geo', 'ai', 'india', 'fintech', 'ifs']);
 const VALID_CONFIDENCES = new Set(['high', 'medium', 'low']);
 
-// Known unavailable indicators (not on Yahoo/FRED — would need RBI direct feed)
-const KNOWN_UNAVAILABLE = new Set(['gsec_10y', 'rbi_fx_reserves']);
-const EFFECTIVE_SLUG_COUNT = VALID_SLUGS.length - KNOWN_UNAVAILABLE.size; // 95
+// Known unavailable indicators: gsec_10y/rbi_fx_reserves need an RBI
+// direct feed; bdi's '^BDI' ticker doesn't exist on Yahoo (404'd on
+// every run since launch) and has no free alternative source yet.
+const KNOWN_UNAVAILABLE = new Set(['gsec_10y', 'rbi_fx_reserves', 'bdi']);
+const EFFECTIVE_SLUG_COUNT = VALID_SLUGS.length - KNOWN_UNAVAILABLE.size;
 
 // ── ROUND NUMBER DETECTION (Layer 5) ─────────────────────────────────────
 // Slugs exempt from round-number warnings (rates, indices, counts where integer/round values are normal)
@@ -137,6 +139,28 @@ export function runAllChecks(html, macroData, expectedDate, dynamicRanges) {
     errors.push(`Rule 6: ${missingSlugs.length} unexpected slugs missing from indicators[]`);
   } else if (missingSlugs.length > 0) {
     warnings.push(`W2: Missing slugs: ${missingSlugs.join(', ')}`);
+  }
+
+  // Rule 6b: PRESENT-but-EMPTY indicators. Every prior rule counted slug
+  // PRESENCE — the renderer coerces null values to the string 'Awaited',
+  // so a run with 100 of 117 indicators blank passed all 22 rules and
+  // published. Thresholds are proportional (same lesson as L2).
+  const emptyCount = indicators.filter(i =>
+    i.latest_numeric === null || i.latest_numeric === undefined || i.latest_value === 'Awaited'
+  ).length;
+  const emptyErrorAt = Math.round(indicators.length * 0.30);
+  const emptyWarnAt  = Math.round(indicators.length * 0.15);
+  if (emptyCount > emptyErrorAt) {
+    errors.push(`Rule 6b: ${emptyCount} of ${indicators.length} indicators are present but empty/Awaited (max ${emptyErrorAt}) — data pipeline likely broken`);
+  } else if (emptyCount > emptyWarnAt) {
+    warnings.push(`Rule 6b: ${emptyCount} of ${indicators.length} indicators are empty/Awaited`);
+  }
+
+  // Rule 6c: slugs NOT in the schema (e.g. an LLM emitting a misspelled
+  // key) used to render a junk row silently and pollute Supabase.
+  const unknownSlugs = indicatorSlugs.filter(s => s && !VALID_SLUGS.includes(s));
+  if (unknownSlugs.length > 0) {
+    warnings.push(`Rule 6c: ${unknownSlugs.length} unknown slug(s) not in the schema: ${unknownSlugs.join(', ')}`);
   }
 
   // 7-9. Indicator field validation
@@ -409,9 +433,14 @@ export function runAllChecks(html, macroData, expectedDate, dynamicRanges) {
   // executive summary paragraphs for leaks.
   const readerSurfaces = [
     run.snap_verdict,
+    run.snap_global,   // classifyGlobalRegime narrative
+    run.snap_risk,     // Top Risk title
+    macroData.leverage?.narrative,  // S11 leverage summary
     ...((macroData.regime || []).flatMap(r => [r.metric_summary, r.signal_text, r.badge_label])),
     ...((macroData.signals || []).flatMap(s => [s.title, s.data_text, s.implication, s.pct_note])),
     ...((macroData.executive_summary || []).map(p => p.para_html)),
+    // news headlines intentionally NOT scanned: they are third-party
+    // content where "FT" or "Munger" can appear legitimately.
   ].filter(Boolean).join('\n');
   const nameHits = scanBannedNames(readerSurfaces);
   if (nameHits.length) {

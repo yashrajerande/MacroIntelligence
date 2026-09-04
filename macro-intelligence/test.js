@@ -138,9 +138,17 @@ const invResult = normalizeValue('re_unsold_inventory', 601);
 assert(invResult.corrected === true, `re_unsold_inventory 601 should be corrected`);
 assert(invResult.value === 601000, `re_unsold_inventory should become 601000, got ${invResult.value}`);
 
-// Corp bond: 6051 → 605100
+// Corp bond: 6051 → 60510 (×10 to the median; the old ×100 fabricated a
+// 9× boom — the p50 guard rejects corrections that move AWAY from p50)
 const corpResult = normalizeValue('corp_bond_issuance', 6051);
 assert(corpResult.corrected === true, `corp_bond_issuance 6051 should be corrected`);
+assert(corpResult.value === 60510, `corp_bond_issuance 6051 should become 60510 (median-anchored), got ${corpResult.value}`);
+// The p50 guard itself: a hard-rule "fix" that lands FARTHER from the
+// median than the original must be rejected (a genuinely weak print must
+// not be scaled into a fabricated boom).
+const weakGst = normalizeValue('gst_month', 49000); // detect window is 10k-50k; ×10 → 490000 (range max 250000, p50 160000)
+assert(weakGst.corrected === false || Math.abs(weakGst.value - 160000) < Math.abs(49000 - 160000),
+  `Hard-rule corrections must never move the value farther from p50: ${JSON.stringify(weakGst)}`);
 
 // Normal value should NOT be corrected
 const niftyResult = normalizeValue('nifty50', 23000);
@@ -267,11 +275,18 @@ const tickerHtml = fillTickerData(
     no_change: { value: 5.5, value_str: '5.5', direction: 'flat' },
   }
 );
-assert(tickerHtml.includes('dir: "down"'), `Ticker items must carry a dir field (template reads am[d.dir])`);
-assert(tickerHtml.includes('dir: "up"'), `Ticker dir must reflect direction`);
+assert(tickerHtml.includes('"dir":"down"'), `Ticker items must carry a dir field (template reads am[d.dir])`);
+assert(tickerHtml.includes('"dir":"up"'), `Ticker dir must reflect direction`);
 assert(!tickerHtml.includes('undefined'), `Ticker output must never contain the string "undefined": ${tickerHtml.slice(0, 200)}`);
 assert(!tickerHtml.includes('Awaited'), `Failed fetches must be excluded from the ticker, not shown as "Awaited"`);
-assert(tickerHtml.includes('change: "—"'), `Missing change_pct must render as an em-dash, not "undefined%"`);
+assert(tickerHtml.includes('"change":"—"'), `Missing change_pct must render as an em-dash, not "undefined%"`);
+// Items are JSON.stringify'd — a quote in a fetched value_str must not
+// produce a syntax error that kills the whole inline <script>.
+const quoteTicker = fillTickerData(
+  'const tickerData = [\n  {label:"X", value:"—", change:"—", dir:"flat"},\n];',
+  { weird: { value: 1, value_str: '1" onload="x', change_pct: 0, direction: 'flat' } }
+);
+assert(quoteTicker.includes('\\"'), `Quotes in value_str must be JSON-escaped, got: ${quoteTicker.slice(0, 160)}`);
 
 // --- Sparklines
 const sparkSeries = Array.from({ length: 10 }, (_, i) => ({ d: `2026-07-0${(i % 9) + 1}`, v: 100 + i * 2 }));
@@ -841,21 +856,36 @@ assert(fiveResult.maturity === 'building', `5 prints should still be 'building' 
 assert(fiveResult.yoyGrowth !== null, `5 prints should already yield a yoyGrowth read, got null`);
 assert(Math.abs(fiveResult.yoyGrowth - 20) < 0.01, `yoyGrowth should be (48-40)/40=20%, got ${fiveResult.yoyGrowth}`);
 
-// 9 distinct quarterly prints → impulse matures
-const ninePrints = Array.from({ length: 9 }, (_, i) => ({ d: `202${Math.floor(i/4)}-0${(i%4)*3+1}-01`, v: 40 + i * 2 }));
+// 9 distinct quarterly prints (real quarter dates) → impulse matures
+const QSTARTS = ['2024-01-15','2024-04-15','2024-07-15','2024-10-15','2025-01-15','2025-04-15','2025-07-15','2025-10-15','2026-01-15'];
+const ninePrints = QSTARTS.map((d, i) => ({ d, v: 40 + i * 2 }));
 const nineResult = computeImpulse('quarterly', ninePrints);
 assert(nineResult.maturity === 'ready', `9 prints should mature the impulse, got '${nineResult.maturity}'`);
 assert(nineResult.impulse !== null, `Mature impulse must be a number, got null`);
 
-// Consecutive-duplicate daily snapshots must collapse before counting prints
+// Daily snapshots collapse to one print per CALENDAR PERIOD — including
+// wobbling LLM values. Value-based dedup used to (a) count each wobble as
+// a fake print (false maturity from days-apart values), and (b) merge two
+// genuinely different quarters that happened to print the same value.
 const dailyDupSeries = [];
-for (let i = 0; i < 9; i++) {
-  const v = 40 + i * 2;
-  for (let d = 0; d < 30; d++) dailyDupSeries.push({ d: `day-${i}-${d}`, v }); // 30 identical daily rows per print
+for (let q = 0; q < 9; q++) {
+  const [y, m] = QSTARTS[q].split('-');
+  const v = 40 + q * 2;
+  for (let day = 1; day <= 28; day++) {
+    // wobble ±0.1 within the quarter — must NOT create extra prints
+    dailyDupSeries.push({ d: `${y}-${m}-${String(day).padStart(2, '0')}`, v: day % 2 ? v : v + 0.1 });
+  }
 }
 const dupResult = computeImpulse('quarterly', dailyDupSeries);
-assert(dupResult.printsAvailable === 9, `270 daily rows of 9 distinct values must collapse to 9 prints, got ${dupResult.printsAvailable}`);
-assert(dupResult.maturity === 'ready', `Deduped series should still mature normally`);
+assert(dupResult.printsAvailable === 9, `252 wobbling daily rows across 9 quarters must collapse to 9 prints, got ${dupResult.printsAvailable}`);
+assert(dupResult.maturity === 'ready', `Period-deduped series should mature normally`);
+
+// Two consecutive quarters printing the IDENTICAL value must still count
+// as two prints (value-dedup wrongly merged them and shifted the YoY index)
+const flatQuarters = QSTARTS.map(d => ({ d, v: 42.0 }));
+const flatResult = computeImpulse('quarterly', flatQuarters);
+assert(flatResult.printsAvailable === 9, `9 identical quarterly prints must stay 9 prints, got ${flatResult.printsAvailable}`);
+assert(flatResult.yoyGrowth === 0, `Flat series must read 0% YoY, got ${flatResult.yoyGrowth}`);
 
 // --- classifyQuadrant: the four Minsky reads ---
 assert(classifyQuadrant(85, -1.0) === 'danger', `High level + decelerating must be 'danger'`);

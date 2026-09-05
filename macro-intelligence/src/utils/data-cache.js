@@ -109,7 +109,7 @@ export function shouldSkipDataIntelligence(isoDate) {
   // window covers Sat/Sun and a Monday holiday following a Friday run.
   const recentCount = cachedDailySlugs.filter(s => {
     const days = (new Date(isoDate + 'T00:00:00Z') - new Date(cache.last_updated[s] + 'T00:00:00Z')) / 86400000;
-    return days >= 0 && days <= 3;
+    return days >= 0 && days <= NON_TRADING_MAX_AGE_DAYS;
   }).length;
 
   return recentCount === cachedDailySlugs.length;
@@ -148,18 +148,34 @@ export function writeCache(cache) {
 
 // ── Higher-level helpers ────────────────────────────────────────────
 
+// Weekend/holiday window: how old a "daily" cache entry may be and still
+// be served on a non-trading day (Fri data on Sat/Sun/Mon-holiday).
+// MUST stay in sync with shouldSkipDataIntelligence — the skip decision
+// and the cache read used to disagree (skip said yes, the reader then
+// dropped every daily slug as stale) and the run failed on 24 missing
+// market indicators the very first time the skip path fired.
+export const NON_TRADING_MAX_AGE_DAYS = 3;
+
 /**
  * Returns an object of cached indicators that are still fresh (not stale).
  * @param {string} currentDate — ISO date
+ * @param {{ maxAgeDays?: number }} [opts] — when set, an entry is ALSO served
+ *        if its last_updated is within maxAgeDays, in addition to the normal
+ *        per-frequency rule (weekend/holiday path: Friday's daily prices
+ *        survive the window; monthly/quarterly entries survive their rule).
  * @returns {Record<string,any>}
  */
-export function getCachedIndicators(currentDate) {
+export function getCachedIndicators(currentDate, opts = {}) {
   const cache = readCache();
   const fresh = {};
   for (const slug of Object.keys(cache.indicators)) {
-    if (!isStale(slug, cache.last_updated[slug], currentDate)) {
-      fresh[slug] = cache.indicators[slug];
+    const stamp = cache.last_updated[slug];
+    let keep = !isStale(slug, stamp, currentDate);
+    if (!keep && typeof opts.maxAgeDays === 'number' && stamp) {
+      const days = (new Date(currentDate + 'T00:00:00Z') - new Date(stamp + 'T00:00:00Z')) / 86400000;
+      keep = days >= 0 && days <= opts.maxAgeDays;
     }
+    if (keep) fresh[slug] = cache.indicators[slug];
   }
   return fresh;
 }

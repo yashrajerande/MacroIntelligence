@@ -16,7 +16,7 @@ import { classifyAll } from './agents/Analysis/RegimeClassifier/skills/regime-lo
 import { row, fillId, fillTbody, fillTickerData } from './agents/Production/DashboardRenderer/skills/template-filler.js';
 import { trendSuffix } from './src/utils/trend-context.js';
 import { computeImpulse, classifyQuadrant, QUADRANT_LABELS } from './src/utils/credit-impulse.js';
-import { MARKET_SLUGS, RE_SLUGS, LEVERAGE_SLUGS } from './src/utils/data-cache.js';
+import { MARKET_SLUGS, RE_SLUGS, LEVERAGE_SLUGS, NON_TRADING_MAX_AGE_DAYS, readCache, getCachedIndicators } from './src/utils/data-cache.js';
 import { LeverageAnalyzer } from './agents/Analysis/LeverageAnalyzer/analyze.js';
 import { rankRiskSignals, getStreak, classifyRiskSeverity } from './src/utils/risk-tracker.js';
 import { classifyGlobalRegime } from './src/utils/global-regime.js';
@@ -978,6 +978,32 @@ const dupTitleSignals = [
 const rankedDup = rankRiskSignals(dupTitleSignals);
 assert(rankedDup.runnerUp.title === 'Different one',
   `Runner-up must differ in TITLE from the top pick even if an intermediate card shares it, got "${rankedDup.runnerUp?.title}"`);
+
+// --- Weekend-skip consistency: the skip decision and the cache reader
+// must agree. The first time the skip path ever fired (Sat 2026-09-05)
+// the reader dropped every daily slug as stale and the run failed on 24
+// missing market indicators. Invariant: a daily entry stamped yesterday is
+// served under the non-trading window, and non-daily entries are NOT
+// dropped by that window (it is an OR with the normal freshness rule).
+{
+  const cache = readCache();
+  const stamps = Object.values(cache.last_updated).filter(Boolean).sort();
+  if (stamps.length > 0) {
+    const latest = stamps[stamps.length - 1];
+    const nextDay = new Date(new Date(latest + 'T00:00:00Z').getTime() + 86400000).toISOString().slice(0, 10);
+    const windowed = getCachedIndicators(nextDay, { maxAgeDays: NON_TRADING_MAX_AGE_DAYS });
+    const strict = getCachedIndicators(nextDay);
+    const dailyStampedLatest = Object.keys(cache.indicators)
+      .filter(s => MARKET_SLUGS.has(s) && cache.last_updated[s] === latest);
+    for (const s of dailyStampedLatest) {
+      assert(windowed[s] !== undefined, `Non-trading window must serve daily slug "${s}" stamped ${latest} on ${nextDay}`);
+    }
+    // whatever the strict rule keeps, the windowed read must keep too (OR semantics)
+    for (const s of Object.keys(strict)) {
+      assert(windowed[s] !== undefined, `Windowed read must be a superset of the strict read (dropped "${s}")`);
+    }
+  }
+}
 
 // --- getStreak on empty/missing history must be 0, never throw
 assert(getStreak('THEME_THAT_HAS_NEVER_WON') === 0, `getStreak for an unseen theme must be 0`);

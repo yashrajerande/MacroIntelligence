@@ -15,7 +15,7 @@ import { RunLogger } from './run-log.js';
 import { checkBudget, recordRunCost, getCostSummary } from '../../src/utils/cost-ledger.js';
 import {
   shouldSkipDataIntelligence, getCachedIndicators, updateCache, checkWebSearchNeeded,
-  MARKET_SLUGS, RE_SLUGS, LEVERAGE_SLUGS,
+  MARKET_SLUGS, RE_SLUGS, LEVERAGE_SLUGS, NON_TRADING_MAX_AGE_DAYS,
 } from '../../src/utils/data-cache.js';
 import { normalizeAllIndicators } from '../../src/utils/unit-normalizer.js';
 import { scorePct10y } from '../Analysis/SignalDetector/skills/signal-scoring.js';
@@ -87,7 +87,9 @@ async function run() {
     if (skipDI) {
       // Weekend/holiday — use ALL cached data
       console.log('  ⏭ Weekend/holiday — using cached data from last trading day');
-      const cached = getCachedIndicators(isoDate);
+      // Same window as shouldSkipDataIntelligence, or Friday's daily prices
+      // get dropped as "stale" and the validator fails on 24 missing slugs.
+      const cached = getCachedIndicators(isoDate, { maxAgeDays: NON_TRADING_MAX_AGE_DAYS });
       const marketPrices = {}, macroInds = {}, reInds = {}, leverageInds = {};
       for (const [slug, val] of Object.entries(cached)) {
         if (MARKET_SLUGS.has(slug)) marketPrices[slug] = val;

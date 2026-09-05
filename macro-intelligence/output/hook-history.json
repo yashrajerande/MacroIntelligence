@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "04 AUG 2026",
-      "verdict_line": "Bank Nifty at a 97th-percentile high while corporate bond issuance hits a 7th-percentile panic print — the market is pricing banking strength that the funding structure cannot sustain.",
-      "themes": [
-        "markets"
-      ],
-      "slugs": [
-        "bank_nifty",
-        "nikkei225",
-        "euro_stoxx50",
-        "sp500",
-        "india_vix"
-      ]
-    },
-    {
       "date": "05 AUG 2026",
       "verdict_line": "Copper at $6.63 — a 79th-percentile print — and iron ore at $161.91 both rising while US GDP prints 0.7% SAAR: industrial metals are pricing a recovery the data refuses to confirm.",
       "themes": [
@@ -428,6 +414,21 @@
         "sip_accounts",
         "nat_gas",
         "airline_pax"
+      ]
+    },
+    {
+      "date": "06 SEP 2026",
+      "verdict_line": "Copper at an 80th-percentile $6.67 — up four of five sessions — while India's PMI Services slips to 57.5 from 58.1; the commodity cycle is pricing a global recovery that India's own activity data is quietly walking back.",
+      "themes": [
+        "gdp_growth"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "sip_accounts",
+        "copper",
+        "nat_gas",
+        "pmi_services"
       ]
     }
   ]

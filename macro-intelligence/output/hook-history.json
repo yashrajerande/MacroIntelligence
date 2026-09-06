@@ -1,22 +1,6 @@
 {
   "entries": [
     {
-      "date": "05 AUG 2026",
-      "verdict_line": "Copper at $6.63 — a 79th-percentile print — and iron ore at $161.91 both rising while US GDP prints 0.7% SAAR: industrial metals are pricing a recovery the data refuses to confirm.",
-      "themes": [
-        "gdp_growth"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "nat_gas",
-        "sip_accounts",
-        "copper",
-        "iron_ore"
-      ]
-    },
-    {
       "date": "06 AUG 2026",
       "verdict_line": "Nikkei at a 100th-percentile high while US GDP prints 0.7% SAAR — global equities are pricing a recovery that the underlying economy has not yet written.",
       "themes": [
@@ -429,6 +413,22 @@
         "copper",
         "nat_gas",
         "pmi_services"
+      ]
+    },
+    {
+      "date": "07 SEP 2026",
+      "verdict_line": "Retail mall vacancy at a 15th-percentile 6.7% — tightest in three years — while India VIX sits at a 5th-percentile 10.68; the affluent economy is fully priced, and nobody is hedging it.",
+      "themes": [
+        "markets",
+        "real_estate"
+      ],
+      "slugs": [
+        "inr_usd",
+        "us_10y_treasury",
+        "retail_mall_vacancy",
+        "affordability_index",
+        "sip_accounts",
+        "india_vix"
       ]
     }
   ]

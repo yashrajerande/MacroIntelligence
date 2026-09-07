@@ -16,7 +16,7 @@ import { classifyAll } from './agents/Analysis/RegimeClassifier/skills/regime-lo
 import { row, fillId, fillTbody, fillTickerData } from './agents/Production/DashboardRenderer/skills/template-filler.js';
 import { trendSuffix } from './src/utils/trend-context.js';
 import { computeImpulse, classifyQuadrant, QUADRANT_LABELS } from './src/utils/credit-impulse.js';
-import { MARKET_SLUGS, RE_SLUGS, LEVERAGE_SLUGS, NON_TRADING_MAX_AGE_DAYS, readCache, getCachedIndicators } from './src/utils/data-cache.js';
+import { MARKET_SLUGS, RE_SLUGS, LEVERAGE_SLUGS, NON_TRADING_MAX_AGE_DAYS, readCache, getCachedIndicators, migrateCacheStamps, backfillFromCache } from './src/utils/data-cache.js';
 import { LeverageAnalyzer } from './agents/Analysis/LeverageAnalyzer/analyze.js';
 import { rankRiskSignals, getStreak, classifyRiskSeverity } from './src/utils/risk-tracker.js';
 import { classifyGlobalRegime } from './src/utils/global-regime.js';
@@ -1003,6 +1003,52 @@ assert(rankedDup.runnerUp.title === 'Different one',
       assert(windowed[s] !== undefined, `Windowed read must be a superset of the strict read (dropped "${s}")`);
     }
   }
+}
+
+// --- Cache stamp migration (pure): pre-fix stamps on non-daily slugs are
+// reset to an epoch date so the frozen macro data actually refetches;
+// daily slugs and post-fix stamps are untouched; idempotent.
+{
+  const c = {
+    indicators: { cpi_headline: { value: 3 }, india_gdp_yoy: { value: 7 }, nifty50: { value: 23000 }, re_launches_units: { value: 100 } },
+    last_updated: { cpi_headline: '2026-09-04', india_gdp_yoy: '2026-09-04', nifty50: '2026-09-04', re_launches_units: '2026-09-07' },
+    last_changed: {}, supabase_snapshot: {}, schema_v: undefined,
+  };
+  const reset = migrateCacheStamps(c);
+  assert(reset === 2, `Migration must reset exactly the 2 pre-fix non-daily stamps, got ${reset}`);
+  assert(c.last_updated.cpi_headline === '2000-01-01', `Monthly pre-fix stamp must be reset to epoch`);
+  assert(c.last_updated.india_gdp_yoy === '2000-01-01', `Quarterly pre-fix stamp must be reset to epoch`);
+  assert(c.last_updated.nifty50 === '2026-09-04', `Daily stamp must be untouched by the migration`);
+  assert(c.last_updated.re_launches_units === '2026-09-07', `Post-fix stamp (genuine fetch) must be untouched`);
+  assert(migrateCacheStamps(c) === 0, `Migration must be idempotent (schema_v marks it done)`);
+}
+
+// --- Output backfill (pure): a missed fetch takes the cached value for the
+// day's output; a real fetch is never overridden; no cache → stays null.
+{
+  const fresh = {
+    a: { value: null, value_str: 'Awaited' },          // missed, cache has it
+    b: { value: 5, value_str: '5' },                    // real fetch
+    c: { value: 0, fetch_error: 'HTTP 404' },           // failed sentinel, cache has it
+    d: { value: null },                                  // missed, no cache
+  };
+  const cached = { a: { value: 42, value_str: '42' }, b: { value: 999 }, c: { value: 7 } };
+  const n = backfillFromCache(fresh, cached);
+  assert(n === 2, `Backfill must fill exactly the 2 recoverable misses, got ${n}`);
+  assert(fresh.a.value === 42 && fresh.a.served_from_cache === true, `Missed slug must take the cached value and be marked`);
+  assert(fresh.b.value === 5, `A real fetch must never be overridden by the cache`);
+  assert(fresh.c.value === 7, `A fetch_error sentinel must be backfilled`);
+  assert(fresh.d.value === null, `No cached value → stays null (honest Awaited)`);
+}
+
+// --- Generic scaler must pick the BEST factor, not the first that fits.
+// Real case from the 07 SEP run: home loans 4,500,000 with range
+// [80000,700000] / p50 230000 was scaled ×0.001 → 4,500 (only "in range"
+// via the negative 20% buffer floor) instead of ×0.1 → 450,000.
+{
+  const r = normalizeValue('home_loan_disbursements', 4500000);
+  assert(r.corrected === true, `4,500,000 home loans must be corrected`);
+  assert(r.value === 450000, `Must scale ×0.1 → 450000 (inside the strict range, near p50), got ${r.value}`);
 }
 
 // --- getStreak on empty/missing history must be 0, never throw

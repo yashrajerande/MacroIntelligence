@@ -121,21 +121,84 @@ export function shouldSkipDataIntelligence(isoDate) {
  * Read the cache file. Returns a default structure if missing or corrupt.
  * @returns {{ indicators: Record<string,any>, last_updated: Record<string,string>, supabase_snapshot: Record<string,any> }}
  */
-export function readCache() {
-  if (!existsSync(CACHE_PATH)) {
-    return { indicators: {}, last_updated: {}, last_changed: {}, supabase_snapshot: {} };
+// Cache schema version. v2 = one-time repair of last_updated stamps that
+// the pre-fix code had re-written every day: 63 monthly/quarterly slugs
+// carried a "fetched 2026-09-04" stamp while holding Feb-2026 data, so
+// they would not have refetched until Oct/Dec. Stamps from before the
+// fix deployed are reset to an epoch date so the freshness rules see them
+// as stale NOW. Daily slugs are untouched (they genuinely refetch daily).
+// The migration is applied in memory on read and persisted by the next
+// writeCache (updateCache runs on every trading-day run).
+const CACHE_SCHEMA_VERSION = 2;
+const PRE_FIX_STAMP_CUTOFF = '2026-09-07'; // first run stamped by the fixed code
+const EPOCH_STALE = '2000-01-01';
+
+/**
+ * Pure: repair poisoned freshness stamps. Exported for testing.
+ * @returns {number} how many stamps were reset
+ */
+export function migrateCacheStamps(cache) {
+  if (cache.schema_v === CACHE_SCHEMA_VERSION) return 0;
+  let reset = 0;
+  for (const slug of Object.keys(cache.last_updated)) {
+    const freq = INDICATOR_FRESHNESS[slug];
+    if (!freq || freq === 'daily') continue;
+    if (cache.last_updated[slug] < PRE_FIX_STAMP_CUTOFF) {
+      cache.last_updated[slug] = EPOCH_STALE;
+      reset++;
+    }
   }
+  cache.schema_v = CACHE_SCHEMA_VERSION;
+  // readCache runs ~12x per run; the in-memory migration repeats until the
+  // next writeCache persists schema_v — log it once, not a dozen times.
+  if (reset > 0 && !migrateCacheStamps._logged) {
+    migrateCacheStamps._logged = true;
+    console.log(`[DataCache] Schema v${CACHE_SCHEMA_VERSION}: reset ${reset} poisoned freshness stamp(s) — affected indicators will refetch`);
+  }
+  return reset;
+}
+
+/**
+ * Read the cache file. Returns a default structure if missing or corrupt.
+ * @returns {{ indicators: Record<string,any>, last_updated: Record<string,string>, last_changed: Record<string,string>, supabase_snapshot: Record<string,any>, schema_v: number }}
+ */
+export function readCache() {
+  const empty = { indicators: {}, last_updated: {}, last_changed: {}, supabase_snapshot: {}, schema_v: CACHE_SCHEMA_VERSION };
+  if (!existsSync(CACHE_PATH)) return empty;
   try {
     const raw = JSON.parse(readFileSync(CACHE_PATH, 'utf-8'));
-    return {
+    const cache = {
       indicators:        raw.indicators        || {},
       last_updated:      raw.last_updated      || {},
       last_changed:      raw.last_changed      || {},
       supabase_snapshot: raw.supabase_snapshot  || {},
+      schema_v:          raw.schema_v,
     };
+    migrateCacheStamps(cache);
+    return cache;
   } catch {
-    return { indicators: {}, last_updated: {}, last_changed: {}, supabase_snapshot: {} };
+    return empty;
   }
+}
+
+/**
+ * Pure: for every slug in `fresh` whose value is null/failed, substitute
+ * the cached entry if the cache holds a real number. updateCache already
+ * refuses to let a failed fetch clobber a good cached value — but that
+ * only protected the CACHE; the day's OUTPUT still showed "Awaited" for
+ * any slug the LLM missed on a refresh day. Returns the count backfilled.
+ */
+export function backfillFromCache(fresh, cachedIndicators) {
+  let n = 0;
+  for (const [slug, v] of Object.entries(fresh)) {
+    const failed = !v || v.fetch_error || typeof v.value !== 'number';
+    const cachedGood = cachedIndicators?.[slug] && typeof cachedIndicators[slug].value === 'number';
+    if (failed && cachedGood) {
+      fresh[slug] = { ...cachedIndicators[slug], served_from_cache: true };
+      n++;
+    }
+  }
+  return n;
 }
 
 /**

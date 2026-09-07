@@ -174,24 +174,34 @@ export function normalizeValue(slug, value, source) {
     return { value, corrected: false, correction_note: '', kind: 'none' };
   }
 
-  // 4. Generic scale-factor detection using p50 as anchor (LLM values only)
+  // 4. Generic scale-factor detection using p50 as anchor (LLM values only).
+  //    Pick the BEST candidate, not the first that fits: prefer factors
+  //    landing inside the strict [min,max] over ones that only fit the 20%
+  //    buffer (whose floor goes negative for wide ranges), then the one
+  //    closest to p50. First-match turned home loans 4,500,000 → 4,500
+  //    (×0.001 "fit" via the negative floor) when ×0.1 → 450,000 was the
+  //    obvious answer against a 230,000 median.
   const range = HISTORICAL_RANGES[slug];
   if (range && range.p50) {
+    const distOriginal = Math.abs(value - range.p50);
+    let best = null;
     for (const factor of SCALE_FACTORS) {
       const candidate = value * factor;
-      if (isInRange(slug, candidate)) {
-        // Sanity check: the corrected value should be closer to p50
-        const distOriginal  = Math.abs(value - range.p50);
-        const distCorrected = Math.abs(candidate - range.p50);
-        if (distCorrected < distOriginal) {
-          return {
-            value: Math.round(candidate * 10000) / 10000,
-            corrected: true,
-            correction_note: `Scaled by ${factor}x to fit expected range [${range.min}, ${range.max}]`,
-            kind: 'scale',
-          };
-        }
+      if (!isInRange(slug, candidate)) continue;
+      const dist = Math.abs(candidate - range.p50);
+      if (dist >= distOriginal) continue; // must move toward the median
+      const strict = candidate >= range.min && candidate <= range.max ? 1 : 0;
+      if (!best || strict > best.strict || (strict === best.strict && dist < best.dist)) {
+        best = { factor, candidate, dist, strict };
       }
+    }
+    if (best) {
+      return {
+        value: Math.round(best.candidate * 10000) / 10000,
+        corrected: true,
+        correction_note: `Scaled by ${best.factor}x to fit expected range [${range.min}, ${range.max}]`,
+        kind: 'scale',
+      };
     }
   }
 

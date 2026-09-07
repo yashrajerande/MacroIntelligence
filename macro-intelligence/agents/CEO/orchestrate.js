@@ -15,6 +15,7 @@ import { RunLogger } from './run-log.js';
 import { checkBudget, recordRunCost, getCostSummary } from '../../src/utils/cost-ledger.js';
 import {
   shouldSkipDataIntelligence, getCachedIndicators, updateCache, checkWebSearchNeeded,
+  readCache, backfillFromCache,
   MARKET_SLUGS, RE_SLUGS, LEVERAGE_SLUGS, NON_TRADING_MAX_AGE_DAYS,
 } from '../../src/utils/data-cache.js';
 import { normalizeAllIndicators } from '../../src/utils/unit-normalizer.js';
@@ -175,6 +176,21 @@ async function run() {
       if (wsCheck.needsMacroRefresh) normalizeAllIndicators(macroData.data.indicators);
       if (wsCheck.needsRERefresh) normalizeAllIndicators(reData.data.indicators);
       if (wsCheck.needsLeverageRefresh) normalizeAllIndicators(leverageData.data.indicators);
+
+      // Backfill the day's OUTPUT for slugs a refresh fetch missed. The cache
+      // guard already keeps the old value on disk, but the dashboard still
+      // rendered "Awaited" for that day — so a refresh day could blank out
+      // rows the cache knew perfectly well. Read the cache once, before
+      // updateCache rewrites it.
+      {
+        const cachedNow = readCache().indicators;
+        let backfilled = 0;
+        backfilled += backfillFromCache(marketData.data.prices, cachedNow);
+        if (wsCheck.needsMacroRefresh) backfilled += backfillFromCache(macroData.data.indicators, cachedNow);
+        if (wsCheck.needsRERefresh) backfilled += backfillFromCache(reData.data.indicators, cachedNow);
+        if (wsCheck.needsLeverageRefresh) backfilled += backfillFromCache(leverageData.data.indicators, cachedNow);
+        if (backfilled > 0) console.log(`  ↩ Backfilled ${backfilled} missed fetch(es) from cache for today's output`);
+      }
 
       // Update the cache with ONLY genuinely-fetched data. Feeding the
       // cache-served branches back in re-stamped every slug's last_updated

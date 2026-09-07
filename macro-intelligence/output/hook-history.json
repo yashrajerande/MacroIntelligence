@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "06 AUG 2026",
-      "verdict_line": "Nikkei at a 100th-percentile high while US GDP prints 0.7% SAAR — global equities are pricing a recovery that the underlying economy has not yet written.",
-      "themes": [
-        "gdp_growth"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "nat_gas",
-        "copper"
-      ]
-    },
-    {
       "date": "07 AUG 2026",
       "verdict_line": "India VIX at a 7th-percentile low while airline passengers collapse to a 7th-percentile low — complacency and consumption are cracking in unison, and the market hasn't noticed.",
       "themes": [
@@ -429,6 +415,20 @@
         "affordability_index",
         "sip_accounts",
         "india_vix"
+      ]
+    },
+    {
+      "date": "08 SEP 2026",
+      "verdict_line": "Mumbai office rents at a 100th-percentile ₹335/sqft while absorption sits at a 6th-percentile 13.7 mn sqft — landlords are pricing a demand that tenants aren't showing up to confirm.",
+      "themes": [
+        "real_estate"
+      ],
+      "slugs": [
+        "rent_mumbai",
+        "nikkei225",
+        "euro_stoxx50",
+        "rent_bengaluru",
+        "office_absorption"
       ]
     }
   ]

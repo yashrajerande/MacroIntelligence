@@ -87,19 +87,24 @@ function buildRootIndex(cycleLabel, isoMonth) {
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MacroIntelligence</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700&family=DM+Mono:wght@400;500&display=swap');
 :root{--ink:#0a0a14;--paper:#fafaf7;--muted:#6b6b78;--accent:#1a00cc;--rule:#e6e6e0;}
 *{box-sizing:border-box}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:'DM Mono',ui-monospace,monospace;height:100vh;display:flex;flex-direction:column;}
-header{padding:14px 28px;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:24px;flex-shrink:0;}
-header h1{font-family:'Syne',ui-sans-serif,system-ui;font-weight:700;font-size:18px;letter-spacing:-0.01em;margin:0;color:var(--accent);}
-nav{display:flex;gap:18px;font-family:'Syne',ui-sans-serif,system-ui;font-size:12px;text-transform:uppercase;letter-spacing:0.06em;}
-nav a{color:var(--muted);text-decoration:none;padding:6px 0;border-bottom:2px solid transparent;cursor:pointer;}
+/* flex-wrap + nowrap tabs: the header had no wrap rule, so on a phone the
+   nav was squeezed and "Conglomerates" was pushed off the right edge of
+   the screen — the tab existed but was invisible. Keep in sync with the
+   committed root index.html (this generator overwrites it every cycle). */
+header{padding:12px 16px;border-bottom:1px solid var(--rule);display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;flex-shrink:0;min-width:0;}
+header h1{font-family:'Syne',ui-sans-serif,system-ui;font-weight:700;font-size:18px;letter-spacing:-0.01em;margin:0;color:var(--accent);white-space:nowrap;}
+nav{display:flex;gap:18px;font-family:'Syne',ui-sans-serif,system-ui;font-size:12px;text-transform:uppercase;letter-spacing:0.06em;flex-shrink:0;}
+nav a{color:var(--muted);text-decoration:none;padding:6px 0;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;}
 nav a.active{color:var(--accent);border-bottom-color:var(--accent);}
 nav a:hover{color:var(--ink);}
 .frame-wrap{flex:1;overflow:hidden;}
 iframe{border:0;width:100%;height:100%;display:block;}
-.cycle-tag{margin-left:auto;color:var(--muted);font-size:11px;}
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700&family=DM+Mono:wght@400;500&display=swap');
+.cycle-tag{margin-left:auto;color:var(--muted);font-size:11px;white-space:nowrap;}
+@media (max-width:640px){ .cycle-tag{display:none;} header{padding:10px 12px;} }
 </style>
 </head>
 <body>

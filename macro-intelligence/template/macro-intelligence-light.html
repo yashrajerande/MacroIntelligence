@@ -1478,7 +1478,10 @@ html.tv .dt td, html.tv .dt th { padding:14px 0; }
   <div class="glass-panel footer">
     <div class="footer-src"><strong>Sources:</strong> MOSPI · RBI · AMFI · NSDL · NSE · BSE · BEA · BLS · S&amp;P Global PMI · HSBC PMI · IMF · FAO · ICE · CME · Baltic Exchange · Reuters · Bloomberg · TradingEconomics · Anarock · Knight Frank · JLL · NHB · Web search as of <span id="footer-date"></span></div>
     <div class="footer-dis">For informational purposes only. Not investment advice. All data subject to revision. Estimates marked ~.</div>
-    <div class="footer-src" style="margin-top:4px;font-size:0.55rem;color:var(--ink-4);"><span id="cost-tag"></span> · <a href="archive.html" style="color:var(--ink-3);">Dashboard Archive</a> · <a href="?tv=1" style="color:var(--ink-3);">TV Mode</a></div>
+    <!-- target=_top: this page usually lives inside the root tab shell's iframe,
+         but the deep URL, TV mode and the archive can strand a visitor on this
+         tab-less page — these links always escape to the root shell. -->
+    <div class="footer-src" style="margin-top:4px;font-size:0.55rem;color:var(--ink-4);"><span id="cost-tag"></span> · <a href="archive.html" style="color:var(--ink-3);">Dashboard Archive</a> · <a href="?tv=1" style="color:var(--ink-3);">TV Mode</a> · <a href="../../index.html?tab=conglomerates" target="_top" style="color:var(--ink-3);">Conglomerates</a> · <a href="../../index.html" target="_top" style="color:var(--ink-3);">All Tabs</a></div>
   </div>
 
 </div><!-- /canvas -->

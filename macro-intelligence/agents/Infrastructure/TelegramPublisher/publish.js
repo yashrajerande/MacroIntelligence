@@ -5,12 +5,13 @@
  * Non-blocking: skips gracefully if credentials missing.
  */
 
-import { readFileSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { generateCardHTML } from './skills/summary-card.js';
 import { htmlToImage } from './skills/screenshot.js';
-import { sendPhoto, sendAudio } from './skills/telegram-api.js';
+import { generateHighlightsHTML, htmlToPdf } from './skills/highlights-pdf.js';
+import { sendPhoto, sendAudio, sendDocument } from './skills/telegram-api.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..', '..', '..');
@@ -76,6 +77,34 @@ export class TelegramPublisher {
 
     await sendPhoto(token, chatId, imageBuffer, caption);
 
+    // ── Step 2b: Daily Highlights PDF ────────────────────────────────
+    // The card is a glance; the PDF is the read — verdict, regime board,
+    // executive summary, every signal with its "so what", surprising
+    // moves, scenarios, private-debt read and news, on A5 pages so the
+    // phone's in-app viewer shows it at a readable size. Non-fatal: a
+    // PDF failure must never block the audio that follows.
+    let pdfPath = null;
+    try {
+      console.log('[TelegramPublisher] Generating Daily Highlights PDF...');
+      const highlightsHTML = generateHighlightsHTML(macroDataObj, {
+        dateStr,
+        dashboardUrl: dashboardUrl || 'https://yashrajerande.github.io/MacroIntelligence/',
+      });
+      pdfPath = join(ROOT, 'output', `daily-highlights-${isoDate}.pdf`);
+      const pdfBuffer = await htmlToPdf(highlightsHTML, pdfPath);
+      writeFileSync(join(ROOT, 'output', 'daily-highlights.pdf'), pdfBuffer);
+
+      console.log('[TelegramPublisher] Sending PDF to Telegram...');
+      await sendDocument(
+        token, chatId, pdfBuffer,
+        `MacroIntelligence-Highlights-${isoDate}.pdf`,
+        `📄 <b>Daily Highlights — ${dateStr}</b>\nRegime board · executive summary · signals · surprising moves · scenarios · news. Tap to read.`
+      );
+    } catch (err) {
+      pdfPath = null;
+      console.warn(`[TelegramPublisher] Highlights PDF failed (non-fatal): ${err.message}`);
+    }
+
     // ── Step 3: Send audio to Telegram ───────────────────────────────
     // Only send audio generated THIS run. Falling back to the committed
     // output/daily-broadcast.mp3 meant that when TTS was skipped (no
@@ -97,6 +126,7 @@ export class TelegramPublisher {
 
     return {
       imagePath,
+      pdfPath,
       meta: {
         agent: 'TelegramPublisher',
         model: 'none',

@@ -16,7 +16,9 @@ import { classifyAll } from './agents/Analysis/RegimeClassifier/skills/regime-lo
 import { row, fillId, fillTbody, fillTickerData } from './agents/Production/DashboardRenderer/skills/template-filler.js';
 import { trendSuffix } from './src/utils/trend-context.js';
 import { computeImpulse, classifyQuadrant, QUADRANT_LABELS } from './src/utils/credit-impulse.js';
-import { MARKET_SLUGS, RE_SLUGS, LEVERAGE_SLUGS, NON_TRADING_MAX_AGE_DAYS, readCache, getCachedIndicators, migrateCacheStamps, backfillFromCache } from './src/utils/data-cache.js';
+import { MARKET_SLUGS, RE_SLUGS, LEVERAGE_SLUGS, NON_TRADING_MAX_AGE_DAYS, readCache, getCachedIndicators, migrateCacheStamps, backfillFromCache, healFutureVintages } from './src/utils/data-cache.js';
+import { isVintageInFuture } from './src/utils/vintage.js';
+import { scanBannedNames, scrubBannedNames, scrubReaderSurfaces } from './src/utils/banned-names.js';
 import { LeverageAnalyzer } from './agents/Analysis/LeverageAnalyzer/analyze.js';
 import { rankRiskSignals, getStreak, classifyRiskSeverity } from './src/utils/risk-tracker.js';
 import { classifyGlobalRegime } from './src/utils/global-regime.js';
@@ -505,6 +507,86 @@ const cardHTML = generateCardHTML(mockCardData);
 assert(cardHTML.includes('Test verdict line'), 'Card HTML must contain verdict line');
 assert(cardHTML.includes('SURPRISING RISKS'), 'Card HTML must contain risks section');
 assert(cardHTML.includes('SURPRISING STRENGTHS'), 'Card HTML must contain strengths section');
+
+// ── Daily Highlights PDF (HTML builder is pure; no browser needed) ──
+import { generateHighlightsHTML, sanitizeRich, esc as hlEsc } from './agents/Infrastructure/TelegramPublisher/skills/highlights-pdf.js';
+import { findChrome } from './agents/Infrastructure/TelegramPublisher/skills/screenshot.js';
+
+const highlightsPath = join(__dirname, 'agents', 'Infrastructure', 'TelegramPublisher', 'skills', 'highlights-pdf.js');
+assert(existsSync(highlightsPath), 'highlights-pdf.js must exist');
+assert(typeof findChrome === 'function', 'screenshot.js must export findChrome for the PDF skill');
+
+const telegramApiSrc = readFileSync(join(__dirname, 'agents', 'Infrastructure', 'TelegramPublisher', 'skills', 'telegram-api.js'), 'utf8');
+assert(telegramApiSrc.includes('export async function sendDocument'), 'telegram-api.js must export sendDocument');
+const telegramPublishSrc = readFileSync(telegramPublishPath, 'utf8');
+assert(telegramPublishSrc.includes('generateHighlightsHTML') && telegramPublishSrc.includes('sendDocument'),
+  'publish.js must build the highlights PDF and send it as a document');
+assert(/Highlights PDF failed \(non-fatal\)/.test(telegramPublishSrc),
+  'PDF failure must be non-fatal so audio still goes out');
+
+const mockHighlightsData = {
+  run: {
+    run_date: '2026-09-14', ist_time: '05:15 IST',
+    snap_verdict: 'Verdict <script>alert(1)</script> line',
+    snap_india: 'Nifty 23779 | INR/USD 94.34',
+    snap_global: 'Steady global expansion; VIX 15.',
+    snap_risk: 'Fuel Inflation Remains Structural Threat',
+    india_regime: 'Slowing Pace', global_regime: 'Global Steady-State',
+    scenario_base_name: 'Base Case', scenario_base_prob: 55, scenario_base_txt: 'Base text',
+    scenario_bull_name: 'Bull Case', scenario_bull_prob: 0, scenario_bull_txt: 'Bull text',
+    scenario_bear_name: '', scenario_bear_prob: 0, scenario_bear_txt: '',
+  },
+  regime: [
+    { dimension: 'growth', badge_type: 'b-slow', badge_label: 'Slowing Pace', metric_summary: 'GDP 7.8%; PMI 54.6' },
+    { dimension: 'inflation', badge_type: 'b-risk', badge_label: 'Inflation Overshoot', metric_summary: 'CPI 4.45%' },
+  ],
+  signals: [
+    { signal_num: 1, signal_theme: 'OIL / COMMODITY RISK', status: 'risk', title: 'Fuel Inflation Remains Structural Threat',
+      data_text: 'Fuel inflation 27.41% YoY', implication: 'Hold repo at 5.25%', pct_10y: 100 },
+    { signal_num: 2, signal_theme: 'CAPEX', status: 'positive', title: 'Capex Upcycle', data_text: '', implication: 'Overweight industrials', pct_10y: 74 },
+  ],
+  news: [
+    { category: 'india', headline: 'A & B headline', url: 'https://example.com/a?x=1&amp;y=2', source_name: 'India News' },
+  ],
+  indicators: mockCardData.macroDataObj.indicators,
+  executive_summary: [
+    { para_num: 1, para_label: 'India Macro Regime', para_html: '<p>GDP at <strong onclick="x()">7.8%</strong> <img src=x onerror=alert(1)> is high.</p>' },
+  ],
+  leverage: { narrative: 'No country shows the Minsky pre-shock combination.' },
+};
+const hl = generateHighlightsHTML(mockHighlightsData, { dateStr: '14 SEP 2026', dashboardUrl: 'https://example.com/dash' });
+assert(hl.startsWith('<!DOCTYPE html>'), 'Highlights HTML must be a full document');
+assert(hl.includes('14 SEP 2026') && hl.includes('05:15 IST'), 'Highlights must carry date and IST time');
+assert(hl.includes('Verdict &lt;script&gt;alert(1)&lt;/script&gt; line') && !hl.includes('<script>'),
+  'Verdict must be escaped — no raw script tags in the PDF');
+assert(hl.includes('Regime board') && hl.includes('Slowing Pace') && hl.includes('Inflation Overshoot') && hl.includes('GDP 7.8%; PMI 54.6'),
+  'Regime board must list every dimension with badge and metrics');
+assert(hl.includes('Fuel Inflation Remains Structural Threat') && hl.includes('Fuel inflation 27.41% YoY'),
+  'Top risk tile must show the title and the matching signal evidence');
+assert(hl.includes('So what:') && hl.includes('Hold repo at 5.25%') && hl.includes('Overweight industrials'),
+  'Every signal must carry its implication');
+assert(hl.includes('Risk · P100') && hl.includes('Positive · P74'), 'Signal pills must show status and percentile');
+assert(hl.includes('<strong>7.8%</strong>') && !hl.includes('onclick') && !hl.includes('<img'),
+  'Executive summary must keep <strong> emphasis but strip attributes and foreign tags');
+assert(hl.includes('href="https://example.com/a?x=1&amp;y=2"'), 'News URL must be encoded exactly once');
+assert(hl.includes('A &amp; B headline'), 'News headline must be escaped');
+assert(hl.includes('Base Case') && hl.includes('55%') && hl.includes('Bull Case') && !hl.includes('Bear'),
+  'Scenarios: show named ones, show probability only when > 0, skip unnamed');
+assert(hl.includes('Private debt') && hl.includes('Minsky pre-shock'), 'Leverage narrative must appear when present');
+assert(hl.includes('Surprising moves') && hl.includes('CD Ratio') && hl.includes('Nifty 50'),
+  'Surprising moves must use the Polarity Skill picks');
+assert(hl.includes('href="https://example.com/dash"'), 'CTA must link to the dashboard');
+assert(!hl.includes('undefined') && !/\bNaN\b/.test(hl), 'Highlights must never print undefined/NaN');
+assert(hl.includes('@page { size: 148mm 210mm'), 'Highlights page must be A5 so phones render it readably');
+
+// Degrades cleanly on an empty payload
+const hlEmpty = generateHighlightsHTML({}, { dateStr: '14 SEP 2026' });
+assert(hlEmpty.includes('No regime classification today') && hlEmpty.includes('No signals today') && !hlEmpty.includes('undefined'),
+  'Highlights must render placeholders, not crash, on empty data');
+
+assert(sanitizeRich('<p>a <strong class="x">b</strong> <a href="j">c</a> <script>d</script></p>') === '<p>a <strong>b</strong> c d</p>',
+  'sanitizeRich keeps allowed tags without attributes and strips the rest');
+assert(hlEsc('<a href="x">&</a>') === '&lt;a href=&quot;x&quot;&gt;&amp;&lt;/a&gt;', 'esc must encode <>&"');
 assert(cardHTML.includes('Explore Full Dashboard'), 'Card HTML must contain CTA');
 assert(cardHTML.includes('https://example.com'), 'Card HTML must contain dashboard URL');
 assert(cardHTML.includes('1080px'), 'Card HTML must be 1080px wide');
@@ -1039,6 +1121,109 @@ assert(rankedDup.runnerUp.title === 'Different one',
   assert(fresh.b.value === 5, `A real fetch must never be overridden by the cache`);
   assert(fresh.c.value === 7, `A fetch_error sentinel must be backfilled`);
   assert(fresh.d.value === null, `No cached value → stays null (honest Awaited)`);
+}
+
+// --- Future-vintage self-heal. Real case from the 14 SEP manual run: the
+// extractor returned ecb_deposit_rate with vintage "2026-09-16" (the next
+// ECB meeting, two days ahead) and the Validator hard-failed the edition
+// after every agent had already run. The orchestrator now swaps in the
+// cached print BEFORE updateCache; the Validator only warns.
+{
+  assert(isVintageInFuture('2026-09-16', '2026-09-14') === true, `ISO vintage two days ahead is in the future`);
+  assert(isVintageInFuture('2026-09-14', '2026-09-14') === false, `Same-day vintage is not in the future`);
+  assert(isVintageInFuture('Sep 2026', '2026-09-14') === false, `Current month is allowed`);
+  assert(isVintageInFuture('Oct 2026', '2026-09-14') === true, `Next month is in the future`);
+  assert(isVintageInFuture('Q2 FY27', '2026-09-14') === true, `Q2 FY27 (Jul-Sep 2026) ends after 14 Sep → future`);
+  assert(isVintageInFuture('Q1 FY27', '2026-09-14') === false, `Q1 FY27 (Apr-Jun 2026) is past`);
+  assert(isVintageInFuture('Awaited', '2026-09-14') === false && isVintageInFuture(null, '2026-09-14') === false,
+    `Awaited/null vintages are never "future"`);
+
+  const fresh = {
+    ecb_deposit_rate: { value: 2.5, vintage: '2026-09-16', confidence: 'high' }, // future, cache good
+    boj_rate:         { value: 1.0, vintage: '2026-09-10', confidence: 'high' }, // sane → untouched
+    fao_food_index:   { value: 130, vintage: 'Oct 2026', confidence: 'medium' }, // future, no cache
+    us_cpi:           { value: 3.3, vintage: '2026-11-01' },                     // future, cache ALSO future → blank
+  };
+  const cached = {
+    ecb_deposit_rate: { value: 2.25, vintage: '2026-07-24', confidence: 'high' },
+    boj_rate: { value: 0.75, vintage: '2026-07-31' },
+    us_cpi: { value: 3.1, vintage: '2026-12-01' },
+  };
+  const healed = healFutureVintages(fresh, cached, '2026-09-14');
+  assert(healed.length === 3 && healed.includes('ecb_deposit_rate') && healed.includes('fao_food_index') && healed.includes('us_cpi'),
+    `Exactly the 3 future-vintage prints must be healed, got ${JSON.stringify(healed)}`);
+  assert(fresh.ecb_deposit_rate.value === 2.25 && fresh.ecb_deposit_rate.vintage === '2026-07-24' && fresh.ecb_deposit_rate.served_from_cache === true,
+    `Future-vintage print with a sane cached value must take the cached print and be marked`);
+  assert(/future vintage 2026-09-16/.test(fresh.ecb_deposit_rate.heal_reason), `Heal reason must record the bad vintage for the ops log`);
+  assert(fresh.boj_rate.value === 1.0 && fresh.boj_rate.vintage === '2026-09-10' && !fresh.boj_rate.served_from_cache,
+    `A sane print must never be touched by the heal`);
+  assert(fresh.fao_food_index.value === 130 && fresh.fao_food_index.vintage === 'Awaited' && fresh.fao_food_index.confidence === 'low',
+    `Future vintage with no cache keeps the value, blanks the vintage, drops confidence`);
+  assert(fresh.us_cpi.vintage === 'Awaited', `A cached print that is itself future-dated must not be substituted`);
+  assert(healFutureVintages(fresh, cached, '2026-09-14').length === 0, `Heal must be idempotent`);
+  assert(healFutureVintages(undefined, cached, '2026-09-14').length === 0, `Heal must tolerate a missing set`);
+
+  const rulesSrc = readFileSync(join(__dirname, 'agents', 'Production', 'Validator', 'skills', 'validation-rules.js'), 'utf8');
+  assert(/warnings\.push\(`L2: indicator "\$\{slug\}" vintage/.test(rulesSrc) && !/errors\.push\(`L2: indicator "\$\{slug\}" vintage/.test(rulesSrc),
+    `L2 future-vintage must be a warning now that the heal step runs upstream`);
+  assert(/import \{ isVintageInFuture \} from '\.\.\/\.\.\/\.\.\/\.\.\/src\/utils\/vintage\.js'/.test(rulesSrc),
+    `Validator must share isVintageInFuture with the heal step (one definition)`);
+  const orchSrc = readFileSync(join(__dirname, 'agents', 'CEO', 'orchestrate.js'), 'utf8');
+  assert(orchSrc.indexOf('healFutureVintages(') < orchSrc.indexOf('updateCache(allFresh'),
+    `Heal must run BEFORE updateCache so a future vintage is never persisted`);
+}
+
+// --- Persona-anchor scrubber. The other half of the 14 SEP failure: a
+// single "Mishra" in the editorial output failed the whole edition (L7).
+// Now the orchestrator rewrites the attribution and L7 only warns.
+{
+  const cases = [
+    ['As Neelkanth Mishra notes, the dual economy is widening.', 'The dual economy is widening.'],
+    ['Applying the Munger inversion here: what would make this fail?', 'Applying the inversion here: what would make this fail?'],
+    ['Mishra would argue that the proxy data contradicts the headline.', 'The proxy data contradicts the headline.'],
+    ["This is Munger's inversion in action.", 'This is the inversion in action.'],
+    ['<p>GDP at <strong>7.8%</strong> passes the Mishra proxy test.</p>', '<p>GDP at <strong>7.8%</strong> passes the proxy test.</p>'],
+    ["In the FT's voice: yields are the story.", 'Yields are the story.'],
+    ['A BCG senior partner would say the portfolio is too wide.', 'A senior partner would say the portfolio is too wide.'],
+  ];
+  for (const [input, expected] of cases) {
+    const out = scrubBannedNames(input);
+    assert(out === expected, `scrub(${JSON.stringify(input)}) → ${JSON.stringify(out)}, expected ${JSON.stringify(expected)}`);
+    assert(scanBannedNames(out).length === 0, `Scrubbed text must pass the scanner: ${JSON.stringify(out)}`);
+  }
+  const clean = 'Reliance is over-extended on capex; the front foot is soft.';
+  assert(scrubBannedNames(clean) === clean, `Clean text must come back byte-identical`);
+  assert(scrubBannedNames(null) === null && scrubBannedNames(42) === 42, `Non-strings pass through untouched`);
+  assert(scrubBannedNames(scrubBannedNames(cases[0][0])) === cases[0][1], `Scrub must be idempotent`);
+
+  const surfaces = {
+    execSummary: {
+      verdict_line: 'As Mishra notes, the CD ratio is the tell.',
+      regime_narratives: { growth: 'Munger would argue growth is hollow.', credit: 'Deposits lag credit.' },
+      data: [{ para_num: 1, para_html: '<p>Apply the Mishra proxy test.</p>' }, { para_num: 2, para_html: '<p>Clean.</p>' }],
+    },
+    regime: { data: [{ dimension: 'growth', signal_text: "Munger's inversion says no.", metric_summary: 'GDP 7.8%', badge_label: 'Slowing Pace' }] },
+    signals: { data: [{ title: 'Deposit Gap', data_text: 'CD 83%', implication: 'Per McKinsey, banks will compete.', pct_note: '' }] },
+    leverage: { data: { narrative: 'No Minsky moment yet.' } },
+  };
+  const n = scrubReaderSurfaces(surfaces);
+  assert(n === 5, `Exactly the 5 leaking fields must be rewritten, got ${n}`);
+  assert(surfaces.execSummary.verdict_line === 'The CD ratio is the tell.', `verdict_line scrubbed: ${surfaces.execSummary.verdict_line}`);
+  assert(surfaces.execSummary.regime_narratives.growth === 'Growth is hollow.', `regime narrative scrubbed: ${surfaces.execSummary.regime_narratives.growth}`);
+  assert(surfaces.execSummary.regime_narratives.credit === 'Deposits lag credit.', `clean narrative untouched`);
+  assert(surfaces.execSummary.data[0].para_html === '<p>Apply the proxy test.</p>', `para_html scrubbed: ${surfaces.execSummary.data[0].para_html}`);
+  assert(surfaces.regime.data[0].signal_text === 'The inversion says no.', `signal_text scrubbed: ${surfaces.regime.data[0].signal_text}`);
+  assert(surfaces.signals.data[0].implication === 'Banks will compete.', `implication scrubbed: ${surfaces.signals.data[0].implication}`);
+  assert(surfaces.leverage.data.narrative === 'No Minsky moment yet.', `Minsky is a framework name, not a persona anchor — untouched`);
+  assert(scrubReaderSurfaces({}) === 0 && scrubReaderSurfaces() === 0, `Scrub must tolerate missing surfaces`);
+
+  const rulesSrc = readFileSync(join(__dirname, 'agents', 'Production', 'Validator', 'skills', 'validation-rules.js'), 'utf8');
+  assert(/warnings\.push\(\s*`L7: Persona-anchor/.test(rulesSrc) && !/errors\.push\(\s*`L7: Persona-anchor/.test(rulesSrc),
+    `L7 must warn, not fail, now that the scrubber runs upstream`);
+  const orchSrc = readFileSync(join(__dirname, 'agents', 'CEO', 'orchestrate.js'), 'utf8');
+  assert(orchSrc.indexOf('scrubReaderSurfaces({') > orchSrc.indexOf('Regime narratives upgraded') &&
+         orchSrc.indexOf('scrubReaderSurfaces({') < orchSrc.indexOf('new DashboardRenderer().render('),
+    `Scrub must run after the editorial phase and before the renderer`);
 }
 
 // --- Generic scaler must pick the BEST factor, not the first that fits.

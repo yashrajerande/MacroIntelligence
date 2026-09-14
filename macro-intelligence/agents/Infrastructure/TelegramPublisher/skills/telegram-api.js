@@ -71,6 +71,40 @@ export async function sendAudio(token, chatId, audioBuffer, title = '60-Second M
 }
 
 /**
+ * Send a document (PDF) to a Telegram chat. Telegram renders PDFs in-app
+ * on phones, so the Daily Highlights brief opens with one tap.
+ * @param {string} token — Bot token
+ * @param {string} chatId — Chat ID
+ * @param {Buffer} fileBuffer — File bytes
+ * @param {string} filename — Name shown in the chat (with extension)
+ * @param {string} caption — Caption (supports HTML)
+ * @param {string} mimeType — Defaults to application/pdf
+ * @returns {Promise<object>}
+ */
+export async function sendDocument(token, chatId, fileBuffer, filename, caption = '', mimeType = 'application/pdf') {
+  const url = `${BASE_URL}${token}/sendDocument`;
+
+  const form = new FormData();
+  form.append('chat_id', chatId);
+  form.append('document', new Blob([fileBuffer], { type: mimeType }), filename);
+  if (caption) {
+    form.append('caption', caption);
+    form.append('parse_mode', 'HTML');
+  }
+
+  const res = await fetch(url, { method: 'POST', body: form });
+  if (!res.ok) {
+    const err = await res.text().catch(() => 'unknown');
+    throw new Error(`[Telegram] sendDocument failed: HTTP ${res.status} — ${err}`);
+  }
+
+  const data = await res.json();
+  if (!data.ok) throw new Error(`[Telegram] sendDocument error: ${data.description}`);
+  console.log('[Telegram] Document sent successfully');
+  return data;
+}
+
+/**
  * Send a text message to a Telegram chat.
  */
 export async function sendMessage(token, chatId, text, parseMode = 'HTML') {

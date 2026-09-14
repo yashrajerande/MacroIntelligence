@@ -12,14 +12,22 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 /**
  * Find Chrome executable on the system.
+ *
+ * CHROME_PATH wins when set (local runs, non-standard installs). The
+ * GitHub runner ships google-chrome-stable; the Playwright layout is
+ * checked last so a dev box with only that browser can still render.
+ * Shared with the Highlights PDF skill.
  */
-function findChrome() {
+export function findChrome() {
   const paths = [
+    process.env.CHROME_PATH,
     '/usr/bin/google-chrome-stable',
     '/usr/bin/google-chrome',
     '/usr/bin/chromium-browser',
     '/usr/bin/chromium',
-  ];
+    process.env.PLAYWRIGHT_BROWSERS_PATH ? join(process.env.PLAYWRIGHT_BROWSERS_PATH, 'chromium') : null,
+    '/opt/pw-browsers/chromium',
+  ].filter(Boolean);
   for (const p of paths) {
     if (existsSync(p)) return p;
   }

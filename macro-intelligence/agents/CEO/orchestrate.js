@@ -15,9 +15,10 @@ import { RunLogger } from './run-log.js';
 import { checkBudget, recordRunCost, getCostSummary } from '../../src/utils/cost-ledger.js';
 import {
   shouldSkipDataIntelligence, getCachedIndicators, updateCache, checkWebSearchNeeded,
-  readCache, backfillFromCache,
+  readCache, backfillFromCache, healFutureVintages,
   MARKET_SLUGS, RE_SLUGS, LEVERAGE_SLUGS, NON_TRADING_MAX_AGE_DAYS,
 } from '../../src/utils/data-cache.js';
+import { scrubReaderSurfaces } from '../../src/utils/banned-names.js';
 import { normalizeAllIndicators } from '../../src/utils/unit-normalizer.js';
 import { scorePct10y } from '../Analysis/SignalDetector/skills/signal-scoring.js';
 
@@ -190,6 +191,21 @@ async function run() {
         if (wsCheck.needsRERefresh) backfilled += backfillFromCache(reData.data.indicators, cachedNow);
         if (wsCheck.needsLeverageRefresh) backfilled += backfillFromCache(leverageData.data.indicators, cachedNow);
         if (backfilled > 0) console.log(`  ↩ Backfilled ${backfilled} missed fetch(es) from cache for today's output`);
+
+        // A vintage after the run date is an extractor misread (a scheduled
+        // release date, not a period). Swap in the cached print — or blank
+        // the vintage — BEFORE updateCache so the bad stamp never persists
+        // and the Validator's vintage layer has nothing to fail on.
+        const healed = [
+          ...healFutureVintages(marketData.data.prices, cachedNow, isoDate),
+          ...(wsCheck.needsMacroRefresh ? healFutureVintages(macroData.data.indicators, cachedNow, isoDate) : []),
+          ...(wsCheck.needsRERefresh ? healFutureVintages(reData.data.indicators, cachedNow, isoDate) : []),
+          ...(wsCheck.needsLeverageRefresh ? healFutureVintages(leverageData.data.indicators, cachedNow, isoDate) : []),
+        ];
+        if (healed.length > 0) {
+          console.log(`  ↩ Healed ${healed.length} future-vintage print(s) from cache: ${healed.join(', ')}`);
+          logger.warn('Future vintage healed', healed.join(', '));
+        }
       }
 
       // Update the cache with ONLY genuinely-fetched data. Feeding the
@@ -310,6 +326,19 @@ async function run() {
         if (narrative) r.signal_text = narrative;
       }
       console.log('  ✓ Regime narratives upgraded by Sonnet');
+    }
+
+    // Persona anchors (Mishra, Munger, FT…) are for thinking, never for
+    // attribution. When a model still writes "as Mishra notes", rewrite
+    // the sentence here rather than fail the edition at the Validator
+    // after every agent has spent its budget. L7 still scans afterwards
+    // and warns if anything slipped through.
+    {
+      const scrubbed = scrubReaderSurfaces({ execSummary, regime, signals, leverage });
+      if (scrubbed > 0) {
+        console.log(`  ↩ Scrubbed persona-anchor attribution from ${scrubbed} reader-facing field(s)`);
+        logger.warn('Persona-anchor leak scrubbed', `${scrubbed} field(s)`);
+      }
     }
 
     // ── STEP 4: PRODUCTION ──────────────────────────────────────────

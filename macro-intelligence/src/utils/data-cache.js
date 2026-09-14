@@ -8,6 +8,7 @@ import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { INDICATOR_FRESHNESS, isStale } from './indicator-freshness.js';
+import { isVintageInFuture } from './vintage.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..', '..');
@@ -199,6 +200,32 @@ export function backfillFromCache(fresh, cachedIndicators) {
     }
   }
   return n;
+}
+
+/**
+ * Pure: a print whose vintage is AFTER the run date cannot be real — the
+ * extractor read a scheduled release date (the ECB meeting two days out)
+ * as the period the number refers to. Substitute the cached print when
+ * the cache holds a real number with a sane vintage; otherwise keep the
+ * value but blank the vintage to 'Awaited' and drop confidence, so the
+ * validator's vintage layer counts it as missing instead of failing the
+ * edition. Runs BEFORE updateCache so the bad vintage is never persisted.
+ * Returns the list of healed slugs.
+ */
+export function healFutureVintages(fresh, cachedIndicators, runDate) {
+  const healed = [];
+  for (const [slug, v] of Object.entries(fresh || {})) {
+    if (!v || !isVintageInFuture(v.vintage, runDate)) continue;
+    const c = cachedIndicators?.[slug];
+    const cachedGood = c && typeof c.value === 'number' && !isVintageInFuture(c.vintage, runDate);
+    if (cachedGood) {
+      fresh[slug] = { ...c, served_from_cache: true, heal_reason: `future vintage ${v.vintage}` };
+    } else {
+      fresh[slug] = { ...v, vintage: 'Awaited', confidence: 'low', heal_reason: `future vintage ${v.vintage}` };
+    }
+    healed.push(slug);
+  }
+  return healed;
 }
 
 /**

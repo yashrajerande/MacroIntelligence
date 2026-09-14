@@ -1,22 +1,6 @@
 {
   "entries": [
     {
-      "date": "07 AUG 2026",
-      "verdict_line": "India VIX at a 7th-percentile low while airline passengers collapse to a 7th-percentile low — complacency and consumption are cracking in unison, and the market hasn't noticed.",
-      "themes": [
-        "markets"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "sp500",
-        "us_vix",
-        "bank_nifty",
-        "airline_pax",
-        "india_vix"
-      ]
-    },
-    {
       "date": "08 AUG 2026",
       "verdict_line": "US 10Y at 4.69% — an 84th-percentile yield while US GDP prints 0.7% SAAR — is repricing every carry trade that funded EM inflows; India's FII reversal from +₹22,615 cr to -₹114 cr in a single period is the first tremor.",
       "themes": [
@@ -429,6 +413,20 @@
         "euro_stoxx50",
         "rent_bengaluru",
         "office_absorption"
+      ]
+    },
+    {
+      "date": "14 SEP 2026",
+      "verdict_line": "US 10Y at 4.95% — a 4-of-5-month climb to an 89th-percentile yield — is repricing every EM carry trade while India's DII flows hit an all-time high; domestic money is buying what foreign money is quietly exiting.",
+      "themes": [
+        "flows"
+      ],
+      "slugs": [
+        "us_10y_treasury",
+        "inr_usd",
+        "dii_equity_net",
+        "uk_corp_debt_gdp",
+        "wti_usd"
       ]
     }
   ]

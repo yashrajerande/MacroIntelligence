@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "09 AUG 2026",
-      "verdict_line": "Natural gas at a 15th-percentile low cuts India's LNG import bill — but airline passengers at a 7th-percentile collapse say the consumer funding that bill is already spent.",
-      "themes": [
-        "oil"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "nat_gas",
-        "us_10y_treasury",
-        "sip_accounts",
-        "airline_pax"
-      ]
-    },
-    {
       "date": "10 AUG 2026",
       "verdict_line": "Gold in INR at an all-time ₹13,472/gram while SIP accounts grow at a 2nd-percentile crawl — India's savers are fleeing paper assets faster than new investors are entering them.",
       "themes": [],
@@ -427,6 +412,20 @@
         "fuel_inflation",
         "sip_aum",
         "dii_equity_net"
+      ]
+    },
+    {
+      "date": "16 SEP 2026",
+      "verdict_line": "Euro Stoxx 50 at a 100th-percentile 6,237 — sliding for five sessions — while Bank Nifty drops to 55,795; the rate reckoning that started in US Treasuries is now repricing European and Indian financials simultaneously.",
+      "themes": [
+        "markets"
+      ],
+      "slugs": [
+        "euro_stoxx50",
+        "bank_nifty",
+        "inr_usd",
+        "us_10y_treasury",
+        "india_vix"
       ]
     }
   ]

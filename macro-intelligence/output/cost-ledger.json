@@ -299,7 +299,7 @@
       ]
     },
     "2026-09": {
-      "total_usd": 1.0989,
+      "total_usd": 1.2202,
       "runs": [
         {
           "date": "2026-09-01",
@@ -360,9 +360,15 @@
           "run_id": "5d1eeb5b-0f2d-4d9c-a1b6-c3f728e305ed",
           "cost_usd": 0.1177,
           "timestamp": "2026-09-15T15:07:28.568Z"
+        },
+        {
+          "date": "2026-09-16",
+          "run_id": "9767a435-1eeb-4e9d-993f-566f0c488d28",
+          "cost_usd": 0.1213,
+          "timestamp": "2026-09-15T23:38:56.271Z"
         }
       ]
     }
   },
-  "lifetime_usd": 4.8027
+  "lifetime_usd": 4.924
 }

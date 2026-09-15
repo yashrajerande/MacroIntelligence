@@ -19,6 +19,9 @@ import { computeImpulse, classifyQuadrant, QUADRANT_LABELS } from './src/utils/c
 import { MARKET_SLUGS, RE_SLUGS, LEVERAGE_SLUGS, NON_TRADING_MAX_AGE_DAYS, readCache, getCachedIndicators, migrateCacheStamps, backfillFromCache, healFutureVintages } from './src/utils/data-cache.js';
 import { isVintageInFuture } from './src/utils/vintage.js';
 import { scanBannedNames, scrubBannedNames, scrubReaderSurfaces } from './src/utils/banned-names.js';
+import { classifyModelError, isTerminalModelError, retryDelaysFor, preflightModelCheck, alreadyPublished, formatFailureAlert } from './src/utils/resilience.js';
+import { writeFileSync as writeTmp, mkdtempSync } from 'fs';
+import { tmpdir } from 'os';
 import { LeverageAnalyzer } from './agents/Analysis/LeverageAnalyzer/analyze.js';
 import { rankRiskSignals, getStreak, classifyRiskSeverity } from './src/utils/risk-tracker.js';
 import { classifyGlobalRegime } from './src/utils/global-regime.js';
@@ -1224,6 +1227,73 @@ assert(rankedDup.runnerUp.title === 'Different one',
   assert(orchSrc.indexOf('scrubReaderSurfaces({') > orchSrc.indexOf('Regime narratives upgraded') &&
          orchSrc.indexOf('scrubReaderSurfaces({') < orchSrc.indexOf('new DashboardRenderer().render('),
     `Scrub must run after the editorial phase and before the renderer`);
+}
+
+// --- Resilience layer. The 09–14 SEP streak was six silent failures on
+// one billing error. These pin the four behaviours that stop a repeat:
+// classify → retry by cause → serve cache → alert a human.
+{
+  // Classification — from the exact strings the SDK / skills produce
+  const billing = new Error('400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."}}');
+  assert(classifyModelError(billing) === 'billing', `Empty-balance error must classify as billing`);
+  assert(classifyModelError(Object.assign(new Error('authentication_error: invalid x-api-key'), { status: 401 })) === 'auth', `401 must classify as auth`);
+  assert(classifyModelError(Object.assign(new Error('rate_limit_error'), { status: 429 })) === 'rate_limit', `429 must classify as rate_limit`);
+  assert(classifyModelError(Object.assign(new Error('Overloaded'), { status: 529 })) === 'overloaded', `529 must classify as overloaded`);
+  assert(classifyModelError(Object.assign(new Error('Internal server error'), { status: 500 })) === 'server', `500 must classify as server`);
+  assert(classifyModelError(new Error('fetch failed')) === 'server', `Network drop must classify as server (retryable)`);
+  assert(classifyModelError(new Error("Cannot read properties of undefined (reading 'value')")) === null, `A code bug must NOT classify as a model error`);
+  assert(classifyModelError(null) === null, `null error → null`);
+  assert(isTerminalModelError('billing') && isTerminalModelError('auth') && !isTerminalModelError('server') && !isTerminalModelError(null),
+    `Only billing/auth are terminal`);
+
+  // Retry schedule by cause
+  assert(retryDelaysFor('billing').length === 0 && retryDelaysFor('auth').length === 0, `Terminal errors get zero retries`);
+  assert(retryDelaysFor('rate_limit').length === 3 && retryDelaysFor('overloaded').length === 3 && retryDelaysFor('server').length === 3,
+    `Transient errors get three spaced retries`);
+  assert(retryDelaysFor(null).length === 1 && retryDelaysFor(null)[0] === 5000, `Unknown errors keep the original single 5s retry`);
+  for (const k of ['rate_limit', 'overloaded', 'server']) {
+    const d = retryDelaysFor(k);
+    assert(d.every((v, i) => i === 0 || v > d[i - 1]), `${k} backoff must be increasing`);
+  }
+
+  // Pre-flight: terminal → not ok; transient → ok (agents retry); success → ok
+  const fakeClient = (err) => ({ messages: { create: async () => { if (err) throw err; return {}; } } });
+  const pfBilling = await preflightModelCheck({ client: fakeClient(billing) });
+  assert(pfBilling.ok === false && pfBilling.kind === 'billing', `Pre-flight must fail fast on billing`);
+  const pfOverloaded = await preflightModelCheck({ client: fakeClient(Object.assign(new Error('Overloaded'), { status: 529 })) });
+  assert(pfOverloaded.ok === true && pfOverloaded.kind === 'overloaded', `Pre-flight must NOT abort on a transient overload`);
+  const pfOk = await preflightModelCheck({ client: fakeClient(null) });
+  assert(pfOk.ok === true && pfOk.kind === null, `Pre-flight passes on success`);
+
+  // Retry-window idempotence
+  const dir = mkdtempSync(join(tmpdir(), 'mi-pub-'));
+  const idx = join(dir, 'index.html');
+  writeTmp(idx, '<script>window.__MACRO_DATA__ = {"run":{"run_date":"2026-09-15","ist_time":"05:15 IST"}};</script>');
+  assert(alreadyPublished('2026-09-15', idx) === true, `Today's date in the committed index → already published`);
+  assert(alreadyPublished('2026-09-16', idx) === false, `A different date → not published`);
+  assert(alreadyPublished('2026-09-15', join(dir, 'missing.html')) === false, `Missing index → not published (never throws)`);
+
+  // Alert text carries the fix, not just the error
+  const alert = formatFailureAlert({ dateStr: '15 SEP 2026', kind: 'billing', reason: billing.message, runUrl: 'https://github.com/x/y/actions/runs/1', phase: 'Pre-flight' });
+  assert(alert.includes('FAILED — 15 SEP 2026') && alert.includes('Plans &amp; Billing') && alert.includes('Open run log') && alert.includes('Phase: Pre-flight'),
+    `Billing alert must name the date, the fix, the phase and link the run`);
+  assert(!/<script/.test(formatFailureAlert({ dateStr: 'x', kind: 'unknown', reason: '<script>alert(1)</script>' })), `Alert must escape the error text`);
+  assert(formatFailureAlert({ dateStr: 'x', kind: 'not-a-kind', reason: 'r' }).includes('Open the run log'), `Unknown kinds fall back to the generic fix`);
+
+  // Wiring: every exit path alerts; Supabase is non-fatal; fetchers fall back to cache
+  const orchSrc = readFileSync(join(__dirname, 'agents', 'CEO', 'orchestrate.js'), 'utf8');
+  assert((orchSrc.match(/sendFailureAlert\(/g) || []).length >= 5, `Budget, pre-flight, validation, Supabase and the catch-all must each alert`);
+  assert(orchSrc.includes('preflightModelCheck()') && orchSrc.indexOf('preflightModelCheck()') < orchSrc.indexOf("logger.phase('DataIntelligence')"),
+    `Pre-flight must run before any agent spends`);
+  assert(orchSrc.includes("process.env.FORCE_RERUN !== 'true' && alreadyPublished(isoDate)"), `Retry window must be a no-op after a successful 03:00 run unless forced`);
+  assert(/catch \(err\) \{\s*console\.warn\(`  ⚠ SupabaseWriter failed \(non-fatal/.test(orchSrc), `SupabaseWriter must be non-fatal`);
+  assert((orchSrc.match(/fetchOrCached\(/g) || []).length >= 4, `Macro, RE and Leverage fetchers must fall back to cache when the model is down`);
+  const wf = readFileSync(join(__dirname, '..', '.github', 'workflows', 'daily-dashboard.yml'), 'utf8');
+  assert(wf.includes("cron: '30 21 * * *'") && wf.includes("cron: '30 23 * * *'"), `Workflow must schedule the edition AND a retry window`);
+  assert(wf.includes("FORCE_RERUN:          ${{ github.event_name == 'workflow_dispatch' }}"), `Manual runs must force a rerun`);
+  assert(wf.includes('name: Alert on failure') && wf.includes('if: failure()') && wf.includes('api.telegram.org'), `Workflow-level failures must alert Telegram`);
+  const keepAliveCurl = (wf.match(/curl -sf "\$SUPABASE_URL[^\n]*/) || [''])[0];
+  assert(keepAliveCurl.includes('dashboard_runs?select=run_date') && !keepAliveCurl.includes('run_metadata'), `Keep-alive must query a table that exists`);
 }
 
 // --- Generic scaler must pick the BEST factor, not the first that fits.

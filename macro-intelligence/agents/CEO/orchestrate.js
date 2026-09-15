@@ -19,6 +19,10 @@ import {
   MARKET_SLUGS, RE_SLUGS, LEVERAGE_SLUGS, NON_TRADING_MAX_AGE_DAYS,
 } from '../../src/utils/data-cache.js';
 import { scrubReaderSurfaces } from '../../src/utils/banned-names.js';
+import {
+  classifyModelError, isTerminalModelError, retryDelaysFor,
+  preflightModelCheck, alreadyPublished, sendFailureAlert, currentRunUrl,
+} from '../../src/utils/resilience.js';
 import { normalizeAllIndicators } from '../../src/utils/unit-normalizer.js';
 import { scorePct10y } from '../Analysis/SignalDetector/skills/signal-scoring.js';
 
@@ -41,13 +45,40 @@ import { GitPublisher }           from '../Infrastructure/GitPublisher/publish.j
 import { TelegramPublisher }      from '../Infrastructure/TelegramPublisher/publish.js';
 import { OpsManager }             from '../Infrastructure/OpsManager/report.js';
 
+// Retry with a schedule chosen by WHY it failed: rate limits and
+// overloads get three spaced attempts, a genuine bug still gets the
+// original single retry, and billing/auth (which no retry can fix) are
+// rethrown immediately so the run can alert instead of burning minutes.
 async function withRetry(fn, agentName, logger) {
+  let attempt = 0;
+  for (;;) {
+    try {
+      return await fn();
+    } catch (err) {
+      const kind = classifyModelError(err);
+      if (isTerminalModelError(kind)) throw err;
+      const delays = retryDelaysFor(kind);
+      if (attempt >= delays.length) throw err;
+      const delay = delays[attempt++];
+      logger.warn(`${agentName} failed (${kind || 'error'}). Retry ${attempt}/${delays.length} in ${delay / 1000}s.`, err.message);
+      await new Promise(r => setTimeout(r, delay));
+    }
+  }
+}
+
+// LLM-backed data fetch with a cache fallback: if the model is the thing
+// that is down (overloaded, 5xx, exhausted retries), yesterday's cached
+// set is a far better edition than no edition. Non-model errors (a bug
+// in the fetcher) still propagate so they get fixed.
+async function fetchOrCached(fn, agentName, logger, cachedSet) {
   try {
-    return await fn();
+    return await withRetry(fn, agentName, logger);
   } catch (err) {
-    logger.warn(`${agentName} failed. Retrying once in 5s.`, err.message);
-    await new Promise(r => setTimeout(r, 5000));
-    return await fn();
+    const kind = classifyModelError(err);
+    if (!kind || isTerminalModelError(kind)) throw err;
+    console.warn(`  ⚠ ${agentName} unavailable (${kind}) — serving cached indicators for today's edition`);
+    logger.warn(`${agentName} served from cache (${kind})`, err.message);
+    return cachedSet();
   }
 }
 
@@ -75,8 +106,35 @@ async function run() {
     console.log(`  Budget: $${budget.month_spend_usd} spent / $${budget.budget_usd} cap · $${budget.remaining_usd} remaining`);
     if (!budget.allowed) {
       logger.error('Budget exceeded', `Monthly spend $${budget.month_spend_usd} exceeds $${budget.budget_usd} cap`);
+      await sendFailureAlert({ dateStr, kind: 'budget', reason: `Monthly spend $${budget.month_spend_usd} exceeds $${budget.budget_usd} cap`, runUrl: currentRunUrl(), phase: 'Budget guard' });
       logger.fail('Monthly budget cap reached');
       process.exit(1);
+    }
+
+    // ── RETRY-WINDOW GUARD ──────────────────────────────────────────
+    // The workflow fires at 03:00 IST and again at 05:00 IST. The second
+    // firing exists to recover from a transient failure; when the first
+    // one already published today's edition it must do nothing (and pay
+    // nothing). Manual runs set FORCE_RERUN so a human can always re-run.
+    if (process.env.FORCE_RERUN !== 'true' && alreadyPublished(isoDate)) {
+      console.log(`  ⏭ ${dateStr} edition is already published — nothing to do (retry window no-op)`);
+      logger.complete({ totalCostUSD: 0, skipped: 'already_published' });
+      process.exit(0);
+    }
+
+    // ── MODEL PRE-FLIGHT ────────────────────────────────────────────
+    // One-token call. An empty balance or a revoked key fails here in a
+    // second, with the fix in Telegram, instead of after five agents
+    // have each spent money and then died on the same error.
+    {
+      const pf = await preflightModelCheck();
+      if (!pf.ok) {
+        logger.error('Model pre-flight failed', pf.message);
+        await sendFailureAlert({ dateStr, kind: pf.kind, reason: pf.message, runUrl: currentRunUrl(), phase: 'Pre-flight' });
+        logger.fail(`Model pre-flight failed (${pf.kind})`);
+        process.exit(1);
+      }
+      if (pf.kind) logger.warn('Model pre-flight degraded', pf.message);
     }
 
     // ── STEP 1: DATA INTELLIGENCE ──────────────────────────────────
@@ -120,54 +178,54 @@ async function run() {
       console.log(`  ℹ Cache: ${wsCheck.cachedCount} indicators cached, ${wsCheck.staleSlugs.length} stale`);
       console.log(`  ℹ Macro refresh needed: ${wsCheck.needsMacroRefresh} | RE refresh needed: ${wsCheck.needsRERefresh} | Leverage refresh needed: ${wsCheck.needsLeverageRefresh}`);
 
+      // One cache reader for the three LLM-backed sets. Used both when the
+      // cache is fresh (skip the spend) and when the model is down (serve
+      // yesterday's numbers rather than no edition). On a fallback the
+      // stale-but-real values will be older than the freshness window;
+      // that is the point — an honest older print beats "Awaited".
+      const cachedSetFor = (pred, { anyAge = false } = {}) => {
+        const cached = getCachedIndicators(isoDate, anyAge ? { maxAgeDays: 3650 } : undefined);
+        const inds = {};
+        for (const [slug, val] of Object.entries(cached)) if (pred(slug)) inds[slug] = val;
+        return { data: { generated_at: new Date().toISOString(), run_date: isoDate, indicators: inds }, meta: cachedMeta };
+      };
+      const isMacro    = slug => !MARKET_SLUGS.has(slug) && !RE_SLUGS.has(slug) && !LEVERAGE_SLUGS.has(slug);
+      const isRE       = slug => RE_SLUGS.has(slug);
+      const isLeverage = slug => LEVERAGE_SLUGS.has(slug);
+
       if (wsCheck.needsMacroRefresh) {
-        macroData = await withRetry(
+        macroData = await fetchOrCached(
           () => new MacroDataAnalyst().fetch(isoDate),
-          'MacroDataAnalyst', logger
+          'MacroDataAnalyst', logger, () => cachedSetFor(isMacro, { anyAge: true })
         );
         logger.agent('MacroDataAnalyst', macroData.meta);
       } else {
         console.log('  ⏭ MacroDataAnalyst — all indicators fresh in cache, skipping web_search ($0.50 saved)');
-        const cached = getCachedIndicators(isoDate);
-        const macroInds = {};
-        for (const [slug, val] of Object.entries(cached)) {
-          if (!MARKET_SLUGS.has(slug) && !RE_SLUGS.has(slug) && !LEVERAGE_SLUGS.has(slug)) macroInds[slug] = val;
-        }
-        macroData = { data: { generated_at: new Date().toISOString(), run_date: isoDate, indicators: macroInds }, meta: cachedMeta };
+        macroData = cachedSetFor(isMacro);
         logger.agent('MacroDataAnalyst', cachedMeta);
       }
 
       if (wsCheck.needsRERefresh) {
-        reData = await withRetry(
+        reData = await fetchOrCached(
           () => new RealEstateAnalyst().fetch(isoDate),
-          'RealEstateAnalyst', logger
+          'RealEstateAnalyst', logger, () => cachedSetFor(isRE, { anyAge: true })
         );
         logger.agent('RealEstateAnalyst', reData.meta);
       } else {
         console.log('  ⏭ RealEstateAnalyst — all RE indicators fresh in cache, skipping web_search ($0.30 saved)');
-        const cached = getCachedIndicators(isoDate);
-        const reInds = {};
-        for (const [slug, val] of Object.entries(cached)) {
-          if (RE_SLUGS.has(slug)) reInds[slug] = val;
-        }
-        reData = { data: { generated_at: new Date().toISOString(), run_date: isoDate, indicators: reInds }, meta: cachedMeta };
+        reData = cachedSetFor(isRE);
         logger.agent('RealEstateAnalyst', cachedMeta);
       }
 
       if (wsCheck.needsLeverageRefresh) {
-        leverageData = await withRetry(
+        leverageData = await fetchOrCached(
           () => new LeverageAnalyst().fetch(isoDate),
-          'LeverageAnalyst', logger
+          'LeverageAnalyst', logger, () => cachedSetFor(isLeverage, { anyAge: true })
         );
         logger.agent('LeverageAnalyst', leverageData.meta);
       } else {
         console.log('  ⏭ LeverageAnalyst — all leverage indicators fresh in cache, skipping web_search ($0.30 saved)');
-        const cached = getCachedIndicators(isoDate);
-        const leverageInds = {};
-        for (const [slug, val] of Object.entries(cached)) {
-          if (LEVERAGE_SLUGS.has(slug)) leverageInds[slug] = val;
-        }
-        leverageData = { data: { generated_at: new Date().toISOString(), run_date: isoDate, indicators: leverageInds }, meta: cachedMeta };
+        leverageData = cachedSetFor(isLeverage);
         logger.agent('LeverageAnalyst', cachedMeta);
       }
 
@@ -377,6 +435,7 @@ async function run() {
 
     if (!validation.valid) {
       logger.error('Validation failed', validation.errors.join('; '));
+      await sendFailureAlert({ dateStr, kind: 'validation', reason: validation.errors.join('; '), runUrl: currentRunUrl(), phase: 'Production' });
       logger.fail('Validation failed');
       recordCostOnFailure();
       process.exit(1);
@@ -416,11 +475,20 @@ async function run() {
     // ── STEP 5: INFRASTRUCTURE ──────────────────────────────────────
     logger.phase('Infrastructure');
 
-    await withRetry(
-      () => new SupabaseWriter().sync(macroDataObj, isoDate),
-      'SupabaseWriter', logger
-    );
-    logger.agent('SupabaseWriter', { model: 'none', latency_ms: 0, tokens: { input: 0, output: 0 } });
+    // Supabase persistence is the history, the dashboard is the product.
+    // A paused free-tier project must not stop today's edition from
+    // publishing; the history gap is announced in Telegram instead.
+    try {
+      await withRetry(
+        () => new SupabaseWriter().sync(macroDataObj, isoDate),
+        'SupabaseWriter', logger
+      );
+      logger.agent('SupabaseWriter', { model: 'none', latency_ms: 0, tokens: { input: 0, output: 0 } });
+    } catch (err) {
+      console.warn(`  ⚠ SupabaseWriter failed (non-fatal, dashboard still publishes): ${err.message}`);
+      logger.warn('SupabaseWriter failed', err.message);
+      await sendFailureAlert({ dateStr, kind: 'supabase', reason: err.message, runUrl: currentRunUrl(), phase: 'Infrastructure (dashboard still published)' });
+    }
 
     // Record cost BEFORE publishing so the updated cost-ledger.json is part
     // of the commit — otherwise every fresh CI checkout sees $0 spent and
@@ -458,6 +526,8 @@ async function run() {
 
   } catch (err) {
     logger.error('Pipeline failed', err.message, err.stack);
+    const kind = classifyModelError(err) || (/git|push|remote/i.test(err.message) ? 'git' : 'unknown');
+    await sendFailureAlert({ dateStr, kind, reason: err.message, runUrl: currentRunUrl(), phase: logger.currentPhase || null });
     logger.fail(err.message);
     recordCostOnFailure();
     process.exit(1);

@@ -2,7 +2,8 @@ name: MacroIntelligence Corp - Daily Run
 
 on:
   schedule:
-    - cron: '30 21 * * *'   # 21:30 UTC = 03:00 IST
+    - cron: '30 21 * * *'   # 21:30 UTC = 03:00 IST — the edition
+    - cron: '30 23 * * *'   # 23:30 UTC = 05:00 IST — retry window: no-op if 03:00 published
   workflow_dispatch:
     inputs:
       run_date_override:
@@ -44,11 +45,16 @@ jobs:
         working-directory: macro-intelligence
         run: node test.js
 
+      # Free-tier Supabase pauses after a week without traffic. This ping
+      # is the keep-alive. It used to query a table that does not exist
+      # (run_metadata) so it printed "ping failed" on every run, including
+      # successful ones, and never actually touched the database.
       - name: Keep Supabase alive
         run: |
-          curl -sf "$SUPABASE_URL/rest/v1/run_metadata?select=count&limit=1" \
+          curl -sf "$SUPABASE_URL/rest/v1/dashboard_runs?select=run_date&order=run_date.desc&limit=1" \
             -H "apikey: $SUPABASE_SERVICE_KEY" \
-            -H "Authorization: Bearer $SUPABASE_SERVICE_KEY" || echo "Supabase ping failed (may be paused)"
+            -H "Authorization: Bearer $SUPABASE_SERVICE_KEY" \
+            && echo " ← Supabase reachable" || echo "Supabase ping failed (may be paused) — pipeline will publish from cache"
         env:
           SUPABASE_URL:         ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
@@ -67,6 +73,9 @@ jobs:
           TELEGRAM_CHAT_ID:    ${{ secrets.TELEGRAM_CHAT_ID }}
           RABBIT_HOLE_URL:     ${{ secrets.RABBIT_HOLE_URL }}
           DATE_OVERRIDE:        ${{ inputs.run_date_override }}
+          # A human pressing "Run workflow" always wants a fresh edition;
+          # the scheduled 05:00 retry must be a no-op when 03:00 succeeded.
+          FORCE_RERUN:          ${{ github.event_name == 'workflow_dispatch' }}
           GITHUB_REPOSITORY:    ${{ github.repository }}
           NODE_ENV:             production
 
@@ -77,3 +86,19 @@ jobs:
           name: run-logs-${{ github.run_id }}
           path: macro-intelligence/logs/
           retention-days: 7
+
+      # The orchestrator alerts on its own failure paths. This catches
+      # everything before it gets that far — npm ci, the pre-flight test
+      # suite, a runner crash — so a broken run is never silent.
+      - name: Alert on failure
+        if: failure()
+        run: |
+          [ -z "$TELEGRAM_BOT_TOKEN" ] && exit 0
+          TEXT=$'🚨 MacroIntelligence workflow FAILED ('"${{ github.event_name }}"$') before the pipeline could report.\nStep logs: '"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          curl -s "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
+            --data-urlencode "text=${TEXT}" \
+            --data-urlencode "disable_web_page_preview=true" > /dev/null || true
+        env:
+          TELEGRAM_BOT_TOKEN:  ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID:    ${{ secrets.TELEGRAM_CHAT_ID }}

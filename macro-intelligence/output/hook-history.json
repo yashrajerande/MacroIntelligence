@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "08 AUG 2026",
-      "verdict_line": "US 10Y at 4.69% — an 84th-percentile yield while US GDP prints 0.7% SAAR — is repricing every carry trade that funded EM inflows; India's FII reversal from +₹22,615 cr to -₹114 cr in a single period is the first tremor.",
-      "themes": [
-        "gdp_growth",
-        "flows"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "nat_gas",
-        "sip_accounts"
-      ]
-    },
-    {
       "date": "09 AUG 2026",
       "verdict_line": "Natural gas at a 15th-percentile low cuts India's LNG import bill — but airline passengers at a 7th-percentile collapse say the consumer funding that bill is already spent.",
       "themes": [
@@ -427,6 +412,21 @@
         "dii_equity_net",
         "uk_corp_debt_gdp",
         "wti_usd"
+      ]
+    },
+    {
+      "date": "15 SEP 2026",
+      "verdict_line": "Nikkei at a 100th-percentile 63,493 — down 1,500 points this week — while US VIX climbs to 17.1; global equity is repricing risk that India's 7th-percentile VIX at 12.3 hasn't noticed yet.",
+      "themes": [
+        "markets"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "office_absorption",
+        "rent_mumbai",
+        "us_10y_treasury",
+        "us_vix"
       ]
     }
   ]

@@ -1,18 +1,6 @@
 {
   "entries": [
     {
-      "date": "10 AUG 2026",
-      "verdict_line": "Gold in INR at an all-time ₹13,472/gram while SIP accounts grow at a 2nd-percentile crawl — India's savers are fleeing paper assets faster than new investors are entering them.",
-      "themes": [],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "sip_accounts",
-        "copper"
-      ]
-    },
-    {
       "date": "11 AUG 2026",
       "verdict_line": "Euro Stoxx 50 at a 100th-percentile high while eurozone GDP prints 0.9% — European equities are pricing a prosperity the continent's output has not earned.",
       "themes": [
@@ -426,6 +414,23 @@
         "inr_usd",
         "us_10y_treasury",
         "india_vix"
+      ]
+    },
+    {
+      "date": "17 SEP 2026",
+      "verdict_line": "BOJ at 1.0% — a 25bps hike that breaks the last pillar of global carry — while India's fuel inflation hits a decade-high 22.93%; two separate shocks, one direction for the rupee.",
+      "themes": [
+        "inflation",
+        "currency",
+        "policy"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "inr_usd",
+        "us_10y_treasury",
+        "rent_bengaluru",
+        "fuel_inflation"
       ]
     }
   ]

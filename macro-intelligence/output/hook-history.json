@@ -1,22 +1,6 @@
 {
   "entries": [
     {
-      "date": "11 AUG 2026",
-      "verdict_line": "Euro Stoxx 50 at a 100th-percentile high while eurozone GDP prints 0.9% — European equities are pricing a prosperity the continent's output has not earned.",
-      "themes": [
-        "gdp_growth",
-        "global_macro"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "nat_gas",
-        "sip_accounts",
-        "ez_gdp"
-      ]
-    },
-    {
       "date": "12 AUG 2026",
       "verdict_line": "Bank Nifty at a 95th-percentile high while FII equity flows swung ₹22,729 cr negative in a single period — the market is pricing a banking cycle the deposit base cannot fund.",
       "themes": [
@@ -431,6 +415,18 @@
         "us_10y_treasury",
         "rent_bengaluru",
         "fuel_inflation"
+      ]
+    },
+    {
+      "date": "18 SEP 2026",
+      "verdict_line": "Nikkei at an all-time 100th-percentile 64,136 while US 10Y pierces 5.01% — global equities are pricing a soft landing that the bond market is simultaneously pricing as impossible.",
+      "themes": [],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "uk_corp_debt_gdp",
+        "india_gdp_fy_estimate"
       ]
     }
   ]

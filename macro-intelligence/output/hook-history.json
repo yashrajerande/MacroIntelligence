@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "12 AUG 2026",
-      "verdict_line": "Bank Nifty at a 95th-percentile high while FII equity flows swung ₹22,729 cr negative in a single period — the market is pricing a banking cycle the deposit base cannot fund.",
-      "themes": [
-        "markets",
-        "flows"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "sp500",
-        "bank_nifty",
-        "india_vix"
-      ]
-    },
-    {
       "date": "13 AUG 2026",
       "verdict_line": "Iron ore at 161.91 — up 70% from 95.08 — while India's core sector prints 2.3% YoY; the commodity is screaming capex, the output is whispering doubt.",
       "themes": [
@@ -427,6 +412,21 @@
         "us_10y_treasury",
         "uk_corp_debt_gdp",
         "india_gdp_fy_estimate"
+      ]
+    },
+    {
+      "date": "19 SEP 2026",
+      "verdict_line": "RBI's inflation forecast just jumped 50bps to 5.1% — yet repo sits at 5.25%, leaving a real rate of 15bps that is too thin to anchor a currency at a 91st-percentile 96.15.",
+      "themes": [
+        "inflation",
+        "policy"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "inr_usd",
+        "us_10y_treasury",
+        "office_absorption"
       ]
     }
   ]

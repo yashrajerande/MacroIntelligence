@@ -1,22 +1,6 @@
 {
   "entries": [
     {
-      "date": "13 AUG 2026",
-      "verdict_line": "Iron ore at 161.91 — up 70% from 95.08 — while India's core sector prints 2.3% YoY; the commodity is screaming capex, the output is whispering doubt.",
-      "themes": [
-        "gdp_growth",
-        "capex"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "nat_gas",
-        "sip_accounts",
-        "iron_ore"
-      ]
-    },
-    {
       "date": "14 AUG 2026",
       "verdict_line": "Copper at a 78th-percentile $6.59/lb while India's core sector prints 2.3% — the industrial metal is pricing a capex cycle the domestic output data flatly refuses to confirm.",
       "themes": [
@@ -427,6 +411,22 @@
         "inr_usd",
         "us_10y_treasury",
         "office_absorption"
+      ]
+    },
+    {
+      "date": "20 SEP 2026",
+      "verdict_line": "S&P 500 at an all-time 100th-percentile 7,650 while copper rises for the fourth consecutive month to $6.69 — global markets are pricing a capex supercycle that India's own IIP data is only beginning to confirm.",
+      "themes": [
+        "markets",
+        "gdp_growth",
+        "capex"
+      ],
+      "slugs": [
+        "sp500",
+        "rent_bengaluru",
+        "inr_usd",
+        "copper",
+        "uk_corp_debt_gdp"
       ]
     }
   ]

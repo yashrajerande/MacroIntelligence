@@ -1,22 +1,6 @@
 {
   "entries": [
     {
-      "date": "14 AUG 2026",
-      "verdict_line": "Copper at a 78th-percentile $6.59/lb while India's core sector prints 2.3% — the industrial metal is pricing a capex cycle the domestic output data flatly refuses to confirm.",
-      "themes": [
-        "gdp_growth",
-        "capex"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "nat_gas",
-        "us_10y_treasury",
-        "sip_accounts",
-        "copper"
-      ]
-    },
-    {
       "date": "15 AUG 2026",
       "verdict_line": "Nikkei at a 100th-percentile 68,714 while US GDP prints 0.7% SAAR — global equities are pricing a growth cycle the underlying economies have stopped delivering.",
       "themes": [
@@ -427,6 +411,21 @@
         "inr_usd",
         "copper",
         "uk_corp_debt_gdp"
+      ]
+    },
+    {
+      "date": "21 SEP 2026",
+      "verdict_line": "Gold at ₹13,632/gram — a 100th-percentile print rising 4 of 5 sessions — is telling you something the Nifty at 75th percentile is not: domestic capital is quietly hedging a rupee it no longer trusts.",
+      "themes": [
+        "currency",
+        "markets"
+      ],
+      "slugs": [
+        "inr_usd",
+        "affordability_index",
+        "uk_corp_debt_gdp",
+        "rbi_gdp_forecast",
+        "mf_avg_aum"
       ]
     }
   ]

@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "16 AUG 2026",
-      "verdict_line": "India VIX at a 6th-percentile 11.31 while FII flows swung ₹22,729 cr negative — the market is pricing serenity the foreign money is quietly exiting.",
-      "themes": [
-        "markets",
-        "flows"
-      ],
-      "slugs": [
-        "nikkei225",
-        "sp500",
-        "bank_nifty",
-        "india_vix",
-        "us_vix"
-      ]
-    },
-    {
       "date": "17 AUG 2026",
       "verdict_line": "Airline passenger traffic at a 7th-percentile 35 million — down 9% in a month — while GST prints ₹2 lakh crore; one of these numbers is lying.",
       "themes": [
@@ -428,6 +413,20 @@
         "sip_aum",
         "pmi_composite",
         "us_pmi_composite"
+      ]
+    },
+    {
+      "date": "23 SEP 2026",
+      "verdict_line": "DII equity net at ₹58,502 Cr — a 100th-percentile print rising for two consecutive months — is domestic capital voting with conviction precisely when FIIs were net sellers three sessions ago.",
+      "themes": [
+        "flows"
+      ],
+      "slugs": [
+        "euro_stoxx50",
+        "dii_equity_net",
+        "uk_corp_debt_gdp",
+        "sip_aum",
+        "affordability_index"
       ]
     }
   ]

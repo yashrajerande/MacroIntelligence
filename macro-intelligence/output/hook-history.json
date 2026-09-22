@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "15 AUG 2026",
-      "verdict_line": "Nikkei at a 100th-percentile 68,714 while US GDP prints 0.7% SAAR — global equities are pricing a growth cycle the underlying economies have stopped delivering.",
-      "themes": [
-        "gdp_growth"
-      ],
-      "slugs": [
-        "nikkei225",
-        "sp500",
-        "us_vix",
-        "bank_nifty",
-        "india_vix"
-      ]
-    },
-    {
       "date": "16 AUG 2026",
       "verdict_line": "India VIX at a 6th-percentile 11.31 while FII flows swung ₹22,729 cr negative — the market is pricing serenity the foreign money is quietly exiting.",
       "themes": [
@@ -426,6 +412,22 @@
         "uk_corp_debt_gdp",
         "rbi_gdp_forecast",
         "mf_avg_aum"
+      ]
+    },
+    {
+      "date": "22 SEP 2026",
+      "verdict_line": "Euro Stoxx 50 at a 100th-percentile 6,318 while US PMI composite hits 56 — global growth is re-accelerating precisely when US 10Y at 5.01% says it cannot afford to.",
+      "themes": [
+        "gdp_growth"
+      ],
+      "slugs": [
+        "euro_stoxx50",
+        "dii_equity_net",
+        "uk_corp_debt_gdp",
+        "sip_inflows",
+        "sip_aum",
+        "pmi_composite",
+        "us_pmi_composite"
       ]
     }
   ]

@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "17 AUG 2026",
-      "verdict_line": "Airline passenger traffic at a 7th-percentile 35 million — down 9% in a month — while GST prints ₹2 lakh crore; one of these numbers is lying.",
-      "themes": [
-        "consumption"
-      ],
-      "slugs": [
-        "nikkei225",
-        "airline_pax",
-        "us_10y_treasury",
-        "sip_accounts",
-        "copper"
-      ]
-    },
-    {
       "date": "18 AUG 2026",
       "verdict_line": "US 10Y at 4.68% — an 84th-percentile print, still climbing — while India's SIP accounts grow at a 2nd-percentile crawl; the carry trade that funds domestic equity optimism is thinning at both ends.",
       "themes": [],
@@ -427,6 +413,20 @@
         "uk_corp_debt_gdp",
         "sip_aum",
         "affordability_index"
+      ]
+    },
+    {
+      "date": "24 SEP 2026",
+      "verdict_line": "Office absorption at 24.6 Mn sqft — an 18th-percentile print rising 18% sequentially — while REIT prices have fallen 15-25% YTD: the real economy and the listed proxy are telling opposite stories.",
+      "themes": [
+        "real_estate"
+      ],
+      "slugs": [
+        "euro_stoxx50",
+        "dii_equity_net",
+        "uk_corp_debt_gdp",
+        "office_absorption",
+        "sip_aum"
       ]
     }
   ]

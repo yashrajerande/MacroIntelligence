@@ -80,6 +80,8 @@ SKIP_SUPABASE=true SKIP_GIT_PUSH=true node agents/CEO/orchestrate.js
 | 2 | **MarketDataAnalyst** | DataIntelligence | Fetches real-time market prices from Yahoo Finance & FRED APIs | Code only | — |
 | 3 | **MacroDataAnalyst** | DataIntelligence | 12 structured web searches for India & global macro indicators (CPI, GDP, PMI, GST, FII/DII, etc.) | LLM | Haiku |
 | 4 | **RealEstateAnalyst** | DataIntelligence | Indian residential & commercial real estate data (Anarock, Knight Frank, JLL, RBI) | LLM | Haiku |
+| 4b | **RealEstateSegmentAnalyst** | DataIntelligence | Segmented real estate: ticket-size bands (launch share vs sales share), top-7 cities, NRI vs domestic buyers, office leasing by city/occupier. Weekly fetch, dated history in `output/re-segments-history.json` | LLM | Haiku |
+| 4c | **RealEstateSegmentAnalyzer** | Analysis | Pure code: supply/demand balance per band, city ranking, NRI direction (rising/falling/flat) from history, commercial ranking; S8 "Segmented View", Supabase `real_estate_segments`, PDF section, writer context | Code only | — |
 | 5 | **RegimeClassifier** | Analysis | Classifies macro regime across 6 dimensions with template-based narratives | Code only | — |
 | 6 | **SignalDetector** | Analysis | Produces 7 signal cards with 10-year percentile scoring for capital allocators | LLM | Haiku |
 | 7 | **ScenarioPlanner** | Analysis | Builds Base/Bull/Bear probability matrix via deterministic decision tree | Code only | — |

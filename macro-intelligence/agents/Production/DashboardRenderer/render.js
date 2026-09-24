@@ -93,7 +93,7 @@ export class DashboardRenderer {
     const {
       marketData, macroData, reData, leverageData,
       regime, signals, scenarios, news, execSummary,
-      dateStr, isoDate, dynamicRanges, leverage,
+      dateStr, isoDate, dynamicRanges, leverage, reSegments,
     } = allData;
 
     // ── Merge all raw indicators ─────────────────────────────────────
@@ -272,6 +272,8 @@ export class DashboardRenderer {
         commercial_regime:       commercialRegime,
         reit_vs_gsec_spread_bps: reitVsGsecBps,
         key_risk_note:           keyRiskNote,
+        // Segmented view (ticket size × city × NRI) from RealEstateSegmentAnalyzer
+        segments:                reSegments?.data || null,
       },
       leverage: leverage.data,
     };
@@ -488,6 +490,56 @@ export class DashboardRenderer {
       'india_credit_creditcard_yoy', 'india_credit_nbfc_yoy',
     ]));
     html = fillId(html, 's11-leverage-summary', leverage?.data?.narrative || '');
+
+    // ── S8 Segmented View: ticket size × city × buyer (founder's work order) ──
+    {
+      const seg = reSegments?.data || null;
+      const p1 = v => (v === null || v === undefined ? '—' : `${Math.round(v * 10) / 10}%`);
+      const pp = v => (v === null || v === undefined ? '—' : `${v > 0 ? '+' : ''}${Math.round(v * 10) / 10} pp`);
+      const n0 = v => (v === null || v === undefined ? '—' : Math.round(v).toLocaleString('en-IN'));
+      const dirClass = { rising: 'dir-up', falling: 'dir-down', flat: 'dir-flat' };
+      if (seg && seg.coverage?.present > 0) {
+        const nriDir = seg.nri?.direction || 'unknown';
+        const nriWord = { rising: 'Rising', falling: 'Falling', flat: 'Flat', unknown: 'Unknown' }[nriDir];
+        const topBand = [...(seg.bands || [])].filter(b => b.sales_share_pct !== null).sort((a, b) => b.sales_share_pct - a.sales_share_pct)[0];
+        const hotCity = (seg.cities || []).find(c => c.rank === 1);
+        const leadOffice = (seg.commercial?.cities || []).find(c => c.rank === 1);
+        const tiles = [
+          { k: 'NRI buying', v: `<span class="${dirClass[nriDir] || 'dir-unk'}">${nriWord}</span> · ${p1(seg.buyers?.nri_share_pct)}`, s: `of purchases${seg.nri?.delta_pp !== null && seg.nri?.delta_pp !== undefined ? ` (${pp(seg.nri.delta_pp)} ${escHtml(seg.nri.basis || '')})` : ''}${seg.buyers?.nri_share_premium_luxury_pct !== null && seg.buyers?.nri_share_premium_luxury_pct !== undefined ? ` · ${p1(seg.buyers.nri_share_premium_luxury_pct)} within premium/luxury` : ''}` },
+          { k: 'Demand leader (band)', v: topBand ? escHtml(topBand.label) : '—', s: topBand ? `${p1(topBand.sales_share_pct)} of sales vs ${p1(topBand.launches_share_pct)} of launches · ${escHtml(topBand.balance)}` : 'band shares not published' },
+          { k: 'Hottest city', v: hotCity ? escHtml(hotCity.city) : '—', s: hotCity ? `sales ${p1(hotCity.sales_yoy_pct)} YoY${hotCity.price_yoy_pct !== null ? ` · price ${p1(hotCity.price_yoy_pct)} YoY` : ''}` : 'city sales YoY not published' },
+          { k: 'Office leasing leader', v: leadOffice ? escHtml(leadOffice.city) : '—', s: leadOffice ? `${leadOffice.absorption_mn_sqft} mn sq ft / quarter${seg.commercial?.occupiers?.gcc_share_pct !== null ? ` · GCC ${p1(seg.commercial.occupiers.gcc_share_pct)} of leasing` : ''}` : 'city leasing not published' },
+        ];
+        html = fillId(html, 's8-seg-tiles', tiles.map(t => `<div class="seg-tile"><div class="k">${t.k}</div><div class="v">${t.v}</div><div class="s">${t.s}</div></div>`).join(''));
+
+        const sw = seg.so_what || {};
+        html = fillId(html, 's8-seg-summary',
+          (sw.title ? `<h4>${escHtml(sw.title)}</h4>` : '') +
+          ((sw.facts || []).length ? `<p><b>The facts:</b></p><ul>${sw.facts.map(f => `<li>${f}</li>`).join('')}</ul>` : '') +
+          (sw.tension ? `<p><b>The tension:</b> ${escHtml(sw.tension)}</p>` : '') +
+          (sw.bottom_line ? `<p><b>Bottom line:</b> ${escHtml(sw.bottom_line)}</p>` : ''));
+
+        const balClass = b => ({ undersupplied: 'bal-under', oversupplied: 'bal-over', balanced: 'bal-balanced' }[b] || 'bal-unknown');
+        html = fillTbody(html, 's8-seg-bands', (seg.bands || []).map(b =>
+          `<tr><td>${escHtml(b.label)}</td><td>${escHtml(b.range)}</td><td>${p1(b.launches_share_pct)}</td><td>${p1(b.sales_share_pct)}</td><td>${pp(b.gap_pp)}</td><td><span class="bal ${balClass(b.balance)}">${escHtml(b.balance)}</span></td><td>${p1(b.sales_yoy_pct)}</td></tr>`
+        ).join(''));
+        html = fillTbody(html, 's8-seg-cities', (seg.cities || []).map(c =>
+          `<tr><td>${c.rank ?? '—'}</td><td>${escHtml(c.city)}</td><td>${n0(c.sales_units)}</td><td>${p1(c.sales_yoy_pct)}</td><td>${n0(c.launches_units)}</td><td>${p1(c.launches_yoy_pct)}</td><td>${p1(c.price_yoy_pct)}</td><td>${c.unsold_months ?? '—'}</td></tr>`
+        ).join(''));
+        html = fillTbody(html, 's8-seg-commercial', (seg.commercial?.cities || []).map(c =>
+          `<tr><td>${c.rank ?? '—'}</td><td>${escHtml(c.city)}</td><td>${c.absorption_mn_sqft ?? '—'}</td><td>${p1(c.absorption_yoy_pct)}</td><td>${p1(c.vacancy_pct)}</td><td>${p1(c.rent_yoy_pct)}</td></tr>`
+        ).join(''));
+        html = fillId(html, 's8-seg-meta',
+          `Vintage ${escHtml(seg.vintage || 'unknown')} · ${escHtml(seg.sources || 'sources not stated')} · coverage ${seg.coverage.present}/${seg.coverage.total} fields · fetched ${escHtml((seg.fetched_at || '').slice(0, 10) || '—')}${seg.served_from_cache ? ' (snapshot)' : ''}${seg.gaps?.length ? ` · not published: ${escHtml(seg.gaps.join('; '))}` : ''}`);
+      } else {
+        html = fillId(html, 's8-seg-tiles', '');
+        html = fillId(html, 's8-seg-summary', '<p>Segmented real estate data awaited — the next weekly fetch will populate ticket-size, city and NRI views.</p>');
+        html = fillTbody(html, 's8-seg-bands', '');
+        html = fillTbody(html, 's8-seg-cities', '');
+        html = fillTbody(html, 's8-seg-commercial', '');
+        html = fillId(html, 's8-seg-meta', '');
+      }
+    }
 
     // ── Top movers strip: biggest polarity-aware daily MARKET moves ──
     // Restricted to daily-frequency price/index series with a sane cap.

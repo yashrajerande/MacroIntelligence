@@ -717,6 +717,26 @@ html.tv .dt td, html.tv .dt th { padding:14px 0; }
 .ec-txt p:has(+ ul) { margin-bottom:4px; }
 .ec-txt p:has(> b:first-child):not(:has(+ ul)) { padding:8px 10px; background:rgba(26,0,204,0.04); border-left:2px solid rgba(26,0,204,0.35); border-radius:0 6px 6px 0; }
 
+/* ── S8 Segmented View (ticket size × city × buyer) ── */
+.seg-tiles { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:10px 0 12px; }
+.seg-tile { background:rgba(248,249,255,0.95); border:1px solid rgba(0,0,60,0.09); border-radius:var(--r-md); padding:12px 14px; }
+.seg-tile .k { font-family:var(--mono); font-size:0.54rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-4); margin-bottom:4px; }
+.seg-tile .v { font-family:var(--display); font-size:1.15rem; font-weight:700; letter-spacing:-0.02em; color:var(--ink-1); line-height:1.1; }
+.seg-tile .s { font-family:var(--body); font-size:0.68rem; color:var(--ink-3); margin-top:4px; line-height:1.4; }
+.seg-tile .v .dir-up { color:#0a8a3a; } .seg-tile .v .dir-down { color:#c62828; } .seg-tile .v .dir-flat { color:#8a6d00; } .seg-tile .v .dir-unk { color:var(--ink-4); }
+.seg-sowhat h4 { font-family:var(--display); font-size:0.92rem; font-weight:700; margin:0 0 8px; color:var(--ink-1); }
+.seg-sowhat b { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#1a00cc; margin-right:4px; }
+.seg-sowhat ul { list-style:none; margin:0 0 8px; padding:0; }
+.seg-sowhat li { position:relative; padding-left:14px; margin:0 0 3px; }
+.seg-sowhat li::before { content:''; position:absolute; left:0; top:0.62em; width:6px; height:6px; border-radius:50%; background:rgba(26,0,204,0.55); }
+.seg-sowhat p { margin:0 0 5px; }
+.dt.seg td { font-family:var(--mono); font-size:0.7rem; }
+.dt.seg td:first-child, .dt.seg td:nth-child(2) { font-family:var(--body); font-size:0.74rem; }
+.bal { display:inline-block; padding:2px 7px; border-radius:999px; font-family:var(--mono); font-size:0.58rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; }
+.bal-under { background:rgba(10,138,58,0.10); color:#0a8a3a; } .bal-over { background:rgba(198,40,40,0.10); color:#c62828; } .bal-balanced { background:rgba(26,0,204,0.07); color:#1a00cc; } .bal-unknown { background:rgba(0,0,60,0.05); color:var(--ink-4); }
+.seg-meta { font-family:var(--mono); font-size:0.58rem; color:var(--ink-4); margin-top:8px; letter-spacing:0.04em; }
+@media (max-width:900px) { .seg-tiles { grid-template-columns:repeat(2,1fr); } }
+
 /* ══════════════════════════════════════════════════
    NEWS STRIP
 ══════════════════════════════════════════════════ */
@@ -1393,6 +1413,23 @@ html.tv .dt td, html.tv .dt th { padding:14px 0; }
         <tr><td class="c-ind">Brookfield REIT (unit price / yield)</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
       </tbody></table>
       <div class="p-summary" id="s10-re-summary"><!-- FILL --></div>
+
+      <!-- Segmented view (founder's work order, 24 SEP 2026): ticket size ×
+           city × buyer origin, supply vs demand, NRI direction. Filled by
+           DashboardRenderer from real_estate.segments (RealEstateSegmentAnalyzer). -->
+      <div class="sub-lbl">Segmented View — Ticket Size × City × Buyer</div>
+      <div class="seg-tiles" id="s8-seg-tiles"><!-- FILL --></div>
+      <div class="p-summary seg-sowhat" id="s8-seg-summary"><!-- FILL --></div>
+      <div class="sub-lbl">Residential by Ticket Size — Supply (launch share) vs Demand (sales share)</div>
+      <table class="dt seg"><thead><tr><th>Band</th><th>Range</th><th>Launch share</th><th>Sales share</th><th>Gap (demand − supply)</th><th>Balance</th><th>Sales YoY</th></tr></thead>
+      <tbody id="s8-seg-bands"><!-- FILL --></tbody></table>
+      <div class="sub-lbl">Residential by City — ranked by sales momentum (latest quarter)</div>
+      <table class="dt seg"><thead><tr><th>#</th><th>City</th><th>Sales (units / qtr)</th><th>Sales YoY</th><th>Launches (units / qtr)</th><th>Launches YoY</th><th>Price YoY</th><th>Unsold (months)</th></tr></thead>
+      <tbody id="s8-seg-cities"><!-- FILL --></tbody></table>
+      <div class="sub-lbl">Commercial by City — office leasing (latest quarter)</div>
+      <table class="dt seg"><thead><tr><th>#</th><th>City</th><th>Leasing (mn sq ft / qtr)</th><th>Leasing YoY</th><th>Vacancy</th><th>Rent YoY</th></tr></thead>
+      <tbody id="s8-seg-commercial"><!-- FILL --></tbody></table>
+      <div class="seg-meta" id="s8-seg-meta"><!-- FILL --></div>
     </div>
   </div>
 

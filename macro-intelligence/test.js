@@ -1436,6 +1436,109 @@ describe('Display units — period and basis');
     `RE fetch prompts must pin launches, disbursements and absorption to a single quarter`);
 }
 
+// --- Segmented real estate (founder's work order, 24 SEP 2026): ticket
+// size × city × buyer origin, supply vs demand, NRI direction.
+describe('Real Estate — Segmented View');
+{
+  const { RealEstateSegmentAnalyzer, classifyBalance, classifyNriDirection, BALANCE_THRESHOLD_PP } =
+    await import('./agents/Analysis/RealEstateSegmentAnalyzer/analyze.js');
+  const { needsSegmentRefresh, isUsableEntry, loadSegmentHistory, REFRESH_DAYS } =
+    await import('./agents/DataIntelligence/RealEstateSegmentAnalyst/fetch.js');
+  const { PRICE_BANDS, CITIES, OFFICE_CITIES } =
+    await import('./agents/DataIntelligence/RealEstateSegmentAnalyst/skills/segment-search.js');
+
+  assert(PRICE_BANDS.length === 5 && PRICE_BANDS.map(b => b.id).join(',') === 'affordable,mid,premium,luxury,ultra_luxury', `Five Anarock budget bands in order`);
+  assert(CITIES.length === 7 && CITIES.includes('MMR') && CITIES.includes('Kolkata'), `Top-7 residential cities`);
+  assert(OFFICE_CITIES.length === 6 && OFFICE_CITIES.includes('Hyderabad'), `Top-6 office cities`);
+
+  // Supply/demand balance per band
+  assert(classifyBalance(25, 29).balance === 'undersupplied' && classifyBalance(25, 29).gap_pp === 4, `Demand share 4 pp above supply share → undersupplied`);
+  assert(classifyBalance(20, 14).balance === 'oversupplied', `Supply share above demand share → oversupplied`);
+  assert(classifyBalance(28, 27).balance === 'balanced', `Within ${BALANCE_THRESHOLD_PP} pp → balanced`);
+  assert(classifyBalance(null, 27).balance === 'unknown' && classifyBalance(20, undefined).balance === 'unknown', `Missing share → unknown, never a guess`);
+
+  // NRI direction from dated history
+  const mk = (nri, prev, at) => ({ fetched_at: at, buyers: { nri_share_pct: nri, nri_share_prev_pct: prev } });
+  const hist = [mk(13, null, '2026-09-01T00:00:00Z'), mk(15.5, null, '2026-09-24T00:00:00Z')];
+  const up = classifyNriDirection(hist[1].buyers, hist);
+  assert(up.direction === 'rising' && up.delta_pp === 2.5 && up.basis === 'vs earlier fetched print', `Two prints, +2.5 pp → rising: ${JSON.stringify(up)}`);
+  const down = classifyNriDirection({ nri_share_pct: 10, nri_share_prev_pct: 12 }, [mk(10, 12, '2026-09-24T00:00:00Z')]);
+  assert(down.direction === 'falling' && down.delta_pp === -2 && down.basis === 'vs prior period in source', `Single print falls back to the source's prior period`);
+  assert(classifyNriDirection({ nri_share_pct: 12.4, nri_share_prev_pct: 12 }, []).direction === 'flat', `Under 1 pp → flat (noise floor)`);
+  assert(classifyNriDirection({ nri_share_pct: null }, hist).direction === 'unknown', `No NRI share → unknown`);
+  assert(classifyNriDirection({ nri_share_pct: 15.5 }, [mk(15.5, null, 'a'), mk(15.5, null, 'b')]).direction === 'unknown', `Identical prints carry no direction`);
+
+  // Analyzer end to end on a realistic snapshot
+  const snap = (nri, at) => ({ fetched_at: at, run_date: at.slice(0, 10),
+    residential: { vintage: 'Q2 2026', source: 'Anarock', bands: [
+      { band: 'affordable', launches_share_pct: 20, sales_share_pct: 14, sales_yoy_pct: -8 },
+      { band: 'mid', launches_share_pct: 28, sales_share_pct: 27 },
+      { band: 'premium', launches_share_pct: 25, sales_share_pct: 29, sales_yoy_pct: 11 },
+      { band: 'luxury', launches_share_pct: 17, sales_share_pct: 20, sales_yoy_pct: 24 },
+      { band: 'ultra_luxury', launches_share_pct: 10, sales_share_pct: 10 } ],
+      cities: [ { city: 'MMR', sales_units: 38000, sales_yoy_pct: 9, price_yoy_pct: 12, unsold_months: 22 },
+        { city: 'Bengaluru', sales_units: 16000, sales_yoy_pct: 14, price_yoy_pct: 9 }, { city: 'NCR', sales_yoy_pct: -6 } ] },
+    buyers: { vintage: 'H1 2026', source: 'Anarock survey', nri_share_pct: nri, nri_share_premium_luxury_pct: 22, nri_top_cities: ['Mumbai', 'Bengaluru', 'Hyderabad'] },
+    commercial: { vintage: 'Q2 2026', source: 'CBRE', cities: [ { city: 'Bengaluru', absorption_mn_sqft: 5.1, absorption_yoy_pct: 8 }, { city: 'Mumbai', absorption_mn_sqft: 2.4, vacancy_pct: 14.7 } ], occupiers: { gcc_share_pct: 41 } } });
+  const h2 = [snap(13, '2026-09-01T00:00:00Z'), snap(15.5, '2026-09-24T00:00:00Z')];
+  const r = new RealEstateSegmentAnalyzer().analyze({ latest: h2[1], history: h2 }).data;
+  assert(r.nri.direction === 'rising' && r.buyers.nri_share_pct === 15.5, `NRI read carried through`);
+  assert(r.bands.length === 5 && r.bands.find(b => b.id === 'premium').balance === 'undersupplied' && r.bands.find(b => b.id === 'affordable').balance === 'oversupplied',
+    `All five bands present with balance classified`);
+  assert(r.cities[0].city === 'Bengaluru' && r.cities[0].rank === 1 && r.cities.find(c => c.city === 'Kolkata').rank === null,
+    `Cities ranked by sales YoY; unpublished cities unranked, not dropped`);
+  assert(r.commercial.cities[0].city === 'Bengaluru' && r.commercial.cities.find(c => c.city === 'MMR').absorption_mn_sqft === 2.4,
+    `Office cities ranked by leasing; "Mumbai" maps onto MMR`);
+  assert(r.commercial.occupiers.gcc_share_pct === 41, `Occupier split carried`);
+  assert(r.so_what.title === 'NRI Bid Rising — Top End Undersupplied', `Title names the tension: ${r.so_what.title}`);
+  assert(r.so_what.facts.some(f => /NRI buying is <strong>RISING<\/strong>: <strong>15.5%<\/strong>/.test(f)), `NRI fact carries direction and number`);
+  assert(/Undersupplied: Premium \(\+4 pp\), Luxury \(\+3 pp\)/.test(r.so_what.facts.join('|')), `Undersupplied bands listed with gaps`);
+  assert(/NRI money is concentrating in the top-end bands/.test(r.so_what.tension) && /remittance/.test(r.so_what.bottom_line), `Rising NRI + undersupplied top end → the founder's thesis, stated with its risk`);
+  assert(r.coverage.present > 0 && r.coverage.total === 33, `Coverage counts fields: ${JSON.stringify(r.coverage)}`);
+  assert(/\. [A-Z]/.test(r.narrative) && !/undefined|NaN/.test(r.narrative), `Narrative is sentences, no undefined/NaN`);
+  assert(r.history_points.length === 2 && r.history_points[1].v === 15.5, `History points for the NRI sparkline`);
+  const empty = new RealEstateSegmentAnalyzer().analyze({ latest: null, history: [] }).data;
+  assert(empty.coverage.present === 0 && empty.nri.direction === 'unknown' && empty.bands.length === 5 && /Awaiting/.test(empty.so_what.title) && /thin/.test(empty.so_what.tension),
+    `Empty snapshot degrades honestly, never throws`);
+  const falling = new RealEstateSegmentAnalyzer().analyze({ latest: { ...snap(11, '2026-09-24T00:00:00Z'), buyers: { nri_share_pct: 11, nri_share_prev_pct: 13 } }, history: [] }).data;
+  assert(falling.nri.direction === 'falling' && /Fading/.test(falling.so_what.title) && /unsold inventory/.test(falling.so_what.bottom_line), `Falling NRI → fading title and inventory warning`);
+
+  // Fetch cadence and snapshot protection
+  assert(needsSegmentRefresh({ history: [] }, '2026-09-24') === true, `No history → fetch`);
+  assert(needsSegmentRefresh({ history: [{ fetched_at: '2026-09-20T01:00:00Z' }] }, '2026-09-24') === false, `4 days old → serve snapshot`);
+  assert(needsSegmentRefresh({ history: [{ fetched_at: '2026-09-17T01:00:00Z' }] }, '2026-09-24') === true, `${REFRESH_DAYS} days old → fetch`);
+  assert(isUsableEntry({ residential: { bands: [{}] } }) && isUsableEntry({ buyers: { nri_share_pct: 12 } }) && !isUsableEntry({ residential: null, buyers: null, commercial: null }) && !isUsableEntry(null),
+    `A fetch with no usable block must not overwrite a good snapshot`);
+  assert(loadSegmentHistory('/nonexistent/path.json').history.length === 0, `Missing history file → empty, never throws`);
+
+  // Wiring across the org: orchestrator, renderer, template, Supabase, PDF, writer, publisher, validator
+  const orch = readFileSync(join(__dirname, 'agents', 'CEO', 'orchestrate.js'), 'utf8');
+  assert(orch.includes('new RealEstateSegmentAnalyst().fetch(isoDate)') && orch.includes('new RealEstateSegmentAnalyzer().analyze(reSegments.data)') && orch.includes('reSegments: reSegmentRead'),
+    `Orchestrator fetches, analyzes and passes segments to the renderer and writer`);
+  assert(/RealEstateSegmentAnalyst failed \(non-fatal\)/.test(orch), `Segment fetch must be non-fatal`);
+  const rend = readFileSync(join(__dirname, 'agents', 'Production', 'DashboardRenderer', 'render.js'), 'utf8');
+  const tpl = readFileSync(join(__dirname, 'template', 'macro-intelligence-light.html'), 'utf8');
+  for (const id of ['s8-seg-tiles', 's8-seg-summary', 's8-seg-bands', 's8-seg-cities', 's8-seg-commercial', 's8-seg-meta']) {
+    assert(rend.includes(`'${id}'`), `Renderer fills ${id}`);
+    assert(tpl.includes(`id="${id}"`), `Template has slot ${id}`);
+  }
+  assert(rend.includes('segments:                reSegments?.data || null'), `real_estate.segments exposed on __MACRO_DATA__`);
+  assert(tpl.includes('.seg-tiles {') && tpl.includes('.bal-under') && tpl.includes('.seg-sowhat h4'), `Template CSS for the segmented view`);
+  const sync = readFileSync(join(__dirname, 'agents', 'Infrastructure', 'SupabaseWriter', 'sync.js'), 'utf8');
+  assert(sync.includes("upsert('real_estate_segments'") && sync.includes('nri_direction:') && sync.includes('nri_share_delta_pp:'), `SupabaseWriter persists real_estate_segments with NRI direction`);
+  const pdf = readFileSync(join(__dirname, 'agents', 'Infrastructure', 'TelegramPublisher', 'skills', 'highlights-pdf.js'), 'utf8');
+  assert(pdf.includes('Real estate — segmented view') && pdf.includes('NRI buying'), `Highlights PDF carries the segmented view`);
+  const wr = readFileSync(join(__dirname, 'agents', 'Editorial', 'ExecutiveSummaryWriter', 'write.js'), 'utf8');
+  assert(wr.includes('REAL ESTATE — SEGMENTED VIEW') && wr.includes('allData.reSegments?.data') && wr.includes('NRI buying:'), `Writer receives the segment block for section 04`);
+  const gitOps = readFileSync(join(__dirname, 'agents', 'Infrastructure', 'GitPublisher', 'skills', 'git-ops.js'), 'utf8');
+  assert(gitOps.includes('re-segments-history.json'), `History file is committed so NRI direction survives between runs`);
+  const rules = readFileSync(join(__dirname, 'agents', 'Production', 'Validator', 'skills', 'validation-rules.js'), 'utf8');
+  assert(/warnings\.push\('L8: real_estate\.segments missing/.test(rules) && !/errors\.push\(`?'?L8/.test(rules), `L8 segment coverage is warn-only`);
+  for (const p of ['agents/DataIntelligence/RealEstateSegmentAnalyst/Persona.md', 'agents/Analysis/RealEstateSegmentAnalyzer/Persona.md']) {
+    assert(existsSync(join(__dirname, p)), `${p} must exist (org chart is law)`);
+  }
+}
+
 // --- Generic scaler must pick the BEST factor, not the first that fits.
 // Real case from the 07 SEP run: home loans 4,500,000 with range
 // [80000,700000] / p50 230000 was scaled ×0.001 → 4,500 (only "in range"

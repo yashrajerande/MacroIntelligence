@@ -30,6 +30,8 @@ import { MarketDataAnalyst }      from '../DataIntelligence/MarketDataAnalyst/fe
 import { MacroDataAnalyst }       from '../DataIntelligence/MacroDataAnalyst/fetch.js';
 import { RealEstateAnalyst }      from '../DataIntelligence/RealEstateAnalyst/fetch.js';
 import { LeverageAnalyst }        from '../DataIntelligence/LeverageAnalyst/fetch.js';
+import { RealEstateSegmentAnalyst } from '../DataIntelligence/RealEstateSegmentAnalyst/fetch.js';
+import { RealEstateSegmentAnalyzer } from '../Analysis/RealEstateSegmentAnalyzer/analyze.js';
 import { RegimeClassifier }       from '../Analysis/RegimeClassifier/classify.js';
 import { SignalDetector }         from '../Analysis/SignalDetector/detect.js';
 import { ScenarioPlanner }        from '../Analysis/ScenarioPlanner/plan.js';
@@ -283,6 +285,19 @@ async function run() {
       console.log(`  ✓ Cache updated: ${Object.keys(allFresh).length} freshly-fetched indicators`);
     }
 
+    // ── Segmented real estate (ticket size × city × NRI) ─────────────
+    // Founder's work order, 24 SEP 2026. Weekly fetch, snapshot served in
+    // between (see the analyst for the cadence). Non-fatal: the edition
+    // publishes without the segment panel rather than not at all.
+    let reSegments = { data: { latest: null, history: [] }, meta: { agent: 'RealEstateSegmentAnalyst', model: 'none', latency_ms: 0, tokens: { input: 0, output: 0 } } };
+    try {
+      reSegments = await withRetry(() => new RealEstateSegmentAnalyst().fetch(isoDate), 'RealEstateSegmentAnalyst', logger);
+      logger.agent('RealEstateSegmentAnalyst', reSegments.meta);
+    } catch (err) {
+      console.warn(`  ⚠ RealEstateSegmentAnalyst failed (non-fatal): ${err.message}`);
+      logger.warn('RealEstateSegmentAnalyst failed', err.message);
+    }
+
     // ── Re-score percentiles AFTER normalization ─────────────────────
     // scorePct10y used to run inside the fetchers, BEFORE the unit
     // normalizer — so inr_usd was scored on the raw 0.0106 quote (0th
@@ -345,6 +360,11 @@ async function run() {
     const leverage = new LeverageAnalyzer().analyze(allIndicatorsForLeverage, dynamicRanges);
     logger.agent('LeverageAnalyzer', leverage.meta);
 
+    // Pure code, no LLM — supply/demand balance by ticket size, city
+    // ranking, NRI direction from the dated history, commercial by city.
+    const reSegmentRead = new RealEstateSegmentAnalyzer().analyze(reSegments.data);
+    logger.agent('RealEstateSegmentAnalyzer', reSegmentRead.meta);
+
     // ── STEP 3: EDITORIAL ───────────────────────────────────────────
     logger.phase('Editorial');
 
@@ -369,7 +389,7 @@ async function run() {
           };
         }),
       withRetry(
-        () => new ExecutiveSummaryWriter().write({ ...allData, regime, signals, scenarios }),
+        () => new ExecutiveSummaryWriter().write({ ...allData, regime, signals, scenarios, reSegments: reSegmentRead }),
         'ExecutiveSummaryWriter', logger
       ),
     ]);
@@ -407,6 +427,7 @@ async function run() {
 
     const { html, macroDataObj, outputPath, indexPath } = new DashboardRenderer().render({
       ...allData, regime, signals, scenarios, news, execSummary, costSummary, dynamicRanges, leverage,
+      reSegments: reSegmentRead,
     });
     logger.agent('DashboardRenderer', { model: 'none', latency_ms: 0, tokens: { input: 0, output: 0 } });
 

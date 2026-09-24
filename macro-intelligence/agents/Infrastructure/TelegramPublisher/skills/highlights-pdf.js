@@ -169,6 +169,36 @@ export function generateHighlightsHTML(macroDataObj, { dateStr, dashboardUrl } =
 
   const hasLeverage = leverage.narrative && String(leverage.narrative).trim().length > 0;
 
+  // Segmented real estate (ticket size × city × NRI). Rendered from the
+  // analyzer's numbers, with the so-what block in the same shape as the
+  // executive summary.
+  const seg = d.real_estate?.segments || null;
+  let segmentsHtml = '';
+  if (seg && (seg.coverage?.present > 0)) {
+    const dirWord = { rising: 'Rising', falling: 'Falling', flat: 'Flat', unknown: 'Unknown' }[seg.nri?.direction || 'unknown'];
+    const p1 = v => (v === null || v === undefined ? '—' : `${Math.round(v * 10) / 10}%`);
+    const pp = v => (v === null || v === undefined ? '' : ` (${v > 0 ? '+' : ''}${Math.round(v * 10) / 10} pp)`);
+    const bandRows = (seg.bands || []).filter(b => b.sales_share_pct !== null || b.launches_share_pct !== null).map(b => `
+      <tr><td class="ind-name">${esc(b.label)} <span class="src">${esc(b.range)}</span></td><td class="ind-val">${p1(b.launches_share_pct)} → ${p1(b.sales_share_pct)}</td><td class="ind-pct"><span class="pill ${b.balance === 'undersupplied' ? 'good' : b.balance === 'oversupplied' ? 'bad' : 'neu'}">${esc(b.balance)}</span></td></tr>`).join('');
+    const cityRows = (seg.cities || []).filter(c => c.rank !== null).slice(0, 7).map(c => `
+      <tr><td class="ind-name">${esc(c.city)}</td><td class="ind-val">${p1(c.sales_yoy_pct)} sales YoY</td><td class="ind-pct">${c.price_yoy_pct !== null ? `<span class="pill neu">${p1(c.price_yoy_pct)} price</span>` : ''}</td></tr>`).join('');
+    const officeRows = (seg.commercial?.cities || []).filter(c => c.rank !== null).slice(0, 6).map(c => `
+      <tr><td class="ind-name">${esc(c.city)}</td><td class="ind-val">${c.absorption_mn_sqft} mn sq ft / qtr</td><td class="ind-pct">${c.vacancy_pct !== null ? `<span class="pill neu">${p1(c.vacancy_pct)} vacant</span>` : ''}</td></tr>`).join('');
+    const sw = seg.so_what || {};
+    segmentsHtml = `
+  <h2>Real estate — segmented view</h2>
+  <div class="tiles">
+    <div class="tile"><div class="k">NRI buying</div><div class="v"><span class="pill ${seg.nri?.direction === 'rising' ? 'good' : seg.nri?.direction === 'falling' ? 'bad' : 'neu'}">${esc(dirWord)}</span> ${p1(seg.buyers?.nri_share_pct)} of purchases${esc(pp(seg.nri?.delta_pp))}</div>${seg.buyers?.nri_share_premium_luxury_pct !== null && seg.buyers?.nri_share_premium_luxury_pct !== undefined ? `<div class="sub">${p1(seg.buyers.nri_share_premium_luxury_pct)} within premium/luxury${(seg.buyers.nri_top_cities || []).length ? ` · ${esc(seg.buyers.nri_top_cities.slice(0, 3).join(', '))}` : ''}</div>` : ''}</div>
+  </div>
+  <div class="para">
+    <div class="para-body">${sw.title ? `<h4>${esc(sw.title)}</h4>` : ''}${(sw.facts || []).length ? `<p><b>The facts:</b></p><ul>${sw.facts.map(f => `<li>${sanitizeRich(f)}</li>`).join('')}</ul>` : ''}${sw.tension ? `<p><b>The tension:</b> ${esc(sw.tension)}</p>` : ''}${sw.bottom_line ? `<p><b>Bottom line:</b> ${esc(sw.bottom_line)}</p>` : ''}</div>
+  </div>
+  ${bandRows ? `<div class="sub-h">Ticket size — launch share → sales share</div><table class="ind">${bandRows}</table>` : ''}
+  ${cityRows ? `<div class="sub-h">Cities — ranked by sales momentum</div><table class="ind">${cityRows}</table>` : ''}
+  ${officeRows ? `<div class="sub-h">Office leasing by city</div><table class="ind">${officeRows}</table>` : ''}
+  <div class="empty">Vintage ${esc(seg.vintage || 'unknown')} · ${esc(seg.sources || '')} · coverage ${seg.coverage.present}/${seg.coverage.total} fields</div>`;
+  }
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -329,6 +359,8 @@ export function generateHighlightsHTML(macroDataObj, { dateStr, dashboardUrl } =
   ${scenarios ? `<h2>Scenarios</h2>${scenarios}` : ''}
 
   ${hasLeverage ? `<h2>Private debt (Keen / Minsky read)</h2><div class="lev">${esc(leverage.narrative)}</div>` : ''}
+
+  ${segmentsHtml}
 
   ${newsItems ? `<h2>In the news</h2><ul class="news">${newsItems}</ul>` : ''}
 

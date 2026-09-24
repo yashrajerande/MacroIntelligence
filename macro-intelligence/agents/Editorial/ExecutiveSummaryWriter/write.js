@@ -96,6 +96,24 @@ Bear: ${allData.scenarios.data.bear.name} — ${allData.scenarios.data.bear.desc
       .join('\n');
     const unitsBlock = unitGlossary(presentSlugs);
 
+    // Segmented real estate (ticket size × city × NRI) from the
+    // RealEstateSegmentAnalyzer — feeds section 04. Numbers only; the
+    // direction words come from the analyzer's deterministic read.
+    const seg = allData.reSegments?.data || null;
+    const segmentBlock = seg && seg.coverage?.present > 0 ? [
+      'REAL ESTATE — SEGMENTED VIEW (use in section 04; these are the founder\'s priority questions — ticket size, city, and whether NRI buying is rising or falling):',
+      `NRI buying: ${seg.nri?.direction?.toUpperCase() || 'UNKNOWN'} — NRI share of residential purchases ${seg.buyers?.nri_share_pct ?? '—'}% (prior ${seg.buyers?.nri_share_prev_pct ?? '—'}%${seg.nri?.delta_pp !== null && seg.nri?.delta_pp !== undefined ? `, ${seg.nri.delta_pp > 0 ? '+' : ''}${Math.round(seg.nri.delta_pp * 10) / 10} pp ${seg.nri.basis}` : ''}); NRI share within premium/luxury ${seg.buyers?.nri_share_premium_luxury_pct ?? '—'}%; NRI-favoured cities: ${(seg.buyers?.nri_top_cities || []).join(', ') || '—'}; remittances ${seg.buyers?.remittances_usd_bn ?? '—'} $ bn (${seg.buyers?.remittances_yoy_pct ?? '—'}% YoY).`,
+      'Ticket-size bands (launch share of supply → sales share of demand, balance):',
+      ...(seg.bands || []).map(b => `  ${b.label} ${b.range}: ${b.launches_share_pct ?? '—'}% → ${b.sales_share_pct ?? '—'}% (${b.balance}${b.gap_pp !== null ? `, ${b.gap_pp > 0 ? '+' : ''}${Math.round(b.gap_pp * 10) / 10} pp` : ''})${b.sales_yoy_pct !== null ? `, sales ${b.sales_yoy_pct}% YoY` : ''}`),
+      'Cities (ranked by sales momentum, latest quarter):',
+      ...(seg.cities || []).filter(c => c.rank !== null).map(c => `  ${c.rank}. ${c.city}: sales ${c.sales_yoy_pct}% YoY${c.launches_yoy_pct !== null ? `, launches ${c.launches_yoy_pct}% YoY` : ''}${c.price_yoy_pct !== null ? `, price ${c.price_yoy_pct}% YoY` : ''}${c.unsold_months !== null ? `, ${c.unsold_months} months unsold` : ''}`),
+      'Office leasing by city (latest quarter):',
+      ...(seg.commercial?.cities || []).filter(c => c.rank !== null).map(c => `  ${c.rank}. ${c.city}: ${c.absorption_mn_sqft} mn sq ft / quarter${c.absorption_yoy_pct !== null ? ` (${c.absorption_yoy_pct}% YoY)` : ''}${c.vacancy_pct !== null ? `, vacancy ${c.vacancy_pct}%` : ''}`),
+      seg.commercial?.occupiers?.gcc_share_pct !== null ? `Occupier split: GCC ${seg.commercial.occupiers.gcc_share_pct}% · IT services ${seg.commercial.occupiers.it_services_share_pct ?? '—'}% · BFSI ${seg.commercial.occupiers.bfsi_share_pct ?? '—'}% · flex ${seg.commercial.occupiers.flex_share_pct ?? '—'}%` : null,
+      seg.gaps?.length ? `Not published this print: ${seg.gaps.join('; ')}.` : null,
+      `Vintage: ${seg.vintage || 'unknown'}; sources: ${seg.sources || '—'}.`,
+    ].filter(Boolean).join('\n') : 'REAL ESTATE — SEGMENTED VIEW: no segment data this run (say so in section 04 rather than guess).';
+
     // ── Hook Writer Skill: freshness + anti-repetition context ──
     const hookHistory = loadHookHistory();
     const indicatorsForHook = Object.entries(allIndicators)
@@ -126,6 +144,8 @@ ${scenarioSummary}
 ALL ${Object.keys(allIndicators).length} INDICATORS:
 ${TREND_GUIDANCE}
 ${indicatorSummary}
+
+${segmentBlock}
 
 UNITS ARE PART OF THE NUMBER (mandatory):
 Every FLOW carries its period ("₹31,961 cr / month", "13.7 mn sq ft / quarter") and every RATE carries its basis ("4.45% YoY", "1.5% SAAR", "5.25% p.a.", "42.6% of GDP") — exactly as shown above. Never write a bare "₹ cr", a bare "%", or a bare count. If a unit says "/ month", the word month (or "monthly") appears next to the number.

@@ -214,6 +214,37 @@ export class SupabaseWriter {
       }
     }
 
+    // ── 9. real_estate_segments (ticket size × city × NRI, founder's work order 24 SEP 2026)
+    if (macroData.real_estate?.segments) {
+      console.log('[SupabaseWriter] 9/9: real_estate_segments');
+      const seg = macroData.real_estate.segments;
+      const segRow = {
+        run_id:             runId,
+        run_date:           runDate,
+        data_vintage:       seg.vintage || null,
+        sources:            seg.sources || null,
+        fetched_at:         seg.fetched_at || null,
+        bands:              seg.bands || [],
+        cities:             seg.cities || [],
+        buyers:             seg.buyers || {},
+        commercial:         seg.commercial || {},
+        nri_direction:      seg.nri?.direction || 'unknown',
+        nri_share_pct:      seg.buyers?.nri_share_pct ?? null,
+        nri_share_delta_pp: seg.nri?.delta_pp ?? null,
+        narrative:          seg.narrative || '',
+        so_what:            seg.so_what || {},
+      };
+      const segKey = () => 'real_estate_segments';
+      const { changed: changedSeg } = filterChangedRows('real_estate_segments', [segRow], segKey);
+      if (changedSeg.length > 0) {
+        results.real_estate_segments = await upsert('real_estate_segments', segRow, supabaseUrl, serviceKey, 'run_date');
+        recordSnapshot('real_estate_segments', [segRow], segKey);
+      } else {
+        results.real_estate_segments = { table: 'real_estate_segments', totalRows: 0, chunks: 0, allSuccess: true };
+        console.log(`[SupabaseWriter] real_estate_segments: unchanged, skipped`);
+      }
+    }
+
     // ── Summary ─────────────────────────────────────────────────────
     const totalPushed = [changedRegime, changedSigs, changedNews, changedInds, changedExec].reduce((s, a) => s + a.length, 0);
     const totalSkipped = skippedRegime + skippedSigs + skippedNews + skippedInds + skippedExec;

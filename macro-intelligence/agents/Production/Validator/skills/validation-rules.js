@@ -421,6 +421,23 @@ export function runAllChecks(html, macroData, expectedDate, dynamicRanges) {
     );
   }
 
+  // ── L8: SEGMENTED REAL ESTATE COVERAGE (warn only) ─────────────────
+  // Founder's work order (24 SEP 2026): ticket size × city × NRI must be
+  // on every edition. The panel degrades honestly when a print is thin,
+  // so this never fails the run — it makes a thin or missing print
+  // visible in the ops log.
+  const seg = macroData.real_estate?.segments;
+  if (!seg) {
+    warnings.push('L8: real_estate.segments missing — segmented view not rendered this edition');
+  } else {
+    const cov = seg.coverage || { present: 0, total: 0 };
+    if (cov.present === 0) warnings.push('L8: segmented real estate has 0 fields — all three segment searches came back empty');
+    else if (cov.total && cov.present / cov.total < 0.4) warnings.push(`L8: segmented real estate coverage thin — ${cov.present}/${cov.total} fields`);
+    if (seg.nri?.direction === 'unknown') warnings.push('L8: NRI direction unknown — no NRI share in this print or its history');
+    if (Array.isArray(seg.bands) && seg.bands.length !== 5) warnings.push(`L8: expected 5 ticket-size bands, got ${seg.bands.length}`);
+    if (!seg.so_what?.bottom_line) warnings.push('L8: segmented real estate has no bottom line');
+  }
+
   // ── WARNINGS ───────────────────────────────────────────────────────
   if (macroData._market_fetch_errors && macroData._market_fetch_errors.length > 0) {
     warnings.push(`W3: ${macroData._market_fetch_errors.length} market data fetch errors`);

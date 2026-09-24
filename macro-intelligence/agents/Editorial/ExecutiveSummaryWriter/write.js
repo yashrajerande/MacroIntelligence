@@ -128,7 +128,8 @@ ${TREND_GUIDANCE}
 ${indicatorSummary}
 
 UNITS ARE PART OF THE NUMBER (mandatory):
-Every figure you write carries the full unit shown above — the period for flows ("₹31,961 cr / month", "13.7 mn sq ft / quarter") and the basis for rates ("4.45% YoY", "1.5% SAAR", "5.25% p.a.", "42.6% of GDP"). Never write a bare "₹ cr", a bare "%", or a bare count. If a unit says "/ month", the word month (or "monthly") appears next to the number. Glossary:
+Every FLOW carries its period ("₹31,961 cr / month", "13.7 mn sq ft / quarter") and every RATE carries its basis ("4.45% YoY", "1.5% SAAR", "5.25% p.a.", "42.6% of GDP") — exactly as shown above. Never write a bare "₹ cr", a bare "%", or a bare count. If a unit says "/ month", the word month (or "monthly") appears next to the number.
+LEVELS read naturally: index points and prices take no suffix — write "Nifty 23,447", "Euro Stoxx 50 at 6,300", "INR at 96.15", "Brent at $103/bbl", "Embassy REIT at ₹370" — never "6,299.82 index" or "96.15 ₹". Round index points to whole numbers. Glossary:
 ${unitsBlock}
 
 ───────────────────────────────────────────

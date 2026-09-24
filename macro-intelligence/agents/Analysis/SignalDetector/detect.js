@@ -68,7 +68,7 @@ KEY INDICATORS (${Object.keys(scored).length} total):
 Each indicator is tagged with [polarity: positive|negative|neutral, signal: classification, score: -100..+100]
 from the canonical Polarity Skill. TRUST these tags — do not re-judge polarity from the raw value.
 A 'positive' polarity metric rising is good; a 'negative' polarity metric rising is bad.
-UNITS ARE PART OF THE NUMBER: quote every figure with the full unit shown next to it — the period for flows ("₹31,961 cr / month", "13.7 mn sq ft / quarter") and the basis for rates ("4.45% YoY", "1.5% SAAR", "5.25% p.a."). Never a bare "₹ cr", a bare "%", or a bare count in data_text or implication.
+UNITS ARE PART OF THE NUMBER: quote every figure with the full unit shown next to it — the period for flows ("₹31,961 cr / month", "13.7 mn sq ft / quarter") and the basis for rates ("4.45% YoY", "1.5% SAAR", "5.25% p.a."). Never a bare "₹ cr", a bare "%", or a bare count in data_text or implication. Levels read naturally: index points and prices take no suffix ("Nifty 23,447", "INR at 96.15", "Brent at $103/bbl"), never "6,299.82 index" or "96.15 ₹".
 ${TREND_GUIDANCE}
 ${indicatorSummary}
 

@@ -417,18 +417,16 @@
     },
     {
       "date": "24 SEP 2026",
-      "verdict_line": "Office absorption at a 10-year-low 13.2 mn sq ft / quarter — yet Bank Nifty sits at its 93rd percentile, pricing a credit cycle the GCC demand signal just quietly withdrew.",
+      "verdict_line": "Mumbai office rents at a 100th-percentile ₹335/sqft/mo while absorption collapses to 13.2 mn sq ft/quarter — landlords are pricing a demand that GCC hiring data says has already left the building.",
       "themes": [
-        "markets",
         "real_estate"
       ],
       "slugs": [
+        "rent_mumbai",
+        "rent_bengaluru",
         "office_absorption",
         "inr_usd",
-        "retail_mall_vacancy",
-        "dii_equity_net",
-        "sip_aum",
-        "bank_nifty"
+        "retail_mall_vacancy"
       ]
     }
   ]

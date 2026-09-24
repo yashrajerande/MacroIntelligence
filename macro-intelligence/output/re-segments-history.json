@@ -1,0 +1,203 @@
+{
+  "history": [
+    {
+      "fetched_at": "2026-09-24T02:45:27.003Z",
+      "run_date": "2026-09-24",
+      "residential": {
+        "vintage": "Q2 2026 (April-June 2026)",
+        "source": "Anarock / PropEquity",
+        "bands": [
+          {
+            "band": "affordable",
+            "range": "< ₹40 lakh",
+            "launches_share_pct": 6,
+            "sales_share_pct": null,
+            "sales_yoy_pct": null
+          },
+          {
+            "band": "mid",
+            "range": "₹40-80 lakh",
+            "launches_share_pct": 19,
+            "sales_share_pct": null,
+            "sales_yoy_pct": null
+          },
+          {
+            "band": "premium",
+            "range": "₹80 lakh - ₹1.5 cr",
+            "launches_share_pct": 27,
+            "sales_share_pct": null,
+            "sales_yoy_pct": null
+          },
+          {
+            "band": "luxury",
+            "range": "₹1.5 - 2.5 cr",
+            "launches_share_pct": 25,
+            "sales_share_pct": null,
+            "sales_yoy_pct": null
+          },
+          {
+            "band": "ultra_luxury",
+            "range": "> ₹2.5 cr",
+            "launches_share_pct": 22,
+            "sales_share_pct": null,
+            "sales_yoy_pct": null
+          }
+        ],
+        "cities": [
+          {
+            "city": "MMR",
+            "sales_units": 28710,
+            "sales_yoy_pct": -8,
+            "launches_units": 34555,
+            "launches_yoy_pct": 23,
+            "price_yoy_pct": null,
+            "unsold_months": null
+          },
+          {
+            "city": "NCR",
+            "sales_units": 13365,
+            "sales_yoy_pct": -6,
+            "launches_units": 11205,
+            "launches_yoy_pct": -40,
+            "price_yoy_pct": 13,
+            "unsold_months": null
+          },
+          {
+            "city": "Bengaluru",
+            "sales_units": 15285,
+            "sales_yoy_pct": 1,
+            "launches_units": 21670,
+            "launches_yoy_pct": 41,
+            "price_yoy_pct": 8,
+            "unsold_months": null
+          },
+          {
+            "city": "Pune",
+            "sales_units": 13090,
+            "sales_yoy_pct": -15,
+            "launches_units": 12735,
+            "launches_yoy_pct": -10,
+            "price_yoy_pct": null,
+            "unsold_months": null
+          },
+          {
+            "city": "Hyderabad",
+            "sales_units": 11270,
+            "sales_yoy_pct": 2,
+            "launches_units": 16970,
+            "launches_yoy_pct": 53,
+            "price_yoy_pct": null,
+            "unsold_months": 29
+          },
+          {
+            "city": "Chennai",
+            "sales_units": 5135,
+            "sales_yoy_pct": -9,
+            "launches_units": 5315,
+            "launches_yoy_pct": -38,
+            "price_yoy_pct": 20,
+            "unsold_months": null
+          },
+          {
+            "city": "Kolkata",
+            "sales_units": 3860,
+            "sales_yoy_pct": 10,
+            "launches_units": 3550,
+            "launches_yoy_pct": 42,
+            "price_yoy_pct": null,
+            "unsold_months": null
+          }
+        ]
+      },
+      "buyers": {
+        "vintage": "FY2025-2026 (2025 calendar year / fiscal year 2024-25 and 2025-26)",
+        "source": "Anarock, Business Standard, Star Estate, Puravankara, Multiple Industry Reports",
+        "nri_share_pct": 18,
+        "nri_share_prev_pct": 10,
+        "nri_share_premium_luxury_pct": 25,
+        "domestic_share_pct": null,
+        "nri_top_cities": [
+          "Mumbai",
+          "Bengaluru",
+          "Hyderabad",
+          "Delhi-NCR"
+        ],
+        "nri_source_regions": [
+          "USA",
+          "UAE",
+          "UK",
+          "Canada",
+          "Singapore"
+        ],
+        "developer_nri_shares": [
+          {
+            "developer": "DLF",
+            "nri_sales_share_pct": 23,
+            "period": "FY2024 (April 2023 - March 2024)"
+          }
+        ],
+        "nri_trend_note": "NRI buying is rising sharply, with share increasing from 10% previously to 18-20% in 2025, driven by rupee depreciation and demand for luxury properties.",
+        "remittances_usd_bn": 140,
+        "remittances_yoy_pct": null,
+        "nre_nro_deposit_growth_yoy_pct": 9.9
+      },
+      "commercial": {
+        "vintage": "Q2 2026",
+        "source": "JLL, CBRE, Colliers, Cushman & Wakefield",
+        "cities": [
+          {
+            "city": "Bengaluru",
+            "absorption_mn_sqft": 5.59,
+            "absorption_yoy_pct": 8,
+            "vacancy_pct": null,
+            "rent_yoy_pct": 5.4
+          },
+          {
+            "city": "Hyderabad",
+            "absorption_mn_sqft": 3.8,
+            "absorption_yoy_pct": 19,
+            "vacancy_pct": 21.2,
+            "rent_yoy_pct": 11.9
+          },
+          {
+            "city": "MMR (Mumbai)",
+            "absorption_mn_sqft": 2.1,
+            "absorption_yoy_pct": -29,
+            "vacancy_pct": null,
+            "rent_yoy_pct": 3.4
+          },
+          {
+            "city": "NCR",
+            "absorption_mn_sqft": 2.7,
+            "absorption_yoy_pct": 23,
+            "vacancy_pct": 20.6,
+            "rent_yoy_pct": 7.7
+          },
+          {
+            "city": "Pune",
+            "absorption_mn_sqft": 3.22,
+            "absorption_yoy_pct": 13,
+            "vacancy_pct": 18.7,
+            "rent_yoy_pct": 1
+          },
+          {
+            "city": "Chennai",
+            "absorption_mn_sqft": null,
+            "absorption_yoy_pct": null,
+            "vacancy_pct": 3.4,
+            "rent_yoy_pct": 4.6
+          }
+        ],
+        "occupiers": {
+          "gcc_share_pct": 42,
+          "it_services_share_pct": 21,
+          "bfsi_share_pct": 13,
+          "flex_share_pct": 27,
+          "domestic_share_pct": 46,
+          "global_share_pct": 54
+        }
+      },
+      "errors": []
+    }
+  ]
+}

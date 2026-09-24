@@ -417,15 +417,16 @@
     },
     {
       "date": "24 SEP 2026",
-      "verdict_line": "Office absorption at 24.6 Mn sqft — an 18th-percentile print rising 18% sequentially — while REIT prices have fallen 15-25% YTD: the real economy and the listed proxy are telling opposite stories.",
+      "verdict_line": "Retail mall vacancy at a cycle-low 5% while fuel inflation hits 22.93% — the consumer is showing up, but the margin on serving them is evaporating.",
       "themes": [
+        "inflation",
         "real_estate"
       ],
       "slugs": [
-        "euro_stoxx50",
+        "retail_mall_vacancy",
+        "inr_usd",
+        "fuel_inflation",
         "dii_equity_net",
-        "uk_corp_debt_gdp",
-        "office_absorption",
         "sip_aum"
       ]
     }

@@ -1296,6 +1296,85 @@ assert(rankedDup.runnerUp.title === 'Different one',
   assert(keepAliveCurl.includes('dashboard_runs?select=run_date') && !keepAliveCurl.includes('run_metadata'), `Keep-alive must query a table that exists`);
 }
 
+// --- Executive summary "So What" format. Sections are title / The facts /
+// The tension / Bottom line, assembled deterministically from the fields
+// the model returns so the structure can never drift.
+describe('Executive Summary — So What format');
+{
+  const { formatSoWhat, lintSoWhat, inlineOnly, hasSoWhatFields, SO_WHAT_LIMITS } =
+    await import('./agents/Editorial/ExecutiveSummaryWriter/skills/so-what-format.js');
+
+  const canonical = {
+    title: 'Global Macro Paradox — Acceleration Meets Deceleration',
+    facts: [
+      'US PMI <strong>56.0</strong> (84th percentile), Euro Stoxx 50 at <strong>6,299</strong> (100th percentile) signal re-acceleration',
+      'But US GDP SAAR slowed to <strong>1.5%</strong> from 2.1%; China at <strong>4.3%</strong> from 5.0% with PMI 49.5 (contraction)',
+      'US 10Y at <strong>4.96%</strong> (90th percentile) vs Fed funds 3.63% — bond market tightening for the Fed',
+      'BOJ at <strong>1.0%</strong> (86th percentile, up from 0.75%) driving yen carry unwind; INR at <strong>96.15</strong> (91st percentile)',
+    ],
+    tension: 'DM growth appears accelerating on surveys, but nominal GDP growth is already decelerating and real tightening is embedded in 10Y yields. China weak prevents commodity reflation from sustaining.',
+    bottom_line: 'Equity valuations pricing growth re-acceleration; macro data pricing slowdown. BOJ is the underappreciated tail risk for India liquidity flows.',
+  };
+  const html = formatSoWhat(canonical, 'Global Macro Regime');
+  assert(html.startsWith('<h4>Global Macro Paradox — Acceleration Meets Deceleration</h4>'), `Title renders as h4: ${html.slice(0, 80)}`);
+  assert(html.includes('<p><b>The facts:</b></p><ul><li>US PMI <strong>56.0</strong>'), `Facts render as a labelled list with <strong> figures preserved`);
+  assert((html.match(/<li>/g) || []).length === 4, `All four facts render`);
+  assert(html.includes('<p><b>The tension:</b> DM growth appears'), `Tension renders with its label inline`);
+  assert(html.includes('<p><b>Bottom line:</b> Equity valuations'), `Bottom line renders with its label inline`);
+  assert(!/\sclass=|\sstyle=|\sid=/.test(html), `Output must be tags only — no attributes (PDF sanitiser strips them)`);
+  assert(lintSoWhat(canonical, 'Global Macro Regime').length === 0, `Canonical example must lint clean: ${JSON.stringify(lintSoWhat(canonical, 'Global Macro Regime'))}`);
+
+  // Sanitisation of model-supplied strings
+  assert(inlineOnly('<p>GDP <strong onclick="x()">7.8%</strong> <script>alert(1)</script><a href="j">x</a></p>') === 'GDP <strong>7.8%</strong> x',
+    `inlineOnly keeps <strong> without attributes and drops every other tag`);
+  const hostile = formatSoWhat({ title: '<img src=x onerror=alert(1)>T', facts: ['<li>1 <em>a</em></li>', '2', '3'], tension: '<h1>t</h1>', bottom_line: '<b>b</b>' });
+  assert(!hostile.includes('<img') && !hostile.includes('onerror') && hostile.includes('<h4>T</h4>') && hostile.includes('<li>1 <em>a</em></li>'),
+    `Hostile markup in fields is neutralised: ${hostile}`);
+
+  // Degradation: missing fields → labelled gaps, never a crash
+  assert(formatSoWhat({}, 'Liquidity Conditions') === '<h4>Liquidity Conditions</h4>', `Empty section falls back to the label as title`);
+  assert(formatSoWhat({ facts: Array(8).fill('fact 1') }).split('<li>').length - 1 === SO_WHAT_LIMITS.factsMax, `Facts are capped at ${SO_WHAT_LIMITS.factsMax}`);
+  assert(hasSoWhatFields({ facts: [] }) && hasSoWhatFields({ tension: '' }) && !hasSoWhatFields({ para_html: '<p>x</p>' }) && !hasSoWhatFields(null),
+    `hasSoWhatFields distinguishes the new shape from legacy prose`);
+
+  // Lint catches the anti-patterns the user rejected
+  const bad = lintSoWhat({
+    title: 'Liquidity Conditions',
+    facts: ['The market is calm', 'Two'],
+    tension: Array(50).fill('w').join(' '),
+    bottom_line: '',
+  }, 'Liquidity Conditions');
+  assert(bad.some(p => /just the section label/.test(p)), `Lint: title equal to the label`);
+  assert(bad.some(p => /only 2 fact/.test(p)), `Lint: too few facts`);
+  assert(bad.some(p => /fact 1 has no number/.test(p)), `Lint: fact without a number`);
+  assert(bad.some(p => /fact 1 starts with "The"/.test(p)), `Lint: fact starting with The`);
+  assert(bad.some(p => /tension is 50 words/.test(p)), `Lint: tension over the word cap`);
+  assert(bad.some(p => /missing bottom line/.test(p)), `Lint: missing bottom line`);
+
+  // Writer wiring: both skills in the system prompt, fields → formatSoWhat, legacy prose still renders
+  const writerSrc = readFileSync(join(__dirname, 'agents', 'Editorial', 'ExecutiveSummaryWriter', 'write.js'), 'utf8');
+  assert(writerSrc.includes("readFileSync(join(__dirname, 'skills', 'so-what-format.md')") && writerSrc.includes('SKILL: so-what-format.md') && writerSrc.includes('SKILL: summary-style.md'),
+    `Writer must load both skills into the system prompt`);
+  assert(writerSrc.includes('text: SYSTEM_PROMPT'), `Writer must send the composed system prompt, not the bare persona`);
+  assert(writerSrc.includes('"sections": [') && writerSrc.includes('"bottom_line"') && !writerSrc.includes('"para_html": "<p>...</p>"'),
+    `Prompt schema must ask for so-what fields, not prose HTML`);
+  assert(writerSrc.includes('parsed.sections || parsed.paragraphs') && writerSrc.includes('para_html: formatSoWhat(p, para_label)'),
+    `Writer must accept the new shape and assemble HTML deterministically`);
+  assert(existsSync(join(__dirname, 'agents', 'Editorial', 'ExecutiveSummaryWriter', 'skills', 'so-what-format.md')), `so-what-format.md skill must exist`);
+  const soWhatMd = readFileSync(join(__dirname, 'agents', 'Editorial', 'ExecutiveSummaryWriter', 'skills', 'so-what-format.md'), 'utf8');
+  assert(soWhatMd.includes('Acceleration Meets Deceleration') && soWhatMd.includes('Bottom line:'), `Skill must carry the canonical example`);
+  const personaMd = readFileSync(join(__dirname, 'agents', 'Editorial', 'ExecutiveSummaryWriter', 'Persona.md'), 'utf8');
+  assert(personaMd.includes('So What') && !personaMd.includes('5 paragraphs × 4 sentences'), `Persona must describe the so-what format, not prose paragraphs`);
+
+  // Render surfaces style the structure by tag on both the dashboard and the PDF
+  const tpl = readFileSync(join(__dirname, 'template', 'macro-intelligence-light.html'), 'utf8');
+  assert(tpl.includes('.ec-txt h4 {') && tpl.includes('.ec-txt li {') && tpl.includes('.ec-txt b {'), `Dashboard CSS must style h4 / li / b inside .ec-txt`);
+  const { sanitizeRich: sr } = await import('./agents/Infrastructure/TelegramPublisher/skills/highlights-pdf.js');
+  assert(sr(html) === html, `PDF sanitiser must pass the so-what HTML through untouched`);
+  const pdfSrc = readFileSync(join(__dirname, 'agents', 'Infrastructure', 'TelegramPublisher', 'skills', 'highlights-pdf.js'), 'utf8');
+  assert(pdfSrc.includes('.para-body h4 {') && pdfSrc.includes('.para-body li {'), `PDF CSS must style the structure`);
+}
+
 // --- Generic scaler must pick the BEST factor, not the first that fits.
 // Real case from the 07 SEP run: home loans 4,500,000 with range
 // [80000,700000] / p50 230000 was scaled ×0.001 → 4,500 (only "in range"

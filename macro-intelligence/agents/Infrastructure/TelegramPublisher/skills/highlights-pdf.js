@@ -47,10 +47,12 @@ export function esc(s) {
 export function sanitizeRich(html) {
   if (!html) return '';
   return String(html)
-    // Strip every tag that is not in the allow-list.
-    .replace(/<(?!\/?(?:strong|em|b|i|p|br)\b)[^>]*>/gi, '')
+    // Strip every tag that is not in the allow-list. h4/ul/li carry the
+    // executive summary's "so what" structure (title / facts / tension /
+    // bottom line); b is its label, strong its figures.
+    .replace(/<(?!\/?(?:strong|em|b|i|p|br|h4|ul|li)\b)[^>]*>/gi, '')
     // Strip attributes from the allowed tags.
-    .replace(/<(\/?)(strong|em|b|i|p|br)\b[^>]*>/gi, '<$1$2>');
+    .replace(/<(\/?)(strong|em|b|i|p|br|h4|ul|li)\b[^>]*>/gi, '<$1$2>');
 }
 
 /** Regime / signal badge → colour role. */
@@ -228,6 +230,11 @@ export function generateHighlightsHTML(macroDataObj, { dateStr, dashboardUrl } =
   .para-label { font-size: 8pt; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #1d4ed8; margin-bottom: 2px; }
   .para-body p { margin: 0 0 4px; }
   .para-body strong { font-weight: 700; color: #111827; }
+  /* "So what" structure */
+  .para-body h4 { font-size: 11pt; font-weight: 800; letter-spacing: -0.01em; line-height: 1.25; margin: 0 0 4px; color: #111827; }
+  .para-body b { font-size: 7.5pt; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #1d4ed8; margin-right: 3px; }
+  .para-body ul { margin: 0 0 5px; padding-left: 14px; }
+  .para-body li { margin: 0 0 2px; font-size: 9.5pt; line-height: 1.4; }
 
   /* Signals */
   .signal { border-left: 3px solid #e5e7eb; padding: 4px 0 4px 10px; margin-bottom: 10px; page-break-inside: avoid; }

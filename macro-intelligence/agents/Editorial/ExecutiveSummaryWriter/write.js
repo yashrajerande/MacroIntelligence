@@ -23,11 +23,28 @@ import {
   buildHookContext,
 } from '../../../src/utils/hook-writer.js';
 import { trendSuffix, TREND_GUIDANCE } from '../../../src/utils/trend-context.js';
+import { formatSoWhat, hasSoWhatFields, lintSoWhat, inlineOnly } from './skills/so-what-format.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const persona = readFileSync(join(__dirname, 'Persona.md'), 'utf-8');
 const styleGuide = readFileSync(join(__dirname, 'skills', 'summary-style.md'), 'utf-8');
+const soWhatGuide = readFileSync(join(__dirname, 'skills', 'so-what-format.md'), 'utf-8');
 const client = new Anthropic();
+
+// Persona + both skills go in the system prompt. summary-style.md was
+// being read and never sent — the model had the persona's voice rules but
+// none of the style skill's mandatory rules.
+const SYSTEM_PROMPT = `${persona}
+
+════════════════════════════════════════
+SKILL: summary-style.md
+════════════════════════════════════════
+${styleGuide}
+
+════════════════════════════════════════
+SKILL: so-what-format.md
+════════════════════════════════════════
+${soWhatGuide}`;
 
 const PARA_LABELS = [
   'India Macro Regime',
@@ -120,14 +137,22 @@ Return JSON wrapped in <<<JSON and >>> markers:
     "consumption": "2-3 sentences. GST as formalization proxy (Mishra insight). Vehicle sales by segment. Apply Munger: is urban discretionary strong while rural staples are weak? What does that divergence predict?"
   },
 
-  "paragraphs": [
-    { "para_num": 1, "para_label": "India Macro Regime", "para_html": "<p>...</p>" },
-    { "para_num": 2, "para_label": "Global Macro Regime", "para_html": "<p>...</p>" },
-    { "para_num": 3, "para_label": "Liquidity Conditions", "para_html": "<p>...</p>" },
-    { "para_num": 4, "para_label": "Equity + Real Estate Implications", "para_html": "<p>...</p>" },
-    { "para_num": 5, "para_label": "Key Risks to Monitor", "para_html": "<p>...</p>" }
+  "sections": [
+    {
+      "para_num": 1, "para_label": "India Macro Regime",
+      "title": "4-12 words naming the TENSION, not the topic. e.g. 'Growth Headline vs Goods Economy — Services Carry the Load'",
+      "facts": ["3-5 bullets. Each: one fact, one number, <strong> around the figure. Open a contradicting bullet with 'But'. Never start with 'The'."],
+      "tension": "1-2 sentences, max 45 words. Name the two things that disagree and why.",
+      "bottom_line": "1 sentence, max 30 words. A positioning call (overweight/avoid/hedge) OR the one thing to watch with a threshold."
+    },
+    { "para_num": 2, "para_label": "Global Macro Regime", "title": "...", "facts": ["..."], "tension": "...", "bottom_line": "..." },
+    { "para_num": 3, "para_label": "Liquidity Conditions", "title": "...", "facts": ["..."], "tension": "...", "bottom_line": "..." },
+    { "para_num": 4, "para_label": "Equity + Real Estate Implications", "title": "...", "facts": ["..."], "tension": "...", "bottom_line": "..." },
+    { "para_num": 5, "para_label": "Key Risks to Monitor", "title": "...", "facts": ["risks ranked by probability × impact, one per bullet, each with the number that makes it a risk"], "tension": "...", "bottom_line": "the single data point to watch this week, with its threshold" }
   ]
 }
+
+SECTION FORMAT IS NON-NEGOTIABLE: the so-what-format.md skill in your system prompt shows the canonical example. Return the FIELDS (title / facts / tension / bottom_line) — the HTML is assembled for you. Do not return prose paragraphs and do not return HTML blocks. Under 130 words per section; if over, cut a fact, never the bottom line.
 
 REMEMBER: Your persona defines three voices (Mishra, Munger, Economist). USE THEM TO THINK — never to attribute. Every regime narrative must show at least one inversion (Munger), one proxy-vs-headline tension (Mishra), and zero banned phrases (Economist test). The names are your private analytical anchors and MUST NOT appear in the output. Do not write "as Mishra notes", "applying Munger", "in the FT's voice", or any variant. Present every conclusion as your own, unattributed.`;
 
@@ -135,7 +160,7 @@ REMEMBER: Your persona defines three voices (Mishra, Munger, Economist). USE THE
       model: 'claude-sonnet-4-6',
       max_tokens: 4096,
       temperature: 0.3,
-      system: [{ type: 'text', text: persona, cache_control: { type: 'ephemeral' } }],
+      system: [{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }],
       messages: [{ role: 'user', content: prompt }],
     });
     const response = await stream.finalMessage();
@@ -160,15 +185,44 @@ REMEMBER: Your persona defines three voices (Mishra, Munger, Economist). USE THE
     } else {
       verdictLine = parsed.verdict_line || '';
       regimeNarratives = parsed.regime_narratives || {};
-      paragraphs = parsed.paragraphs || [];
+      paragraphs = parsed.sections || parsed.paragraphs || [];
     }
 
-    // Enforce structure
-    paragraphs = paragraphs.map((p, i) => ({
-      para_num: i + 1,
-      para_label: PARA_LABELS[i] || p.para_label,
-      para_html: p.para_html || `<p>${p.text || 'Awaited'}</p>`,
-    }));
+    // Enforce structure. The "so what" fields are assembled into HTML here
+    // (see skills/so-what-format.js) so the layout can never drift; a
+    // legacy prose answer still renders via para_html. Structured fields
+    // are kept on the object for any consumer that wants them raw.
+    const lintProblems = [];
+    paragraphs = paragraphs.slice(0, PARA_LABELS.length).map((p, i) => {
+      const para_label = PARA_LABELS[i] || p.para_label;
+      if (hasSoWhatFields(p)) {
+        lintProblems.push(...lintSoWhat(p, para_label));
+        return {
+          para_num: i + 1,
+          para_label,
+          para_html: formatSoWhat(p, para_label),
+          title: inlineOnly(p.title),
+          facts: (Array.isArray(p.facts) ? p.facts : []).map(inlineOnly).filter(Boolean),
+          tension: inlineOnly(p.tension),
+          bottom_line: inlineOnly(p.bottom_line),
+        };
+      }
+      lintProblems.push(`[${para_label}] answered in legacy prose, not so-what fields`);
+      return {
+        para_num: i + 1,
+        para_label,
+        para_html: p.para_html || `<p>${p.text || 'Awaited'}</p>`,
+      };
+    });
+    while (paragraphs.length < PARA_LABELS.length) {
+      const i = paragraphs.length;
+      lintProblems.push(`[${PARA_LABELS[i]}] missing — model returned ${paragraphs.length} sections`);
+      paragraphs.push({ para_num: i + 1, para_label: PARA_LABELS[i], para_html: '<p>Awaited</p>' });
+    }
+    if (lintProblems.length) {
+      console.warn(`[ExecutiveSummaryWriter] So-what lint: ${lintProblems.length} issue(s)`);
+      for (const pr of lintProblems) console.warn(`  ↳ ${pr}`);
+    }
 
     // Persist the verdict line to hook history so tomorrow's run bans
     // today's theme. Use the Top Hook Candidate slugs as the initial
@@ -201,6 +255,7 @@ REMEMBER: Your persona defines three voices (Mishra, Munger, Economist). USE THE
         tokens,
         hook_banned_themes: hookContext.banned_themes,
         hook_top_candidates: hookContext.candidates.slice(0, 5).map(c => c.slug),
+        so_what_lint: lintProblems,
       },
     };
   }

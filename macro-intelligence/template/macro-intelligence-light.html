@@ -704,6 +704,18 @@ html.tv .dt td, html.tv .dt th { padding:14px 0; }
 }
 .ec-txt { font-family:var(--body); font-size:0.82rem; color:var(--ink-2); line-height:1.84; font-weight:300; }
 .ec-txt strong { color:var(--ink-1); font-weight:700; font-family:var(--mono); font-size:0.80rem; }
+/* "So what" section structure: h4 title / facts list / tension / bottom line.
+   Tags only — the same HTML feeds the Highlights PDF, whose sanitiser
+   strips attributes, so nothing here relies on a class. */
+.ec-txt h4 { font-family:var(--display); font-size:0.98rem; font-weight:700; letter-spacing:-0.01em; line-height:1.3; color:var(--ink-1); margin:0 0 10px; }
+.ec-txt p { margin:0 0 6px; }
+.ec-txt p:last-child { margin-bottom:0; }
+.ec-txt b { font-family:var(--mono); font-size:0.62rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#1a00cc; margin-right:4px; }
+.ec-txt ul { list-style:none; margin:0 0 10px; padding:0; }
+.ec-txt li { position:relative; padding-left:14px; margin:0 0 4px; line-height:1.6; }
+.ec-txt li::before { content:''; position:absolute; left:0; top:0.62em; width:6px; height:6px; border-radius:50%; background:rgba(26,0,204,0.55); }
+.ec-txt p:has(+ ul) { margin-bottom:4px; }
+.ec-txt p:has(> b:first-child):not(:has(+ ul)) { padding:8px 10px; background:rgba(26,0,204,0.04); border-left:2px solid rgba(26,0,204,0.35); border-radius:0 6px 6px 0; }
 
 /* ══════════════════════════════════════════════════
    NEWS STRIP

@@ -15,14 +15,15 @@ tests below run in your head, not on the page.
   05 — Key Risks to Monitor
 
 ## Mandatory Rules
-- Open each paragraph with the single most important number.
-- Use em-dashes for causation chains: "Brent $95 — CAD widens $15bn — INR at 87 — imported inflation +40bps".
+- Every section uses the "So What" format — title / The facts / The tension / Bottom line. The contract and the canonical example are in `so-what-format.md`. Prose paragraphs are not accepted.
+- Title names the tension, not the topic.
+- Open each fact with the number or the indicator, never with "The".
+- Use em-dashes for causation chains inside a fact: "Brent $95 — CAD widens $15bn — INR at 87".
 - Use arrows for direction: "→ rate cut → mortgage repricing → housing demand".
-- Never start a sentence with "The".
-- No paragraph longer than 4 sentences.
-- Wrap all key figures in <strong> tags.
-- Final sentence of para 05: the single most important data point this week.
-- Every sentence must contain at least one number or a specific falsifiable claim.
+- Wrap all key figures in <strong> tags. No other markup.
+- Bottom line of section 05: the single most important data point this week, with its threshold.
+- Every fact must contain at least one number or a specific falsifiable claim.
+- Under 130 words per section.
 
 ## The Mishra Test
 Before writing about India GDP, ask: "What does this number actually measure? What's happening in the informal economy that this misses? What do high-frequency proxies (GST, e-way bills, UPI, toll collections) say?"

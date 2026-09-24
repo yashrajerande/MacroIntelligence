@@ -48,13 +48,22 @@ export function classifyBalance(launchShare, salesShare) {
  * value); falls back to the source's own prior-period figure when the
  * history is too young to have two prints. 1 pp is the noise floor.
  */
-export function classifyNriDirection(latestBuyers, history = []) {
+// Two fetches minutes apart can differ by a couple of points purely on
+// which article the search landed on. A history comparison only counts
+// when the earlier print is at least this many days older; until then
+// the source's own prior-period figure is the honest basis.
+export const NRI_HISTORY_MIN_AGE_DAYS = 28;
+
+export function classifyNriDirection(latestBuyers, history = [], { minAgeDays = NRI_HISTORY_MIN_AGE_DAYS } = {}) {
   const now = num(latestBuyers?.nri_share_pct);
   if (now === null) return { direction: 'unknown', delta_pp: null, basis: 'no NRI share published' };
 
-  const priorFromHistory = [...history]
+  const entries = (history || []).filter(h => h?.fetched_at);
+  const newestAt = entries.length ? new Date(entries[entries.length - 1].fetched_at) : null;
+  const priorFromHistory = newestAt === null ? undefined : [...entries]
     .slice(0, -1)
     .reverse()
+    .filter(h => (newestAt - new Date(h.fetched_at)) / 86400000 >= minAgeDays)
     .map(h => num(h?.buyers?.nri_share_pct))
     .find(v => v !== null && v !== now);
   const priorFromSource = num(latestBuyers?.nri_share_prev_pct);
@@ -292,6 +301,8 @@ export class RealEstateSegmentAnalyzer {
       sources,
       fetched_at: latest.fetched_at || null,
       served_from_cache: !!segmentData?.served_from_cache,
+      carried_fields: latest.carried_fields || 0,
+      consolidated_from: Array.isArray(latest.consolidated_from) ? latest.consolidated_from : [],
       bands,
       cities,
       buyers: {

@@ -69,6 +69,81 @@ export function isUsableEntry(entry) {
   );
 }
 
+/**
+ * Consolidate the served snapshot across recent fetches: start from the
+ * newest entry and fill every null field from the next-older entry
+ * within `maxAgeDays`, so one thin fetch (the residential search came
+ * back empty on the second live run) can never erase a good one. The
+ * reports behind these numbers are quarterly, so a 35-day window stays
+ * inside one vintage. Pure; exported for the pre-flight suite.
+ *
+ * Returns the consolidated entry plus `carried_fields` (how many values
+ * were carried from older fetches) so the ops log shows it.
+ */
+export function consolidateSnapshot(history, isoDate, { maxAgeDays = 35 } = {}) {
+  const entries = (history || []).filter(e => e?.fetched_at);
+  if (!entries.length) return null;
+  const newest = entries[entries.length - 1];
+  const cutoff = new Date(isoDate || newest.fetched_at) - maxAgeDays * 86400000;
+  const older = entries.slice(0, -1).filter(e => new Date(e.fetched_at) >= cutoff).reverse(); // newest-first
+  let carried = 0;
+
+  const isNull = v => v === null || v === undefined || v === '';
+  const fillScalars = (target, src) => {
+    if (!src) return;
+    for (const [k, v] of Object.entries(src)) {
+      if (Array.isArray(v) || (v && typeof v === 'object')) continue;
+      if (isNull(target[k]) && !isNull(v)) { target[k] = v; carried++; }
+    }
+  };
+  const fillKeyedArray = (target, src, keyField, normalize = x => String(x || '').toLowerCase()) => {
+    if (!Array.isArray(src)) return target;
+    const out = Array.isArray(target) ? target.map(x => ({ ...x })) : [];
+    for (const s of src) {
+      const key = normalize(s?.[keyField]);
+      let t = out.find(x => normalize(x?.[keyField]) === key);
+      if (!t) { t = { [keyField]: s[keyField] }; out.push(t); carried++; }
+      fillScalars(t, s);
+    }
+    return out;
+  };
+
+  const out = {
+    ...newest,
+    residential: newest.residential ? { ...newest.residential, bands: (newest.residential.bands || []).map(b => ({ ...b })), cities: (newest.residential.cities || []).map(c => ({ ...c })) } : null,
+    buyers: newest.buyers ? { ...newest.buyers } : null,
+    commercial: newest.commercial ? { ...newest.commercial, cities: (newest.commercial.cities || []).map(c => ({ ...c })), occupiers: { ...(newest.commercial.occupiers || {}) } } : null,
+    consolidated_from: [],
+  };
+
+  for (const e of older) {
+    const before = carried;
+    if (e.residential) {
+      if (!out.residential) out.residential = { bands: [], cities: [] };
+      fillScalars(out.residential, e.residential);
+      out.residential.bands = fillKeyedArray(out.residential.bands, e.residential.bands, 'band');
+      out.residential.cities = fillKeyedArray(out.residential.cities, e.residential.cities, 'city');
+    }
+    if (e.buyers) {
+      if (!out.buyers) out.buyers = {};
+      fillScalars(out.buyers, e.buyers);
+      for (const k of ['nri_top_cities', 'nri_source_regions', 'developer_nri_shares']) {
+        if ((!Array.isArray(out.buyers[k]) || !out.buyers[k].length) && Array.isArray(e.buyers[k]) && e.buyers[k].length) { out.buyers[k] = e.buyers[k]; carried++; }
+      }
+    }
+    if (e.commercial) {
+      if (!out.commercial) out.commercial = { cities: [], occupiers: {} };
+      fillScalars(out.commercial, e.commercial);
+      out.commercial.cities = fillKeyedArray(out.commercial.cities, e.commercial.cities, 'city');
+      out.commercial.occupiers = out.commercial.occupiers || {};
+      fillScalars(out.commercial.occupiers, e.commercial.occupiers);
+    }
+    if (carried > before) out.consolidated_from.push(e.fetched_at.slice(0, 10));
+  }
+  out.carried_fields = carried;
+  return out;
+}
+
 export class RealEstateSegmentAnalyst {
   async fetch(isoDate, { force = process.env.FORCE_RE_SEGMENTS === 'true', historyPath = SEGMENTS_HISTORY_PATH } = {}) {
     const start = Date.now();
@@ -76,8 +151,8 @@ export class RealEstateSegmentAnalyst {
     const cachedMeta = { agent: 'RealEstateSegmentAnalyst', model: 'none', latency_ms: 0, tokens: { input: 0, output: 0 } };
 
     if (!force && !needsSegmentRefresh(store, isoDate)) {
-      const latest = store.history.at(-1);
-      console.log(`[RealEstateSegmentAnalyst] Serving snapshot from ${latest.fetched_at.slice(0, 10)} (refresh every ${REFRESH_DAYS} days)`);
+      const latest = consolidateSnapshot(store.history, isoDate);
+      console.log(`[RealEstateSegmentAnalyst] Serving snapshot from ${latest.fetched_at.slice(0, 10)} (refresh every ${REFRESH_DAYS} days${latest.carried_fields ? `; ${latest.carried_fields} field(s) carried from ${latest.consolidated_from.join(', ')}` : ''})`);
       return { data: { latest, history: store.history, served_from_cache: true }, meta: cachedMeta };
     }
 
@@ -99,9 +174,9 @@ export class RealEstateSegmentAnalyst {
       console.warn('[RealEstateSegmentAnalyst] All segment searches failed — keeping the previous snapshot');
     }
 
-    const latest = store.history.at(-1) || entry;
+    const latest = consolidateSnapshot(store.history, isoDate) || entry;
     const latency = Date.now() - start;
-    console.log(`[RealEstateSegmentAnalyst] Done in ${latency}ms. ${result.errors.length ? result.errors.length + ' block(s) failed. ' : ''}${store.history.length} snapshot(s) in history.`);
+    console.log(`[RealEstateSegmentAnalyst] Done in ${latency}ms. ${result.errors.length ? result.errors.length + ' block(s) failed. ' : ''}${store.history.length} snapshot(s) in history${latest.carried_fields ? `; ${latest.carried_fields} field(s) carried from ${latest.consolidated_from.join(', ')}` : ''}.`);
 
     return {
       data: { latest, history: store.history, served_from_cache: !isUsableEntry(entry) },

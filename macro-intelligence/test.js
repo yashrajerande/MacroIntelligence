@@ -1459,7 +1459,7 @@ describe('Real Estate — Segmented View');
 
   // NRI direction from dated history
   const mk = (nri, prev, at) => ({ fetched_at: at, buyers: { nri_share_pct: nri, nri_share_prev_pct: prev } });
-  const hist = [mk(13, null, '2026-09-01T00:00:00Z'), mk(15.5, null, '2026-09-24T00:00:00Z')];
+  const hist = [mk(13, null, '2026-08-01T00:00:00Z'), mk(15.5, null, '2026-09-24T00:00:00Z')];
   const up = classifyNriDirection(hist[1].buyers, hist);
   assert(up.direction === 'rising' && up.delta_pp === 2.5 && up.basis === 'vs earlier fetched print', `Two prints, +2.5 pp → rising: ${JSON.stringify(up)}`);
   const down = classifyNriDirection({ nri_share_pct: 10, nri_share_prev_pct: 12 }, [mk(10, 12, '2026-09-24T00:00:00Z')]);
@@ -1480,7 +1480,7 @@ describe('Real Estate — Segmented View');
         { city: 'Bengaluru', sales_units: 16000, sales_yoy_pct: 14, price_yoy_pct: 9 }, { city: 'NCR', sales_yoy_pct: -6 } ] },
     buyers: { vintage: 'H1 2026', source: 'Anarock survey', nri_share_pct: nri, nri_share_premium_luxury_pct: 22, nri_top_cities: ['Mumbai', 'Bengaluru', 'Hyderabad'] },
     commercial: { vintage: 'Q2 2026', source: 'CBRE', cities: [ { city: 'Bengaluru', absorption_mn_sqft: 5.1, absorption_yoy_pct: 8 }, { city: 'Mumbai', absorption_mn_sqft: 2.4, vacancy_pct: 14.7 } ], occupiers: { gcc_share_pct: 41 } } });
-  const h2 = [snap(13, '2026-09-01T00:00:00Z'), snap(15.5, '2026-09-24T00:00:00Z')];
+  const h2 = [snap(13, '2026-08-01T00:00:00Z'), snap(15.5, '2026-09-24T00:00:00Z')];
   const r = new RealEstateSegmentAnalyzer().analyze({ latest: h2[1], history: h2 }).data;
   assert(r.nri.direction === 'rising' && r.buyers.nri_share_pct === 15.5, `NRI read carried through`);
   assert(r.bands.length === 5 && r.bands.find(b => b.id === 'premium').balance === 'undersupplied' && r.bands.find(b => b.id === 'affordable').balance === 'oversupplied',
@@ -1569,6 +1569,29 @@ describe('Real Estate — Segmented View');
   assert(wf2.includes('refetch_segments:') && wf2.includes('FORCE_RE_SEGMENTS:    ${{ inputs.refetch_segments == true }}'), `Workflow exposes a forced segment refetch`);
   const wr2 = readFileSync(join(__dirname, 'agents', 'Editorial', 'ExecutiveSummaryWriter', 'write.js'), 'utf8');
   assert(/MANDATORY when the REAL ESTATE — SEGMENTED VIEW block has an NRI share/.test(wr2), `Section 04 must carry the NRI direction fact`);
+
+  // Lessons from the second live fetch (run #187): a thin fetch (4/33
+  // fields) must not erase a good one (22/33) minutes earlier, and two
+  // prints minutes apart must not manufacture an NRI "trend".
+  const { consolidateSnapshot } = await import('./agents/DataIntelligence/RealEstateSegmentAnalyst/fetch.js');
+  const { NRI_HISTORY_MIN_AGE_DAYS } = await import('./agents/Analysis/RealEstateSegmentAnalyzer/analyze.js');
+  const rich = { fetched_at: '2026-09-24T02:45:00Z', residential: { vintage: 'Q2 2026', source: 'Anarock', bands: [{ band: 'luxury', launches_share_pct: 25, sales_share_pct: null }], cities: [{ city: 'MMR', sales_units: 28710, sales_yoy_pct: -8 }] }, buyers: { nri_share_pct: 18, nri_share_prev_pct: 10, nri_top_cities: ['Mumbai'] }, commercial: { cities: [{ city: 'Hyderabad', absorption_mn_sqft: 3.8 }], occupiers: { gcc_share_pct: 42 } } };
+  const thin = { fetched_at: '2026-09-24T02:53:00Z', residential: { vintage: null, bands: [{ band: 'luxury', launches_share_pct: null, sales_share_pct: 30 }], cities: [] }, buyers: { nri_share_pct: 20, nri_share_prev_pct: null, nri_top_cities: [] }, commercial: { cities: [{ city: 'Bengaluru', absorption_mn_sqft: 5.59 }], occupiers: {} } };
+  const cons = consolidateSnapshot([rich, thin], '2026-09-24');
+  assert(cons.fetched_at === thin.fetched_at && cons.buyers.nri_share_pct === 20, `Newest fetch stays authoritative for the fields it has`);
+  assert(cons.buyers.nri_share_prev_pct === 10 && cons.buyers.nri_top_cities[0] === 'Mumbai', `Null scalars and empty lists are filled from the older fetch`);
+  assert(cons.residential.bands[0].launches_share_pct === 25 && cons.residential.bands[0].sales_share_pct === 30, `Band rows merge field by field across fetches`);
+  assert(cons.residential.cities.find(c => c.city === 'MMR').sales_units === 28710 && cons.residential.vintage === 'Q2 2026', `City rows and vintage carried`);
+  assert(cons.commercial.cities.length === 2 && cons.commercial.occupiers.gcc_share_pct === 42, `Office rows and occupier split carried`);
+  assert(cons.carried_fields > 0 && cons.consolidated_from.includes('2026-09-24'), `Carried-field count and provenance reported: ${cons.carried_fields}`);
+  const stale = consolidateSnapshot([{ ...rich, fetched_at: '2026-06-01T00:00:00Z' }, thin], '2026-09-24');
+  assert(stale.residential.bands[0].launches_share_pct === null && stale.carried_fields === 0, `Fetches older than the window (another vintage) are not carried`);
+  assert(consolidateSnapshot([], '2026-09-24') === null && consolidateSnapshot([thin], '2026-09-24').carried_fields === 0, `Empty or single history handled`);
+
+  const minutesApart = classifyNriDirection({ nri_share_pct: 20, nri_share_prev_pct: 10 }, [{ fetched_at: '2026-09-24T02:45:00Z', buyers: { nri_share_pct: 18 } }, { fetched_at: '2026-09-24T02:53:00Z', buyers: { nri_share_pct: 20 } }]);
+  assert(minutesApart.basis === 'vs prior period in source' && minutesApart.delta_pp === 10, `Prints minutes apart must not be compared (needs ≥ ${NRI_HISTORY_MIN_AGE_DAYS} days): ${JSON.stringify(minutesApart)}`);
+  const monthApart = classifyNriDirection({ nri_share_pct: 20, nri_share_prev_pct: 10 }, [{ fetched_at: '2026-08-20T02:45:00Z', buyers: { nri_share_pct: 18 } }, { fetched_at: '2026-09-24T02:53:00Z', buyers: { nri_share_pct: 20 } }]);
+  assert(monthApart.basis === 'vs earlier fetched print' && monthApart.delta_pp === 2, `A print a month older is a valid comparison: ${JSON.stringify(monthApart)}`);
 }
 
 // --- Generic scaler must pick the BEST factor, not the first that fits.

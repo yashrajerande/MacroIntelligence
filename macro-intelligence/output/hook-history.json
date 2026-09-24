@@ -417,16 +417,18 @@
     },
     {
       "date": "24 SEP 2026",
-      "verdict_line": "Mumbai office rents at a 100th-percentile ₹335/sqft/mo while absorption collapses to 13.2 mn sq ft/quarter — landlords are pricing a demand that GCC hiring data says has already left the building.",
+      "verdict_line": "Fuel inflation at 22.93% YoY — a 95th-percentile print — is the number RBI's 5.25% repo cannot contain, and the rupee at 96.15 is already pricing the failure.",
       "themes": [
-        "real_estate"
+        "inflation",
+        "currency"
       ],
       "slugs": [
         "rent_mumbai",
         "rent_bengaluru",
         "office_absorption",
         "inr_usd",
-        "retail_mall_vacancy"
+        "retail_mall_vacancy",
+        "fuel_inflation"
       ]
     }
   ]

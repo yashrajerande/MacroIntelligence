@@ -198,6 +198,112 @@
         }
       },
       "errors": []
+    },
+    {
+      "fetched_at": "2026-09-24T02:53:12.841Z",
+      "run_date": "2026-09-24",
+      "residential": {
+        "status": "Data not available",
+        "note": "Q3 2026 (July-September 2026) results have not yet been published as of September 24, 2026. The latest available complete quarterly data is for Q2 2026 (April-June 2026).",
+        "latest_available_quarter": "Q2 2026",
+        "sources_checked": [
+          "Anarock",
+          "Knight Frank",
+          "PropEquity",
+          "PropTiger"
+        ],
+        "recommendation": "Please check back in early October 2026 when Q3 2026 reports are typically released by market research firms."
+      },
+      "buyers": {
+        "vintage": "2025-2026 (FY26 and calendar 2025-2026)",
+        "source": "Anarock Property Consultants, Business Standard, Bank of Baroda Research, RBI data",
+        "nri_share_pct": 20,
+        "nri_share_prev_pct": 15,
+        "nri_share_premium_luxury_pct": 25,
+        "domestic_share_pct": 80,
+        "nri_top_cities": [
+          "Mumbai Metropolitan Region",
+          "Delhi-NCR",
+          "Bengaluru",
+          "Hyderabad",
+          "Pune"
+        ],
+        "nri_source_regions": [
+          "USA",
+          "UAE",
+          "UK",
+          "Canada",
+          "Singapore"
+        ],
+        "developer_nri_shares": [
+          {
+            "developer": "DLF",
+            "nri_sales_share_pct": 23,
+            "period": "FY24"
+          }
+        ],
+        "nri_trend_note": "NRI demand rose 15-20% over the past 20 months with share in total real estate investments expected to reach 20% by end of 2025, up from 10-15%, and projected to reach 22-25% by 2026.",
+        "remittances_usd_bn": 135.46,
+        "remittances_yoy_pct": 14,
+        "nre_nro_deposit_growth_yoy_pct": 0.6
+      },
+      "commercial": {
+        "vintage": "Q2 2026 (April-June 2026)",
+        "source": "JLL, CBRE, Savills India, Colliers",
+        "cities": [
+          {
+            "city": "Bengaluru",
+            "absorption_mn_sqft": 5.59,
+            "absorption_yoy_pct": null,
+            "vacancy_pct": 11.4,
+            "rent_yoy_pct": 5.4
+          },
+          {
+            "city": "Hyderabad",
+            "absorption_mn_sqft": null,
+            "absorption_yoy_pct": null,
+            "vacancy_pct": null,
+            "rent_yoy_pct": 11.9
+          },
+          {
+            "city": "MMR",
+            "absorption_mn_sqft": null,
+            "absorption_yoy_pct": null,
+            "vacancy_pct": null,
+            "rent_yoy_pct": 3.4
+          },
+          {
+            "city": "NCR",
+            "absorption_mn_sqft": null,
+            "absorption_yoy_pct": null,
+            "vacancy_pct": null,
+            "rent_yoy_pct": 7.7
+          },
+          {
+            "city": "Pune",
+            "absorption_mn_sqft": null,
+            "absorption_yoy_pct": null,
+            "vacancy_pct": null,
+            "rent_yoy_pct": 1
+          },
+          {
+            "city": "Chennai",
+            "absorption_mn_sqft": null,
+            "absorption_yoy_pct": null,
+            "vacancy_pct": null,
+            "rent_yoy_pct": 4.6
+          }
+        ],
+        "occupiers": {
+          "gcc_share_pct": 42,
+          "it_services_share_pct": null,
+          "bfsi_share_pct": null,
+          "flex_share_pct": 27,
+          "domestic_share_pct": null,
+          "global_share_pct": 55.2
+        }
+      },
+      "errors": []
     }
   ]
 }

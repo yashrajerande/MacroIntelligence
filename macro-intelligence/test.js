@@ -1537,6 +1537,38 @@ describe('Real Estate — Segmented View');
   for (const p of ['agents/DataIntelligence/RealEstateSegmentAnalyst/Persona.md', 'agents/Analysis/RealEstateSegmentAnalyzer/Persona.md']) {
     assert(existsSync(join(__dirname, p)), `${p} must exist (org chart is law)`);
   }
+
+  // Lessons from the first live fetch (run #186): city spellings vary,
+  // the sales split lives in a second search, and a supply-only print
+  // must still say something true.
+  const { normalizeCity } = await import('./agents/Analysis/RealEstateSegmentAnalyzer/analyze.js');
+  const { mergeSalesSplit } = await import('./agents/DataIntelligence/RealEstateSegmentAnalyst/skills/segment-search.js');
+  for (const [raw, want] of [['MMR (Mumbai)', 'MMR'], ['Mumbai', 'MMR'], ['Delhi-NCR', 'NCR'], ['Gurugram', 'NCR'], ['Bangalore', 'Bengaluru'], ['Hyderabad', 'Hyderabad'], ['Calcutta', 'Kolkata'], ['Ahmedabad', null], ['', null]]) {
+    assert(normalizeCity(raw) === want, `normalizeCity(${JSON.stringify(raw)}) → ${want}, got ${normalizeCity(raw)}`);
+  }
+  const merged = mergeSalesSplit({
+    residential: { source: 'Anarock', bands: [{ band: 'luxury', launches_share_pct: 25, sales_share_pct: null }, { band: 'affordable', launches_share_pct: 6 }] },
+    residential_sales: { source: 'Knight Frank', bands: [{ band: 'luxury', sales_share_pct: 30, sales_yoy_pct: 12 }, { band: 'premium', sales_share_pct: 28 }] },
+  });
+  assert(merged.residential.bands.find(b => b.band === 'luxury').sales_share_pct === 30 && merged.residential.bands.find(b => b.band === 'luxury').launches_share_pct === 25,
+    `Sales split merges onto the launch split without overwriting supply`);
+  assert(merged.residential.bands.find(b => b.band === 'premium').sales_share_pct === 28, `Bands only in the sales search are added`);
+  assert(merged.residential.source === 'Anarock / Knight Frank' && !('residential_sales' in merged), `Sources concatenated, temp block removed`);
+  assert(mergeSalesSplit({ residential: { bands: [] } }).residential.bands.length === 0 && mergeSalesSplit({}).residential === undefined, `No sales block → no-op`);
+  const supplyOnly = new RealEstateSegmentAnalyzer().analyze({ latest: {
+    fetched_at: '2026-09-24T00:00:00Z',
+    residential: { vintage: 'Q2 2026', bands: [{ band: 'affordable', launches_share_pct: 6 }, { band: 'luxury', launches_share_pct: 25 }, { band: 'ultra_luxury', launches_share_pct: 22 }], cities: [{ city: 'MMR (Mumbai)', sales_yoy_pct: -8 }] },
+    buyers: { nri_share_pct: 18, nri_share_prev_pct: 10 },
+    commercial: { cities: [{ city: 'Mumbai', absorption_mn_sqft: 2.1 }] },
+  }, history: [] }).data;
+  assert(supplyOnly.so_what.title === 'NRI Bid Rising — Top-End Supply Building', `Supply-only print names what it knows: ${supplyOnly.so_what.title}`);
+  assert(/<strong>47%<\/strong> of new launches priced above ₹1\.5 cr/.test(supplyOnly.so_what.facts[0]) && /affordable just <strong>6%/.test(supplyOnly.so_what.facts[0]), `Launch-mix fact from supply shares: ${supplyOnly.so_what.facts[0]}`);
+  assert(/both sides are crowding into the top end/.test(supplyOnly.so_what.tension) && /sales-share split by band next quarter/.test(supplyOnly.so_what.bottom_line), `Supply-only tension and bottom line`);
+  assert(supplyOnly.cities.find(c => c.city === 'MMR').sales_yoy_pct === -8 && supplyOnly.commercial.cities.find(c => c.city === 'MMR').absorption_mn_sqft === 2.1, `"MMR (Mumbai)" and "Mumbai" both land on the MMR row`);
+  const wf2 = readFileSync(join(__dirname, '..', '.github', 'workflows', 'daily-dashboard.yml'), 'utf8');
+  assert(wf2.includes('refetch_segments:') && wf2.includes('FORCE_RE_SEGMENTS:    ${{ inputs.refetch_segments == true }}'), `Workflow exposes a forced segment refetch`);
+  const wr2 = readFileSync(join(__dirname, 'agents', 'Editorial', 'ExecutiveSummaryWriter', 'write.js'), 'utf8');
+  assert(/MANDATORY when the REAL ESTATE — SEGMENTED VIEW block has an NRI share/.test(wr2), `Section 04 must carry the NRI direction fact`);
 }
 
 // --- Generic scaler must pick the BEST factor, not the first that fits.

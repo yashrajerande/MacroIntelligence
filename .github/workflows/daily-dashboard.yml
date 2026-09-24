@@ -10,6 +10,11 @@ on:
         description: 'Override date (YYYY-MM-DD). Leave blank for today.'
         required: false
         default: ''
+      refetch_segments:
+        description: 'Force a fresh segmented real-estate fetch (ticket size / city / NRI) instead of the weekly snapshot'
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   run-pipeline:
@@ -76,6 +81,7 @@ jobs:
           # A human pressing "Run workflow" always wants a fresh edition;
           # the scheduled 05:00 retry must be a no-op when 03:00 succeeded.
           FORCE_RERUN:          ${{ github.event_name == 'workflow_dispatch' }}
+          FORCE_RE_SEGMENTS:    ${{ inputs.refetch_segments == true }}
           GITHUB_REPOSITORY:    ${{ github.repository }}
           NODE_ENV:             production
 

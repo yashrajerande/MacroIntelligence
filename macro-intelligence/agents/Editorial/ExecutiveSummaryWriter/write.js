@@ -183,7 +183,7 @@ Return JSON wrapped in <<<JSON and >>> markers:
     },
     { "para_num": 2, "para_label": "Global Macro Regime", "title": "...", "facts": ["..."], "tension": "...", "bottom_line": "..." },
     { "para_num": 3, "para_label": "Liquidity Conditions", "title": "...", "facts": ["..."], "tension": "...", "bottom_line": "..." },
-    { "para_num": 4, "para_label": "Equity + Real Estate Implications", "title": "...", "facts": ["..."], "tension": "...", "bottom_line": "..." },
+    { "para_num": 4, "para_label": "Equity + Real Estate Implications", "title": "...", "facts": ["MANDATORY when the REAL ESTATE — SEGMENTED VIEW block has an NRI share: one fact stating whether NRI buying is RISING or FALLING, the share, the change, and the NRI share within premium/luxury; one fact on ticket-size or city segmentation (which band or city leads, launch mix vs sales mix). Then equities/REITs."], "tension": "...", "bottom_line": "..." },
     { "para_num": 5, "para_label": "Key Risks to Monitor", "title": "...", "facts": ["risks ranked by probability × impact, one per bullet, each with the number that makes it a risk"], "tension": "...", "bottom_line": "the single data point to watch this week, with its threshold" }
   ]
 }

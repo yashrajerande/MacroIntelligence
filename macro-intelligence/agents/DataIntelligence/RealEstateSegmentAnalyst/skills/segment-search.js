@@ -46,6 +46,26 @@ const SEGMENT_SEARCHES = [
 launches_share_pct = that band's share of NEW LAUNCHES (supply) in the latest single quarter across the top-7 cities; sales_share_pct = that band's share of SALES (demand) in the same quarter; shares in percent of units and should each sum to ~100. sales_yoy_pct = YoY change in units sold in that band. City sales_units / launches_units = units in the latest single QUARTER (not annual, not thousands — full unit counts); price_yoy_pct = average residential price change YoY for that city; unsold_months = months of inventory. If a figure is not published, use null — never estimate.`,
   },
   {
+    // The first search reliably returns the LAUNCH split by band (supply)
+    // but the SALES split (demand) is published in a different table of
+    // the same reports and came back empty on the first live run. A
+    // dedicated query for the demand side; merged into residential.bands.
+    key: 'residential_sales',
+    query: 'India residential sales share by budget segment latest quarter 2026 luxury above 1.5 crore share of sales affordable below 40 lakh share of sales top 7 cities Anarock Knight Frank CBRE PropEquity',
+    extract: `Return JSON: {
+  "vintage": "quarter the numbers refer to",
+  "source": "publisher(s)",
+  "bands": [
+    { "band": "affordable",   "sales_share_pct": number|null, "sales_yoy_pct": number|null },
+    { "band": "mid",          "sales_share_pct": number|null, "sales_yoy_pct": number|null },
+    { "band": "premium",      "sales_share_pct": number|null, "sales_yoy_pct": number|null },
+    { "band": "luxury",       "sales_share_pct": number|null, "sales_yoy_pct": number|null },
+    { "band": "ultra_luxury", "sales_share_pct": number|null, "sales_yoy_pct": number|null }
+  ]
+}
+Bands: affordable < ₹40 lakh; mid ₹40-80 lakh; premium ₹80 lakh-₹1.5 cr; luxury ₹1.5-2.5 cr; ultra_luxury > ₹2.5 cr. sales_share_pct = that band's share of units SOLD in the latest single quarter across the top-7 cities (shares should sum to ~100). If a source only gives a coarser split (e.g. "above ₹1.5 cr = 30% of sales"), put it on the band that matches the boundary and leave the others null — never redistribute or estimate. sales_yoy_pct = YoY change in units sold in that band.`,
+  },
+  {
     key: 'buyers',
     query: 'NRI share of Indian residential property purchases 2026 NRI demand luxury premium Mumbai Bengaluru Hyderabad Anarock survey DLF Lodha Godrej NRI sales share percentage remittances NRE deposits',
     extract: `Return JSON: {
@@ -101,5 +121,29 @@ export async function fetchSegmentData() {
     }
   }
 
+  mergeSalesSplit(data);
   return { data, errors, tokens };
+}
+
+/**
+ * Fold the demand-side search into residential.bands: a band's
+ * sales_share_pct / sales_yoy_pct come from residential_sales when the
+ * first search left them null. Pure; exported for the pre-flight suite.
+ */
+export function mergeSalesSplit(data) {
+  const sales = data?.residential_sales;
+  if (!sales || !Array.isArray(sales.bands)) return data;
+  if (!data.residential) data.residential = { vintage: sales.vintage, source: sales.source, bands: [], cities: [] };
+  const r = data.residential;
+  if (!Array.isArray(r.bands)) r.bands = [];
+  for (const sb of sales.bands) {
+    const id = String(sb.band || '').toLowerCase();
+    let target = r.bands.find(b => String(b.band || '').toLowerCase() === id);
+    if (!target) { target = { band: id }; r.bands.push(target); }
+    if ((target.sales_share_pct === null || target.sales_share_pct === undefined) && typeof sb.sales_share_pct === 'number') target.sales_share_pct = sb.sales_share_pct;
+    if ((target.sales_yoy_pct === null || target.sales_yoy_pct === undefined) && typeof sb.sales_yoy_pct === 'number') target.sales_yoy_pct = sb.sales_yoy_pct;
+  }
+  if (sales.source && r.source && !r.source.includes(sales.source)) r.source = `${r.source} / ${sales.source}`;
+  delete data.residential_sales;
+  return data;
 }

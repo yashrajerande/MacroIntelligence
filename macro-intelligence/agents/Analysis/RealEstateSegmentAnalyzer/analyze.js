@@ -82,10 +82,36 @@ function analyzeBands(residential) {
   });
 }
 
+/**
+ * Sources name the same market five ways — "MMR (Mumbai)", "Mumbai",
+ * "Delhi-NCR", "Gurugram", "Bangalore". Collapse them onto the canonical
+ * city ids so a row is never lost to a spelling. Exported for tests.
+ */
+export function normalizeCity(name) {
+  const s = String(name || '').toLowerCase().replace(/\(.*?\)/g, ' ').replace(/[^a-z\s-]/g, ' ').trim();
+  if (/mmr|mumbai|thane|navi/.test(s)) return 'MMR';
+  if (/ncr|delhi|gurugram|gurgaon|noida/.test(s)) return 'NCR';
+  if (/bengaluru|bangalore/.test(s)) return 'Bengaluru';
+  if (/hyderabad/.test(s)) return 'Hyderabad';
+  if (/pune/.test(s)) return 'Pune';
+  if (/chennai/.test(s)) return 'Chennai';
+  if (/kolkata|calcutta/.test(s)) return 'Kolkata';
+  return null;
+}
+
+function indexByCity(rows) {
+  const out = {};
+  for (const r of rows || []) {
+    const id = normalizeCity(r?.city);
+    if (id && !out[id]) out[id] = r;
+  }
+  return out;
+}
+
 function analyzeCities(residential) {
-  const byName = Object.fromEntries((residential?.cities || []).map(c => [String(c.city || '').toLowerCase(), c]));
+  const byName = indexByCity(residential?.cities);
   const rows = CITIES.map(city => {
-    const c = byName[city.toLowerCase()] || {};
+    const c = byName[city] || {};
     return {
       city,
       sales_units: num(c.sales_units),
@@ -103,9 +129,9 @@ function analyzeCities(residential) {
 }
 
 function analyzeCommercial(commercial) {
-  const byName = Object.fromEntries((commercial?.cities || []).map(c => [String(c.city || '').toLowerCase(), c]));
+  const byName = indexByCity(commercial?.cities);
   const cities = OFFICE_CITIES.map(city => {
-    const c = byName[city.toLowerCase()] || (city === 'MMR' ? byName['mumbai'] : city === 'NCR' ? byName['delhi ncr'] || byName['delhi-ncr'] : null) || {};
+    const c = byName[city] || {};
     return {
       city,
       absorption_mn_sqft: num(c.absorption_mn_sqft),
@@ -191,12 +217,27 @@ function buildNarrative({ bands, cities, buyers, nri, commercial, vintage, cov }
     gaps.push('city-wise office leasing not published this print');
   }
 
+  // Supply-only read: the launch split by band is published more often
+  // than the sales split. When only supply is known, say where the
+  // supply is going instead of pretending the balance is known.
+  const launchKnown = bands.filter(b => b.launches_share_pct !== null);
+  const topEndLaunchShare = launchKnown.length
+    ? launchKnown.filter(b => b.id === 'luxury' || b.id === 'ultra_luxury').reduce((s, b) => s + b.launches_share_pct, 0)
+    : null;
+  if (!withShares.length && launchKnown.length) {
+    facts.splice(0, 0, `Launch mix (supply): <strong>${pct1(topEndLaunchShare)}</strong> of new launches priced above ₹1.5 cr${(() => { const a = launchKnown.find(b => b.id === 'affordable'); return a ? `; affordable just <strong>${pct1(a.launches_share_pct)}</strong>` : ''; })()} — sales split by band not published this print`);
+  }
+
   // Tension + bottom line
   let tension, bottom_line;
   const lux = bands.find(b => b.id === 'luxury'), ultra = bands.find(b => b.id === 'ultra_luxury'), aff = bands.find(b => b.id === 'affordable');
   const topEndUnder = [lux, ultra].some(b => b && b.balance === 'undersupplied');
+  const balanceKnown = bands.some(b => b.balance !== 'unknown');
   const affOver = aff && aff.balance === 'oversupplied';
-  if (nriShare !== null && nri.direction === 'rising' && topEndUnder) {
+  if (nriShare !== null && nri.direction === 'rising' && !balanceKnown && topEndLaunchShare !== null) {
+    tension = `NRI demand is rising and developers are launching ${pct1(topEndLaunchShare)} of new supply above ₹1.5 cr — both sides are crowding into the top end, and whether sales absorb that supply is the number this print does not publish.`;
+    bottom_line = `Watch the sales-share split by band next quarter: if luxury sales share prints below its ${pct1(topEndLaunchShare)} launch share, unsold inventory builds at the top end first, NRI bid or not.`;
+  } else if (nriShare !== null && nri.direction === 'rising' && topEndUnder) {
     tension = `NRI money is concentrating in the top-end bands that are already undersupplied — that combination holds prices up even as the affordable end ${affOver ? 'oversupplies' : 'softens'}.`;
     bottom_line = `Premium and luxury pricing is NRI-funded and supply-constrained; a stronger rupee or a remittance slowdown is the specific risk to the top end, not domestic affordability.`;
   } else if (nriShare !== null && nri.direction === 'falling') {
@@ -210,9 +251,12 @@ function buildNarrative({ bands, cities, buyers, nri, commercial, vintage, cov }
     bottom_line = `Treat segment conclusions as provisional until the next quarterly report drops.`;
   }
 
+  const topEndWord = !balanceKnown
+    ? (topEndLaunchShare !== null ? 'Top-End Supply Building' : 'Band Balance Unpublished')
+    : (topEndUnder ? 'Top End Undersupplied' : 'Top End Supplied');
   const title = nriShare !== null && nri.direction !== 'unknown'
-    ? `NRI Bid ${nri.direction === 'rising' ? 'Rising' : nri.direction === 'falling' ? 'Fading' : 'Steady'} — ${topEndUnder ? 'Top End Undersupplied' : 'Top End Supplied'}`
-    : `Segment Read — ${withShares.length ? 'Demand Mix vs Launch Mix' : 'Awaiting Quarterly Prints'}`;
+    ? `NRI Bid ${nri.direction === 'rising' ? 'Rising' : nri.direction === 'falling' ? 'Fading' : 'Steady'} — ${topEndWord}`
+    : `Segment Read — ${withShares.length ? 'Demand Mix vs Launch Mix' : launchKnown.length ? 'Launch Mix Only' : 'Awaiting Quarterly Prints'}`;
 
   const narrative = [
     ...facts.map(f => f.replace(/<\/?strong>/g, '').replace(/\.?\s*$/, '.')),

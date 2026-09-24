@@ -100,37 +100,37 @@ export function classifyAll(indicators) {
     {
       dimension: 'growth',
       ...classifyGrowth(get('india_gdp_yoy') || 0, get('pmi_composite') || 0),
-      metric_summary: `GDP ${get('india_gdp_yoy') || '~'}%; PMI ${get('pmi_composite') || '~'}`,
+      metric_summary: `GDP ${get('india_gdp_yoy') || '~'}% YoY; PMI ${get('pmi_composite') || '~'}`,
       signal_text: '',
     },
     {
       dimension: 'inflation',
       ...classifyInflation(get('cpi_headline') || 0, get('fuel_inflation') || 0),
-      metric_summary: `CPI ${get('cpi_headline') || '~'}%; Fuel ${get('fuel_inflation') || '~'}%`,
+      metric_summary: `CPI ${get('cpi_headline') || '~'}% YoY; Fuel ${get('fuel_inflation') || '~'}% YoY`,
       signal_text: '',
     },
     {
       dimension: 'credit',
       ...classifyCredit(get('bank_credit_growth') || 0, get('cd_ratio') || 0),
-      metric_summary: `Credit ${get('bank_credit_growth') || '~'}%; CD ${get('cd_ratio') || '~'}%`,
+      metric_summary: `Credit ${get('bank_credit_growth') || '~'}% YoY; CD ratio ${get('cd_ratio') || '~'}%`,
       signal_text: '',
     },
     {
       dimension: 'policy',
       ...classifyPolicy(get('rbi_repo_rate') || 0, getPrev('rbi_repo_rate')),
-      metric_summary: `Repo ${get('rbi_repo_rate') || '~'}%`,
+      metric_summary: `Repo ${get('rbi_repo_rate') || '~'}% p.a.`,
       signal_text: '',
     },
     {
       dimension: 'capex',
       ...classifyCapex(get('iip_capgoods') || 0, get('capacity_utilisation') || 0),
-      metric_summary: `IIP CapG ${get('iip_capgoods') || '~'}%; CU ${get('capacity_utilisation') || '~'}%`,
+      metric_summary: `IIP CapG ${get('iip_capgoods') || '~'}% YoY; CU ${get('capacity_utilisation') || '~'}% of capacity`,
       signal_text: '',
     },
     {
       dimension: 'consumption',
       ...classifyConsumption(get('gst_month') || 0, get('pv_sales') || 0),
-      metric_summary: `GST ${get('gst_month') || '~'}; PV ${get('pv_sales') || '~'}%`,
+      metric_summary: `GST ₹${get('gst_month') || '~'} cr/mo; PV ${get('pv_sales') || '~'}% YoY`,
       signal_text: '',
     },
   ];

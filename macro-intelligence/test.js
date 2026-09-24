@@ -1375,6 +1375,67 @@ describe('Executive Summary — So What format');
   assert(pdfSrc.includes('.para-body h4 {') && pdfSrc.includes('.para-body li {'), `PDF CSS must style the structure`);
 }
 
+// --- Units are part of the number. "₹ cr" is not a unit; "₹ cr / month"
+// is. Flows carry their period, rates their basis, levels neither — and
+// every surface (table, prompts, regime chips) uses the same string.
+describe('Display units — period and basis');
+{
+  const { displayUnit, DISPLAY_UNITS, unitGlossary, SLUG_MAP: SM, INDICATOR_SCHEMA: IS } = await import('./src/utils/indicator-schema.js');
+  const expect = {
+    sip_inflows: '₹ cr / month', gst_month: '₹ cr / month', gst_ytd: '₹ cr FYTD',
+    fii_equity_net: '₹ cr net / month', equity_mf_net: '₹ cr net / month', corp_bond_issuance: '₹ cr / month',
+    airline_pax: 'mn / month', home_loan_disbursements: '₹ cr / quarter', re_launches_units: 'units / quarter',
+    office_absorption: 'mn sq ft / quarter',
+    re_unsold_inventory: 'units', mf_aum: '₹ lakh cr', sip_accounts: 'mn', fed_balance_sheet: '$ bn', rbi_fx_reserves: '$ bn',
+    cpi_headline: '% YoY', india_gdp_yoy: '% YoY', us_gdp_saar: '% SAAR', rbi_repo_rate: '% p.a.', fed_funds_rate: '% p.a.',
+    us_10y_treasury: '% yield', india_hh_debt_gdp: '% of GDP', capacity_utilisation: '% of capacity', office_vacancy: '% vacant',
+    cd_ratio: '% credit ÷ deposits', affordability_index: '× price ÷ income',
+    nifty50: 'index', pmi_mfg: 'index', brent_usd: '$/bbl', inr_usd: '₹', rent_mumbai: '₹/sqft/mo', gold_usd: '$/oz',
+  };
+  for (const [slug, want] of Object.entries(expect)) {
+    assert(displayUnit(slug) === want, `displayUnit(${slug}) must be "${want}", got "${displayUnit(slug)}"`);
+  }
+  assert(displayUnit('not_a_slug') === '', `Unknown slug → empty unit, never throws`);
+  // Every flow-type currency/count indicator that is a per-period quantity must carry a period
+  for (const slug of ['sip_inflows','gst_month','fii_equity_net','dii_equity_net','equity_mf_net','nfo_collections','corp_bond_issuance','home_loan_disbursements','re_launches_units','re_sales_units','office_absorption','airline_pax']) {
+    assert(/\/ (month|quarter)|FYTD/.test(displayUnit(slug)), `${slug} is a flow and must carry a period: "${displayUnit(slug)}"`);
+  }
+  // Every percentage carries a basis
+  for (const [slug, s] of Object.entries(IS)) {
+    if (s.data_type === 'percentage') assert(/^% \S/.test(displayUnit(slug)), `${slug} is a rate and must carry a basis: "${displayUnit(slug)}"`);
+  }
+  assert(Object.keys(DISPLAY_UNITS).length === Object.keys(IS).length, `DISPLAY_UNITS covers every slug`);
+  assert(SM.sip_inflows.display_unit === '₹ cr / month', `SLUG_MAP must expose display_unit for the renderer`);
+  const gl = unitGlossary(['sip_inflows', 'us_gdp_saar']);
+  assert(gl.includes('sip_inflows = SIP Inflows: ₹ cr / month (monthly print)') && gl.includes('us_gdp_saar = US GDP SAAR: % SAAR (quarterly print)'),
+    `Glossary lines must be prompt-ready: ${gl}`);
+
+  // Renderer stamps the full unit on the value the reader sees (and Supabase stores)
+  const renderSrc = readFileSync(join(__dirname, 'agents', 'Production', 'DashboardRenderer', 'render.js'), 'utf8');
+  assert(renderSrc.includes('meta.display_unit || meta.unit') && renderSrc.includes('latest_unit:      meta.display_unit || meta.unit'),
+    `Renderer must use display_unit for latest_value and latest_unit`);
+  // Prompts carry units on every value and the rule that they are mandatory
+  const writerSrc2 = readFileSync(join(__dirname, 'agents', 'Editorial', 'ExecutiveSummaryWriter', 'write.js'), 'utf8');
+  assert(writerSrc2.includes('UNITS ARE PART OF THE NUMBER') && writerSrc2.includes('unitGlossary(presentSlugs)') && writerSrc2.includes('const unit = displayUnit(slug);'),
+    `ExecutiveSummaryWriter must stamp units on every indicator line and carry the glossary`);
+  const detectSrc = readFileSync(join(__dirname, 'agents', 'Analysis', 'SignalDetector', 'detect.js'), 'utf8');
+  assert(detectSrc.includes('UNITS ARE PART OF THE NUMBER') && detectSrc.includes('const unit = displayUnit(slug);'),
+    `SignalDetector must stamp units on every indicator line`);
+  const soWhatMd2 = readFileSync(join(__dirname, 'agents', 'Editorial', 'ExecutiveSummaryWriter', 'skills', 'so-what-format.md'), 'utf8');
+  assert(soWhatMd2.includes('Units are part of the number'), `So-what skill must carry the units rule`);
+  // Regime chips name the basis / period
+  const regimeSrc = readFileSync(join(__dirname, 'agents', 'Analysis', 'RegimeClassifier', 'skills', 'regime-logic.js'), 'utf8');
+  assert(regimeSrc.includes("% YoY; PMI") && regimeSrc.includes("cr/mo; PV") && regimeSrc.includes("% p.a.`") && regimeSrc.includes('% of capacity'),
+    `Regime metric chips must carry basis/period`);
+  // Fetch prompts ask for a stated period so the number and its unit agree
+  const macroFetch = readFileSync(join(__dirname, 'agents', 'DataIntelligence', 'MacroDataAnalyst', 'fetch.js'), 'utf8');
+  assert(/corp_bond_issuance = the latest single MONTH/.test(macroFetch) && /NET flow for the latest single MONTH/.test(macroFetch),
+    `Macro fetch prompts must pin flows to a single month`);
+  const reFetch = readFileSync(join(__dirname, 'agents', 'DataIntelligence', 'RealEstateAnalyst', 'skills', 're-search.js'), 'utf8');
+  assert(/latest single QUARTER/.test(reFetch) && (reFetch.match(/single QUARTER/g) || []).length >= 3,
+    `RE fetch prompts must pin launches, disbursements and absorption to a single quarter`);
+}
+
 // --- Generic scaler must pick the BEST factor, not the first that fits.
 // Real case from the 07 SEP run: home loans 4,500,000 with range
 // [80000,700000] / p50 230000 was scaled ×0.001 → 4,500 (only "in range"

@@ -40,6 +40,7 @@ Bottom line: Equity valuations pricing growth re-acceleration; macro data pricin
 
 ## Hard rules
 
+- **Units are part of the number.** Every figure carries the full unit exactly as the data table gives it: the period for flows (`₹31,961 cr / month`, `13.7 mn sq ft / quarter`, `₹2,00,640 cr / month` GST) and the basis for rates (`4.45% YoY`, `1.5% SAAR`, `5.25% p.a.`, `42.6% of GDP`, `77.4% of capacity`). A bare `₹ cr`, a bare `%`, or a bare count is a defect — the reader must never guess whether SIP inflows are a month or a quarter. Levels (index points, prices, AUM, reserves) take their unit only.
 - Title: 4–12 words, an em-dash or colon splitting a subject from the tension is ideal. Never the bare section label.
 - Facts: 3–5 bullets. Every bullet has at least one number. Start with the number or the indicator name, never with "The". Use "But" to open a bullet that contradicts the one above it.
 - Tension: 1–2 sentences, at most 45 words. Must name the two things that disagree. No new numbers unless they resolve the disagreement.

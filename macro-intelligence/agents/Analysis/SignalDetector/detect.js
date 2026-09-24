@@ -10,6 +10,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { scoreAllIndicators } from './skills/signal-scoring.js';
 import { getPolarity, classifyIndicator, scoreIndicator } from '../../../src/utils/polarity.js';
 import { trendSuffix, TREND_GUIDANCE } from '../../../src/utils/trend-context.js';
+import { displayUnit } from '../../../src/utils/indicator-schema.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const persona = readFileSync(join(__dirname, 'Persona.md'), 'utf-8');
@@ -51,7 +52,11 @@ export class SignalDetector {
       const polarity = getPolarity(slug);
       const classification = classifyIndicator(forPolarity);
       const signedScore = scoreIndicator(forPolarity);
-      return `${slug}: ${ind.value_str || ind.value} (prev: ${ind.previous}, dir: ${ind.direction}, 10y: ${ind.pct_10y}% ${ind.pct_10y_tier}) [polarity: ${polarity}, signal: ${classification}, score: ${signedScore}]${trendSuffix(slug, dynamicRanges)}`;
+      // Full unit on every value (period for flows, basis for rates) so
+      // signal cards never quote a bare "₹ cr" or a bare "%".
+      const unit = displayUnit(slug);
+      const u = unit ? ' ' + unit : '';
+      return `${slug}: ${ind.value_str || ind.value}${u} (prev: ${ind.previous}${u}, dir: ${ind.direction}, 10y: ${ind.pct_10y}% ${ind.pct_10y_tier}) [polarity: ${polarity}, signal: ${classification}, score: ${signedScore}]${trendSuffix(slug, dynamicRanges)}`;
     }).join('\n');
 
     const prompt = `Analyze the following data and produce exactly 7 signal cards.
@@ -63,6 +68,7 @@ KEY INDICATORS (${Object.keys(scored).length} total):
 Each indicator is tagged with [polarity: positive|negative|neutral, signal: classification, score: -100..+100]
 from the canonical Polarity Skill. TRUST these tags — do not re-judge polarity from the raw value.
 A 'positive' polarity metric rising is good; a 'negative' polarity metric rising is bad.
+UNITS ARE PART OF THE NUMBER: quote every figure with the full unit shown next to it — the period for flows ("₹31,961 cr / month", "13.7 mn sq ft / quarter") and the basis for rates ("4.45% YoY", "1.5% SAAR", "5.25% p.a."). Never a bare "₹ cr", a bare "%", or a bare count in data_text or implication.
 ${TREND_GUIDANCE}
 ${indicatorSummary}
 

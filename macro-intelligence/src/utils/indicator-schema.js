@@ -198,13 +198,86 @@ const INDICATOR_SCHEMA = {
   india_credit_nbfc_yoy:      { name: 'Bank Credit to NBFCs YoY',        section: 'S11', sub_section: 'leverage_india_sectoral', unit: '%', unit_desc: 'percent YoY', data_type: 'percentage', expected_range: [-20, 40], p50: 15, inverse: false, frequency: 'monthly' },
 };
 
+// ── Units that say what the number IS ───────────────────────────────
+//
+// "₹ cr" is not a unit; "₹ cr / month" is. A flow needs its period, a
+// rate needs its basis, a level needs neither. Founder's rule: every
+// number that reaches a reader or a model carries the full unit, so
+// "SIP inflows ₹31,961 cr" can never be misread as a quarter or a year.
+//
+// PERIOD — flows and other per-period counts. Levels (AUM, reserves,
+// unsold inventory, index points, prices) deliberately have none.
+const PERIOD = {
+  gst_month:               '/ month',
+  gst_ytd:                 'FYTD',
+  airline_pax:             '/ month',
+  corp_bond_issuance:      '/ month',
+  fii_equity_net:          '/ month',
+  dii_equity_net:          '/ month',
+  sip_inflows:             '/ month',
+  equity_mf_net:           '/ month',
+  nfo_collections:         '/ month',
+  home_loan_disbursements: '/ quarter',
+  re_launches_units:       '/ quarter',
+  re_sales_units:          '/ quarter',
+  office_absorption:       '/ quarter',
+};
+
+// BASIS — what a percentage or ratio is measured against, derived from
+// unit_desc so the table above stays the single place a unit is defined.
+const BASIS_BY_DESC = {
+  'percent YoY':            'YoY',
+  'percent SAAR':           'SAAR',
+  'percent per annum':      'p.a.',
+  'percent of GDP':         'of GDP',
+  'percent of capacity':    'of capacity',
+  'percent vacant':         'vacant',
+  'percent yield':          'yield',
+  'credit-deposit ratio %': 'credit ÷ deposits',
+  'price-to-income ratio':  'price ÷ income',
+};
+
+/**
+ * The full, unambiguous unit for a slug: "₹ cr / month", "% YoY",
+ * "% of GDP", "mn sq ft / quarter", "index", "$/bbl".
+ */
+export function displayUnit(slug) {
+  const s = INDICATOR_SCHEMA[slug];
+  if (!s) return '';
+  const period = PERIOD[slug];
+  const basis = BASIS_BY_DESC[s.unit_desc];
+  if (s.unit === 'ratio') return basis ? `× ${basis}` : 'ratio';
+  if (s.data_type === 'percentage') {
+    const net = /\bnet\b/i.test(s.unit_desc) ? ' net' : '';
+    return `%${basis ? ' ' + basis : ''}${net}${period ? ' ' + period : ''}`;
+  }
+  const net = /\bnet\b/i.test(s.unit_desc) ? ' net' : '';
+  return `${s.unit}${net}${period ? ' ' + period : ''}`.trim();
+}
+
+/** slug → display unit, for consumers that want the whole table at once */
+export const DISPLAY_UNITS = Object.fromEntries(
+  Object.keys(INDICATOR_SCHEMA).map(slug => [slug, displayUnit(slug)])
+);
+
+/**
+ * Prompt-ready glossary: one line per slug, so an LLM that writes prose
+ * about an indicator can never drop or invent its unit.
+ */
+export function unitGlossary(slugs = Object.keys(INDICATOR_SCHEMA)) {
+  return slugs
+    .filter(slug => INDICATOR_SCHEMA[slug])
+    .map(slug => `${slug} = ${INDICATOR_SCHEMA[slug].name}: ${displayUnit(slug)} (${INDICATOR_SCHEMA[slug].frequency} print)`)
+    .join('\n');
+}
+
 // ── Derived exports for backward compatibility ──────────────────────
 
-/** slug → { section, sub_section, indicator_name, unit } (replaces slug-map.js) */
+/** slug → { section, sub_section, indicator_name, unit, display_unit } (replaces slug-map.js) */
 export const SLUG_MAP = Object.fromEntries(
   Object.entries(INDICATOR_SCHEMA).map(([slug, s]) => [
     slug,
-    { section: s.section, sub_section: s.sub_section, indicator_name: s.name, unit: s.unit },
+    { section: s.section, sub_section: s.sub_section, indicator_name: s.name, unit: s.unit, display_unit: displayUnit(slug) },
   ])
 );
 

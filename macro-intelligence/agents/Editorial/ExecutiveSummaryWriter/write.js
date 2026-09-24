@@ -24,6 +24,7 @@ import {
 } from '../../../src/utils/hook-writer.js';
 import { trendSuffix, TREND_GUIDANCE } from '../../../src/utils/trend-context.js';
 import { formatSoWhat, hasSoWhatFields, lintSoWhat, inlineOnly } from './skills/so-what-format.js';
+import { displayUnit, unitGlossary } from '../../../src/utils/indicator-schema.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const persona = readFileSync(join(__dirname, 'Persona.md'), 'utf-8');
@@ -80,10 +81,20 @@ Bear: ${allData.scenarios.data.bear.name} — ${allData.scenarios.data.bear.desc
       ...allData.marketData.data.prices,
     };
     const dynamicRanges = allData.dynamicRanges || null;
-    const indicatorSummary = Object.entries(allIndicators)
+    // Every value carries its full unit (period for flows, basis for
+    // rates) so the model can never write "SIP inflows ₹31,961 cr" and
+    // leave the reader guessing whether that is a month or a quarter.
+    const presentSlugs = Object.entries(allIndicators)
       .filter(([, v]) => v.value !== null && v.value !== undefined && v.value_str !== 'Awaited')
-      .map(([slug, v]) => `${slug}: ${v.value_str || v.value} (prev: ${v.previous ?? '—'}, ${v.direction || 'flat'}, 10y pct: ${v.pct_10y ?? '—'}%)${trendSuffix(slug, dynamicRanges)}`)
+      .map(([slug]) => slug);
+    const indicatorSummary = presentSlugs
+      .map(slug => {
+        const v = allIndicators[slug];
+        const unit = displayUnit(slug);
+        return `${slug}: ${v.value_str || v.value}${unit ? ' ' + unit : ''} (prev: ${v.previous ?? '—'}${unit ? ' ' + unit : ''}, ${v.direction || 'flat'}, 10y pct: ${v.pct_10y ?? '—'}%)${trendSuffix(slug, dynamicRanges)}`;
+      })
       .join('\n');
+    const unitsBlock = unitGlossary(presentSlugs);
 
     // ── Hook Writer Skill: freshness + anti-repetition context ──
     const hookHistory = loadHookHistory();
@@ -115,6 +126,10 @@ ${scenarioSummary}
 ALL ${Object.keys(allIndicators).length} INDICATORS:
 ${TREND_GUIDANCE}
 ${indicatorSummary}
+
+UNITS ARE PART OF THE NUMBER (mandatory):
+Every figure you write carries the full unit shown above — the period for flows ("₹31,961 cr / month", "13.7 mn sq ft / quarter") and the basis for rates ("4.45% YoY", "1.5% SAAR", "5.25% p.a.", "42.6% of GDP"). Never write a bare "₹ cr", a bare "%", or a bare count. If a unit says "/ month", the word month (or "monthly") appears next to the number. Glossary:
+${unitsBlock}
 
 ───────────────────────────────────────────
 

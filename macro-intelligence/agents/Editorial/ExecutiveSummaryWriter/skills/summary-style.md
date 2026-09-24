@@ -21,6 +21,7 @@ tests below run in your head, not on the page.
 - Use em-dashes for causation chains inside a fact: "Brent $95 — CAD widens $15bn — INR at 87".
 - Use arrows for direction: "→ rate cut → mortgage repricing → housing demand".
 - Wrap all key figures in <strong> tags. No other markup.
+- Units are part of the number: the period for flows ("₹31,961 cr / month", "13.7 mn sq ft / quarter") and the basis for rates ("4.45% YoY", "1.5% SAAR", "5.25% p.a.", "42.6% of GDP"). A bare "₹ cr", bare "%" or bare count is a defect.
 - Bottom line of section 05: the single most important data point this week, with its threshold.
 - Every fact must contain at least one number or a specific falsifiable claim.
 - Under 130 words per section.

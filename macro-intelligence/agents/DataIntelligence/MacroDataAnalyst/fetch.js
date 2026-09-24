@@ -51,12 +51,12 @@ const SEARCH_QUERIES = [
   {
     query: 'India bank credit growth deposit growth CD ratio NBFC credit corporate bond issuance RBI latest 2026',
     slugs: ['bank_credit_growth', 'deposit_growth', 'cd_ratio', 'nbfc_credit_growth', 'corp_bond_issuance'],
-    extract: 'Return JSON: { bank_credit_growth: {value,previous,source,vintage}, deposit_growth: {value,previous,source,vintage}, cd_ratio: {value,previous,source,vintage}, nbfc_credit_growth: {value,previous,source,vintage}, corp_bond_issuance: {value,previous,source,vintage} }. Growth as %, cd_ratio as %, issuance in INR crore.',
+    extract: 'Return JSON: { bank_credit_growth: {value,previous,source,vintage}, deposit_growth: {value,previous,source,vintage}, cd_ratio: {value,previous,source,vintage}, nbfc_credit_growth: {value,previous,source,vintage}, corp_bond_issuance: {value,previous,source,vintage} }. Growth as % YoY, cd_ratio as %, corp_bond_issuance = the latest single MONTH of primary issuance in INR crore (not quarterly, not FYTD).',
   },
   {
     query: 'FII DII flows India equity SIP inflows AMFI mutual fund AUM latest 2026',
     slugs: ['fii_equity_net', 'dii_equity_net', 'sip_inflows', 'sip_yoy_growth', 'mf_aum', 'mf_avg_aum', 'equity_mf_net', 'nfo_collections', 'sip_accounts', 'sip_aum'],
-    extract: 'Return JSON: { fii_equity_net: {value,previous,source,vintage}, dii_equity_net: {value,previous,source,vintage}, sip_inflows: {value,previous,source,vintage}, sip_yoy_growth: {value,previous,source,vintage}, mf_aum: {value,previous,source,vintage}, mf_avg_aum: {value,previous,source,vintage}, equity_mf_net: {value,previous,source,vintage}, nfo_collections: {value,previous,source,vintage}, sip_accounts: {value,previous,source,vintage}, sip_aum: {value,previous,source,vintage} }. Flows in INR crore, AUM in INR lakh crore, accounts in millions.',
+    extract: 'Return JSON: { fii_equity_net: {value,previous,source,vintage}, dii_equity_net: {value,previous,source,vintage}, sip_inflows: {value,previous,source,vintage}, sip_yoy_growth: {value,previous,source,vintage}, mf_aum: {value,previous,source,vintage}, mf_avg_aum: {value,previous,source,vintage}, equity_mf_net: {value,previous,source,vintage}, nfo_collections: {value,previous,source,vintage}, sip_accounts: {value,previous,source,vintage}, sip_aum: {value,previous,source,vintage} }. fii_equity_net / dii_equity_net / equity_mf_net = NET flow for the latest single MONTH in INR crore (negative = outflow; not daily, not FYTD); sip_inflows / nfo_collections = the latest single MONTH in INR crore; mf_aum / mf_avg_aum / sip_aum = month-end stock in INR lakh crore; sip_accounts = stock in millions.',
   },
   {
     query: 'US GDP growth CPI core PCE Fed funds rate latest 2026',

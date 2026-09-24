@@ -46,7 +46,10 @@ function buildIndicatorObj(slug, raw) {
   const prevNum   = typeof raw.previous === 'number' ? raw.previous : null;
 
   const prefix = raw.is_estimated ? '~' : '';
-  const unit   = meta.unit || '';
+  // Full unit with period/basis ("₹ cr / month", "% YoY"), never the bare
+  // symbol — a reader must never have to guess whether SIP inflows are a
+  // month or a quarter. See displayUnit() in indicator-schema.js.
+  const unit   = meta.display_unit || meta.unit || '';
   const latestValue = latestNum !== null
     ? `${prefix}${raw.value_str || latestNum}${unit ? ' ' + unit : ''}`
     : 'Awaited';
@@ -58,7 +61,7 @@ function buildIndicatorObj(slug, raw) {
     indicator_slug:   slug,
     latest_value:     latestValue,
     latest_numeric:   latestNum,
-    latest_unit:      meta.unit,
+    latest_unit:      meta.display_unit || meta.unit,
     previous_value:   prevNum !== null ? String(prevNum) : null,
     previous_numeric: prevNum,
     data_vintage:     raw.vintage || 'Awaited',

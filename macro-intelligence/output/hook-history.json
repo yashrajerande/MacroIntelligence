@@ -417,17 +417,18 @@
     },
     {
       "date": "24 SEP 2026",
-      "verdict_line": "Retail mall vacancy at a cycle-low 5% while fuel inflation hits 22.93% — the consumer is showing up, but the margin on serving them is evaporating.",
+      "verdict_line": "Office absorption at a 10-year-low 13.2 mn sq ft / quarter — yet Bank Nifty sits at its 93rd percentile, pricing a credit cycle the GCC demand signal just quietly withdrew.",
       "themes": [
-        "inflation",
+        "markets",
         "real_estate"
       ],
       "slugs": [
-        "retail_mall_vacancy",
+        "office_absorption",
         "inr_usd",
-        "fuel_inflation",
+        "retail_mall_vacancy",
         "dii_equity_net",
-        "sip_aum"
+        "sip_aum",
+        "bank_nifty"
       ]
     }
   ]

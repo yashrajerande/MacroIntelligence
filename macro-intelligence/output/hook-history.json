@@ -1,18 +1,6 @@
 {
   "entries": [
     {
-      "date": "18 AUG 2026",
-      "verdict_line": "US 10Y at 4.68% — an 84th-percentile print, still climbing — while India's SIP accounts grow at a 2nd-percentile crawl; the carry trade that funds domestic equity optimism is thinning at both ends.",
-      "themes": [],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "nat_gas",
-        "us_10y_treasury",
-        "sip_accounts"
-      ]
-    },
-    {
       "date": "19 AUG 2026",
       "verdict_line": "Nikkei reversing a five-month, 100th-percentile rally in a single session — while US 10Y holds 4.72% — is the carry-trade unwind the Nifty hasn't priced yet.",
       "themes": [
@@ -429,6 +417,18 @@
         "inr_usd",
         "retail_mall_vacancy",
         "fuel_inflation"
+      ]
+    },
+    {
+      "date": "26 SEP 2026",
+      "verdict_line": "Nikkei at an all-time 66,364 while US 10Y climbs to 5.18% — global equities are pricing perpetual expansion precisely as bond markets price the cost of it.",
+      "themes": [],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "office_absorption",
+        "retail_mall_vacancy"
       ]
     }
   ]

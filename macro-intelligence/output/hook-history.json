@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "19 AUG 2026",
-      "verdict_line": "Nikkei reversing a five-month, 100th-percentile rally in a single session — while US 10Y holds 4.72% — is the carry-trade unwind the Nifty hasn't priced yet.",
-      "themes": [
-        "markets"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "nat_gas",
-        "sip_accounts"
-      ]
-    },
-    {
       "date": "20 AUG 2026",
       "verdict_line": "SIP inflows at ₹29,845 cr mask a 2nd-percentile account growth of 0.16 cr — India's retail equity story is deepening wallets, not widening participation.",
       "themes": [
@@ -429,6 +415,20 @@
         "us_10y_treasury",
         "office_absorption",
         "retail_mall_vacancy"
+      ]
+    },
+    {
+      "date": "27 SEP 2026",
+      "verdict_line": "Retail mall vacancy at a 11th-percentile 5.7% vacant while office absorption hits a record-low 0th-percentile 4.9 mn sq ft/quarter — India's real estate is bifurcating in ways the REIT market hasn't priced.",
+      "themes": [
+        "real_estate"
+      ],
+      "slugs": [
+        "office_absorption",
+        "us_10y_treasury",
+        "nat_gas",
+        "retail_mall_vacancy",
+        "copper"
       ]
     }
   ]

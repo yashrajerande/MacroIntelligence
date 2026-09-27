@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "20 AUG 2026",
-      "verdict_line": "SIP inflows at ₹29,845 cr mask a 2nd-percentile account growth of 0.16 cr — India's retail equity story is deepening wallets, not widening participation.",
-      "themes": [
-        "flows"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "nat_gas",
-        "sip_accounts",
-        "sip_inflows"
-      ]
-    },
-    {
       "date": "21 AUG 2026",
       "verdict_line": "Brent at $93 — rising 4 of 5 periods — while airline traffic hits a 7th-percentile 35 million; India's demand story has two completely different endings depending on which proxy you trust.",
       "themes": [
@@ -429,6 +414,20 @@
         "nat_gas",
         "retail_mall_vacancy",
         "copper"
+      ]
+    },
+    {
+      "date": "28 SEP 2026",
+      "verdict_line": "Mumbai office rents at ₹335/sqft/mo — an all-time 100th-percentile — while absorption sits at a 4th-percentile 11.6 mn sq ft/quarter: the price of space has never been higher, and fewer people are taking it.",
+      "themes": [
+        "real_estate"
+      ],
+      "slugs": [
+        "rent_mumbai",
+        "us_10y_treasury",
+        "office_absorption",
+        "rent_bengaluru",
+        "retail_mall_vacancy"
       ]
     }
   ]

@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "21 AUG 2026",
-      "verdict_line": "Brent at $93 — rising 4 of 5 periods — while airline traffic hits a 7th-percentile 35 million; India's demand story has two completely different endings depending on which proxy you trust.",
-      "themes": [
-        "oil"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "nat_gas",
-        "us_10y_treasury",
-        "wti_usd"
-      ]
-    },
-    {
       "date": "22 AUG 2026",
       "verdict_line": "Euro Stoxx50 at a 100th-percentile 6,462 while falling five consecutive periods — global equities are celebrating a party the fundamentals stopped attending.",
       "themes": [],
@@ -428,6 +414,20 @@
         "office_absorption",
         "rent_bengaluru",
         "retail_mall_vacancy"
+      ]
+    },
+    {
+      "date": "29 SEP 2026",
+      "verdict_line": "Bank Nifty at 89th-percentile 54,472 while India VIX jumps to 13.6 — markets are pricing strength precisely as volatility signals the first crack.",
+      "themes": [
+        "markets"
+      ],
+      "slugs": [
+        "india_vix",
+        "us_10y_treasury",
+        "bank_nifty",
+        "office_absorption",
+        "dii_equity_net"
       ]
     }
   ]

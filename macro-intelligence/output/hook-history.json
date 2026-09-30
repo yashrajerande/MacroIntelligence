@@ -1,18 +1,6 @@
 {
   "entries": [
     {
-      "date": "22 AUG 2026",
-      "verdict_line": "Euro Stoxx50 at a 100th-percentile 6,462 while falling five consecutive periods — global equities are celebrating a party the fundamentals stopped attending.",
-      "themes": [],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "nat_gas",
-        "sip_accounts"
-      ]
-    },
-    {
       "date": "23 AUG 2026",
       "verdict_line": "PMI Services at 57.5 — an 88th-percentile print, yet falling for the second period — while airline traffic sits at a 7th-percentile 35 million; India's services expansion is a headline the ground data is quietly contradicting.",
       "themes": [
@@ -428,6 +416,18 @@
         "bank_nifty",
         "office_absorption",
         "dii_equity_net"
+      ]
+    },
+    {
+      "date": "30 SEP 2026",
+      "verdict_line": "US 10Y at 5.24% — a 95th-percentile yield — is tightening global financial conditions faster than any central bank communiqué, and India's INR at 96.15 is absorbing the cost.",
+      "themes": [],
+      "slugs": [
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "india_vix",
+        "office_absorption",
+        "inr_usd"
       ]
     }
   ]

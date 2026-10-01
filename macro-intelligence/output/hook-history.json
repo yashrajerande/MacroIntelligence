@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "23 AUG 2026",
-      "verdict_line": "PMI Services at 57.5 — an 88th-percentile print, yet falling for the second period — while airline traffic sits at a 7th-percentile 35 million; India's services expansion is a headline the ground data is quietly contradicting.",
-      "themes": [
-        "gdp_growth"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "nat_gas",
-        "sip_accounts",
-        "pmi_services"
-      ]
-    },
-    {
       "date": "24 AUG 2026",
       "verdict_line": "Bank Nifty at a 96th-percentile 57,762 while FII equity flows reversed ₹22,729 cr in a single month — the market is pricing a banking boom the deposit base cannot fund.",
       "themes": [
@@ -428,6 +413,20 @@
         "india_vix",
         "office_absorption",
         "inr_usd"
+      ]
+    },
+    {
+      "date": "01 OCT 2026",
+      "verdict_line": "Euro Stoxx 50 at a 100th-percentile 6,269 while US GDP slows to 2.2% SAAR — European equities are pricing a recovery the underlying data hasn't delivered.",
+      "themes": [
+        "gdp_growth"
+      ],
+      "slugs": [
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "office_absorption",
+        "rent_bengaluru",
+        "india_vix"
       ]
     }
   ]

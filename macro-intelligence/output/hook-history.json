@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "24 AUG 2026",
-      "verdict_line": "Bank Nifty at a 96th-percentile 57,762 while FII equity flows reversed ₹22,729 cr in a single month — the market is pricing a banking boom the deposit base cannot fund.",
-      "themes": [
-        "markets",
-        "flows"
-      ],
-      "slugs": [
-        "sp500",
-        "nikkei225",
-        "euro_stoxx50",
-        "bank_nifty",
-        "india_vix"
-      ]
-    },
-    {
       "date": "25 AUG 2026",
       "verdict_line": "Airline traffic at a 7th-percentile 35 million while e-commerce GMV halves to 12.4% YoY — India's affluent consumer is retreating, and the GST headline won't hide it for long.",
       "themes": [
@@ -427,6 +412,18 @@
         "office_absorption",
         "rent_bengaluru",
         "india_vix"
+      ]
+    },
+    {
+      "date": "02 OCT 2026",
+      "verdict_line": "Euro Stoxx 50 drops from a 100th-percentile 6,269 to 6,175 as US 10Y hits 5.29% — DM equities finally reading the bond market's script.",
+      "themes": [],
+      "slugs": [
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "rent_mumbai",
+        "rent_bengaluru",
+        "office_absorption"
       ]
     }
   ]

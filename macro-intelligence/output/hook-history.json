@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "25 AUG 2026",
-      "verdict_line": "Airline traffic at a 7th-percentile 35 million while e-commerce GMV halves to 12.4% YoY — India's affluent consumer is retreating, and the GST headline won't hide it for long.",
-      "themes": [
-        "consumption"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "nat_gas",
-        "airline_pax"
-      ]
-    },
-    {
       "date": "26 AUG 2026",
       "verdict_line": "Copper at an 80th-percentile $6.71/lb rising four of five periods while US GDP prints 0.7% SAAR — the metals market is pricing a global recovery the economy hasn't delivered.",
       "themes": [
@@ -424,6 +410,22 @@
         "rent_mumbai",
         "rent_bengaluru",
         "office_absorption"
+      ]
+    },
+    {
+      "date": "03 OCT 2026",
+      "verdict_line": "Nikkei at a 100th-percentile 68,309 while fuel inflation hits 22.93% YoY — global equities pricing calm precisely as India's import bill compounds.",
+      "themes": [
+        "inflation",
+        "oil"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "rent_mumbai",
+        "inr_usd",
+        "fuel_inflation"
       ]
     }
   ]

@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "26 AUG 2026",
-      "verdict_line": "Copper at an 80th-percentile $6.71/lb rising four of five periods while US GDP prints 0.7% SAAR — the metals market is pricing a global recovery the economy hasn't delivered.",
-      "themes": [
-        "gdp_growth"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "copper",
-        "us_10y_treasury",
-        "nat_gas"
-      ]
-    },
-    {
       "date": "27 AUG 2026",
       "verdict_line": "India VIX at a 5th-percentile 10.6 while US 10Y yields hold at 4.64% — the market is pricing serenity India's airline and e-commerce data have already disproved.",
       "themes": [
@@ -426,6 +412,21 @@
         "rent_mumbai",
         "inr_usd",
         "fuel_inflation"
+      ]
+    },
+    {
+      "date": "04 OCT 2026",
+      "verdict_line": "DII equity flows at a 100th-percentile ₹58,502 cr / month while Nifty falls five sessions straight — domestic money is catching a falling knife.",
+      "themes": [
+        "markets",
+        "flows"
+      ],
+      "slugs": [
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "inr_usd",
+        "office_absorption",
+        "bank_nifty"
       ]
     }
   ]

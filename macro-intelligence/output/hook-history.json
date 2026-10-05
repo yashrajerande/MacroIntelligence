@@ -1,22 +1,6 @@
 {
   "entries": [
     {
-      "date": "27 AUG 2026",
-      "verdict_line": "India VIX at a 5th-percentile 10.6 while US 10Y yields hold at 4.64% — the market is pricing serenity India's airline and e-commerce data have already disproved.",
-      "themes": [
-        "markets",
-        "consumption"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "sp500",
-        "us_vix",
-        "bank_nifty",
-        "india_vix"
-      ]
-    },
-    {
       "date": "30 AUG 2026",
       "verdict_line": "US 10Y at 4.67% — an 84th-percentile yield — while global equities hit simultaneous all-time highs; someone is catastrophically wrong about the cost of capital.",
       "themes": [],
@@ -427,6 +411,21 @@
         "inr_usd",
         "office_absorption",
         "bank_nifty"
+      ]
+    },
+    {
+      "date": "05 OCT 2026",
+      "verdict_line": "Retail mall vacancy at a 7th-percentile 4.8% vacant signals consumption strength the Nifty's five-session slide refuses to price.",
+      "themes": [
+        "markets",
+        "real_estate"
+      ],
+      "slugs": [
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "inr_usd",
+        "retail_mall_vacancy",
+        "sip_aum"
       ]
     }
   ]

@@ -1,18 +1,6 @@
 {
   "entries": [
     {
-      "date": "30 AUG 2026",
-      "verdict_line": "US 10Y at 4.67% — an 84th-percentile yield — while global equities hit simultaneous all-time highs; someone is catastrophically wrong about the cost of capital.",
-      "themes": [],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "nat_gas",
-        "sip_accounts"
-      ]
-    },
-    {
       "date": "31 AUG 2026",
       "verdict_line": "SIP AUM at ₹16.64 lakh cr while new accounts grew at a 2nd-percentile 1.6% MoM — India's equity rally is being funded by deeper pockets, not wider participation.",
       "themes": [],
@@ -426,6 +414,18 @@
         "inr_usd",
         "retail_mall_vacancy",
         "sip_aum"
+      ]
+    },
+    {
+      "date": "06 OCT 2026",
+      "verdict_line": "US 10Y at 5.28% — a 96th-percentile yield — is doing the Fed's work for it; India's INR at 96.15 is paying the tuition.",
+      "themes": [],
+      "slugs": [
+        "us_10y_treasury",
+        "inr_usd",
+        "office_absorption",
+        "retail_mall_vacancy",
+        "dii_equity_net"
       ]
     }
   ]

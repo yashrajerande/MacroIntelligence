@@ -1,19 +1,6 @@
 {
   "entries": [
     {
-      "date": "31 AUG 2026",
-      "verdict_line": "SIP AUM at ₹16.64 lakh cr while new accounts grew at a 2nd-percentile 1.6% MoM — India's equity rally is being funded by deeper pockets, not wider participation.",
-      "themes": [],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "nat_gas",
-        "sip_accounts",
-        "sip_aum"
-      ]
-    },
-    {
       "date": "01 SEP 2026",
       "verdict_line": "US 10Y at 4.73% — an 85th-percentile yield rising three of five periods — while Nikkei and S&P sit at simultaneous all-time highs; the bond market and equity market cannot both be right.",
       "themes": [
@@ -426,6 +413,20 @@
         "office_absorption",
         "retail_mall_vacancy",
         "dii_equity_net"
+      ]
+    },
+    {
+      "date": "07 OCT 2026",
+      "verdict_line": "Mumbai office rents at a 100th-percentile ₹335/sqft/mo while absorption sits at a 6th-percentile 13.2 mn sq ft/quarter — landlords pricing scarcity that occupiers aren't confirming.",
+      "themes": [
+        "real_estate"
+      ],
+      "slugs": [
+        "us_10y_treasury",
+        "rent_mumbai",
+        "inr_usd",
+        "rent_bengaluru",
+        "office_absorption"
       ]
     }
   ]

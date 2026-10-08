@@ -96,6 +96,7 @@ SKIP_SUPABASE=true SKIP_GIT_PUSH=true node agents/CEO/orchestrate.js
 | 16 | **StrategyAdvisor** | ConglomeratesTracker | Senior-partner synthesis: 7 core scores + 6 overlays + ranking + typology + red flags | LLM | Sonnet |
 | 17 | **CriticReviewer** | ConglomeratesTracker | Stress-tests draft, gates publication, runs deterministic + LLM checks | LLM + Code | Sonnet |
 | 18 | **Publisher (Conglomerates)** | ConglomeratesTracker | HTML render, root tab shell update, git commit/push | Code only | — |
+| 19 | **Voice Assistant** | Interaction (standalone, not a pipeline phase) | Spoken Q&A over the day's published dashboard, driven by a mic button on the page — speech-to-text and text-to-speech run in the browser; a Supabase edge function assembles the full day's data and answers, calling back into Rabbit Hole's own context functions as tools to "go deeper" on a signal or regime by voice | LLM, tool use | Haiku |
 
 **Execution order:** DataIntelligence → Analysis → Editorial → Production → Infrastructure
 

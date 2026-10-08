@@ -90,6 +90,10 @@ export class DashboardRenderer {
     const rabbitHoleUrl = process.env.RABBIT_HOLE_URL || '';
     html = html.replace('%%RABBIT_HOLE_URL%%', rabbitHoleUrl);
 
+    // Inject Voice Assistant Edge Function URL (agents/VoiceAssistant)
+    const voiceAssistantUrl = process.env.VOICE_ASSISTANT_URL || '';
+    html = html.replace('%%VOICE_ASSISTANT_URL%%', voiceAssistantUrl);
+
     const {
       marketData, macroData, reData, leverageData,
       regime, signals, scenarios, news, execSummary,

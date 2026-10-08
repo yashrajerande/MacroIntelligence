@@ -1663,8 +1663,118 @@ assert(!missingRead.narrative.includes('undefined') && !missingRead.narrative.in
 assert(!missingRead.narrative.includes('VIX'), `No VIX data means no risk-appetite clause should be appended at all`);
 
 // ═══════════════════════════════════════════════════════════════════
-// RESULTS
+// VOICE ASSISTANT (founder's work order, 05 OCT 2026): a mic button
+// that does speech-to-text / text-to-speech over the day's published
+// dashboard, with "go deeper" as a tool call and local playback control.
 // ═══════════════════════════════════════════════════════════════════
+{
+  const {
+    toSpeechText, parseVoiceCommand, applyRateCommand,
+    MAX_COMMAND_WORDS, RATE_DEFAULT, RATE_MIN, RATE_MAX,
+  } = await import('./agents/VoiceAssistant/skills/speech-format.js');
+
+  // toSpeechText: units and abbreviations read naturally, nothing bare
+  assert(toSpeechText('<p>SIP inflows at <strong>₹32,297 cr / month</strong> (92nd percentile)</p>') ===
+    'SIP inflows at rupees 32,297 crore per month (92nd percentile).',
+    `Flow with period reads naturally: ${toSpeechText('<p>SIP inflows at <strong>₹32,297 cr / month</strong> (92nd percentile)</p>')}`);
+  assert(toSpeechText('CD ratio at 81.4% credit ÷ deposits') === 'CD ratio at 81.4 percent credit ÷ deposits',
+    `Bare percent becomes "percent": ${toSpeechText('CD ratio at 81.4% credit ÷ deposits')}`);
+  assert(toSpeechText('Repo at 5.25% p.a.') === 'Repo at 5.25 percent per annum', `"% p.a." reads as "percent per annum"`);
+  assert(toSpeechText('GDP growth at 7.8% YoY') === 'G D P growth at 7.8 percent year on year', `GDP and YoY both expand`);
+  assert(toSpeechText('NRI share within GCC leasing') === 'N R I share within G C C leasing', `Acronyms spelled out letter by letter`);
+  assert(toSpeechText('Brent at $103/bbl') === 'Brent at dollars 103/bbl', `Bare $ converts; unmapped unit left intact rather than guessed`);
+  assert(toSpeechText('<p>Line one.</p><p>Line two.</p>') === 'Line one. Line two.', `Paragraph boundaries become pauses, not run-ons`);
+  assert(toSpeechText('Bold **word** stays') === 'Bold word stays', `Markdown bold stripped (defense in depth)`);
+  assert(toSpeechText(null) === '' && toSpeechText(undefined) === '' && toSpeechText('') === '', `Null/undefined/empty never throw`);
+  assert(!/<[^>]+>/.test(toSpeechText('<ul><li>A</li><li>B</li></ul>')), `No tag survives, including list markup`);
+
+  // parseVoiceCommand: short standalone phrases are commands
+  for (const [phrase, want] of [
+    ['stop', 'stop'], ['please stop', 'stop'], ['cancel', 'stop'], ['never mind', 'stop'],
+    ['pause', 'pause'],
+    ['slow down', 'slower'], ['slower please', 'slower'], ['too fast', 'slower'],
+    ['speed up', 'faster'], ['go faster', 'faster'], ['too slow', 'faster'],
+    ['repeat that', 'repeat'], ['say that again', 'repeat'], ['what did you say', 'repeat'],
+    ['resume', 'resume'], ['keep going', 'resume'],
+  ]) {
+    assert(parseVoiceCommand(phrase) === want, `parseVoiceCommand(${JSON.stringify(phrase)}) → ${want}, got ${parseVoiceCommand(phrase)}`);
+  }
+  // Real questions must NEVER be swallowed by a command, even when they
+  // contain a command word — this was the precise failure mode flagged
+  // during design: "should I continue holding Nifty" is not "resume".
+  for (const q of [
+    'should I continue holding Nifty given the credit cycle',
+    'why did FII flows stop rising last week',
+    'give me the highlights for the day',
+    'what is going on with NRI demand for premium real estate in Mumbai',
+    'is the rupee going to weaken further this quarter',
+  ]) {
+    assert(parseVoiceCommand(q) === null, `A real question must never be classified as a command: ${JSON.stringify(q)} → ${parseVoiceCommand(q)}`);
+  }
+  assert(parseVoiceCommand('') === null && parseVoiceCommand(null) === null && parseVoiceCommand(undefined) === null, `Empty/null transcript → null, never throws`);
+  assert(MAX_COMMAND_WORDS === 6, `Command word-count guard must stay a short constant, not silently widen`);
+
+  // applyRateCommand: pure step function, clamped
+  assert(applyRateCommand(1.0, 'slower') === 0.85 && applyRateCommand(1.0, 'faster') === 1.15, `One step changes rate by the documented factor`);
+  assert(applyRateCommand(RATE_MIN, 'slower') === RATE_MIN, `Floor holds at ${RATE_MIN}`);
+  assert(applyRateCommand(RATE_MAX, 'faster') === RATE_MAX, `Ceiling holds at ${RATE_MAX}`);
+  assert(applyRateCommand(1.0, 'repeat') === 1.0 && applyRateCommand(1.0, 'stop') === 1.0, `Non-rate commands leave the rate untouched`);
+  assert(applyRateCommand(-1, 'slower') < 1.0 && applyRateCommand(NaN, 'faster') > 1.0, `A corrupt stored rate falls back to the default before stepping`);
+  assert(typeof RATE_DEFAULT === 'number' && RATE_DEFAULT === 1.0, `Default rate is the engine's natural 1.0x`);
+
+  // Org files exist (Charter: the org chart is law)
+  assert(existsSync(join(__dirname, 'agents', 'VoiceAssistant', 'Persona.md')), `VoiceAssistant Persona.md must exist`);
+  assert(existsSync(join(__dirname, 'agents', 'VoiceAssistant', 'skills', 'speech-format.js')), `speech-format.js skill must exist`);
+  const vaPersonaSrc = readFileSync(join(__dirname, 'agents', 'VoiceAssistant', 'Persona.md'), 'utf8');
+  assert(vaPersonaSrc.includes('NEVER name Mishra, Munger'), `Persona must carry the banned-names rule`);
+  assert(/go down the rabbit hole|get_signal_detail|get_regime_detail/.test(vaPersonaSrc), `Persona must describe the "go deeper" tool-use mechanism`);
+
+  // Shared backend module: Rabbit Hole's exact context functions, reused
+  assert(existsSync(join(__dirname, 'supabase', 'functions', '_shared', 'macro-context.ts')), `Shared macro-context.ts must exist`);
+  const sharedSrc = readFileSync(join(__dirname, 'supabase', 'functions', '_shared', 'macro-context.ts'), 'utf8');
+  assert(sharedSrc.includes('export async function getSignalContext') && sharedSrc.includes('export async function getRegimeContext') && sharedSrc.includes('export async function getFullDayContext'),
+    `Shared module must export signal, regime and full-day context builders`);
+  assert(sharedSrc.includes('export const BANNED_NAMES_RULE'), `Shared module must export the one banned-names rule text every chat surface appends`);
+
+  const rhSrc = readFileSync(join(__dirname, 'supabase', 'functions', 'rabbit-hole-chat', 'index.ts'), 'utf8');
+  assert(rhSrc.includes('from "../_shared/macro-context.ts"') && rhSrc.includes('getSignalContext(supabase, sigNum, run_date)') && rhSrc.includes('getRegimeContext(supabase, entry_id, run_date)'),
+    `Rabbit Hole must be refactored onto the shared module, not a parallel reimplementation`);
+  assert(!/function getSignalContext|function getRegimeContext/.test(rhSrc), `Rabbit Hole must not keep its own copy of the context builders after the refactor`);
+
+  const vaSrc = readFileSync(join(__dirname, 'supabase', 'functions', 'voice-assistant-chat', 'index.ts'), 'utf8');
+  assert(vaSrc.includes('getFullDayContext(supabase, run_date)'), `Voice Assistant must assemble the WHOLE day, not one card`);
+  assert(vaSrc.includes('"get_signal_detail"') && vaSrc.includes('"get_regime_detail"') && vaSrc.includes('stop_reason === "tool_use"'),
+    `Voice Assistant must expose "go deeper" as callable tools and handle a tool-use turn`);
+  assert(vaSrc.includes('BANNED_NAMES_RULE'), `Voice Assistant persona must carry the same banned-names rule`);
+  assert(vaSrc.includes('voice_assistant_usage') && vaSrc.includes('DAILY_BUDGET_USD') && vaSrc.includes('MAX_MESSAGES_PER_IP'),
+    `Voice Assistant must have its own budget cap and rate limit, independent of Rabbit Hole's`);
+  assert(vaSrc.includes('MAX_TOOL_ROUNDS'), `Tool-use loop must be bounded — an unbounded loop is a runaway-cost bug waiting to happen`);
+
+  // Wiring: renderer, template, workflow
+  const renderSrc = readFileSync(join(__dirname, 'agents', 'Production', 'DashboardRenderer', 'render.js'), 'utf8');
+  assert(renderSrc.includes("process.env.VOICE_ASSISTANT_URL") && renderSrc.includes("'%%VOICE_ASSISTANT_URL%%'"),
+    `Renderer must inject VOICE_ASSISTANT_URL the same way it injects RABBIT_HOLE_URL`);
+  const tplVA = readFileSync(join(__dirname, 'template', 'macro-intelligence-light.html'), 'utf8');
+  assert(tplVA.includes('id="voice-panel"') && tplVA.includes('id="va-btn"') && tplVA.includes('onclick="toggleVoiceAssistant()"'),
+    `Template must carry the mic button and its panel`);
+  assert(tplVA.includes("'%%VOICE_ASSISTANT_URL%%'"), `Template must declare the VA_URL placeholder the renderer fills`);
+  assert(tplVA.includes('SpeechRecognition') && tplVA.includes('speechSynthesis'), `Template must feature-detect both halves of the Web Speech API`);
+  assert(/if \(!VA_URL \|\| !SRClass \|\| !synth\)/.test(tplVA), `Missing URL or unsupported browser must degrade to a message, not a broken button`);
+  assert(!tplVA.includes('MAX_TOOL_ROUNDS'), `(sanity) the tool-use loop is server-side only — the client never sees it`);
+  const wfVA = readFileSync(join(__dirname, '..', '.github', 'workflows', 'daily-dashboard.yml'), 'utf8');
+  assert(wfVA.includes('VOICE_ASSISTANT_URL: ${{ secrets.VOICE_ASSISTANT_URL }}'), `Workflow must pass the Voice Assistant URL secret through to the pipeline`);
+
+  // Drift guard: every symbol/abbreviation the Node skill converts must
+  // have a matching literal in the template's hand-ported copy, so a
+  // future edit to one cannot silently diverge from the other.
+  const skillSrc = readFileSync(join(__dirname, 'agents', 'VoiceAssistant', 'skills', 'speech-format.js'), 'utf8');
+  const literalFragments = [...skillSrc.matchAll(/'([^'\\]{3,40})'/g)].map(m => m[1])
+    .filter(s => /^[a-zA-Z .]+$/.test(s)); // the plain-English replacement targets, not regex source
+  const missingFragments = literalFragments.filter(s => !tplVA.includes(`'${s}'`));
+  assert(missingFragments.length === 0, `Template's hand-ported speech formatting must repeat every replacement string from the Node skill verbatim — missing: ${JSON.stringify(missingFragments)}`);
+}
+
+
 console.log(`\n═══════════════════════════════════════════════════════════`);
 console.log(`  Test Results: ${pass} passed, ${fail} failed`);
 console.log(`═══════════════════════════════════════════════════════════\n`);

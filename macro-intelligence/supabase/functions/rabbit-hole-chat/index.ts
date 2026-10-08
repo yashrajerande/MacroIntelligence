@@ -1,5 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
+import { getSignalContext, getRegimeContext, BANNED_NAMES_RULE } from "../_shared/macro-context.ts";
 
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY")!;
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
@@ -40,10 +41,7 @@ RULES:
 4. Every claim must include a specific number or date
 5. If you don't have data, say "I don't have that data point" — never hallucinate
 6. Be conversational but rigorous — the user is smart and wants depth, not fluff
-7. NEVER name Mishra, Munger, the Economist, or the FT in your replies —
-   these voices are private analytical anchors, not citations. Present
-   every conclusion as your own, unattributed. (The dashboard's validator
-   hard-errors on these names; this chat surface must hold the same line.)`;
+7. ${BANNED_NAMES_RULE.trim()}`;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
@@ -58,121 +56,6 @@ interface RequestBody {
   run_date: string;
   conversation: Message[];
   question: string;
-}
-
-async function getSignalContext(signalNum: number, runDate: string): Promise<string> {
-  const { data: signal } = await supabase
-    .from("signal_cards")
-    .select("*")
-    .eq("run_date", runDate)
-    .eq("signal_num", signalNum)
-    .single();
-
-  if (!signal) return "Signal data not found for this date.";
-
-  // Get related indicators for this signal's theme
-  const themeToSlugs: Record<string, string[]> = {
-    "CREDIT CYCLE": ["cd_ratio", "bank_credit_growth", "deposit_growth", "nbfc_credit_growth", "corp_bond_issuance"],
-    "CAPEX TRIGGER": ["iip_capgoods", "capacity_utilisation", "core_sector_yoy", "iip_yoy"],
-    "SIP / RETAIL FLOWS": ["sip_inflows", "sip_yoy_growth", "fii_equity_net", "dii_equity_net", "mf_aum", "equity_mf_net"],
-    "OIL / COMMODITY RISK": ["brent_usd", "nat_gas", "inr_usd", "copper", "iron_ore"],
-    "GLOBAL LIQUIDITY": ["fed_funds_rate", "us_10y_treasury", "dxy", "ecb_deposit_rate", "sp500"],
-    "INR / FX RESERVES": ["inr_usd", "rbi_fx_reserves", "fii_equity_net", "dxy", "brent_usd"],
-    "UNDER THE RADAR": ["nifty50", "india_vix", "gst_month", "pmi_mfg", "cpi_headline"],
-  };
-
-  const relatedSlugs = themeToSlugs[signal.signal_theme] || [];
-
-  // Get 30-day history for related indicators
-  const { data: history } = await supabase
-    .from("macro_indicators")
-    .select("indicator_slug, latest_numeric, direction, pct_10y, run_date")
-    .in("indicator_slug", relatedSlugs)
-    .gte("run_date", getDateDaysAgo(runDate, 30))
-    .order("run_date", { ascending: false });
-
-  const latestBySlug: Record<string, any> = {};
-  for (const row of (history || [])) {
-    if (!latestBySlug[row.indicator_slug]) {
-      latestBySlug[row.indicator_slug] = row;
-    }
-  }
-
-  const indicatorContext = Object.entries(latestBySlug)
-    .map(([slug, row]) => `${slug}: ${row.latest_numeric} (${row.direction}, 10y pct: ${row.pct_10y}%)`)
-    .join("\n");
-
-  return `SIGNAL #${signal.signal_num}: ${signal.signal_theme}
-Status: ${signal.status}
-Title: ${signal.title}
-
-DATA:
-${signal.data_text}
-
-IMPLICATION:
-${signal.implication}
-
-Percentile (10y): ${signal.pct_10y}%
-Context: ${signal.pct_note || "—"}
-
-RELATED INDICATORS (latest values):
-${indicatorContext || "No related indicators available."}`;
-}
-
-async function getRegimeContext(dimension: string, runDate: string): Promise<string> {
-  const { data: regime } = await supabase
-    .from("regime_classification")
-    .select("*")
-    .eq("run_date", runDate)
-    .eq("dimension", dimension)
-    .single();
-
-  if (!regime) return "Regime data not found for this date.";
-
-  const dimToSlugs: Record<string, string[]> = {
-    growth: ["india_gdp_yoy", "pmi_mfg", "pmi_services", "iip_yoy", "core_sector_yoy", "capacity_utilisation"],
-    inflation: ["cpi_headline", "cpi_core", "cfpi_food", "wpi", "fuel_inflation", "rbi_repo_rate"],
-    credit: ["bank_credit_growth", "deposit_growth", "cd_ratio", "nbfc_credit_growth", "corp_bond_issuance"],
-    policy: ["rbi_repo_rate", "rbi_inflation_forecast", "gsec_10y", "fed_funds_rate", "us_10y_treasury"],
-    capex: ["iip_capgoods", "capacity_utilisation", "core_sector_yoy", "pmi_mfg"],
-    consumption: ["gst_month", "gst_ytd", "pv_sales", "airline_pax", "ecom_gmv_growth"],
-  };
-
-  const relatedSlugs = dimToSlugs[dimension] || [];
-
-  const { data: history } = await supabase
-    .from("macro_indicators")
-    .select("indicator_slug, latest_numeric, direction, pct_10y, run_date")
-    .in("indicator_slug", relatedSlugs)
-    .gte("run_date", getDateDaysAgo(runDate, 30))
-    .order("run_date", { ascending: false });
-
-  const latestBySlug: Record<string, any> = {};
-  for (const row of (history || [])) {
-    if (!latestBySlug[row.indicator_slug]) {
-      latestBySlug[row.indicator_slug] = row;
-    }
-  }
-
-  const indicatorContext = Object.entries(latestBySlug)
-    .map(([slug, row]) => `${slug}: ${row.latest_numeric} (${row.direction}, 10y pct: ${row.pct_10y}%)`)
-    .join("\n");
-
-  return `REGIME: ${dimension.toUpperCase()}
-Classification: ${regime.badge_label || "unclassified"}
-Metrics: ${regime.metric_summary}
-
-ANALYSIS:
-${regime.signal_text}
-
-CONTRIBUTING INDICATORS (latest values):
-${indicatorContext || "No related indicators available."}`;
-}
-
-function getDateDaysAgo(isoDate: string, days: number): string {
-  const d = new Date(isoDate);
-  d.setDate(d.getDate() - days);
-  return d.toISOString().slice(0, 10);
 }
 
 async function checkRateLimit(ip: string): Promise<{ allowed: boolean; reason?: string }> {
@@ -250,13 +133,13 @@ Deno.serve(async (req: Request) => {
       return new Response(JSON.stringify({ error: rateCheck.reason }), { status: 429 });
     }
 
-    // Assemble context
+    // Assemble context (shared with voice-assistant-chat — see _shared/macro-context.ts)
     let context: string;
     if (entry_type === "signal") {
       const sigNum = parseInt(entry_id.replace("sig", ""), 10);
-      context = await getSignalContext(sigNum, run_date);
+      context = await getSignalContext(supabase, sigNum, run_date);
     } else if (entry_type === "regime") {
-      context = await getRegimeContext(entry_id, run_date);
+      context = await getRegimeContext(supabase, entry_id, run_date);
     } else {
       return new Response(JSON.stringify({ error: "Invalid entry_type" }), { status: 400 });
     }

@@ -77,6 +77,7 @@ jobs:
           TELEGRAM_BOT_TOKEN:  ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID:    ${{ secrets.TELEGRAM_CHAT_ID }}
           RABBIT_HOLE_URL:     ${{ secrets.RABBIT_HOLE_URL }}
+          VOICE_ASSISTANT_URL: ${{ secrets.VOICE_ASSISTANT_URL }}
           DATE_OVERRIDE:        ${{ inputs.run_date_override }}
           # A human pressing "Run workflow" always wants a fresh edition;
           # the scheduled 05:00 retry must be a no-op when 03:00 succeeded.

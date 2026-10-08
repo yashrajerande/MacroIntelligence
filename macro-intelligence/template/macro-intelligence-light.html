@@ -738,6 +738,21 @@ html.tv .dt td, html.tv .dt th { padding:14px 0; }
 @media (max-width:900px) { .seg-tiles { grid-template-columns:repeat(2,1fr); } }
 
 /* ══════════════════════════════════════════════════
+   VOICE ASSISTANT — mic button, one-tap session
+══════════════════════════════════════════════════ */
+.va-btn { width:56px;height:56px;background:#1d1d1f;color:#fff;border:none;border-radius:50%;font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,0.15); }
+.va-btn.listening { background:#c62828;animation:vapulse 1.4s ease-in-out infinite; }
+.va-btn.thinking   { background:#8a6d00; }
+.va-btn.speaking   { background:#0071e3;animation:vapulse 1.8s ease-in-out infinite; }
+@keyframes vapulse { 0%,100%{box-shadow:0 2px 8px rgba(0,0,0,0.15),0 0 0 0 rgba(198,40,40,0.35);} 50%{box-shadow:0 2px 8px rgba(0,0,0,0.15),0 0 0 10px rgba(198,40,40,0);} }
+.va-status { font-family:var(--mono); font-size:0.72rem; color:var(--ink-3); letter-spacing:0.04em; }
+.va-transcript { font-family:var(--body); font-size:0.8rem; color:var(--ink-2); line-height:1.6; margin-top:10px; max-height:140px; overflow-y:auto; }
+.va-transcript .va-q { color:var(--ink-4); font-style:italic; }
+.va-transcript .va-a { color:var(--ink-1); margin-top:4px; }
+.va-toast { font-family:var(--mono); font-size:0.62rem; color:#1a00cc; margin-top:6px; }
+html.tv #voice-panel { display:none !important; }
+
+/* ══════════════════════════════════════════════════
    NEWS STRIP
 ══════════════════════════════════════════════════ */
 .news-strip {
@@ -1098,6 +1113,25 @@ html.tv .dt td, html.tv .dt th { padding:14px 0; }
       </div>
     </div>
     <audio id="macro-audio" preload="auto"></audio>
+  </div>
+
+  <!-- VOICE ASSISTANT — one-tap spoken Q&A over today's dashboard -->
+  <div id="voice-panel" style="margin:12px 0 16px;padding:24px 28px;background:#fff;border-radius:20px;border:1px solid rgba(0,0,0,0.06);box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:14px;">
+      <div style="width:8px;height:8px;border-radius:50%;background:#1a00cc;"></div>
+      <span style="font-family:var(--mono);font-size:0.65rem;font-weight:600;color:var(--ink-3);letter-spacing:0.12em;text-transform:uppercase;">VOICE ASSISTANT</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <button id="va-btn" class="va-btn" onclick="toggleVoiceAssistant()" aria-label="Voice Assistant">
+        <span id="va-icon">&#127908;</span>
+      </button>
+      <div style="flex:1;min-width:0;">
+        <div style="font-family:var(--display);font-size:1.05rem;font-weight:600;color:var(--ink-1);margin-bottom:4px;">Ask about today's macro</div>
+        <div class="va-status" id="va-status">Tap to start — ask a question, or say "slow down", "faster", "repeat that", "stop".</div>
+        <div class="va-toast" id="va-toast" style="display:none;"></div>
+      </div>
+    </div>
+    <div class="va-transcript" id="va-transcript"></div>
   </div>
 
   <!-- EXEC SUMMARY -->
@@ -1885,6 +1919,232 @@ function rhKeydown(event, type, id) {
     panel.innerHTML = `<div class="rh-label">\u{1F407} Rabbit Hole</div><div class="rh-thread"></div><div class="rh-input"><input type="text" placeholder="Ask a follow-up..." onkeydown="rhKeydown(event,'regime','${regimeNames[idx]}')" /><button onclick="sendRabbitHole('regime','${regimeNames[idx]}')">Send</button></div>`;
     card.appendChild(panel);
   });
+})();
+
+/* ── VOICE ASSISTANT — one-tap spoken Q&A session ──────────────
+   Speech-to-text and text-to-speech run entirely in the browser
+   (SpeechRecognition / speechSynthesis) — no audio ever leaves the
+   device. Only the recognised TEXT of a real question is sent to the
+   Voice Assistant edge function; playback commands ("slow down",
+   "repeat that", "stop") are handled locally and never sent anywhere.
+
+   toSpeechText / parseVoiceCommand / applyRateCommand below are a
+   hand-port of agents/VoiceAssistant/skills/speech-format.js — that
+   Node module is the tested source of truth (the Charter keeps this
+   template a single self-contained file, so it cannot be imported
+   here). A pre-flight test greps this block for the same literal
+   patterns so the two copies cannot silently drift apart; if you
+   change the rules, change both. ─────────────────────────────── */
+const VA_URL = '%%VOICE_ASSISTANT_URL%%';
+
+function vaToSpeechText(text) {
+  if (text === null || text === undefined) return '';
+  return String(text)
+    .replace(/<\/(p|li|h[1-6]|div)>/gi, '. ')
+    .replace(/<br\s*\/?>/gi, '. ')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, ' and ')
+    .replace(/&lt;/gi, '<').replace(/&gt;/gi, '>').replace(/&quot;/gi, '"').replace(/&#39;/gi, "'")
+    .replace(/—|–/g, ', ')
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/\*/g, '')
+    .replace(/\s*\/\s*(month|quarter|annum|year)\b/gi, ' per $1')
+    .replace(/%/g, ' percent')
+    .replace(/₹/g, 'rupees ')
+    .replace(/\$/g, 'dollars ')
+    .replace(/\bcr\b/gi, 'crore')
+    .replace(/\bp\.a\./gi, 'per annum')
+    .replace(/\byoy\b/gi, 'year on year')
+    .replace(/\bqoq\b/gi, 'quarter on quarter')
+    .replace(/\bsaar\b/gi, 'annualised')
+    .replace(/\bbps\b/gi, 'basis points')
+    .replace(/\bfytd\b/gi, 'financial year to date')
+    .replace(/\bgdp\b/gi, 'G D P')
+    .replace(/\bnri\b/gi, 'N R I')
+    .replace(/\bgcc\b/gi, 'G C C')
+    .replace(/\s{2,}/g, ' ')
+    .replace(/\.(\s*\.)+/g, '.')
+    .trim();
+}
+const VA_MAX_COMMAND_WORDS = 6;
+const VA_COMMAND_PATTERNS = [
+  { cmd: 'stop',   re: /\b(stop|cancel|never ?mind|that'?s enough)\b/i },
+  { cmd: 'pause',  re: /\bpause\b/i },
+  { cmd: 'resume', re: /\b(resume|keep going|go on|continue)\b/i },
+  { cmd: 'repeat', re: /\b(repeat|say (that|it) again|what did you say)\b/i },
+  { cmd: 'slower', re: /\b(slow(er)? down|slower|too fast)\b/i },
+  { cmd: 'faster', re: /\b(speed(s)? up|faster|go faster|too slow|quicker)\b/i },
+];
+function vaParseCommand(transcript) {
+  const t = String(transcript || '').trim().toLowerCase();
+  if (!t) return null;
+  const words = t.split(/\s+/).filter(Boolean);
+  if (words.length > VA_MAX_COMMAND_WORDS) return null;
+  for (const { cmd, re } of VA_COMMAND_PATTERNS) if (re.test(t)) return cmd;
+  return null;
+}
+const VA_RATE_DEFAULT = 1.0, VA_RATE_MIN = 0.5, VA_RATE_MAX = 2.0;
+function vaApplyRate(rate, cmd) {
+  const r = (typeof rate === 'number' && rate > 0) ? rate : VA_RATE_DEFAULT;
+  if (cmd === 'slower') return Math.max(VA_RATE_MIN, Math.round(r * 0.85 * 100) / 100);
+  if (cmd === 'faster') return Math.min(VA_RATE_MAX, Math.round(r * 1.15 * 100) / 100);
+  return r;
+}
+
+(function initVoiceAssistant() {
+  const btn = document.getElementById('va-btn');
+  const statusEl = document.getElementById('va-status');
+  const toastEl = document.getElementById('va-toast');
+  const transcriptEl = document.getElementById('va-transcript');
+  if (!btn) return;
+
+  const SRClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const synth = window.speechSynthesis;
+
+  if (!VA_URL || !SRClass || !synth) {
+    statusEl.textContent = !VA_URL
+      ? 'Voice Assistant not configured for this edition.'
+      : 'Voice input isn’t supported in this browser — try Chrome on Android or desktop.';
+    btn.disabled = true;
+    btn.style.opacity = '0.35';
+    btn.style.cursor = 'not-allowed';
+    return;
+  }
+
+  let rate = VA_RATE_DEFAULT;
+  try { const saved = parseFloat(localStorage.getItem('va-rate')); if (saved > 0) rate = saved; } catch (e) {}
+
+  const state = { active: false, phase: 'idle', conversation: [], lastAnswer: '' };
+  const recognition = new SRClass();
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.lang = 'en-IN';
+
+  function setPhase(phase) {
+    state.phase = phase;
+    btn.classList.remove('listening', 'thinking', 'speaking');
+    const icons = { idle: '\u{1F3A4}', listening: '\u{1F534}', thinking: '\u{2026}', speaking: '\u{1F50A}' };
+    document.getElementById('va-icon').textContent = icons[phase] || icons.idle;
+    if (phase !== 'idle') btn.classList.add(phase);
+    const labels = {
+      idle: 'Tap to start — ask a question, or say "slow down", "faster", "repeat that", "stop".',
+      listening: 'Listening…',
+      thinking: 'Thinking…',
+      speaking: 'Speaking… (say "slow down", "faster", "repeat that" or "stop")',
+    };
+    statusEl.textContent = labels[phase] || '';
+  }
+
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.style.display = 'block';
+    clearTimeout(toastEl._t);
+    toastEl._t = setTimeout(() => { toastEl.style.display = 'none'; }, 2200);
+  }
+
+  function appendTranscript(role, text) {
+    const row = document.createElement('div');
+    row.className = role === 'user' ? 'va-q' : 'va-a';
+    row.textContent = (role === 'user' ? 'You: ' : '') + text;
+    transcriptEl.appendChild(row);
+    transcriptEl.scrollTop = transcriptEl.scrollHeight;
+  }
+
+  function startListening() {
+    if (!state.active) return;
+    setPhase('listening');
+    try { recognition.start(); } catch (e) { /* already started — Chrome throws on double-start */ }
+  }
+
+  function speak(text) {
+    state.lastAnswer = text;
+    setPhase('speaking');
+    synth.cancel();
+    const utter = new SpeechSynthesisUtterance(vaToSpeechText(text));
+    utter.rate = rate;
+    utter.lang = 'en-IN';
+    utter.onend = () => { if (state.active) startListening(); else setPhase('idle'); };
+    utter.onerror = () => { if (state.active) startListening(); else setPhase('idle'); };
+    synth.speak(utter);
+  }
+
+  function sendQuestion(question) {
+    appendTranscript('user', question);
+    setPhase('thinking');
+    const d = window.__MACRO_DATA__;
+    const runDate = d?.run?.run_date || new Date().toISOString().slice(0, 10);
+    fetch(VA_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ run_date: runDate, conversation: state.conversation, question }),
+    })
+      .then(res => res.json().then(data => ({ ok: res.ok, data })))
+      .then(({ ok, data }) => {
+        const answer = ok ? (data.answer || 'I don’t have an answer for that one.') : (data.error || 'Something went wrong.');
+        if (ok) {
+          state.conversation.push({ role: 'user', content: question });
+          state.conversation.push({ role: 'assistant', content: answer });
+          if (state.conversation.length > 20) state.conversation = state.conversation.slice(-20);
+        }
+        appendTranscript('assistant', answer);
+        speak(answer);
+      })
+      .catch(() => {
+        const msg = 'I couldn’t reach the assistant just now.';
+        appendTranscript('assistant', msg);
+        speak(msg);
+      });
+  }
+
+  function handleCommand(cmd) {
+    if (cmd === 'stop') { stopSession(); return; }
+    if (cmd === 'pause') { synth.pause(); toast('Paused'); return; }
+    if (cmd === 'resume') { synth.resume(); toast('Resumed'); if (state.phase !== 'speaking') startListening(); return; }
+    if (cmd === 'repeat') { if (state.lastAnswer) { speak(state.lastAnswer); } else { startListening(); } return; }
+    if (cmd === 'slower' || cmd === 'faster') {
+      rate = vaApplyRate(rate, cmd);
+      try { localStorage.setItem('va-rate', String(rate)); } catch (e) {}
+      toast('Speed: ' + rate.toFixed(2) + 'x');
+      startListening();
+      return;
+    }
+    startListening();
+  }
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[event.results.length - 1][0].transcript;
+    const cmd = vaParseCommand(transcript);
+    if (cmd) { handleCommand(cmd); return; }
+    if (transcript && transcript.trim()) sendQuestion(transcript.trim());
+    else startListening();
+  };
+  recognition.onerror = (event) => {
+    if (event.error === 'not-allowed' || event.error === 'audio-capture') {
+      statusEl.textContent = 'Microphone access denied — allow it in your browser to use the Voice Assistant.';
+      state.active = false;
+      setPhase('idle');
+      return;
+    }
+    // 'no-speech' and similar are routine (silence timeout) — just listen again.
+    if (state.active && state.phase === 'listening') startListening();
+  };
+  recognition.onend = () => {
+    if (state.active && state.phase === 'listening') startListening();
+  };
+
+  function stopSession() {
+    state.active = false;
+    try { recognition.stop(); } catch (e) {}
+    try { synth.cancel(); } catch (e) {}
+    setPhase('idle');
+  }
+
+  window.toggleVoiceAssistant = function () {
+    if (state.active) { stopSession(); return; }
+    state.active = true;
+    startListening();
+  };
 })();
 
 /* ── SIDENAV ACTIVE STATE ──────────────────────── */

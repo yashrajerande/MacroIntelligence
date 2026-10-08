@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "01 SEP 2026",
-      "verdict_line": "US 10Y at 4.73% — an 85th-percentile yield rising three of five periods — while Nikkei and S&P sit at simultaneous all-time highs; the bond market and equity market cannot both be right.",
-      "themes": [
-        "markets"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "nat_gas",
-        "wti_usd"
-      ]
-    },
-    {
       "date": "02 SEP 2026",
       "verdict_line": "Brent at $95.26 — a 5% surge in 30 days — hits India's import bill at ₹8,000 cr per $5 move while the RBI's inflation forecast of 4.6% was written at $90.",
       "themes": [
@@ -427,6 +413,18 @@
         "inr_usd",
         "rent_bengaluru",
         "office_absorption"
+      ]
+    },
+    {
+      "date": "08 OCT 2026",
+      "verdict_line": "Euro Stoxx 50 slides to 6,180 from a 100th-percentile peak — DM equities cracking precisely as US 10Y at 5.27% yield extracts its toll.",
+      "themes": [],
+      "slugs": [
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "rent_mumbai",
+        "inr_usd",
+        "rent_bengaluru"
       ]
     }
   ]

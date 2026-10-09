@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "02 SEP 2026",
-      "verdict_line": "Brent at $95.26 — a 5% surge in 30 days — hits India's import bill at ₹8,000 cr per $5 move while the RBI's inflation forecast of 4.6% was written at $90.",
-      "themes": [
-        "inflation",
-        "oil"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "nat_gas",
-        "sip_accounts"
-      ]
-    },
-    {
       "date": "03 SEP 2026",
       "verdict_line": "Nikkei at a 100th-percentile 64,325 — down 1,890 points in a session — while US 10Y hits 4.79%; global equity complacency is meeting its rate reckoning.",
       "themes": [],
@@ -425,6 +410,22 @@
         "rent_mumbai",
         "inr_usd",
         "rent_bengaluru"
+      ]
+    },
+    {
+      "date": "09 OCT 2026",
+      "verdict_line": "INR at 97.09 — a 94th-percentile low — while SIP inflows hit ₹32,297 cr / month: domestic savers funding the equity market that foreign capital is quietly abandoning.",
+      "themes": [
+        "markets",
+        "flows"
+      ],
+      "slugs": [
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "rent_mumbai",
+        "inr_usd",
+        "rent_bengaluru",
+        "sip_inflows"
       ]
     }
   ]

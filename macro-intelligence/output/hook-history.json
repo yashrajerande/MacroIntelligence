@@ -1,18 +1,6 @@
 {
   "entries": [
     {
-      "date": "03 SEP 2026",
-      "verdict_line": "Nikkei at a 100th-percentile 64,325 — down 1,890 points in a session — while US 10Y hits 4.79%; global equity complacency is meeting its rate reckoning.",
-      "themes": [],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "sip_accounts",
-        "nat_gas"
-      ]
-    },
-    {
       "date": "04 SEP 2026",
       "verdict_line": "Airline passengers collapsed 9.5% MoM to a 7th-percentile 35M while GST hit ₹2.01 lakh crore — India's affluent are grounding themselves as mass consumption flies.",
       "themes": [
@@ -426,6 +414,18 @@
         "inr_usd",
         "rent_bengaluru",
         "sip_inflows"
+      ]
+    },
+    {
+      "date": "10 OCT 2026",
+      "verdict_line": "Euro Stoxx 50 at a 100th-percentile 6,173 while US 10Y yields slip to 5.22% — DM equities pricing recovery precisely as the bond market withdraws its permission slip.",
+      "themes": [],
+      "slugs": [
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "inr_usd",
+        "office_absorption",
+        "mf_avg_aum"
       ]
     }
   ]

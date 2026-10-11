@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "04 SEP 2026",
-      "verdict_line": "Airline passengers collapsed 9.5% MoM to a 7th-percentile 35M while GST hit ₹2.01 lakh crore — India's affluent are grounding themselves as mass consumption flies.",
-      "themes": [
-        "consumption"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "copper",
-        "sip_accounts",
-        "nat_gas",
-        "airline_pax"
-      ]
-    },
-    {
       "date": "06 SEP 2026",
       "verdict_line": "Copper at an 80th-percentile $6.67 — up four of five sessions — while India's PMI Services slips to 57.5 from 58.1; the commodity cycle is pricing a global recovery that India's own activity data is quietly walking back.",
       "themes": [
@@ -426,6 +411,22 @@
         "inr_usd",
         "office_absorption",
         "mf_avg_aum"
+      ]
+    },
+    {
+      "date": "11 OCT 2026",
+      "verdict_line": "Copper at $6.69/lb — an 80th-percentile print rising 3 of 5 sessions — is pricing a global capex upcycle that China's 49.5 PMI flatly contradicts.",
+      "themes": [
+        "gdp_growth",
+        "capex",
+        "global_macro"
+      ],
+      "slugs": [
+        "us_10y_treasury",
+        "office_absorption",
+        "inr_usd",
+        "copper",
+        "fuel_inflation"
       ]
     }
   ]

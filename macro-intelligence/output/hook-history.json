@@ -415,17 +415,17 @@
     },
     {
       "date": "11 OCT 2026",
-      "verdict_line": "Copper at $6.69/lb — an 80th-percentile print rising 3 of 5 sessions — is pricing a global capex upcycle that China's 49.5 PMI flatly contradicts.",
+      "verdict_line": "Fuel inflation at 22.93% YoY — a 95th-percentile print with Brent rising five sessions straight — is the number RBI's pause cannot survive if crude holds $104.",
       "themes": [
-        "gdp_growth",
-        "capex",
-        "global_macro"
+        "inflation",
+        "oil"
       ],
       "slugs": [
-        "us_10y_treasury",
         "office_absorption",
         "inr_usd",
-        "copper",
+        "us_10y_treasury",
+        "nikkei225",
+        "dii_equity_net",
         "fuel_inflation"
       ]
     }

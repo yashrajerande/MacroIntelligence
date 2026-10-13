@@ -1,22 +1,6 @@
 {
   "entries": [
     {
-      "date": "07 SEP 2026",
-      "verdict_line": "Retail mall vacancy at a 15th-percentile 6.7% — tightest in three years — while India VIX sits at a 5th-percentile 10.68; the affluent economy is fully priced, and nobody is hedging it.",
-      "themes": [
-        "markets",
-        "real_estate"
-      ],
-      "slugs": [
-        "inr_usd",
-        "us_10y_treasury",
-        "retail_mall_vacancy",
-        "affordability_index",
-        "sip_accounts",
-        "india_vix"
-      ]
-    },
-    {
       "date": "08 SEP 2026",
       "verdict_line": "Mumbai office rents at a 100th-percentile ₹335/sqft while absorption sits at a 6th-percentile 13.7 mn sqft — landlords are pricing a demand that tenants aren't showing up to confirm.",
       "themes": [
@@ -427,6 +411,21 @@
         "inr_usd",
         "rent_bengaluru",
         "office_absorption"
+      ]
+    },
+    {
+      "date": "13 OCT 2026",
+      "verdict_line": "Retail mall vacancy at a 10-year-low 4.8% vacant while office absorption oscillates violently — consumption is the economy's load-bearing wall, not capex.",
+      "themes": [
+        "real_estate",
+        "capex"
+      ],
+      "slugs": [
+        "us_10y_treasury",
+        "inr_usd",
+        "office_absorption",
+        "retail_mall_vacancy",
+        "sip_aum"
       ]
     }
   ]

@@ -31,6 +31,8 @@ export async function gitPublish(filePath, indexPath, commitMessage, ghPat, repo
     `git add -f ${outputDir}/ops-cockpit.html || echo "[Git] ops-cockpit.html not found, skipping"`,
     `git add -f ${outputDir}/archive.html || echo "[Git] archive.html not found, skipping"`,
     `git add -f ${outputDir}/daily-broadcast.mp3 || echo "[Git] daily-broadcast.mp3 not found, skipping"`,
+    `git add -f ${outputDir}/daily-podcast.mp3 || echo "[Git] daily-podcast.mp3 not found, skipping"`,
+    `git add -f ${outputDir}/daily-podcast.wav || echo "[Git] daily-podcast.wav not found, skipping"`,
     `git commit -m "${commitMessage}"`,
     'git pull --rebase origin main || true',
     'git push origin HEAD:refs/heads/main',

@@ -620,7 +620,7 @@ td.c-pct { text-align:right; min-width:96px; }
 
 /* ── TV / kiosk mode (?tv=1) ── */
 html.tv { font-size:22px !important; }
-html.tv .sidenav, html.tv .footer-dis, html.tv #audio-panel { display:none !important; }
+html.tv .sidenav, html.tv .footer-dis, html.tv #audio-panel, html.tv #podcast-panel { display:none !important; }
 html.tv body { padding-bottom:40px; }
 html.tv .cmd-verdict { font-size:1.5em; line-height:1.35; }
 html.tv .dt td, html.tv .dt th { padding:14px 0; }
@@ -1113,6 +1113,29 @@ html.tv #voice-panel { display:none !important; }
       </div>
     </div>
     <audio id="macro-audio" preload="auto"></audio>
+  </div>
+
+  <!-- MACRO MORNING PODCAST — two-host deep dive -->
+  <div id="podcast-panel" style="display:none;margin:12px 0 16px;padding:24px 28px;background:#fff;border-radius:20px;border:1px solid rgba(0,0,0,0.06);box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:14px;">
+      <div style="width:8px;height:8px;border-radius:50%;background:#0071e3;animation:livepulse 2s ease-in-out infinite;"></div>
+      <span style="font-family:var(--mono);font-size:0.65rem;font-weight:600;color:var(--ink-3);letter-spacing:0.12em;text-transform:uppercase;">MACRO MORNING PODCAST</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <button id="podcast-play-btn" onclick="togglePodcast()" style="width:56px;height:56px;background:#1d1d1f;color:#fff;border:none;border-radius:50%;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,0.15);">
+        <span id="podcast-icon">&#9654;</span>
+      </button>
+      <div style="flex:1;min-width:0;">
+        <div style="font-family:var(--display);font-size:1.05rem;font-weight:600;color:var(--ink-1);margin-bottom:6px;">Asha &amp; Vikram — today's deep dive</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div id="podcast-bar-wrap" style="flex:1;height:4px;background:rgba(0,0,0,0.08);border-radius:2px;cursor:pointer;position:relative;overflow:hidden;" onclick="seekPodcast(event)">
+            <div id="podcast-bar" style="height:100%;width:0%;background:#0071e3;border-radius:2px;transition:width 0.15s;"></div>
+          </div>
+          <div id="podcast-time" style="font-family:var(--mono);font-size:0.62rem;color:var(--ink-4);white-space:nowrap;">0:00 / 6:00</div>
+        </div>
+      </div>
+    </div>
+    <audio id="macro-podcast" preload="auto"></audio>
   </div>
 
   <!-- VOICE ASSISTANT — one-tap spoken Q&A over today's dashboard -->
@@ -1629,6 +1652,78 @@ html.tv #voice-panel { display:none !important; }
   audio.addEventListener('timeupdate', () => {
     const cur = audio.currentTime;
     const dur = audio.duration || 60;
+    const pct = (cur / dur) * 100;
+    bar.style.width = pct + '%';
+    const cm = Math.floor(cur / 60), cs = Math.floor(cur % 60);
+    const dm = Math.floor(dur / 60), ds = Math.floor(dur % 60);
+    timeEl.textContent = `${cm}:${String(cs).padStart(2,'0')} / ${dm}:${String(ds).padStart(2,'0')}`;
+  });
+
+  audio.addEventListener('ended', () => {
+    icon.innerHTML = '&#9654;';
+    btn.style.background = 'linear-gradient(135deg,#6366f1,#8b5cf6)';
+    bar.style.width = '0%';
+  });
+})();
+
+/* ── MACRO MORNING PODCAST PLAYER ──────────────── */
+(function() {
+  const audio = document.getElementById('macro-podcast');
+  const panel = document.getElementById('podcast-panel');
+  const btn = document.getElementById('podcast-play-btn');
+  const icon = document.getElementById('podcast-icon');
+  const timeEl = document.getElementById('podcast-time');
+  const bar = document.getElementById('podcast-bar');
+
+  // Same today-only guard as the 60-second audio player — daily-podcast.*
+  // is overwritten each run, so an archived page must never play it.
+  document.addEventListener('DOMContentLoaded', function () {
+    const runDate = (window.__MACRO_DATA__ && window.__MACRO_DATA__.run && window.__MACRO_DATA__.run.run_date) || null;
+    const istToday = (function () {
+      const t = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+      return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`;
+    })();
+    if (runDate && runDate !== istToday) return; // archived edition — no podcast
+
+    // ffmpeg may be unavailable on a given run, in which case the pipeline
+    // ships the uncompressed WAV instead of the MP3 — probe both.
+    const candidates = ['daily-podcast.mp3', 'daily-podcast.wav'];
+    (function tryNext(i) {
+      if (i >= candidates.length) return;
+      fetch(candidates[i], { method: 'HEAD' }).then(r => {
+        if (r.ok) {
+          audio.src = candidates[i];
+          panel.style.display = 'block';
+        } else {
+          tryNext(i + 1);
+        }
+      }).catch(() => tryNext(i + 1));
+    })(0);
+  });
+
+  window.togglePodcast = function() {
+    if (!audio.src) return;
+    if (audio.paused) {
+      audio.play();
+      icon.innerHTML = '&#9646;&#9646;';
+      btn.style.background = 'linear-gradient(135deg,#8b5cf6,#6366f1)';
+    } else {
+      audio.pause();
+      icon.innerHTML = '&#9654;';
+      btn.style.background = 'linear-gradient(135deg,#6366f1,#8b5cf6)';
+    }
+  };
+
+  window.seekPodcast = function(e) {
+    if (!audio.duration) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const pct = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = pct * audio.duration;
+  };
+
+  audio.addEventListener('timeupdate', () => {
+    const cur = audio.currentTime;
+    const dur = audio.duration || 360;
     const pct = (cur / dur) * 100;
     bar.style.width = pct + '%';
     const cm = Math.floor(cur / 60), cs = Math.floor(cur % 60);

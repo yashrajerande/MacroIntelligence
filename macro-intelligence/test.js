@@ -1774,6 +1774,175 @@ assert(!missingRead.narrative.includes('VIX'), `No VIX data means no risk-appeti
   assert(missingFragments.length === 0, `Template's hand-ported speech formatting must repeat every replacement string from the Node skill verbatim — missing: ${JSON.stringify(missingFragments)}`);
 }
 
+// ═══════════════════════════════════════════════════════════════════
+// PODCAST PRODUCER (founder's work order, 13 OCT 2026): a daily two-host
+// "Macro Morning" podcast — Haiku dialogue script + Gemini multi-speaker
+// TTS, encoded to MP3 via ffmpeg with a graceful WAV fallback.
+// ═══════════════════════════════════════════════════════════════════
+{
+  const {
+    VALID_SPEAKERS, parseScriptTurns, totalWordCount, turnsToTranscript,
+    DEFAULT_CHUNK_WORD_BUDGET, chunkTurns,
+  } = await import('./agents/Production/PodcastProducer/skills/podcast-script.js');
+
+  // parseScriptTurns: tolerant extraction, strict validation
+  assert(JSON.stringify(VALID_SPEAKERS) === JSON.stringify(['Asha', 'Vikram']), `Exactly two hosts, named Asha and Vikram`);
+
+  const bareArray = JSON.stringify([{ speaker: 'Asha', text: 'Hi.' }, { speaker: 'Vikram', text: 'Hey.' }]);
+  assert(parseScriptTurns(bareArray).length === 2, `A bare JSON array parses straight through`);
+
+  const fenced = '```json\n' + bareArray + '\n```';
+  assert(parseScriptTurns(fenced).length === 2, `A fenced \`\`\`json block is tolerated, same as every other writer in this org`);
+
+  const prosedWrapped = 'Here is the script:\n' + bareArray + '\nHope that helps!';
+  assert(parseScriptTurns(prosedWrapped).length === 2, `An array embedded in prose is still recovered`);
+
+  let threw = false;
+  try { parseScriptTurns('not json at all'); } catch { threw = true; }
+  assert(threw, `Unparseable garbage must throw, not silently degrade to an empty podcast`);
+
+  threw = false;
+  try { parseScriptTurns(JSON.stringify([{ speaker: 'Rohan', text: 'Hi.' }])); } catch { threw = true; }
+  assert(threw, `A speaker outside Asha/Vikram must throw — this string is passed straight to the TTS speaker config`);
+
+  threw = false;
+  try { parseScriptTurns(JSON.stringify([{ speaker: 'Asha', text: '' }])); } catch { threw = true; }
+  assert(threw, `An empty turn must throw rather than ship a silent gap in the audio`);
+
+  threw = false;
+  try { parseScriptTurns('[]'); } catch { threw = true; }
+  assert(threw, `An empty array must throw — never produce a zero-turn podcast`);
+
+  // totalWordCount / turnsToTranscript
+  const sampleTurns = [
+    { speaker: 'Asha', text: 'Okay so what is going on with the rupee today.' },
+    { speaker: 'Vikram', text: 'Honestly more than the number it is the speed.' },
+  ];
+  assert(totalWordCount(sampleTurns) === 19, `Word count sums across all turns, got ${totalWordCount(sampleTurns)}`);
+  assert(turnsToTranscript(sampleTurns) === 'Asha: Okay so what is going on with the rupee today.\nVikram: Honestly more than the number it is the speed.',
+    `Transcript renders "Speaker: text" per line, speaker names exact for the TTS speakerVoiceConfigs match`);
+
+  // chunkTurns: never split a single turn across chunks
+  assert(chunkTurns([]).length === 0, `No turns means no chunks`);
+  const oneChunk = chunkTurns(sampleTurns, 600);
+  assert(oneChunk.length === 1 && oneChunk[0].length === 2, `Short script fits in one chunk`);
+
+  const longTurn = { speaker: 'Vikram', text: Array(700).fill('word').join(' ') };
+  const overBudget = chunkTurns([{ speaker: 'Asha', text: 'Short one.' }, longTurn], 600);
+  assert(overBudget.length === 2, `A turn longer than the budget becomes its own chunk rather than being split, got ${overBudget.length} chunks`);
+  assert(overBudget[1][0].text === longTurn.text, `The oversized turn's text must survive intact, never truncated`);
+
+  const manyShort = Array.from({ length: 10 }, (_, i) => ({ speaker: i % 2 ? 'Vikram' : 'Asha', text: Array(100).fill('w').join(' ') }));
+  const chunked = chunkTurns(manyShort, 250);
+  assert(chunked.length > 1, `Many turns over budget split into multiple chunks`);
+  for (const c of chunked) {
+    assert(c.reduce((s, t) => s + t.text.split(/\s+/).length, 0) <= 250 || c.length === 1,
+      `Each chunk stays under budget unless it's a single oversized turn`);
+  }
+  assert(chunked.flat().length === manyShort.length, `chunkTurns must preserve every turn — none dropped, none duplicated`);
+  assert(typeof DEFAULT_CHUNK_WORD_BUDGET === 'number' && DEFAULT_CHUNK_WORD_BUDGET > 0, `Default chunk budget is a positive, tunable constant`);
+
+  // audio-pcm.js: pure byte-math WAV wrapping
+  const { PCM_SAMPLE_RATE, PCM_CHANNELS, PCM_BIT_DEPTH, concatenatePcm, pcmToWav, estimateDurationSeconds } =
+    await import('./agents/Production/PodcastProducer/skills/audio-pcm.js');
+
+  assert(PCM_SAMPLE_RATE === 24000 && PCM_CHANNELS === 1 && PCM_BIT_DEPTH === 16, `Gemini TTS default PCM format: 24kHz mono 16-bit`);
+
+  const pcmA = Buffer.from([1, 2, 3, 4]);
+  const pcmB = Buffer.from([5, 6, 7, 8]);
+  const concatenated = concatenatePcm([pcmA, pcmB]);
+  assert(concatenated.equals(Buffer.from([1, 2, 3, 4, 5, 6, 7, 8])), `Multiple TTS chunks concatenate in order`);
+
+  threw = false;
+  try { concatenatePcm([]); } catch { threw = true; }
+  assert(threw, `No PCM data to concatenate must throw, not produce a silent empty file`);
+  threw = false;
+  try { concatenatePcm([null, Buffer.alloc(0)]); } catch { threw = true; }
+  assert(threw, `All-empty/null buffers must throw`);
+
+  const wav = pcmToWav(concatenated);
+  assert(wav.length === 44 + concatenated.length, `WAV = 44-byte header + raw PCM, got ${wav.length}`);
+  assert(wav.toString('ascii', 0, 4) === 'RIFF' && wav.toString('ascii', 8, 12) === 'WAVE', `Valid RIFF/WAVE magic bytes`);
+  assert(wav.toString('ascii', 12, 16) === 'fmt ' && wav.toString('ascii', 36, 40) === 'data', `fmt and data sub-chunk markers present`);
+  assert(wav.readUInt32LE(4) === 36 + concatenated.length, `RIFF chunk size field = 36 + data size`);
+  assert(wav.readUInt16LE(20) === 1, `Audio format field = 1 (PCM)`);
+  assert(wav.readUInt16LE(22) === PCM_CHANNELS, `Channel count written correctly`);
+  assert(wav.readUInt32LE(24) === PCM_SAMPLE_RATE, `Sample rate written correctly`);
+  assert(wav.readUInt16LE(34) === PCM_BIT_DEPTH, `Bit depth written correctly`);
+  assert(wav.readUInt32LE(40) === concatenated.length, `data sub-chunk size = raw PCM length`);
+
+  threw = false;
+  try { pcmToWav(Buffer.alloc(0)); } catch { threw = true; }
+  assert(threw, `Empty PCM data must throw rather than ship a zero-length "podcast"`);
+
+  const oneSecondPcm = Buffer.alloc(PCM_SAMPLE_RATE * PCM_CHANNELS * (PCM_BIT_DEPTH / 8));
+  assert(estimateDurationSeconds(oneSecondPcm) === 1, `One second of PCM at the default format estimates to 1.0s, got ${estimateDurationSeconds(oneSecondPcm)}`);
+  assert(estimateDurationSeconds(Buffer.alloc(0)) === 0, `Zero-length PCM estimates to 0s, never divides by zero into NaN/Infinity`);
+
+  // mp3-encode.js: must degrade gracefully, never throw, when ffmpeg is absent
+  const { findFfmpeg, encodeToMp3 } = await import('./agents/Production/PodcastProducer/skills/mp3-encode.js');
+  const ffmpegPath = findFfmpeg();
+  if (!ffmpegPath) {
+    assert(encodeToMp3(wav) === null, `No ffmpeg on this box → encodeToMp3 returns null (graceful WAV fallback), not a throw`);
+  } else {
+    const mp3 = encodeToMp3(wav);
+    assert(mp3 === null || Buffer.isBuffer(mp3), `When ffmpeg IS present, encodeToMp3 returns a Buffer or null, never throws`);
+  }
+
+  // gemini-tts.js: fails loudly (not a silent skip) when its own key is
+  // missing — the caller (produce.js) is responsible for the graceful
+  // skip, same division of responsibility as every other TTS skill here.
+  const { MODEL, synthesizeDialogue } = await import('./agents/Production/PodcastProducer/skills/gemini-tts.js');
+  assert(typeof MODEL === 'string' && MODEL.length > 0, `A single exported MODEL constant — the one line to change if Google renames it`);
+  assert(!MODEL.includes('flash-lite'), `Must never point at the -flash-lite variant — it doesn't support multi-speaker mode`);
+  const savedKey = process.env.GEMINI_API_KEY;
+  delete process.env.GEMINI_API_KEY;
+  let rejected = false;
+  try { await synthesizeDialogue(sampleTurns, { Asha: 'Kore', Vikram: 'Puck' }); } catch { rejected = true; }
+  assert(rejected, `synthesizeDialogue must throw immediately when GEMINI_API_KEY is missing, not attempt a network call`);
+  if (savedKey) process.env.GEMINI_API_KEY = savedKey;
+
+  // Org files exist (Charter: the org chart is law)
+  assert(existsSync(join(__dirname, 'agents', 'Production', 'PodcastProducer', 'Persona.md')), `PodcastProducer Persona.md must exist`);
+  assert(existsSync(join(__dirname, 'agents', 'Production', 'PodcastProducer', 'produce.js')), `produce.js must exist`);
+  const podcastPersonaSrc = readFileSync(join(__dirname, 'agents', 'Production', 'PodcastProducer', 'Persona.md'), 'utf8');
+  assert(podcastPersonaSrc.includes('never say "Mishra," "Munger," "the Economist," or "the FT"'), `Persona must carry the banned-names rule`);
+  assert(podcastPersonaSrc.includes('Asha') && podcastPersonaSrc.includes('Vikram'), `Persona must name both hosts`);
+
+  // produce.js: mirrors VoiceBroadcaster's key-check-first, clean-skip pattern
+  const produceSrc = readFileSync(join(__dirname, 'agents', 'Production', 'PodcastProducer', 'produce.js'), 'utf8');
+  assert(produceSrc.includes("process.env.GEMINI_API_KEY") && /if \(!process\.env\.GEMINI_API_KEY\)/.test(produceSrc),
+    `produce() must check GEMINI_API_KEY first, same as VoiceBroadcaster checks OPENAI_API_KEY`);
+  assert(/audioPath:\s*null,\s*\n\s*latestAudioPath:\s*null/.test(produceSrc), `Skip path must return explicit nulls — a missing field once made Telegram fall back to yesterday's committed audio`);
+
+  // Wiring: orchestrator, Telegram, GitPublisher, template, workflow
+  const orchSrc = readFileSync(join(__dirname, 'agents', 'CEO', 'orchestrate.js'), 'utf8');
+  assert(orchSrc.includes("import { PodcastProducer }") && orchSrc.includes("new PodcastProducer().produce("),
+    `Orchestrator must import and call PodcastProducer`);
+  assert(/try\s*{\s*\n\s*podcastResult = await new PodcastProducer/.test(orchSrc), `PodcastProducer call must be wrapped non-blocking — a bonus format must never fail the pipeline`);
+  assert(orchSrc.includes('podcastAudioPath: podcastResult.audioPath || podcastResult.latestAudioPath'),
+    `Orchestrator must pass today's podcast audio through to TelegramPublisher`);
+
+  const telegramSrc = readFileSync(join(__dirname, 'agents', 'Infrastructure', 'TelegramPublisher', 'publish.js'), 'utf8');
+  assert(telegramSrc.includes('podcastAudioPath'), `TelegramPublisher.publish() must accept a podcastAudioPath param`);
+  assert(/const podcastPath = podcastAudioPath \|\| null;\s*\n\s*if \(podcastPath && existsSync\(podcastPath\)\)/.test(telegramSrc),
+    `Podcast send must only fire for THIS run's audio, never fall back to a stale committed file relabeled with today's date`);
+
+  const gitOpsSrc = readFileSync(join(__dirname, 'agents', 'Infrastructure', 'GitPublisher', 'skills', 'git-ops.js'), 'utf8');
+  assert(gitOpsSrc.includes('daily-podcast.mp3') && gitOpsSrc.includes('daily-podcast.wav'),
+    `GitPublisher must commit the overwritten daily-podcast file in whichever format (mp3 or wav fallback) it was produced`);
+
+  const tplPodcast = readFileSync(join(__dirname, 'template', 'macro-intelligence-light.html'), 'utf8');
+  assert(tplPodcast.includes('id="podcast-panel"') && tplPodcast.includes('id="macro-podcast"') && tplPodcast.includes('onclick="togglePodcast()"'),
+    `Template must carry an independently-ID'd podcast player panel`);
+  assert(tplPodcast.includes("'daily-podcast.mp3'") && tplPodcast.includes("'daily-podcast.wav'"),
+    `Template player must probe both possible audio formats`);
+  assert(!tplPodcast.includes('seekAudio(event)" onclick="seekAudio(event)'), `(sanity) podcast panel must not be a copy-paste duplicate wired to the 60-second player's elements`);
+
+  const wfPodcast = readFileSync(join(__dirname, '..', '.github', 'workflows', 'daily-dashboard.yml'), 'utf8');
+  assert(/GEMINI_API_KEY:\s+\$\{\{ secrets\.GEMINI_API_KEY \}\}/.test(wfPodcast), `Workflow must pass GEMINI_API_KEY through to the pipeline`);
+}
+
 
 console.log(`\n═══════════════════════════════════════════════════════════`);
 console.log(`  Test Results: ${pass} passed, ${fail} failed`);

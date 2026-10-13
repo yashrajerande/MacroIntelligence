@@ -26,9 +26,10 @@ export class TelegramPublisher {
    * @param {string} params.dateStr
    * @param {string} params.isoDate
    * @param {string} params.dashboardUrl
-   * @param {string} [params.audioPath] — Path to MP3 file
+   * @param {string} [params.audioPath] — Path to 60-second briefing MP3
+   * @param {string} [params.podcastAudioPath] — Path to the two-host podcast MP3/WAV
    */
-  async publish({ verdictLine, macroDataObj, dateStr, isoDate, dashboardUrl, audioPath }) {
+  async publish({ verdictLine, macroDataObj, dateStr, isoDate, dashboardUrl, audioPath, podcastAudioPath }) {
     const start = Date.now();
     const token = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
@@ -119,6 +120,24 @@ export class TelegramPublisher {
       );
     } else {
       console.log('[TelegramPublisher] No MP3 found — skipping audio send.');
+    }
+
+    // ── Step 3c: Send the two-host podcast ────────────────────────────
+    // Same "only this run's audio" discipline as Step 3 — never resend
+    // yesterday's committed podcast relabeled with today's date.
+    try {
+      const podcastPath = podcastAudioPath || null;
+      if (podcastPath && existsSync(podcastPath)) {
+        console.log('[TelegramPublisher] Sending podcast to Telegram...');
+        const podcastBuffer = readFileSync(podcastPath);
+        await sendAudio(token, chatId, podcastBuffer, `Macro Morning — ${dateStr}`,
+          '🎙️ Macro Morning — today\'s two-host deep dive. Forward to friends!'
+        );
+      } else {
+        console.log('[TelegramPublisher] No podcast found — skipping podcast send.');
+      }
+    } catch (err) {
+      console.warn(`[TelegramPublisher] Podcast send failed (non-fatal): ${err.message}`);
     }
 
     const latency = Date.now() - start;

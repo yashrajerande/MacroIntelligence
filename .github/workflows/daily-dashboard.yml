@@ -74,6 +74,7 @@ jobs:
           FRED_API_KEY:         ${{ secrets.FRED_API_KEY }}
           GH_PAT:              ${{ secrets.GH_PAT }}
           OPENAI_API_KEY:      ${{ secrets.OPENAI_API_KEY }}
+          GEMINI_API_KEY:      ${{ secrets.GEMINI_API_KEY }}
           TELEGRAM_BOT_TOKEN:  ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID:    ${{ secrets.TELEGRAM_CHAT_ID }}
           RABBIT_HOLE_URL:     ${{ secrets.RABBIT_HOLE_URL }}

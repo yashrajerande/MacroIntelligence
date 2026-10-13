@@ -40,6 +40,7 @@ import { ExecutiveSummaryWriter } from '../Editorial/ExecutiveSummaryWriter/writ
 import { NewsCurator }            from '../Editorial/NewsCurator/curate.js';
 import { DashboardRenderer }      from '../Production/DashboardRenderer/render.js';
 import { VoiceBroadcaster }      from '../Production/VoiceBroadcaster/broadcast.js';
+import { PodcastProducer }       from '../Production/PodcastProducer/produce.js';
 import { Validator }              from '../Production/Validator/validate.js';
 import { fetchDynamicRanges }    from '../Production/Validator/skills/dynamic-ranges.js';
 import { SupabaseWriter }         from '../Infrastructure/SupabaseWriter/sync.js';
@@ -446,6 +447,21 @@ async function run() {
       logger.warn('VoiceBroadcaster failed', err.message);
     }
 
+    // Two-host podcast (non-blocking — bonus format, never a pipeline blocker)
+    let podcastResult = { audioPath: null, latestAudioPath: null };
+    try {
+      podcastResult = await new PodcastProducer().produce({
+        verdictLine: execSummary.verdict_line || macroDataObj.run.snap_verdict,
+        macroDataObj,
+        dateStr,
+        isoDate,
+      });
+      logger.agent('PodcastProducer', podcastResult.meta);
+    } catch (err) {
+      console.warn(`  ⚠ PodcastProducer failed (non-fatal): ${err.message}`);
+      logger.warn('PodcastProducer failed', err.message);
+    }
+
     const validation = await new Validator().validate(html, macroDataObj, isoDate, dynamicRanges);
     logger.validation(validation);
     logger.agent('Validator', {
@@ -534,6 +550,7 @@ async function run() {
         isoDate,
         dashboardUrl: 'https://yashrajerande.github.io/MacroIntelligence/',
         audioPath: voiceResult.audioPath || voiceResult.latestAudioPath,
+        podcastAudioPath: podcastResult.audioPath || podcastResult.latestAudioPath,
       });
       logger.agent('TelegramPublisher', telegramResult.meta);
     } catch (err) {

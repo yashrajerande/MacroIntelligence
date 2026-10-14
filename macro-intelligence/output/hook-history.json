@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "08 SEP 2026",
-      "verdict_line": "Mumbai office rents at a 100th-percentile ₹335/sqft while absorption sits at a 6th-percentile 13.7 mn sqft — landlords are pricing a demand that tenants aren't showing up to confirm.",
-      "themes": [
-        "real_estate"
-      ],
-      "slugs": [
-        "rent_mumbai",
-        "nikkei225",
-        "euro_stoxx50",
-        "rent_bengaluru",
-        "office_absorption"
-      ]
-    },
-    {
       "date": "14 SEP 2026",
       "verdict_line": "US 10Y at 4.95% — a 4-of-5-month climb to an 89th-percentile yield — is repricing every EM carry trade while India's DII flows hit an all-time high; domestic money is buying what foreign money is quietly exiting.",
       "themes": [
@@ -425,6 +411,18 @@
         "inr_usd",
         "office_absorption",
         "retail_mall_vacancy",
+        "sip_aum"
+      ]
+    },
+    {
+      "date": "14 OCT 2026",
+      "verdict_line": "US 10Y at 5.24% yield — a 95th-percentile print rising three of five sessions — is repricing every EM carry trade India has benefited from since 2023.",
+      "themes": [],
+      "slugs": [
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "inr_usd",
+        "office_absorption",
         "sip_aum"
       ]
     }

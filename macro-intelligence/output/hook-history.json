@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "15 SEP 2026",
-      "verdict_line": "INR at 96.15 — a 91st-percentile print — is weakening despite record DII inflows, which means Brent at $103 is doing what foreign selling couldn't.",
-      "themes": [
-        "oil",
-        "flows"
-      ],
-      "slugs": [
-        "inr_usd",
-        "us_10y_treasury",
-        "fuel_inflation",
-        "sip_aum",
-        "dii_equity_net"
-      ]
-    },
-    {
       "date": "16 SEP 2026",
       "verdict_line": "Euro Stoxx 50 at a 100th-percentile 6,237 — sliding for five sessions — while Bank Nifty drops to 55,795; the rate reckoning that started in US Treasuries is now repricing European and Indian financials simultaneously.",
       "themes": [
@@ -424,6 +409,21 @@
         "us_10y_treasury",
         "office_absorption",
         "retail_mall_vacancy"
+      ]
+    },
+    {
+      "date": "16 OCT 2026",
+      "verdict_line": "Nikkei at a 10-year-high 64,426 while BOJ holds its highest rate in a decade at 1.25% p.a. — the yen carry unwind that nobody has priced is India's next liquidity shock.",
+      "themes": [
+        "policy",
+        "global_macro"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "boj_rate",
+        "office_absorption"
       ]
     }
   ]

@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "16 SEP 2026",
-      "verdict_line": "Euro Stoxx 50 at a 100th-percentile 6,237 — sliding for five sessions — while Bank Nifty drops to 55,795; the rate reckoning that started in US Treasuries is now repricing European and Indian financials simultaneously.",
-      "themes": [
-        "markets"
-      ],
-      "slugs": [
-        "euro_stoxx50",
-        "bank_nifty",
-        "inr_usd",
-        "us_10y_treasury",
-        "india_vix"
-      ]
-    },
-    {
       "date": "17 SEP 2026",
       "verdict_line": "BOJ at 1.0% — a 25bps hike that breaks the last pillar of global carry — while India's fuel inflation hits a decade-high 22.93%; two separate shocks, one direction for the rupee.",
       "themes": [
@@ -424,6 +410,22 @@
         "us_10y_treasury",
         "boj_rate",
         "office_absorption"
+      ]
+    },
+    {
+      "date": "17 OCT 2026",
+      "verdict_line": "NFO collections at a 10-year-low ₹998 cr / month while SIP inflows hit ₹32,490 cr / month — retail is on autopilot, but the smart money has stopped launching.",
+      "themes": [
+        "flows"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "inr_usd",
+        "us_10y_treasury",
+        "office_absorption",
+        "sip_inflows",
+        "nfo_collections"
       ]
     }
   ]

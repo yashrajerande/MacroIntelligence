@@ -1,23 +1,6 @@
 {
   "entries": [
     {
-      "date": "17 SEP 2026",
-      "verdict_line": "BOJ at 1.0% — a 25bps hike that breaks the last pillar of global carry — while India's fuel inflation hits a decade-high 22.93%; two separate shocks, one direction for the rupee.",
-      "themes": [
-        "inflation",
-        "currency",
-        "policy"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "inr_usd",
-        "us_10y_treasury",
-        "rent_bengaluru",
-        "fuel_inflation"
-      ]
-    },
-    {
       "date": "18 SEP 2026",
       "verdict_line": "Nikkei at an all-time 100th-percentile 64,136 while US 10Y pierces 5.01% — global equities are pricing a soft landing that the bond market is simultaneously pricing as impossible.",
       "themes": [],
@@ -426,6 +409,21 @@
         "office_absorption",
         "sip_inflows",
         "nfo_collections"
+      ]
+    },
+    {
+      "date": "18 OCT 2026",
+      "verdict_line": "India VIX at a 9th-percentile 14.0 while US VIX surges to 19.99 — domestic complacency has rarely been this cheap to hedge, and rarely this wrong.",
+      "themes": [
+        "markets"
+      ],
+      "slugs": [
+        "india_vix",
+        "rent_bengaluru",
+        "inr_usd",
+        "us_10y_treasury",
+        "office_absorption",
+        "us_vix"
       ]
     }
   ]

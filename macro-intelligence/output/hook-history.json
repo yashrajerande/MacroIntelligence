@@ -1,18 +1,6 @@
 {
   "entries": [
     {
-      "date": "18 SEP 2026",
-      "verdict_line": "Nikkei at an all-time 100th-percentile 64,136 while US 10Y pierces 5.01% — global equities are pricing a soft landing that the bond market is simultaneously pricing as impossible.",
-      "themes": [],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "uk_corp_debt_gdp",
-        "india_gdp_fy_estimate"
-      ]
-    },
-    {
       "date": "19 SEP 2026",
       "verdict_line": "RBI's inflation forecast just jumped 50bps to 5.1% — yet repo sits at 5.25%, leaving a real rate of 15bps that is too thin to anchor a currency at a 91st-percentile 96.15.",
       "themes": [
@@ -424,6 +412,21 @@
         "us_10y_treasury",
         "office_absorption",
         "us_vix"
+      ]
+    },
+    {
+      "date": "19 OCT 2026",
+      "verdict_line": "E-commerce GMV at a 10-year-low 15th-percentile 12.4% YoY while fuel inflation hits a 95th-percentile 22.93% — the consumption story is being quietly taxed at the pump.",
+      "themes": [
+        "inflation",
+        "consumption"
+      ],
+      "slugs": [
+        "office_absorption",
+        "inr_usd",
+        "us_10y_treasury",
+        "ecom_gmv_growth",
+        "fuel_inflation"
       ]
     }
   ]

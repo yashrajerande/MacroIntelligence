@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "19 SEP 2026",
-      "verdict_line": "RBI's inflation forecast just jumped 50bps to 5.1% — yet repo sits at 5.25%, leaving a real rate of 15bps that is too thin to anchor a currency at a 91st-percentile 96.15.",
-      "themes": [
-        "inflation",
-        "policy"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "inr_usd",
-        "us_10y_treasury",
-        "office_absorption"
-      ]
-    },
-    {
       "date": "20 SEP 2026",
       "verdict_line": "S&P 500 at an all-time 100th-percentile 7,650 while copper rises for the fourth consecutive month to $6.69 — global markets are pricing a capex supercycle that India's own IIP data is only beginning to confirm.",
       "themes": [
@@ -427,6 +412,20 @@
         "us_10y_treasury",
         "ecom_gmv_growth",
         "fuel_inflation"
+      ]
+    },
+    {
+      "date": "20 OCT 2026",
+      "verdict_line": "Bank Nifty at a 91st-percentile 55,488 while credit grows at 19.4% YoY on deposits growing at 17.8% YoY — the index is pricing the lending boom, not the funding gap beneath it.",
+      "themes": [
+        "markets"
+      ],
+      "slugs": [
+        "home_loan_disbursements",
+        "euro_stoxx50",
+        "bank_nifty",
+        "inr_usd",
+        "us_10y_treasury"
       ]
     }
   ]

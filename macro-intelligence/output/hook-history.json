@@ -1,22 +1,6 @@
 {
   "entries": [
     {
-      "date": "20 SEP 2026",
-      "verdict_line": "S&P 500 at an all-time 100th-percentile 7,650 while copper rises for the fourth consecutive month to $6.69 — global markets are pricing a capex supercycle that India's own IIP data is only beginning to confirm.",
-      "themes": [
-        "markets",
-        "gdp_growth",
-        "capex"
-      ],
-      "slugs": [
-        "sp500",
-        "rent_bengaluru",
-        "inr_usd",
-        "copper",
-        "uk_corp_debt_gdp"
-      ]
-    },
-    {
       "date": "21 SEP 2026",
       "verdict_line": "Gold at ₹13,632/gram — a 100th-percentile print rising 4 of 5 sessions — is telling you something the Nifty at 75th percentile is not: domestic capital is quietly hedging a rupee it no longer trusts.",
       "themes": [
@@ -426,6 +410,20 @@
         "bank_nifty",
         "inr_usd",
         "us_10y_treasury"
+      ]
+    },
+    {
+      "date": "21 OCT 2026",
+      "verdict_line": "Office absorption at a 10-year-low 0th-percentile 5.3 mn sq ft / quarter while Bengaluru rents hit ₹102/sqft/mo — GCCs are consolidating, not retreating, and the REIT market hasn't noticed.",
+      "themes": [
+        "real_estate"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "office_absorption",
+        "us_10y_treasury",
+        "inr_usd"
       ]
     }
   ]

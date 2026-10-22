@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "21 SEP 2026",
-      "verdict_line": "Gold at ₹13,632/gram — a 100th-percentile print rising 4 of 5 sessions — is telling you something the Nifty at 75th percentile is not: domestic capital is quietly hedging a rupee it no longer trusts.",
-      "themes": [
-        "currency",
-        "markets"
-      ],
-      "slugs": [
-        "inr_usd",
-        "affordability_index",
-        "uk_corp_debt_gdp",
-        "rbi_gdp_forecast",
-        "mf_avg_aum"
-      ]
-    },
-    {
       "date": "22 SEP 2026",
       "verdict_line": "Euro Stoxx 50 at a 100th-percentile 6,318 while US PMI composite hits 56 — global growth is re-accelerating precisely when US 10Y at 5.01% says it cannot afford to.",
       "themes": [
@@ -424,6 +409,21 @@
         "office_absorption",
         "us_10y_treasury",
         "inr_usd"
+      ]
+    },
+    {
+      "date": "22 OCT 2026",
+      "verdict_line": "US 10Y at 5.15% — a 93rd-percentile yield pulling FII equity outflows to ₹49,935 cr / month while India's own inflation forecast rises to 5.1% YoY, leaving the RBI with nowhere to cut.",
+      "themes": [
+        "inflation",
+        "flows"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "inr_usd",
+        "office_absorption"
       ]
     }
   ]

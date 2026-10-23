@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "23 SEP 2026",
-      "verdict_line": "DII equity net at ₹58,502 Cr — a 100th-percentile print rising for two consecutive months — is domestic capital voting with conviction precisely when FIIs were net sellers three sessions ago.",
-      "themes": [
-        "flows"
-      ],
-      "slugs": [
-        "euro_stoxx50",
-        "dii_equity_net",
-        "uk_corp_debt_gdp",
-        "sip_aum",
-        "affordability_index"
-      ]
-    },
-    {
       "date": "24 SEP 2026",
       "verdict_line": "Fuel inflation at 22.93% YoY — a 95th-percentile print — is the number RBI's 5.25% repo cannot contain, and the rupee at 96.15 is already pricing the failure.",
       "themes": [
@@ -422,6 +408,20 @@
         "affordability_index",
         "office_absorption",
         "us_10y_treasury"
+      ]
+    },
+    {
+      "date": "24 OCT 2026",
+      "verdict_line": "Retail mall vacancy at a 10-year-low 4.8% vacant while affordability hits a 10-year-worst 10.9× — India's consumer is showing up at the mall but can't afford the flat above it.",
+      "themes": [
+        "real_estate"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "office_absorption",
+        "affordability_index",
+        "retail_mall_vacancy"
       ]
     }
   ]

@@ -196,6 +196,20 @@ const INDICATOR_SCHEMA = {
   india_credit_vehicle_yoy:   { name: 'Bank Credit — Vehicle Loans YoY', section: 'S11', sub_section: 'leverage_india_sectoral', unit: '%', unit_desc: 'percent YoY', data_type: 'percentage', expected_range: [-15, 35], p50: 12, inverse: false, frequency: 'monthly' },
   india_credit_creditcard_yoy:{ name: 'Bank Credit — Credit Card YoY',   section: 'S11', sub_section: 'leverage_india_sectoral', unit: '%', unit_desc: 'percent YoY', data_type: 'percentage', expected_range: [-15, 50], p50: 22, inverse: false, frequency: 'monthly' },
   india_credit_nbfc_yoy:      { name: 'Bank Credit to NBFCs YoY',        section: 'S11', sub_section: 'leverage_india_sectoral', unit: '%', unit_desc: 'percent YoY', data_type: 'percentage', expected_range: [-20, 40], p50: 15, inverse: false, frequency: 'monthly' },
+
+  // ── Lender's Lens inputs (S12 is a derived view; the slugs live in S11
+  // so they ride the LeverageAnalyst fetch + cache partition) ──────────
+  // Sectoral credit the sectoral table does not already carry:
+  india_credit_msme_yoy:      { name: 'Bank Credit — Micro & Small Ind. YoY', section: 'S11', sub_section: 'leverage_india_quality', unit: '%', unit_desc: 'percent YoY', data_type: 'percentage', expected_range: [-10, 40], p50: 13, inverse: false, frequency: 'monthly' },
+  india_credit_medium_yoy:    { name: 'Bank Credit — Medium Industry YoY',    section: 'S11', sub_section: 'leverage_india_quality', unit: '%', unit_desc: 'percent YoY', data_type: 'percentage', expected_range: [-10, 45], p50: 15, inverse: false, frequency: 'monthly' },
+  india_credit_infra_yoy:     { name: 'Bank Credit — Infrastructure YoY',     section: 'S11', sub_section: 'leverage_india_quality', unit: '%', unit_desc: 'percent YoY', data_type: 'percentage', expected_range: [-15, 30], p50: 6,  inverse: false, frequency: 'monthly' },
+  india_credit_cre_yoy:       { name: 'Bank Credit — Commercial Real Estate YoY', section: 'S11', sub_section: 'leverage_india_quality', unit: '%', unit_desc: 'percent YoY', data_type: 'percentage', expected_range: [-10, 40], p50: 12, inverse: false, frequency: 'monthly' },
+  // Asset quality (RBI Financial Stability Report, half-yearly; CRIF / TransUnion CIBIL for small-ticket):
+  india_bank_gnpa:            { name: 'Banks Gross NPA Ratio',               section: 'S11', sub_section: 'leverage_india_quality', unit: '%', unit_desc: 'percent of gross advances', data_type: 'percentage', expected_range: [0.5, 12], p50: 3.5, inverse: true, frequency: 'quarterly' },
+  india_retail_unsecured_gnpa:{ name: 'Unsecured Retail GNPA',               section: 'S11', sub_section: 'leverage_india_quality', unit: '%', unit_desc: 'percent of unsecured retail advances', data_type: 'percentage', expected_range: [0.3, 8], p50: 1.8, inverse: true, frequency: 'quarterly' },
+  india_smallticket_delinquency:{ name: 'Small-Ticket Personal Loan 90+ DPD', section: 'S11', sub_section: 'leverage_india_quality', unit: '%', unit_desc: 'percent of small-ticket PL balances 90+ days past due', data_type: 'percentage', expected_range: [1, 15], p50: 4.5, inverse: true, frequency: 'quarterly' },
+  // Trade: the effective US tariff on Indian goods sets the demand side of export working capital.
+  us_tariff_india_pct:        { name: 'US Tariff on Indian Goods',           section: 'S11', sub_section: 'leverage_india_quality', unit: '%', unit_desc: 'effective additional ad valorem tariff on Indian exports to the US', data_type: 'percentage', expected_range: [0, 60], p50: 10, inverse: true, frequency: 'monthly' },
 };
 
 // ── Units that say what the number IS ───────────────────────────────
@@ -235,6 +249,11 @@ const BASIS_BY_DESC = {
   'percent yield':          'yield',
   'credit-deposit ratio %': 'credit ÷ deposits',
   'price-to-income ratio':  'price ÷ income',
+  // Lender's Lens inputs
+  'percent of gross advances':                       'of gross advances',
+  'percent of unsecured retail advances':            'of unsecured retail advances',
+  'percent of small-ticket PL balances 90+ days past due': 'of small-ticket PL balances, 90+ DPD',
+  'effective additional ad valorem tariff on Indian exports to the US': 'ad valorem on exports to US',
 };
 
 /**

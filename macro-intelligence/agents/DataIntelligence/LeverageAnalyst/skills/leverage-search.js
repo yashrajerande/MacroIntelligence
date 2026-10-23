@@ -24,6 +24,26 @@ india_credit_vehicle_yoy, india_credit_creditcard_yoy, india_credit_nbfc_yoy.
 Each key maps to { value (percent YoY growth, number), previous (number, prior month), source (string), vintage (string like "month 2026") }.
 Source: RBI's monthly "Sectoral Deployment of Bank Credit" release.`,
   },
+  {
+    // Lender's Lens (S12): the sub-sectors a wholesale lender actually books
+    // against, plus the asset-quality prints that decide whether fast growth
+    // is healthy or late-cycle. Two sources, one call.
+    query: 'RBI sectoral deployment bank credit latest 2026 micro small medium industry infrastructure commercial real estate YoY; RBI Financial Stability Report gross NPA unsecured retail small-ticket personal loan delinquency 2026; US tariff rate on India imports current',
+    extract: `Return JSON with keys: india_credit_msme_yoy, india_credit_medium_yoy,
+india_credit_infra_yoy, india_credit_cre_yoy, india_bank_gnpa, india_retail_unsecured_gnpa,
+india_smallticket_delinquency, us_tariff_india_pct.
+Definitions:
+- india_credit_msme_yoy: bank credit to "micro and small" industries, percent YoY (RBI sectoral deployment).
+- india_credit_medium_yoy: bank credit to "medium" industries, percent YoY (RBI sectoral deployment).
+- india_credit_infra_yoy: bank credit to "infrastructure", percent YoY (RBI sectoral deployment).
+- india_credit_cre_yoy: bank credit to "commercial real estate", percent YoY (RBI sectoral deployment).
+- india_bank_gnpa: scheduled commercial banks' gross NPA ratio, percent (RBI Financial Stability Report, latest).
+- india_retail_unsecured_gnpa: GNPA ratio of unsecured retail loans, percent (RBI Financial Stability Report).
+- india_smallticket_delinquency: 90+ days past due share of small-ticket personal loans, percent (RBI FSR, CRIF or TransUnion CIBIL).
+- us_tariff_india_pct: the effective additional US tariff rate applied to Indian goods, percent (USTR / White House proclamation).
+Each key maps to { value (number), previous (number, prior print), source (string), vintage (string like "Aug 2026" or "Mar 2026") }.
+Omit any key you cannot source confidently. Never guess.`,
+  },
 ];
 
 export async function fetchLeverageData() {

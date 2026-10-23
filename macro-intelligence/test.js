@@ -23,6 +23,8 @@ import { classifyModelError, isTerminalModelError, retryDelaysFor, preflightMode
 import { writeFileSync as writeTmp, mkdtempSync } from 'fs';
 import { tmpdir } from 'os';
 import { LeverageAnalyzer } from './agents/Analysis/LeverageAnalyzer/analyze.js';
+import { CreditCycleAnalyzer } from './agents/Analysis/CreditCycleAnalyzer/analyze.js';
+import { SECTOR_BOOK, T as LENS_T } from './agents/Analysis/CreditCycleAnalyzer/skills/lending-rules.js';
 import { rankRiskSignals, getStreak, classifyRiskSeverity } from './src/utils/risk-tracker.js';
 import { classifyGlobalRegime } from './src/utils/global-regime.js';
 import { readFileSync } from 'fs';
@@ -55,7 +57,7 @@ function assert(condition, msg) {
 describe('Schema Integrity');
 
 const schemaKeys = Object.keys(INDICATOR_SCHEMA);
-assert(schemaKeys.length === 117, `Expected 117 indicators, got ${schemaKeys.length}`);
+assert(schemaKeys.length === 125, `Expected 125 indicators, got ${schemaKeys.length}`);
 
 const REQUIRED_FIELDS = ['name', 'section', 'sub_section', 'unit', 'unit_desc', 'data_type', 'expected_range', 'p50', 'inverse', 'frequency'];
 const VALID_DATA_TYPES = new Set(['percentage', 'index', 'currency', 'count', 'ratio', 'price']);
@@ -80,10 +82,10 @@ for (const [slug, def] of Object.entries(INDICATOR_SCHEMA)) {
 // ═══════════════════════════════════════════════════════════════════
 describe('Derived Exports');
 
-assert(Object.keys(SLUG_MAP).length === 117, `SLUG_MAP should have 117 entries, got ${Object.keys(SLUG_MAP).length}`);
-assert(Object.keys(HISTORICAL_RANGES).length === 117, `HISTORICAL_RANGES should have 117 entries, got ${Object.keys(HISTORICAL_RANGES).length}`);
-assert(Object.keys(INDICATOR_FRESHNESS).length === 117, `INDICATOR_FRESHNESS should have 117 entries, got ${Object.keys(INDICATOR_FRESHNESS).length}`);
-assert(VALID_SLUGS.length === 117, `VALID_SLUGS should have 117 entries, got ${VALID_SLUGS.length}`);
+assert(Object.keys(SLUG_MAP).length === 125, `SLUG_MAP should have 125 entries, got ${Object.keys(SLUG_MAP).length}`);
+assert(Object.keys(HISTORICAL_RANGES).length === 125, `HISTORICAL_RANGES should have 125 entries, got ${Object.keys(HISTORICAL_RANGES).length}`);
+assert(Object.keys(INDICATOR_FRESHNESS).length === 125, `INDICATOR_FRESHNESS should have 125 entries, got ${Object.keys(INDICATOR_FRESHNESS).length}`);
+assert(VALID_SLUGS.length === 125, `VALID_SLUGS should have 125 entries, got ${VALID_SLUGS.length}`);
 assert(INVERSE_INDICATORS.size > 20, `INVERSE_INDICATORS should have 20+ entries, got ${INVERSE_INDICATORS.size}`);
 
 // Every schema slug must appear in all derived exports
@@ -365,11 +367,14 @@ if (template) {
   }
 
   // Tbody IDs for data tables
-  for (const tbody of ['s2-body', 's3-body', 's4-body', 's5-body', 's6-body', 's7-body', 's8-growth', 's8-inflation', 's8-liquidity', 's8-markets', 's10-residential', 's10-commercial', 's11-countries', 's11-sectoral']) {
+  for (const tbody of ['s2-body', 's3-body', 's4-body', 's5-body', 's6-body', 's7-body', 's8-growth', 's8-inflation', 's8-liquidity', 's8-markets', 's10-residential', 's10-commercial', 's11-countries', 's11-sectoral', 's12-heatmap', 's12-quality']) {
     assert(template.includes(`id="${tbody}"`), `Template missing tbody id="${tbody}"`);
   }
   assert(template.includes('id="s11-leverage-summary"'), `Template missing leverage summary panel id="s11-leverage-summary"`);
   assert(template.includes('id="s11-panel"'), `Template missing S11 leverage panel id="s11-panel"`);
+  for (const id of ['s12-panel', 's12-lens-summary', 's12-lens-tiles', 's12-decision']) {
+    assert(template.includes(`id="${id}"`), `Template missing S12 Lender's Lens element id="${id}"`);
+  }
 
   // No Supabase upload button element (JS function may still exist in script)
   assert(!template.includes('onclick="supabaseUpload()"'), `Template should not contain Supabase upload button element`);
@@ -431,7 +436,7 @@ for (const slug of MUST_BE_QUARTERLY) {
 const dailyCount = Object.values(INDICATOR_FRESHNESS).filter(f => f === 'daily').length;
 const monthlyCount = Object.values(INDICATOR_FRESHNESS).filter(f => f === 'monthly').length;
 const quarterlyCount = Object.values(INDICATOR_FRESHNESS).filter(f => f === 'quarterly').length;
-assert(dailyCount + monthlyCount + quarterlyCount === 117, `Frequency counts should sum to 117, got ${dailyCount + monthlyCount + quarterlyCount}`);
+assert(dailyCount + monthlyCount + quarterlyCount === 125, `Frequency counts should sum to 125, got ${dailyCount + monthlyCount + quarterlyCount}`);
 
 // ═══════════════════════════════════════════════════════════════════
 // 9. VOICE BROADCASTER
@@ -915,7 +920,7 @@ describe('Leverage & Credit Impulse');
 
 // --- Schema/slug-set consistency (single-source-of-truth guard) ---
 const s11Slugs = Object.entries(INDICATOR_SCHEMA).filter(([, s]) => s.section === 'S11').map(([slug]) => slug);
-assert(s11Slugs.length === 20, `Expected 20 S11 leverage indicators, got ${s11Slugs.length}`);
+assert(s11Slugs.length === 28, `Expected 28 S11 leverage indicators (20 Minsky + 8 Lender's Lens inputs), got ${s11Slugs.length}`);
 for (const slug of s11Slugs) {
   assert(LEVERAGE_SLUGS.has(slug), `S11 schema slug "${slug}" missing from LEVERAGE_SLUGS in data-cache.js`);
 }
@@ -1007,6 +1012,63 @@ assert(typeof leverageResult.data.narrative === 'string' && leverageResult.data.
 const indiaHH = leverageResult.data.countries.find(c => c.country === 'India').household;
 assert(indiaHH.levelPct === 90, `India household level percentile must pass through, got ${indiaHH.levelPct}`);
 assert(indiaHH.maturity === 'ready', `India household impulse should mature from the 9-print synthetic series`);
+
+
+// ═══════════════════════════════════════════════════════════════════
+// LENDER'S LENS (CreditCycleAnalyzer — pure code)
+// ═══════════════════════════════════════════════════════════════════
+describe("Lender's Lens / CreditCycleAnalyzer");
+
+// Every sector book must be a real S11 slug so the renderer can look it up.
+for (const s of SECTOR_BOOK) {
+  assert(INDICATOR_SCHEMA[s.slug]?.section === 'S11', `SECTOR_BOOK slug "${s.slug}" must be an S11 schema slug`);
+}
+// Template heatmap rows must match the sector book, in order.
+{
+  const tpl = readFileSync(join(__dirname, 'template', 'macro-intelligence-light.html'), 'utf-8');
+  const tbody = tpl.split('id="s12-heatmap"')[1].split('</tbody>')[0];
+  const rows = (tbody.match(/<td class="c-ind">([^<]+)<\/td>/g) || []).map(r => r.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&'));
+  assert(rows.length === SECTOR_BOOK.length, `S12 heatmap template has ${rows.length} rows, SECTOR_BOOK has ${SECTOR_BOOK.length}`);
+  rows.forEach((label, i) => assert(label === SECTOR_BOOK[i].name, `S12 heatmap row ${i + 1} label "${label}" must equal SECTOR_BOOK name "${SECTOR_BOOK[i].name}"`));
+}
+
+// --- Synthetic end-to-end: a late-cycle, funding-tight, unsecured-stress day ---
+const lensInd = {};
+for (const slug of s11Slugs) lensInd[slug] = { value: INDICATOR_SCHEMA[slug].p50, pct_10y: 50, direction: 'flat' };
+lensInd.bank_credit_growth = { value: 19.4, pct_10y: 92, direction: 'up' };
+lensInd.deposit_growth     = { value: 17.8, pct_10y: 80, direction: 'up' };
+lensInd.cd_ratio           = { value: 83.0, pct_10y: 95, direction: 'up' };
+lensInd.rbi_repo_rate      = { value: 5.5,  pct_10y: 40, direction: 'up' };
+lensInd.india_bank_gnpa            = { value: 1.8, pct_10y: 5,  direction: 'down' };
+lensInd.india_retail_unsecured_gnpa= { value: 1.7, pct_10y: 30, direction: 'flat' };
+lensInd.india_smallticket_delinquency = { value: 6.4, pct_10y: 85, direction: 'up' };
+lensInd.us_tariff_india_pct        = { value: 10,  pct_10y: 60, direction: 'down' };
+lensInd.india_credit_personal_yoy  = { value: 16.9, pct_10y: 60, direction: 'up' };
+lensInd.india_credit_industry_yoy  = { value: 18.2, pct_10y: 90, direction: 'up' };
+lensInd.india_credit_msme_yoy      = { value: 22.6, pct_10y: 70, direction: 'up' };
+lensInd.india_credit_infra_yoy     = { value: 3.0,  pct_10y: 15, direction: 'flat' };
+lensInd.india_credit_cre_yoy       = { value: null, pct_10y: 50, direction: 'flat' };
+const lens = new CreditCycleAnalyzer().analyze(lensInd, { sectors: [{ slug: 'india_credit_creditcard_yoy', impulse: 0.5, flag: 'watch' }] }).data;
+assert(lens.funding.label === 'Tight', `CD 83% + 1.6pp gap under a rate hike should read Tight, got ${lens.funding.label}`);
+assert(lens.quality.label === 'Unsecured stress', `Small-ticket 90+ DPD 6.4% should read Unsecured stress, got ${lens.quality.label}`);
+assert(lens.phase.label === 'Late expansion, funding-constrained', `Decade-high credit growth + tight funding should read late expansion, got ${lens.phase.label}`);
+assert(lens.exports.label === 'Parity or better', `10% US tariff is at ASEAN parity, got ${lens.exports.label}`);
+const byName = Object.fromEntries(lens.heatmap.map(h => [h.name, h]));
+assert(byName['Personal loans (unsecured)'].stance === 'Caution', `Unsecured book under delinquency stress must be Caution, got ${byName['Personal loans (unsecured)'].stance}`);
+assert(byName['Credit cards'].stance === 'Caution', `Ponzi-drift flag must force Caution, got ${byName['Credit cards'].stance}`);
+assert(byName['Industry (large & medium)'].stance === 'Selective', `Secured book at 90th percentile must be Selective (crowded), got ${byName['Industry (large & medium)'].stance}`);
+assert(byName['MSME (micro & small)'].stance === 'Lend', `22.6% at 70th percentile with clean system GNPA must be Lend, got ${byName['MSME (micro & small)'].stance}`);
+assert(byName['Infrastructure'].stance === 'Selective', `3% growth at 15th percentile is weak demand → Selective, got ${byName['Infrastructure'].stance}`);
+assert(byName['Commercial real estate'].stance === 'No data', `Null growth must be No data, never guessed, got ${byName['Commercial real estate'].stance}`);
+assert(lens.counts.no_data === 1, `Exactly one No data book expected, got ${lens.counts.no_data}`);
+assert(/MSME/.test(lens.decision_rule) && /Personal loans/.test(lens.decision_rule), `Decision rule must name a Lend book and a Caution book: ${lens.decision_rule}`);
+assert(typeof lens.narrative === 'string' && lens.narrative.includes('83') && lens.narrative.includes('6.4'), `Narrative must carry the CD ratio and delinquency numbers`);
+
+// --- Empty-input path never throws and reports No data honestly ---
+const emptyLens = new CreditCycleAnalyzer().analyze({}, null).data;
+assert(emptyLens.funding.label === 'No data' && emptyLens.quality.label === 'No data', `Empty inputs must read No data on both gauges`);
+assert(emptyLens.heatmap.every(h => h.stance === 'No data'), `Empty inputs must leave every sector book as No data`);
+assert(/Insufficient data/.test(emptyLens.decision_rule), `Empty inputs must yield the insufficient-data decision rule`);
 
 // ═══════════════════════════════════════════════════════════════════
 // TOP RISK SELECTION (severity ranking, not array position)

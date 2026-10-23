@@ -22,6 +22,8 @@ GitHub Actions (06:00 IST daily)
 │    RegimeClassifier ──── Haiku (6 dimensions)    │
 │    SignalDetector ─────── Sonnet (7 signals)     │
 │    ScenarioPlanner ───── Haiku (3 scenarios)     │
+│    LeverageAnalyzer ──── Code (Minsky read)      │
+│    CreditCycleAnalyzer ─ Code (Lender's Lens)    │
 │                                                  │
 │  Step 3: Editorial                               │
 │    NewsCurator ────────── Haiku + web_search     │
@@ -81,6 +83,7 @@ SKIP_SUPABASE=true SKIP_GIT_PUSH=true node agents/CEO/orchestrate.js
 | 3 | **MacroDataAnalyst** | DataIntelligence | 12 structured web searches for India & global macro indicators (CPI, GDP, PMI, GST, FII/DII, etc.) | LLM | Haiku |
 | 4 | **RealEstateAnalyst** | DataIntelligence | Indian residential & commercial real estate data (Anarock, Knight Frank, JLL, RBI) | LLM | Haiku |
 | 4b | **RealEstateSegmentAnalyst** | DataIntelligence | Segmented real estate: ticket-size bands (launch share vs sales share), top-7 cities, NRI vs domestic buyers, office leasing by city/occupier. Weekly fetch, dated history in `output/re-segments-history.json` | LLM | Haiku |
+| 4d | **CreditCycleAnalyzer** | Analysis | Pure code: the Lender's Lens (S12) — cycle phase, funding and asset-quality gauges, export-finance tariff read, and a Lend / Selective / Caution stance per sector book with a one-line numeric reason; deterministic narrative + decision rule. Inputs: S5 credit, S11 sectoral growth + FSR quality prints (LeverageAnalyst search #3), LeverageAnalyzer sector reads | Code only | — |
 | 4c | **RealEstateSegmentAnalyzer** | Analysis | Pure code: supply/demand balance per band, city ranking, NRI direction (rising/falling/flat) from history, commercial ranking; S8 "Segmented View", Supabase `real_estate_segments`, PDF section, writer context | Code only | — |
 | 5 | **RegimeClassifier** | Analysis | Classifies macro regime across 6 dimensions with template-based narratives | Code only | — |
 | 6 | **SignalDetector** | Analysis | Produces 7 signal cards with 10-year percentile scoring for capital allocators | LLM | Haiku |

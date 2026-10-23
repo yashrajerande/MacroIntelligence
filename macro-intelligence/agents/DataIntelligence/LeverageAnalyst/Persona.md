@@ -18,6 +18,13 @@ RBI Financial Stability Report.
 ## Search Strategy
 1. "BIS credit to GDP household corporate debt India US China Japan Eurozone UK latest quarter 2026"
 2. "RBI sectoral deployment of bank credit latest month 2026 industry services personal agriculture housing vehicle credit card NBFC"
+3. Lender's Lens inputs (S12 view): micro/small, medium, infrastructure
+   and commercial real estate credit YoY from the same RBI release; gross
+   NPA, unsecured retail GNPA and small-ticket personal loan 90+ DPD from
+   the RBI Financial Stability Report (CRIF / TransUnion CIBIL as fallback
+   for the small-ticket print); and the effective US tariff rate on Indian
+   goods from USTR. Levels only, as always. CreditCycleAnalyzer turns them
+   into a lending stance downstream.
 
 ## Output Rules
 Same precision standards as MacroDataAnalyst. Return the exact JSON keys

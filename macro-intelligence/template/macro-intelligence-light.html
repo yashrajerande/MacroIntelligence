@@ -724,6 +724,11 @@ html.tv .dt td, html.tv .dt th { padding:14px 0; }
 .seg-tile .v { font-family:var(--display); font-size:1.15rem; font-weight:700; letter-spacing:-0.02em; color:var(--ink-1); line-height:1.1; }
 .seg-tile .s { font-family:var(--body); font-size:0.68rem; color:var(--ink-3); margin-top:4px; line-height:1.4; }
 .seg-tile .v .dir-up { color:#0a8a3a; } .seg-tile .v .dir-down { color:#c62828; } .seg-tile .v .dir-flat { color:#8a6d00; } .seg-tile .v .dir-unk { color:var(--ink-4); }
+/* S12 Lender's Lens stance chips + reason column */
+.lens-chip { display:inline-block; font-family:var(--mono); font-size:0.58rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; padding:3px 8px; border-radius:9px; white-space:nowrap; }
+.lens-lend { background:rgba(10,138,58,0.10); color:#0a8a3a; } .lens-sel { background:rgba(138,109,0,0.12); color:#8a6d00; } .lens-caution { background:rgba(198,40,40,0.10); color:#c62828; } .lens-nodata { background:rgba(0,0,60,0.05); color:var(--ink-4); }
+.dt td.c-reason { font-family:var(--body); font-size:0.66rem; color:var(--ink-3); line-height:1.35; white-space:normal; max-width:420px; }
+.lens-decision { font-family:var(--body); font-size:0.74rem; color:var(--ink-1); background:rgba(26,0,204,0.05); border-left:3px solid var(--accent, #1a00cc); border-radius:6px; padding:8px 12px; margin:8px 0 12px; line-height:1.45; }
 .seg-sowhat h4 { font-family:var(--display); font-size:0.92rem; font-weight:700; margin:0 0 8px; color:var(--ink-1); }
 .seg-sowhat b { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#1a00cc; margin-right:4px; }
 .seg-sowhat ul { list-style:none; margin:0 0 8px; padding:0; }
@@ -1064,6 +1069,7 @@ html.tv #voice-panel { display:none !important; }
   <a class="nav-item" href="#s8-panel"><div class="nav-icon">🏘️</div><div class="nav-label">Realty</div></a>
   <a class="nav-item" href="#s9-panel"><div class="nav-icon">🌍</div><div class="nav-label">Global</div></a>
   <a class="nav-item" href="#s11-panel"><div class="nav-icon">⚖️</div><div class="nav-label">Leverage</div></a>
+  <a class="nav-item" href="#s12-panel"><div class="nav-icon">🏛️</div><div class="nav-label">Lender</div></a>
 </nav>
 
 <!-- ── CANVAS ────────────────────────────────────── -->
@@ -1553,6 +1559,42 @@ html.tv #voice-panel { display:none !important; }
         <tr><td class="c-ind">Bank Credit — Vehicle Loans YoY</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
         <tr><td class="c-ind">Bank Credit — Credit Card YoY</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
         <tr><td class="c-ind">Bank Credit to NBFCs YoY</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <!-- S12 LENDER'S LENS — CreditCycleAnalyzer (pure code). Where the credit
+       cycle is, whether the system can fund more lending, whether fast growth
+       is healthy, and a Lend / Selective / Caution stance per sector book. -->
+  <div class="glass-panel" id="s12-panel">
+    <div class="ph" onclick="togglePanel('s12-panel')"><div class="ph-left"><div class="ph-num">S12</div><div class="ph-flag">🏛️</div><div class="ph-title">Lender&rsquo;s Lens — Credit Cycle &amp; Sector Stance</div></div><div class="ph-right"><div class="ph-chev">▾</div></div></div>
+    <div class="pb">
+      <div class="p-summary" id="s12-lens-summary"><!-- FILL --></div>
+      <div class="seg-tiles" id="s12-lens-tiles"><!-- FILL --></div>
+      <div class="lens-decision" id="s12-decision"><!-- FILL --></div>
+      <div class="sub-lbl">Sector Books — Growth, Decade Percentile, Stance</div>
+      <table class="dt"><thead><tr><th>Sector book</th><th>Growth YoY</th><th>10Y %ile</th><th>Stance</th><th>Why</th></tr></thead>
+      <tbody id="s12-heatmap">
+        <tr><td class="c-ind">Industry (large &amp; medium)</td><td class="c-val"></td><td class="c-pct"></td><td></td><td class="c-reason"></td></tr>
+        <tr><td class="c-ind">MSME (micro &amp; small)</td><td class="c-val"></td><td class="c-pct"></td><td></td><td class="c-reason"></td></tr>
+        <tr><td class="c-ind">Medium industry</td><td class="c-val"></td><td class="c-pct"></td><td></td><td class="c-reason"></td></tr>
+        <tr><td class="c-ind">Infrastructure</td><td class="c-val"></td><td class="c-pct"></td><td></td><td class="c-reason"></td></tr>
+        <tr><td class="c-ind">Commercial real estate</td><td class="c-val"></td><td class="c-pct"></td><td></td><td class="c-reason"></td></tr>
+        <tr><td class="c-ind">Services</td><td class="c-val"></td><td class="c-pct"></td><td></td><td class="c-reason"></td></tr>
+        <tr><td class="c-ind">NBFC on-lending</td><td class="c-val"></td><td class="c-pct"></td><td></td><td class="c-reason"></td></tr>
+        <tr><td class="c-ind">Housing</td><td class="c-val"></td><td class="c-pct"></td><td></td><td class="c-reason"></td></tr>
+        <tr><td class="c-ind">Vehicle</td><td class="c-val"></td><td class="c-pct"></td><td></td><td class="c-reason"></td></tr>
+        <tr><td class="c-ind">Agriculture</td><td class="c-val"></td><td class="c-pct"></td><td></td><td class="c-reason"></td></tr>
+        <tr><td class="c-ind">Personal loans (unsecured)</td><td class="c-val"></td><td class="c-pct"></td><td></td><td class="c-reason"></td></tr>
+        <tr><td class="c-ind">Credit cards</td><td class="c-val"></td><td class="c-pct"></td><td></td><td class="c-reason"></td></tr>
+      </tbody></table>
+      <div class="sub-lbl">Asset Quality &amp; Trade Inputs</div>
+      <table class="dt"><thead><tr><th>Indicator</th><th>Latest</th><th>Previous</th><th>▲▼</th><th>Momentum</th><th>10Y %ile</th></tr></thead>
+      <tbody id="s12-quality">
+        <tr><td class="c-ind">Banks Gross NPA Ratio</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
+        <tr><td class="c-ind">Unsecured Retail GNPA</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
+        <tr><td class="c-ind">Small-Ticket Personal Loan 90+ DPD</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
+        <tr><td class="c-ind">US Tariff on Indian Goods</td><td class="c-val"></td><td class="c-prv"></td><td></td><td class="c-mom"></td><td class="c-pct"></td></tr>
       </tbody></table>
     </div>
   </div>

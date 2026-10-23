@@ -36,6 +36,7 @@ import { RegimeClassifier }       from '../Analysis/RegimeClassifier/classify.js
 import { SignalDetector }         from '../Analysis/SignalDetector/detect.js';
 import { ScenarioPlanner }        from '../Analysis/ScenarioPlanner/plan.js';
 import { LeverageAnalyzer }       from '../Analysis/LeverageAnalyzer/analyze.js';
+import { CreditCycleAnalyzer }    from '../Analysis/CreditCycleAnalyzer/analyze.js';
 import { ExecutiveSummaryWriter } from '../Editorial/ExecutiveSummaryWriter/write.js';
 import { NewsCurator }            from '../Editorial/NewsCurator/curate.js';
 import { DashboardRenderer }      from '../Production/DashboardRenderer/render.js';
@@ -360,6 +361,12 @@ async function run() {
     const leverage = new LeverageAnalyzer().analyze(allIndicatorsForLeverage, dynamicRanges);
     logger.agent('LeverageAnalyzer', leverage.meta);
 
+    // Pure code, no LLM — the Lender's Lens (S12): cycle phase, funding
+    // and asset-quality gauges, and a Lend/Selective/Caution stance per
+    // sector book. Consumes the leverage read above; never throws.
+    const creditCycle = new CreditCycleAnalyzer().analyze(allIndicatorsForLeverage, leverage.data);
+    logger.agent('CreditCycleAnalyzer', creditCycle.meta);
+
     // Pure code, no LLM — supply/demand balance by ticket size, city
     // ranking, NRI direction from the dated history, commercial by city.
     const reSegmentRead = new RealEstateSegmentAnalyzer().analyze(reSegments.data);
@@ -427,7 +434,7 @@ async function run() {
 
     const { html, macroDataObj, outputPath, indexPath } = new DashboardRenderer().render({
       ...allData, regime, signals, scenarios, news, execSummary, costSummary, dynamicRanges, leverage,
-      reSegments: reSegmentRead,
+      reSegments: reSegmentRead, creditCycle,
     });
     logger.agent('DashboardRenderer', { model: 'none', latency_ms: 0, tokens: { input: 0, output: 0 } });
 

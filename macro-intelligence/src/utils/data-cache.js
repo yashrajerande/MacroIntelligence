@@ -39,6 +39,9 @@ export const LEVERAGE_SLUGS = new Set([
   'india_credit_industry_yoy','india_credit_services_yoy','india_credit_personal_yoy',
   'india_credit_agri_yoy','india_credit_housing_yoy','india_credit_vehicle_yoy',
   'india_credit_creditcard_yoy','india_credit_nbfc_yoy',
+  // Lender's Lens inputs (S12 view) — fetched by LeverageAnalyst search #3
+  'india_credit_msme_yoy','india_credit_medium_yoy','india_credit_infra_yoy','india_credit_cre_yoy',
+  'india_bank_gnpa','india_retail_unsecured_gnpa','india_smallticket_delinquency','us_tariff_india_pct',
 ]);
 
 // ── Indian market holidays for 2026 (hardcoded) ────────────────────

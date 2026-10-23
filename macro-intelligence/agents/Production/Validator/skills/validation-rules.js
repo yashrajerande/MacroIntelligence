@@ -403,6 +403,9 @@ export function runAllChecks(html, macroData, expectedDate, dynamicRanges) {
     run.snap_global,   // classifyGlobalRegime narrative
     run.snap_risk,     // Top Risk title
     macroData.leverage?.narrative,  // S11 leverage summary
+    macroData.credit_cycle?.narrative,      // S12 Lender's Lens summary
+    macroData.credit_cycle?.decision_rule,  // S12 decision rule
+    ...((macroData.credit_cycle?.heatmap || []).map(h => h.reason)),
     ...((macroData.regime || []).flatMap(r => [r.metric_summary, r.signal_text, r.badge_label])),
     ...((macroData.signals || []).flatMap(s => [s.title, s.data_text, s.implication, s.pct_note])),
     ...((macroData.executive_summary || []).map(p => p.para_html)),

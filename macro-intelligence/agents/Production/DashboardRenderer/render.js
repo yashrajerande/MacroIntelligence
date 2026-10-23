@@ -97,7 +97,7 @@ export class DashboardRenderer {
     const {
       marketData, macroData, reData, leverageData,
       regime, signals, scenarios, news, execSummary,
-      dateStr, isoDate, dynamicRanges, leverage, reSegments,
+      dateStr, isoDate, dynamicRanges, leverage, reSegments, creditCycle,
     } = allData;
 
     // ── Merge all raw indicators ─────────────────────────────────────
@@ -280,6 +280,8 @@ export class DashboardRenderer {
         segments:                reSegments?.data || null,
       },
       leverage: leverage.data,
+      // Lender's Lens (S12) from CreditCycleAnalyzer — pure code
+      credit_cycle: creditCycle?.data || null,
     };
 
     // ── Fill template slot-IDs ───────────────────────────────────────
@@ -494,6 +496,42 @@ export class DashboardRenderer {
       'india_credit_creditcard_yoy', 'india_credit_nbfc_yoy',
     ]));
     html = fillId(html, 's11-leverage-summary', leverage?.data?.narrative || '');
+
+    // ── S12 Lender's Lens (CreditCycleAnalyzer — pure code) ──────────
+    {
+      const lens = creditCycle?.data || null;
+      const stanceClass = { 'Lend': 'lens-lend', 'Selective': 'lens-sel', 'Caution': 'lens-caution', 'No data': 'lens-nodata' };
+      const gaugeClass = (label) => ({
+        'Comfortable': 'dir-up', 'Clean': 'dir-up', 'Parity or better': 'dir-up', 'Early cycle': 'dir-up', 'Mid cycle': 'dir-up',
+        'Stretched': 'dir-flat', 'Normal': 'dir-flat', 'Disadvantaged': 'dir-flat', 'Expansion': 'dir-flat',
+        'Tight': 'dir-down', 'Unsecured stress': 'dir-down', 'Deteriorating': 'dir-down', 'Penalised': 'dir-down',
+        'Late expansion, funding-constrained': 'dir-down', 'Deleveraging': 'dir-down',
+      }[label] || 'dir-unk');
+      if (lens) {
+        const tiles = [
+          { k: 'Cycle phase',    v: `<span class="${gaugeClass(lens.phase.label)}">${escHtml(lens.phase.label)}</span>`,   s: escHtml(lens.phase.note) },
+          { k: 'Funding',        v: `<span class="${gaugeClass(lens.funding.label)}">${escHtml(lens.funding.label)}</span>`, s: escHtml(lens.funding.note) },
+          { k: 'Asset quality',  v: `<span class="${gaugeClass(lens.quality.label)}">${escHtml(lens.quality.label)}</span>`, s: escHtml(lens.quality.note) },
+          { k: 'Export finance', v: `<span class="${gaugeClass(lens.exports.label)}">${escHtml(lens.exports.label)}</span>`, s: escHtml(lens.exports.note) },
+        ];
+        html = fillId(html, 's12-lens-tiles', tiles.map(t => `<div class="seg-tile"><div class="k">${t.k}</div><div class="v">${t.v}</div><div class="s">${t.s}</div></div>`).join(''));
+        html = fillId(html, 's12-lens-summary', escHtml(lens.narrative || ''));
+        html = fillId(html, 's12-decision', `<strong>Decision rule:</strong> ${escHtml(lens.decision_rule || '')}`);
+        html = fillTbody(html, 's12-heatmap', (lens.heatmap || []).map(h => {
+          const g = h.growth === null ? '—' : `${h.growth}%`;
+          const p = h.pct === null ? '—' : `${h.pct}`;
+          return `<tr><td class="c-ind">${escHtml(h.name)}</td><td class="c-val">${g}</td><td class="c-pct">${p}</td><td><span class="lens-chip ${stanceClass[h.stance] || 'lens-nodata'}">${escHtml(h.stance)}</span></td><td class="c-reason">${escHtml(h.reason)}</td></tr>`;
+        }).join('\n'));
+      } else {
+        html = fillId(html, 's12-lens-tiles', '');
+        html = fillId(html, 's12-lens-summary', 'Lender\'s Lens not computed this run.');
+        html = fillId(html, 's12-decision', '');
+        html = fillTbody(html, 's12-heatmap', '');
+      }
+      html = fillTbody(html, 's12-quality', makeRows([
+        'india_bank_gnpa', 'india_retail_unsecured_gnpa', 'india_smallticket_delinquency', 'us_tariff_india_pct',
+      ]));
+    }
 
     // ── S8 Segmented View: ticket size × city × buyer (founder's work order) ──
     {

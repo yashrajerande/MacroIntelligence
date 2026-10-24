@@ -1,22 +1,6 @@
 {
   "entries": [
     {
-      "date": "24 SEP 2026",
-      "verdict_line": "Fuel inflation at 22.93% YoY — a 95th-percentile print — is the number RBI's 5.25% repo cannot contain, and the rupee at 96.15 is already pricing the failure.",
-      "themes": [
-        "inflation",
-        "currency"
-      ],
-      "slugs": [
-        "rent_mumbai",
-        "rent_bengaluru",
-        "office_absorption",
-        "inr_usd",
-        "retail_mall_vacancy",
-        "fuel_inflation"
-      ]
-    },
-    {
       "date": "26 SEP 2026",
       "verdict_line": "Nikkei at an all-time 66,364 while US 10Y climbs to 5.18% — global equities are pricing perpetual expansion precisely as bond markets price the cost of it.",
       "themes": [],
@@ -422,6 +406,21 @@
         "office_absorption",
         "affordability_index",
         "retail_mall_vacancy"
+      ]
+    },
+    {
+      "date": "25 OCT 2026",
+      "verdict_line": "NFO collections at a 10-year-low ₹998 cr / month while SIP inflows hit a record ₹32,490 cr / month — retail is on autopilot, but institutional conviction has quietly left the building.",
+      "themes": [
+        "flows"
+      ],
+      "slugs": [
+        "rent_bengaluru",
+        "inr_usd",
+        "nat_gas",
+        "us_10y_treasury",
+        "nfo_collections",
+        "sip_inflows"
       ]
     }
   ]

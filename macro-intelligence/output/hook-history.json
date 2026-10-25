@@ -1,18 +1,6 @@
 {
   "entries": [
     {
-      "date": "26 SEP 2026",
-      "verdict_line": "Nikkei at an all-time 66,364 while US 10Y climbs to 5.18% — global equities are pricing perpetual expansion precisely as bond markets price the cost of it.",
-      "themes": [],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "office_absorption",
-        "retail_mall_vacancy"
-      ]
-    },
-    {
       "date": "27 SEP 2026",
       "verdict_line": "Retail mall vacancy at a 11th-percentile 5.7% vacant while office absorption hits a record-low 0th-percentile 4.9 mn sq ft/quarter — India's real estate is bifurcating in ways the REIT market hasn't priced.",
       "themes": [
@@ -421,6 +409,21 @@
         "us_10y_treasury",
         "nfo_collections",
         "sip_inflows"
+      ]
+    },
+    {
+      "date": "26 OCT 2026",
+      "verdict_line": "WTI at $102/bbl and INR at 95.24 — crude hasn't broken, and every rupee of depreciation adds ₹8,500 cr monthly to India's import bill.",
+      "themes": [
+        "currency",
+        "oil"
+      ],
+      "slugs": [
+        "wti_usd",
+        "inr_usd",
+        "us_10y_treasury",
+        "boj_rate",
+        "brent_usd"
       ]
     }
   ]

@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "27 SEP 2026",
-      "verdict_line": "Retail mall vacancy at a 11th-percentile 5.7% vacant while office absorption hits a record-low 0th-percentile 4.9 mn sq ft/quarter — India's real estate is bifurcating in ways the REIT market hasn't priced.",
-      "themes": [
-        "real_estate"
-      ],
-      "slugs": [
-        "office_absorption",
-        "us_10y_treasury",
-        "nat_gas",
-        "retail_mall_vacancy",
-        "copper"
-      ]
-    },
-    {
       "date": "28 SEP 2026",
       "verdict_line": "Mumbai office rents at ₹335/sqft/mo — an all-time 100th-percentile — while absorption sits at a 4th-percentile 11.6 mn sq ft/quarter: the price of space has never been higher, and fewer people are taking it.",
       "themes": [
@@ -424,6 +410,20 @@
         "us_10y_treasury",
         "boj_rate",
         "brent_usd"
+      ]
+    },
+    {
+      "date": "27 OCT 2026",
+      "verdict_line": "Euro Stoxx 50 at a 10-year-high 100th percentile while India VIX climbs to 17.16 — global risk appetite and domestic anxiety are moving in opposite directions.",
+      "themes": [
+        "markets"
+      ],
+      "slugs": [
+        "euro_stoxx50",
+        "india_vix",
+        "us_10y_treasury",
+        "bank_nifty",
+        "fuel_inflation"
       ]
     }
   ]

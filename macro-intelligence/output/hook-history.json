@@ -1,18 +1,6 @@
 {
   "entries": [
     {
-      "date": "30 SEP 2026",
-      "verdict_line": "US 10Y at 5.24% — a 95th-percentile yield — is tightening global financial conditions faster than any central bank communiqué, and India's INR at 96.15 is absorbing the cost.",
-      "themes": [],
-      "slugs": [
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "india_vix",
-        "office_absorption",
-        "inr_usd"
-      ]
-    },
-    {
       "date": "01 OCT 2026",
       "verdict_line": "Euro Stoxx 50 at a 100th-percentile 6,269 while US GDP slows to 2.2% SAAR — European equities are pricing a recovery the underlying data hasn't delivered.",
       "themes": [
@@ -426,6 +414,20 @@
         "nfo_collections",
         "us_pmi_composite",
         "fuel_inflation"
+      ]
+    },
+    {
+      "date": "30 OCT 2026",
+      "verdict_line": "Office absorption at 14.1 mn sq ft / quarter — a 26% surge driven by GCCs, not IT services — while REIT unit prices fall 10–28%; the market is pricing the wrong occupier.",
+      "themes": [
+        "real_estate"
+      ],
+      "slugs": [
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "office_absorption",
+        "retail_mall_vacancy",
+        "nfo_collections"
       ]
     }
   ]

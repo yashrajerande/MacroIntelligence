@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "01 OCT 2026",
-      "verdict_line": "Euro Stoxx 50 at a 100th-percentile 6,269 while US GDP slows to 2.2% SAAR — European equities are pricing a recovery the underlying data hasn't delivered.",
-      "themes": [
-        "gdp_growth"
-      ],
-      "slugs": [
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "office_absorption",
-        "rent_bengaluru",
-        "india_vix"
-      ]
-    },
-    {
       "date": "02 OCT 2026",
       "verdict_line": "Euro Stoxx 50 drops from a 100th-percentile 6,269 to 6,175 as US 10Y hits 5.29% — DM equities finally reading the bond market's script.",
       "themes": [],
@@ -428,6 +414,22 @@
         "office_absorption",
         "retail_mall_vacancy",
         "nfo_collections"
+      ]
+    },
+    {
+      "date": "31 OCT 2026",
+      "verdict_line": "Home loan disbursements at a 10-year-low ₹94,000 cr / quarter while IIP capital goods surges 16.9% YoY — India is building factories, not homes.",
+      "themes": [
+        "gdp_growth",
+        "capex"
+      ],
+      "slugs": [
+        "nikkei225",
+        "euro_stoxx50",
+        "home_loan_disbursements",
+        "us_10y_treasury",
+        "office_absorption",
+        "iip_capgoods"
       ]
     }
   ]

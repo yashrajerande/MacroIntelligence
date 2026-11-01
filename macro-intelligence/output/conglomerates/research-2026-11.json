@@ -1,0 +1,913 @@
+{
+  "data": {
+    "window_start": "2026-10-01",
+    "window_end": "2026-11-01",
+    "findings": [
+      {
+        "group": "Reliance",
+        "window_start": "2026-10-01",
+        "window_end": "2026-11-01",
+        "no_material_movement": true,
+        "moves": [],
+        "context_signals": {
+          "leverage_color": "stable",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 803
+          },
+          "latency_ms": 9906
+        }
+      },
+      {
+        "group": "Tata",
+        "window_start": "2026-10-01",
+        "window_end": "2026-11-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-10-30",
+            "category": "M&A",
+            "headline": "Tata Motors completes Iveco acquisition for €3.43 billion",
+            "value_inr_cr": 35500,
+            "value_usd_mn": 4100,
+            "value_status": "confirmed",
+            "source": "AutoPunditz",
+            "raw_evidence": "Tata Motors acquired 89.42% controlling stake in Iveco Group for approximately €3.43 billion (around ₹35,000–36,000 crore). Settlement completed October 30, 2026."
+          },
+          {
+            "date": "2026-10-29",
+            "category": "leadership",
+            "headline": "Noel Tata to step down from six Tata Group boards on November 12",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "HRK Katha, People Matters, BSE Filing",
+            "raw_evidence": "Noel Tata, chairman of Tata Trusts, will retire from six major Tata Group boards (Trent, Voltas, Tata Investment Corporation, Tata International, Tata Steel, Titan Company) effective November 12, 2026, upon turning 70, per group retirement policy. Will remain Tata Trusts nominee director at Tata Sons."
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "deleveraging",
+          "succession_color": "active",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 1020
+          },
+          "latency_ms": 11442
+        }
+      },
+      {
+        "group": "Adani",
+        "window_start": "2026-10-01",
+        "window_end": "2026-11-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-10-07",
+            "category": "rating",
+            "headline": "Adani Enterprises upgraded to CARE AA; Stable, highest rating in company history",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "CARE Ratings",
+            "raw_evidence": "<cite index=\"29-4\">On 7 October 2026, CARE Ratings upgraded Adani Enterprises to CARE AA; Stable, up one notch from AA-. It is the highest rating the company has held in its history.</cite>"
+          },
+          {
+            "date": "2026-10-08",
+            "category": "capex",
+            "headline": "Adani Group targets $100 billion annual capex by 2033, 72% from internal cash flows",
+            "value_inr_cr": null,
+            "value_usd_mn": 100000,
+            "value_status": "confirmed",
+            "source": "WhalesBook",
+            "raw_evidence": "<cite index=\"5-3\">Adani Group aims to ramp up annual capital spending to $100 billion by 2033, with 72% expected from internal cash flows.</cite>"
+          },
+          {
+            "date": "2026-10-22",
+            "category": "leadership",
+            "headline": "Adani Total Gas: Executive Director transition; Sanjay Pandita appointed effective November 1",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "InvestYwise",
+            "raw_evidence": "<cite index=\"11-6,11-7\">Manglani's resignation as Executive Director due to superannuation, effective October 31, 2026. Sanjay Pandita was appointed as an Additional and Whole-time Director, designated as Executive Director, effective November 1, 2026.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "deleveraging",
+          "succession_color": "active",
+          "regulatory_color": "under-watch"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 1355
+          },
+          "latency_ms": 14526
+        }
+      },
+      {
+        "group": "Aditya Birla",
+        "window_start": "2026-10-01",
+        "window_end": "2026-11-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-10-15",
+            "category": "capex",
+            "headline": "Group announces $30 billion capex plan over three years",
+            "value_inr_cr": 250000,
+            "value_usd_mn": 30000,
+            "value_status": "confirmed",
+            "source": "Bloomberg New Economy Forum / Free Press Journal",
+            "raw_evidence": "<cite index=\"5-2,5-3\">Aditya Birla Group announced a plan to invest up to $30 billion over the next three years, confirmed by Chairman Kumar Mangalam Birla at the Bloomberg New Economy Forum, reflecting the group's intention to aggressively expand its footprint across its diversified business portfolio, which includes metals, cement, retail, chemicals, and financial services.</cite>"
+          },
+          {
+            "date": "2026-10-17",
+            "category": "M&A",
+            "headline": "NCLT Mumbai approves Essel Mining renewable energy transfer to ABRen",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "unconfirmed",
+            "source": "LiveLaw",
+            "raw_evidence": "<cite index=\"37-2,37-3\">NCLT Mumbai allowed a composite scheme under which Essel Mining will transfer its renewable energy undertaking to Aditya Birla Renewables Ltd through a slump sale, with four renewable energy subsidiaries merging into Aditya Birla Renewables.</cite>"
+          },
+          {
+            "date": "2026-10-09",
+            "category": "financing",
+            "headline": "Aditya Birla Real Estate repays bank facilities; rating withdrawn",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "unconfirmed",
+            "source": "CARE Ratings",
+            "raw_evidence": "<cite index=\"20-3\">CareEdge Ratings withdrew the rating assigned to bank facilities of Aditya Birla Real Estate Limited with immediate effect, as the company has repaid.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "levering",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3191,
+            "output": 1386
+          },
+          "latency_ms": 15188
+        }
+      },
+      {
+        "group": "Mahindra",
+        "window_start": "2026-10-01",
+        "window_end": "2026-11-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-10-12",
+            "category": "leadership",
+            "headline": "SML Mahindra CFO Pushkar Patwardhan steps down; Surender Kalra named successor",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "WhalesBook",
+            "raw_evidence": "<cite index=\"13-5,13-6\">SML Mahindra Ltd unveiled a strategic reshuffle of its finance and HR leadership teams, as approved by the Board of Directors on October 12, 2026. Pushkar Patwardhan will vacate his position on October 19, 2026, to pursue interests outside the Mahindra Group.</cite>"
+          },
+          {
+            "date": "2026-10-12",
+            "category": "leadership",
+            "headline": "SML Mahindra appoints Ashudeep Saddi as Chief Human Resources Officer",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "WhalesBook",
+            "raw_evidence": "<cite index=\"13-3\">Ashudeep Saddi has been named the new Chief Human Resources Officer, effective October 19, 2026.</cite>"
+          },
+          {
+            "date": "2026-10-24",
+            "category": "leadership",
+            "headline": "Kotak Mahindra Bank appoints Anup Kumar Saha as new MD & CEO effective January 1, 2027",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "WhalesBook",
+            "raw_evidence": "<cite index=\"17-1,17-2\">Kotak Mahindra Bank confirmed a significant leadership transition following a board meeting held on October 24, 2026. The bank has officially named Anup Kumar Saha, currently a Whole-time Director, as its next Managing Director and CEO.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "stable",
+          "succession_color": "active",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3185,
+            "output": 1437
+          },
+          "latency_ms": 15317
+        }
+      },
+      {
+        "group": "L&T",
+        "window_start": "2026-10-01",
+        "window_end": "2026-11-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-10-05",
+            "category": "M&A",
+            "headline": "L&T PT&D wins mega EPC orders in Saudi Arabia, UAE for transmission infrastructure",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "unconfirmed",
+            "source": "L&T Press Release",
+            "raw_evidence": "<cite index=\"1-2\">The Power Transmission & Distribution (PT&D) business vertical of L&T has secured multiple EPC orders in India and abroad, for strengthening power transmission infrastructure and enabling renewable energy evacuation.</cite> <cite index=\"1-4,1-6\">In Saudi Arabia, PT&D has won orders in the 380 kV transmission and substation segments. In the United Arab Emirates, the business has won an order for constructing 132/11 kV substations and associated cabling works.</cite>"
+          },
+          {
+            "date": "2026-10-05",
+            "category": "M&A",
+            "headline": "L&T wins mega contract valued ₹100-150 crore for power transmission and distribution",
+            "value_inr_cr": 12500,
+            "value_usd_mn": null,
+            "value_status": "range",
+            "source": "ScanX Trade",
+            "raw_evidence": "<cite index=\"8-3,8-4,8-5\">Larsen & Toubro has won a mega contract. The contract is valued between ₹100 billion and ₹150 billion. The win falls under the company's highest order-value classification.</cite>"
+          },
+          {
+            "date": "2026-10-21",
+            "category": "M&A",
+            "headline": "L&T wins two government projects covering 70.3 lakh sq ft from CPWD and Andhra Pradesh",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "unconfirmed",
+            "source": "Ad-Hoc News",
+            "raw_evidence": "<cite index=\"9-1,9-7,9-8\">Larsen & Toubro secured two projects covering 32.8 lakh and 37.5 lakh square feet on October 21, 2026. Larsen & Toubro (INE018A01030) secured two government projects on October 21, 2026, with sites covering 32.8 lakh and 37.5 lakh square feet. The orders came from the Central Public Works Department and the Government of Andhra Pradesh.</cite>"
+          },
+          {
+            "date": "2026-10-25",
+            "category": "rating",
+            "headline": "UBS downgrades L&T from Buy to Neutral; cuts price target from ₹4,400 to ₹4,000",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "News Minimalist",
+            "raw_evidence": "<cite index=\"21-2,21-3\">Larsen & Toubro (L&T) shares have been downgraded again, this time by UBS, which changed its rating from \"buy\" to \"neutral\" on October 25. UBS also lowered its price target for the stock from ₹4,400 to ₹4,000.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "stable",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 1452
+          },
+          "latency_ms": 15935
+        }
+      },
+      {
+        "group": "Bharti",
+        "window_start": "2026-10-01",
+        "window_end": "2026-11-01",
+        "no_material_movement": true,
+        "moves": [],
+        "context_signals": {
+          "leverage_color": "deleveraging",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 617
+          },
+          "latency_ms": 7931
+        }
+      },
+      {
+        "group": "JSW",
+        "window_start": "2026-10-01",
+        "window_end": "2026-11-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-10-23",
+            "category": "capex",
+            "headline": "JSW Energy FY27 capex plan: ₹22,000 crore for 3 GW capacity expansion",
+            "value_inr_cr": 22000,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "WhalesBook / JSW Energy",
+            "raw_evidence": "<cite index=\"3-2,3-7\">JSW Energy is accelerating its expansion with a Rs 22,000 crore capital spend in FY27, aiming to add 3 GW to its portfolio and reach 30 GW of total capacity by 2030.</cite>"
+          },
+          {
+            "date": "2026-10-23",
+            "category": "capex",
+            "headline": "JSW JFE Steel 5 MTPA expansion approved; capex ₹16,150 crore for Utkal Phase-II",
+            "value_inr_cr": 16150,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "JSW Steel Q2 FY27 Press Release",
+            "raw_evidence": "<cite index=\"6-4,6-5\">Phase-II of 5 MTPA at the JSW Utkal facility in Odisha, with a capital outlay of ₹16,150 crores and targeted for commissioning by Q1 FY31, will add 5 MTPA of steelmaking capacity.</cite>"
+          },
+          {
+            "date": "2026-10-23",
+            "category": "capex",
+            "headline": "JSW JFE Steel joint venture 5 MTPA expansion approved for Sambalpur",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "unconfirmed",
+            "source": "JFE Steel / JSW Steel",
+            "raw_evidence": "<cite index=\"30-1,30-2\">JFE Steel and JSW Steel decided on October 23, 2026, to make capital investments to expand production capacity at the Sambalpur steelworks in Odisha, increasing crude steel production capacity from 4.5 million tonnes to 9.5 million tonnes.</cite>"
+          },
+          {
+            "date": "2026-10-06",
+            "category": "regulatory",
+            "headline": "CCI approves JSW Steel amalgamation of BMM Ispat; internal restructuring cleared",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Competition Commission of India",
+            "raw_evidence": "<cite index=\"29-2,29-3\">On 6 October 2026, the Competition Commission of India (CCI) announced that it had approved a proposed combination relating to the internal restructuring of the JSW Group, involving JSW Steel Limited, JSW Projects Limited and BMM Ispat Limited, consolidating the group's existing majority interest in BMM into full ownership by amalgamating BMM into JSW Steel.</cite>"
+          },
+          {
+            "date": "2026-10-31",
+            "category": "regulatory",
+            "headline": "JSW Steel Piombino Steel amalgamation effective; NCLT order filed with Registrar",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "JSW Steel / NCLT Mumbai",
+            "raw_evidence": "<cite index=\"32-2,32-3\">JSW Steel Limited completed the amalgamation of Piombino Steel Limited on October 31, 2026, after both companies filed the National Company Law Tribunal order with the Registrar of Companies, Mumbai-I.</cite>"
+          },
+          {
+            "date": "2026-10-24",
+            "category": "rating",
+            "headline": "ICRA assigns [ICRA]A(Stable)/A2+ to three JSW Energy renewable subsidiaries",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "ICRA Limited",
+            "raw_evidence": "<cite index=\"24-1,24-5\">ICRA Limited issued its rating releases on 23 October 2026, assigning [ICRA]A(Stable) for long-term bank facilities and [ICRA]A2+ for short-term facilities to JSW Renew Energy Thirty Seven Limited, JSW Renew Energy Thirty Eight Limited, and JSW Green Energy Nineteen Limited.</cite>"
+          },
+          {
+            "date": "2026-10-13",
+            "category": "rating",
+            "headline": "CARE assigns CARE A+; Stable to seven O2 Renewable Energy JSW subsidiaries",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "CARE Ratings Limited",
+            "raw_evidence": "<cite index=\"26-1,26-5\">CARE Ratings Limited assigned CARE A+; Stable to the long-term bank facilities of seven O2 Renewable Energy step-down subsidiaries of JSW Energy, with rating releases dated 12 October 2026.</cite>"
+          },
+          {
+            "date": "2026-10-05",
+            "category": "rating",
+            "headline": "CARE reaffirms JSW Infrastructure issuer rating at CARE AA+; Stable",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "CARE Ratings Limited",
+            "raw_evidence": "<cite index=\"25-5,25-6\">JSW Infrastructure Limited disclosed on 5 October 2026, via a Regulation 30 filing, that CARE Ratings Limited has reaffirmed its Issuer Rating at CARE AA+; Stable and reaffirmed or assigned ratings across multiple bank facilities.</cite>"
+          },
+          {
+            "date": "2026-10-09",
+            "category": "rating",
+            "headline": "India Ratings affirms JSW Renew Energy at IND A+/Stable for long-term facilities",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "India Ratings and Research",
+            "raw_evidence": "<cite index=\"27-4\">India Ratings and Research (Ind-Ra) has affirmed the credit rating of JSW Renew Energy Limited at IND A+/Stable for long-term bank loan facilities and IND A1 for short-term facilities.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "stable",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3181,
+            "output": 2158
+          },
+          "latency_ms": 19388
+        }
+      },
+      {
+        "group": "Bajaj",
+        "window_start": "2026-10-01",
+        "window_end": "2026-11-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-10-01",
+            "category": "financing",
+            "headline": "Bajaj Finance approves ₹17,500 cr capital raise via QIP and warrants",
+            "value_inr_cr": 17500,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Business Standard, CNBC TV18, ANI",
+            "raw_evidence": "Bajaj Finance board approved capital plan of ₹175.0 billion (₹17,500 cr) comprising ₹117.0 billion qualified institutional placement and ₹58.0 billion preferential warrants subscribed by parent Bajaj Finserv, subject to shareholder approval at EGM scheduled November 2, 2026."
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "levering",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 841
+          },
+          "latency_ms": 9990
+        }
+      },
+      {
+        "group": "Vedanta",
+        "window_start": "2026-10-01",
+        "window_end": "2026-11-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-10-01",
+            "category": "leadership",
+            "headline": "Shareholders approve CEO Arun Misra re-appointment and ESOP schemes",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "BSE/NSE filings",
+            "raw_evidence": "<cite index=\"13-3\">Vedanta Limited shareholders have greenlit two major employee stock incentive schemes, ESOS 2026 and ESPP 2026, alongside the re-appointment of CEO Arun Misra</cite> via postal ballot on October 1, 2026."
+          },
+          {
+            "date": "2026-10-16",
+            "category": "rating",
+            "headline": "CRISIL reaffirms Vedanta at AA+/Stable; bank facilities reduced to ₹31,876 cr",
+            "value_inr_cr": 31876,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "CRISIL",
+            "raw_evidence": "<cite index=\"19-1,19-2\">Vedanta Limited Ratings reaffirmed at 'Crisil AA+/Stable/Crisil A1+' with Total Bank Loan Facilities Rated Rs.31876 Crore (Reduced from Rs.57342 Crore)</cite> on October 16, 2026."
+          },
+          {
+            "date": "2026-10-26",
+            "category": "capex",
+            "headline": "Vedanta announces $25 billion capex over 3 years; shift to professional management",
+            "value_inr_cr": 206250,
+            "value_usd_mn": 25000,
+            "value_status": "confirmed",
+            "source": "WhalesBook",
+            "raw_evidence": "<cite index=\"3-6,3-8\">Vedanta Group is moving to a professional management model and plans to invest $25 billion over the next three years to boost production</cite>, announced October 26, 2026."
+          },
+          {
+            "date": "2026-10-28",
+            "category": "leadership",
+            "headline": "Vedanta Iron & Steel iron ore CEO Anamika Jha resigns",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "BSE regulatory filing",
+            "raw_evidence": "<cite index=\"14-1,14-2\">Vedanta Iron and Steel Ltd said its Chief Executive Officer for the iron ore business, Anamika Jha, has resigned due to personal reasons. Jha tendered her resignation through a letter dated October 28, 2026</cite>."
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "deleveraging",
+          "succession_color": "active",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 1478
+          },
+          "latency_ms": 14853
+        }
+      },
+      {
+        "group": "Murugappa",
+        "window_start": "2026-10-01",
+        "window_end": "2026-11-01",
+        "no_material_movement": true,
+        "moves": [],
+        "context_signals": {
+          "leverage_color": "unknown",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3185,
+            "output": 611
+          },
+          "latency_ms": 8206
+        }
+      },
+      {
+        "group": "TVS",
+        "window_start": "2026-10-01",
+        "window_end": "2026-11-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-10-07",
+            "category": "regulatory",
+            "headline": "TVS Srichakra NCLT scheme of selective capital reduction becomes effective",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "ScanX",
+            "raw_evidence": "<cite index=\"5-5\">The scheme was sanctioned by the National Company Law Tribunal (NCLT), Division Bench, Court II, Chennai, and became effective on October 7, 2026.</cite>"
+          },
+          {
+            "date": "2026-10-17",
+            "category": "capex",
+            "headline": "TVS Srichakra approves ₹49.20 crore capex for capacity expansion",
+            "value_inr_cr": 49.2,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "ScanX",
+            "raw_evidence": "<cite index=\"5-1,5-2\">TVS Srichakra Limited will invest ₹49.20 crore to enhance manufacturing capacity at its Madurai and Uttarakhand facilities. The approval was granted by the Managing Director on October 17, 2026, under delegated authority.</cite>"
+          },
+          {
+            "date": "2026-10-19",
+            "category": "rating",
+            "headline": "CARE Ratings reaffirms TVS Motor CARE AAA; Stable on long-term facilities",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "CARE Ratings / Equitybulls",
+            "raw_evidence": "<cite index=\"24-1,24-2\">CARE Ratings Limited (CareEdge Ratings), vide communications dated October 19, 2026, has reaffirmed the credit ratings across the company's bank facilities, commercial paper and NCDs.</cite>"
+          },
+          {
+            "date": "2026-10-22",
+            "category": "leadership",
+            "headline": "TVS Motor shareholders approve Peyman Kargar as Director and CEO",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Kalkine / WhalesBook",
+            "raw_evidence": "<cite index=\"19-2\">TVS Motor Company shareholders approved two ordinary resolutions via postal ballot e-voting, appointing Mr Peyman Kargar as Director and as Director and Chief Executive Officer in the rank of whole-time Director for a five-year term effective 27 January 2027.</cite>"
+          },
+          {
+            "date": "2026-10-26",
+            "category": "financing",
+            "headline": "TVS Holdings promoters pledge 8.28% stake for ₹825 crore credit facilities",
+            "value_inr_cr": 825,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "WhalesBook / ScanX",
+            "raw_evidence": "<cite index=\"4-6,4-7\">Promoters of TVS Holdings Ltd, specifically the VS Trust and Srinivasan Trust, have created a formal encumbrance on 1,675,800 equity shares of the company. This action was taken on 26 October 2026 to secure credit facilities totaling Rs 825 crore from JM Financial Products Ltd and JM Financial Credit Solutions Ltd.</cite>"
+          },
+          {
+            "date": "2026-10-28",
+            "category": "M&A",
+            "headline": "TVS Motor approves demerger of consumer finance business into separate entity",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "ScanX",
+            "raw_evidence": "<cite index=\"7-4,7-5\">TVS Holdings Limited announced that its subsidiary, TVS Motor Company, has approved a Composite Scheme of Arrangement to demerge its consumer finance and related business undertaking. The primary objective of the demerger is to create focused platforms for the automotive and financial services businesses.</cite>"
+          },
+          {
+            "date": "2026-10-28",
+            "category": "financing",
+            "headline": "TSF Investments divests 3.74% stake in TVS Holdings to promoter group",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "WhalesBook",
+            "raw_evidence": "<cite index=\"2-4,2-5\">TSF Investments has approved the sale of its entire 3.74% stake in TVS Holdings, involving 755,682 shares. This divestment, expected to be completed by November 2, 2026, is part of a strategy to realign its investment portfolio.</cite>"
+          },
+          {
+            "date": "2026-10-29",
+            "category": "rating",
+            "headline": "MarketsMOJO downgrades TVS Holdings from Hold to Sell; quality grade downgraded",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "MarketsMOJO",
+            "raw_evidence": "<cite index=\"20-3,20-4\">TVS Holdings' overall Mojo Score stands at 34.0, with a recent downgrade from Hold to Sell on 29 Oct 2026.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "levering",
+          "succession_color": "active",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3181,
+            "output": 2154
+          },
+          "latency_ms": 22039
+        }
+      },
+      {
+        "group": "Sundaram",
+        "window_start": "2026-10-01",
+        "window_end": "2026-11-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-10-23",
+            "category": "financing",
+            "headline": "Sundaram Finance plans ₹1,250 cr four-year zero-coupon bond issuance",
+            "value_inr_cr": 1250,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Reuters / Stockopedia",
+            "raw_evidence": "Sundaram Finance seeking funding through planned four-year zero-coupon bond issue; bids invited October 23, 2026"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "levering",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 739
+          },
+          "latency_ms": 8562
+        }
+      },
+      {
+        "group": "Godrej",
+        "window_start": "2026-10-01",
+        "window_end": "2026-11-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-10-14",
+            "category": "financing",
+            "headline": "ICRA assigns AA+ rating to ₹1,500 cr NCD programme",
+            "value_inr_cr": 1500,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "ICRA / AD HOC News",
+            "raw_evidence": "Godrej Industries disclosed on October 14, 2026, that ICRA had reaffirmed its ratings and assigned an AA+ (Stable) rating to a fresh non-convertible debenture programme of Rs. 1,500 crore."
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "stable",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 760
+          },
+          "latency_ms": 9276
+        }
+      },
+      {
+        "group": "Hero",
+        "window_start": "2026-10-01",
+        "window_end": "2026-11-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-10-05",
+            "category": "M&A",
+            "headline": "Sumitomo Corp acquires 49% stake in HFE 500 MW renewable project",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "unconfirmed",
+            "source": "Business Standard",
+            "raw_evidence": "Sumitomo Corp to acquire 49% stake in HFE's 500 MW Karnataka project combining wind and solar power with large-scale battery energy storage; Hero Future Energies retains 51%"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "deleveraging",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3179,
+            "output": 805
+          },
+          "latency_ms": 9812
+        }
+      },
+      {
+        "group": "Hinduja",
+        "window_start": "2026-10-01",
+        "window_end": "2026-11-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-10-08",
+            "category": "leadership",
+            "headline": "Hinduja Tech appoints Faiz Ahmad as CEO; Kumar Prabhas retires",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "SMEStreet, MediaBrief",
+            "raw_evidence": "<cite index=\"13-2,13-3\">Hinduja Tech Limited announced the appointment of Faiz Ahmad as Chief Executive Officer, effective November 1, 2026, following the retirement of current CEO Kumar Prabhas from his role as Chief Executive Officer, effective October 31, 2026</cite>."
+          },
+          {
+            "date": "2026-10-30",
+            "category": "leadership",
+            "headline": "Hinduja Housing Finance appoints Vivek Kannan as CEO; Sachin Pillai steps down",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Exchange4Media, Free Press Journal, SMEStreet",
+            "raw_evidence": "<cite index=\"10-1,10-2\">Hinduja Housing Finance Limited appointed Vivek Kannan as Chief Executive Officer, effective October 30, 2026, succeeding Sachin Pillai, who stepped down as Managing Director on October 29, 2026, but will remain on the Board as a Non-Executive Director</cite>."
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "unknown",
+          "succession_color": "active",
+          "regulatory_color": "unknown"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 839
+          },
+          "latency_ms": 9395
+        }
+      },
+      {
+        "group": "RPG",
+        "window_start": "2026-10-01",
+        "window_end": "2026-11-01",
+        "no_material_movement": true,
+        "moves": [],
+        "context_signals": {
+          "leverage_color": "unknown",
+          "succession_color": "unknown",
+          "regulatory_color": "unknown"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3181,
+            "output": 630
+          },
+          "latency_ms": 7780
+        }
+      },
+      {
+        "group": "Shapoorji Pallonji",
+        "window_start": "2026-10-01",
+        "window_end": "2026-11-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-10-29",
+            "category": "financing",
+            "headline": "SP Group seeks $150-200M private credit to repay Porteast debt",
+            "value_inr_cr": 1250,
+            "value_usd_mn": 175,
+            "value_status": "range",
+            "source": "Business Standard, Bloomberg",
+            "raw_evidence": "<cite index=\"1-4\">The Indian conglomerate plans to raise $150 mn-$200 mn through rupee bonds issued by its Eqyizen Investment unit, with about half the proceeds earmarked to repay creditors of Porteast Investment</cite>. <cite index=\"1-6\">The group is seeking to complete its new financing by mid-November</cite>."
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "levering",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3193,
+            "output": 966
+          },
+          "latency_ms": 11875
+        }
+      },
+      {
+        "group": "Essar",
+        "window_start": "2026-10-01",
+        "window_end": "2026-11-01",
+        "no_material_movement": true,
+        "moves": [],
+        "context_signals": {
+          "leverage_color": "unknown",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3183,
+            "output": 704
+          },
+          "latency_ms": 9143
+        }
+      },
+      {
+        "group": "Welspun",
+        "window_start": "2026-10-01",
+        "window_end": "2026-11-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-10-31",
+            "category": "capex",
+            "headline": "Board approves ₹2,280 crore capex for US and Jordan pipe expansion",
+            "value_inr_cr": 2280,
+            "value_usd_mn": 240,
+            "value_status": "confirmed",
+            "source": "Chemical Industry Digest, Groww",
+            "raw_evidence": "<cite index=\"4-4,4-6,4-7\">Welspun Corp Ltd approved investments of up to ₹2,280 crore to expand its steel pipe manufacturing operations in the US and Jordan. The company will invest up to ₹1,093 crore to expand spiral pipe manufacturing capacity at its existing facility in Little Rock, Arkansas, US. Additionally, the company will invest approximately ₹1,188 crore, in partnership with Perma-Pipe, to establish pipe manufacturing and coating facilities in Jordan.</cite>"
+          },
+          {
+            "date": "2026-10-23",
+            "category": "M&A",
+            "headline": "Welspun Tubular LLC secures ₹5,500 crore US natural gas pipeline order",
+            "value_inr_cr": 5500,
+            "value_usd_mn": 580,
+            "value_status": "confirmed",
+            "source": "Investywise, Equity Bulls, Welspun Corp disclosures",
+            "raw_evidence": "<cite index=\"32-3,32-5\">Welspun Corp Limited announced a significant order win for its US subsidiary, Welspun Tubular LLC. This order from a prominent midstream company is valued at approximately ₹5,500 crore.</cite> <cite index=\"32-4\">This boosts the company's global order book to a record USD 5.25 billion, or approximately ₹50,000 crore.</cite>"
+          },
+          {
+            "date": "2026-10-30",
+            "category": "financing",
+            "headline": "Q2 FY27 results: Welspun Corp maintains net cash position of ₹3,887 crore",
+            "value_inr_cr": 3887,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "GuruFocus, Groww",
+            "raw_evidence": "<cite index=\"1-3,1-4,1-5\">Welspun Corp Ltd maintains a net cash position of Rs. 3,887 crore despite incurring capex of ~Rs. 1,500 crore in H1 FY27, with annualized ROCE of 22.7%.</cite>"
+          },
+          {
+            "date": "2026-10-19",
+            "category": "regulatory",
+            "headline": "Welspun Enterprises downgraded to Sell by MarketsMOJO on technical deterioration",
+            "value_inr_cr": null,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "MarketsMOJO",
+            "raw_evidence": "<cite index=\"26-4\">Welspun Enterprises Ltd has seen its investment rating downgraded from Hold to Sell by MarketsMojo as of 19 Oct 2026.</cite>"
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "deleveraging",
+          "succession_color": "settled",
+          "regulatory_color": "under-watch"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3185,
+            "output": 1609
+          },
+          "latency_ms": 16034
+        }
+      },
+      {
+        "group": "Piramal",
+        "window_start": "2026-10-01",
+        "window_end": "2026-11-01",
+        "no_material_movement": false,
+        "moves": [
+          {
+            "date": "2026-10-19",
+            "category": "financing",
+            "headline": "Piramal Finance completes ₹3,850 crore capital raise via QIP and promoter warrants",
+            "value_inr_cr": 3850,
+            "value_usd_mn": null,
+            "value_status": "confirmed",
+            "source": "Kotak Neo, BSE filing",
+            "raw_evidence": "Piramal Finance raised ₹3,850 crore through a qualified institutional placement (QIP) of ₹2,100 crore and a preferential allotment of ₹1,750 crore in warrants to promoter group, disclosed in Q2 FY27 results on October 19, 2026."
+          }
+        ],
+        "context_signals": {
+          "leverage_color": "deleveraging",
+          "succession_color": "settled",
+          "regulatory_color": "clean"
+        },
+        "_meta": {
+          "tokens": {
+            "input": 3185,
+            "output": 796
+          },
+          "latency_ms": 9340
+        }
+      }
+    ]
+  },
+  "meta": {
+    "agent": "ResearchAnalyst",
+    "model": "claude-haiku-4-5-20251001",
+    "latency_ms": 255940,
+    "tokens": {
+      "input": 66859,
+      "output": 23160
+    },
+    "groups_with_moves": 16
+  }
+}

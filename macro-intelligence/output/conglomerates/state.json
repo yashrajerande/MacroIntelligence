@@ -1,110 +1,95 @@
 {
   "cycle": {
-    "cycleLabel": "October 2026",
-    "isoMonth": "2026-10",
-    "windowStart": "2026-09-01",
-    "windowEnd": "2026-10-01",
-    "runDate": "2026-10-01"
+    "cycleLabel": "November 2026",
+    "isoMonth": "2026-11",
+    "windowStart": "2026-10-01",
+    "windowEnd": "2026-11-01",
+    "runDate": "2026-11-01"
   },
   "data": {
-    "cycle_label": "October 2026",
-    "window_start": "2026-09-01",
-    "window_end": "2026-10-01",
+    "cycle_label": "November 2026",
+    "window_start": "2026-10-01",
+    "window_end": "2026-11-01",
     "moves": [
       {
         "group": "Tata",
-        "move": "Chandrasekaran reappointed for third five-year term; RBI rejects NBFC upper-layer surrender; TCS subsidiary acquires 264 acres for 1 GW AI data centre at ₹70,000 crore capex",
-        "interpretation": "Chandrasekaran continuity removes the single largest succession overhang in Indian corporate governance. The RBI rejection is a constraint, not a crisis — Tata Sons retains listing exposure but the capital structure is manageable. The ₹70,000 crore AI data centre is the most consequential single infrastructure bet in this cycle across the entire universe; it signals TCS is moving from services to infrastructure ownership, a structural shift in the group's earnings mix."
+        "move": "Tata Motors completes Iveco acquisition for €3.43 billion (₹35,500 cr); Noel Tata announces departure from six group boards effective November 12.",
+        "interpretation": "The Iveco deal is the largest overseas commercial vehicle acquisition in Tata Motors history and extends the group's European manufacturing footprint materially. The Noel Tata board exit is the more consequential signal: it compresses the family's direct oversight layer across six entities simultaneously, raising succession-sequencing risk at a moment when the group is digesting a multi-billion-dollar integration."
       },
       {
         "group": "Adani",
-        "move": "Seven SEBI settlement orders across shareholding and disclosure violations; aggregate penalty under ₹2 crore; Karan Adani and CFO B. Ravi personally settle disclosure violations",
-        "interpretation": "The settlements close the SEBI chapter at negligible financial cost. The signal is regulatory normalisation, not exoneration — the violations were real but the penalty quantum confirms SEBI treated these as procedural rather than structural. Trust score improves marginally but remains the group's weakest dimension. The personal settlement by Karan Adani is notable: it confirms succession-track positioning while simultaneously creating a governance footnote."
+        "move": "CARE upgrades Adani Enterprises to AA; Stable — highest rating in company history. Group announces $100 billion annual capex target by 2033, with 72% funded from internal cash flows. Adani Total Gas appoints Sanjay Pandita as Executive Director effective November 1.",
+        "interpretation": "The CARE AA upgrade is a structural credibility milestone, not a routine notch — it signals that post-Hindenburg balance sheet repair has been accepted by at least one major domestic rating agency. The $100 billion annual capex ambition by 2033 is extraordinary in scale; the 72% internal-funding claim is the load-bearing assertion and must be tracked against actual FCF generation each year. Pandita's appointment is routine succession at a subsidiary level."
       },
       {
         "group": "Aditya Birla",
-        "move": "Secures ₹24,000 crore acquisition loan for Shell renewable assets",
-        "interpretation": "This is the largest single financing event in the group's recent history. The ability to raise ₹24,000 crore for a single renewable acquisition signals strong lender confidence and confirms the group is executing its energy transition pivot at scale. Capital deployment aggression score rises. The question is whether the balance sheet can absorb this alongside existing telecom and metals leverage."
+        "move": "$30 billion capex plan over three years announced. NCLT Mumbai approves Essel Mining renewable energy transfer to ABRen. Aditya Birla Real Estate repays bank facilities; rating withdrawn.",
+        "interpretation": "The $30 billion capex commitment is the group's most aggressive capital deployment signal in a decade, spanning metals, cement, financial services, and renewables. The ABRen transfer consolidates renewable assets under a dedicated vehicle — a structural move that positions the group for green financing. The real estate facility repayment and rating withdrawal is balance-sheet hygiene, not distress."
       },
       {
         "group": "Mahindra",
-        "move": "Shveta Arya appointed Group Chief Strategy Officer; ICRA reaffirms AAA/A1+ on ₹1,150 crore instruments",
-        "interpretation": "A Group CSO appointment at this level is a structural signal — Mahindra is professionalising the strategy function, likely in response to the complexity of managing EVs, farm equipment, and financial services simultaneously. AAA reaffirmation confirms balance sheet discipline is holding."
+        "move": "SML Mahindra CFO Pushkar Patwardhan replaced by Surender Kalra; Ashudeep Saddi appointed CHRO at SML Mahindra. Kotak Mahindra Bank appoints Anup Kumar Saha as MD & CEO effective January 1, 2027.",
+        "interpretation": "The Kotak MD appointment is the dominant signal: Saha's selection resolves the leadership vacuum at India's fourth-largest private bank, removing a material overhang. SML Mahindra's dual leadership changes at a subsidiary level are operationally relevant but not group-defining."
       },
       {
         "group": "L&T",
-        "move": "Wins ₹797 crore ammonia plant revamp from Rashtriya Chemicals; extends Hyderabad Metro stake disposal deadline to December 31, 2026; CFO transition with P. Ramakrishnan appointment; board refreshed with Vijay Sankar",
-        "interpretation": "The ammonia contract is routine order flow, not a strategic signal. The Metro disposal extension is the material item — this is a disposal that has now been extended, and the market will begin pricing execution credibility risk on the divestment programme. The CFO transition to P. Ramakrishnan is orderly, with no indicated disruption to the finance function. Board refresh with independent directors is governance-positive."
-      },
-      {
-        "group": "Bharti",
-        "move": "TRAI imposes ₹1,10,000 crore financial disincentive for service-quality non-compliance; MarketsMOJO downgrades to Sell",
-        "interpretation": "The TRAI disincentive quantum — ₹1,10,000 crore — is extraordinary and almost certainly a negotiating instrument rather than a collectible penalty, but it creates regulatory overhang and signals deteriorating regulator-operator relations. Combined with a sell-side downgrade, this is the most negative single-group event in the cycle. Trust and Access scores both move down."
+        "move": "PT&D wins mega EPC orders in Saudi Arabia and UAE for transmission infrastructure. Wins two CPWD/Andhra Pradesh government projects covering 70.3 lakh sq ft. UBS downgrades from Buy to Neutral, cuts price target from ₹4,400 to ₹4,000.",
+        "interpretation": "The Middle East EPC wins extend L&T's international order book in a high-margin segment. The UBS downgrade — cutting price target by roughly 9% — reflects valuation concern rather than execution failure, but it is the first major sell-side downgrade in this cycle and signals that the market is questioning whether the order-book premium is fully earned."
       },
       {
         "group": "JSW",
-        "move": "JSW Infrastructure completes NCR Rail acquisition with ₹16,500 crore capex plan through 2028; JSW Cement approves Shiva Cement amalgamation; ₹2,850 crore bond raise planned; Volkswagen partnership talks; Partha Ghosh joins as Group Head of Communications",
-        "interpretation": "JSW is the most active capital deployer in this cycle after Tata. The NCR Rail acquisition extends the infrastructure platform beyond ports. The Shiva Cement amalgamation simplifies the cement structure. The Volkswagen talks, if they close, would be the most significant global industrial partnership for any Indian conglomerate this cycle. Capital deployment aggression is at a cycle high for JSW."
+        "move": "JSW Energy announces ₹22,000 crore FY27 capex for 3 GW capacity expansion. JSW JFE Steel approves 5 MTPA Utkal Phase-II expansion at ₹16,150 crore. CCI clears BMM Ispat amalgamation; NCLT order for Piombino Steel amalgamation filed. ICRA assigns A(Stable)/A2+ to three JSW Energy renewable subsidiaries.",
+        "interpretation": "JSW is running simultaneous large-ticket capex across energy and steel — ₹38,150 crore committed in a single month. The regulatory clearances for BMM Ispat and Piombino consolidate the steel perimeter cleanly. ICRA's rating on the renewable subsidiaries enables project-level debt at competitive rates. The risk is execution bandwidth: two major capacity expansions in parallel demand management depth the group has not yet demonstrated at this scale."
       },
       {
         "group": "Bajaj",
-        "move": "Bajaj Finance board considers QIP or preferential issue capital raise",
-        "interpretation": "A capital raise at Bajaj Finance signals the NBFC is approaching regulatory capital thresholds or is pre-funding a growth acceleration. Given Bajaj Finance's track record of deploying capital efficiently, this is a positive signal on growth ambition, not a distress flag."
+        "move": "Bajaj Finance approves ₹17,500 crore capital raise via QIP and warrants.",
+        "interpretation": "A pre-emptive capital raise of this size — before any visible stress — is classic Bajaj Finance discipline: raise when markets are open, not when you need it. It extends the group's lending runway and signals confidence in loan book growth acceleration."
       },
       {
         "group": "Vedanta",
-        "move": "Promoter encumbers 54.72% equity shares for US$100 million bond",
-        "interpretation": "Promoter-level pledge at this scale — covering the majority of the promoter's equity — is a structural red flag. This is not routine financing; it is a sign that the Anil Agarwal holding structure continues to rely on asset-backed borrowing at the promoter level. Debt Wall score rises."
-      },
-      {
-        "group": "Murugappa",
-        "move": "M. M. Murugappan assumes Executive Chairman role; A. Vellayan retires",
-        "interpretation": "A clean generational transition at the top of a family conglomerate is a governance positive. Murugappan's assumption of the Executive Chairman role consolidates leadership. The succession question, which was a latent risk, is now resolved for this cycle."
+        "move": "Shareholders approve CEO Arun Misra re-appointment and ESOP schemes. CRISIL reaffirms AA+/Stable; bank facilities reduced to ₹31,876 crore. $25 billion capex announced over 3 years with shift to professional management. Vedanta Iron & Steel iron ore CEO Anamika Jha resigns.",
+        "interpretation": "The $25 billion capex announcement alongside a stated shift to professional management is Vedanta's attempt to reframe its narrative from leveraged holding company to industrial operator. CRISIL's AA+ reaffirmation with reduced bank facilities is a positive signal on deleveraging. Jha's resignation at the iron ore subsidiary is a yellow flag — senior exits in a restructuring phase warrant monitoring."
       },
       {
         "group": "TVS",
-        "move": "Peyman Kargar appointed CEO of TVS Motor, effective January 27, 2027",
-        "interpretation": "Appointing an international CEO — Kargar's background is in global automotive — signals TVS Motor is serious about the global expansion thesis. This is a talent bench upgrade and a strategic signal simultaneously. The January 2027 effective date means execution impact is a future-cycle event."
+        "move": "CARE reaffirms TVS Motor at AAA; Stable. Shareholders approve Peyman Kargar as Director and CEO. TVS Motor approves demerger of consumer finance business. TVS Srichakra approves ₹49.20 crore capex; NCLT scheme of selective capital reduction becomes effective. TVS Holdings promoters pledge 8.28% stake for ₹825 crore credit facilities.",
+        "interpretation": "The consumer finance demerger is the structural move of the cycle: it unlocks a separate capital markets identity for the lending business and removes cross-subsidy opacity from the auto core. Kargar's approval as CEO adds international operational credibility. The promoter pledge of 8.28% for ₹825 crore is a modest leverage signal at the holding level — not alarming in isolation but worth tracking if it recurs."
+      },
+      {
+        "group": "Sundaram",
+        "move": "Sundaram Finance plans ₹1,250 crore four-year zero-coupon bond issuance.",
+        "interpretation": "A zero-coupon structure at four years is a liability management optimization — Sundaram is locking in duration at current rates. Consistent with the group's conservative treasury posture."
       },
       {
         "group": "Godrej",
-        "move": "ICRA reaffirms Godrej Properties AA+ (Stable); Godrej Investment receives ₹335 crore capital infusion from GIL; Godrej Industries sells 0.50% stake in GCPL for ₹892 crore block; Brookfield India REIT completes Godrej BKC acquisition",
-        "interpretation": "The post-family-split capital flows are becoming visible. GIL infusing ₹335 crore into Godrej Investment and simultaneously selling a GCPL block suggests active portfolio rebalancing within the split structure. The Brookfield BKC completion is a clean execution receipt — a major asset monetisation delivered. The AA+ reaffirmation on Godrej Properties confirms the real estate arm's credit standing is intact post-split."
+        "move": "ICRA assigns AA+ rating to ₹1,500 crore NCD programme.",
+        "interpretation": "Post-family partition, Godrej is establishing independent credit identity for its entities. The AA+ on the NCD programme confirms market confidence in the restructured balance sheet."
       },
       {
         "group": "Hero",
-        "move": "Hero Motors IPO: ₹1,000 crore issue subscribed 6.66x",
-        "interpretation": "A 6.66x subscription on a ₹1,000 crore IPO is a strong capital markets signal. Hero Motors (components/industrial) is distinct from Hero MotoCorp (two-wheelers); this listing diversifies the group's public market presence and validates investor appetite for the Hero brand extension."
+        "move": "Sumitomo Corp acquires 49% stake in HFE 500 MW renewable project.",
+        "interpretation": "Hero brings in a marquee Japanese industrial partner for its renewable platform — validating asset quality and providing capital without diluting the core auto business. A clean capital-recycling move."
       },
       {
         "group": "Hinduja",
-        "move": "NCLT admits NDL Ventures merger petition with Hinduja Leyland Finance; Hinduja Renewables appoints Deepak Thakur as MD and CEO",
-        "interpretation": "The NCLT admission of the NDL-HLF merger is a structural simplification move — reducing the complexity of the financial services stack. The Renewables CEO appointment signals the group is building out the energy transition vertical with professional management."
-      },
-      {
-        "group": "RPG",
-        "move": "RPG Active Pharma acquires API business of Raghava Life Sciences for ₹135 crore; InvAscent invests ₹243 crore for 40% stake in RPG Life Sciences API unit; ₹700 crore capex committed for API and manufacturing expansion; Actis Generics subsidiary acquisition completed and amalgamation approved",
-        "interpretation": "RPG is executing a focused pharma consolidation play with external capital validation. InvAscent's ₹243 crore for 40% implies a valuation that gives the API unit credibility as a standalone asset. The ₹700 crore capex commitment is large relative to RPG's historical deployment scale. This is the most concentrated strategic activity RPG has shown in recent cycles — execution credibility will be tested over the next 12-18 months."
+        "move": "Hinduja Tech appoints Faiz Ahmad as CEO; Kumar Prabhas retires. Hinduja Housing Finance appoints Vivek Kannan as CEO; Sachin Pillai steps down.",
+        "interpretation": "Two CEO transitions in one month across different subsidiaries. Neither appointment is accompanied by a strategic pivot announcement, which makes these routine succession events — but the simultaneity suggests the group is in a broader leadership refresh cycle."
       },
       {
         "group": "Shapoorji Pallonji",
-        "move": "Seeks ₹3,500 crore debt refinancing; extends deadline to October 31, 2026",
-        "interpretation": "A refinancing extension is a distress signal, not a routine treasury event. SP Group's debt situation has been chronic; the October 31 deadline extension confirms the group has not yet secured terms. This is the most acute near-term balance sheet risk in the universe."
-      },
-      {
-        "group": "Essar",
-        "move": "Commits $18 billion to largest US steel plant project",
-        "interpretation": "$18 billion is an extraordinary commitment for a group that exited Indian steel under insolvency proceedings. The ambition is real — US steel capacity is strategically valuable given trade policy — but the financing structure, execution capability, and timeline are unverified at this stage. Vision score rises; execution credibility requires evidence before the score follows."
+        "move": "SP Group seeks $150-200 million private credit to repay Porteast debt.",
+        "interpretation": "Seeking private credit to repay existing debt is a refinancing-under-duress signal. The group continues to depend on expensive private credit markets rather than accessing investment-grade public debt — a structural constraint that has persisted across multiple cycles."
       },
       {
         "group": "Welspun",
-        "move": "Welspun Corp US unit wins $412.5 million pipe-supply contract (largest in group history); Saudi associate East Pipes secures 771 million SAR contract from Saudi Aramco; ₹1,285 crore fund infusion in subsidiary; Welspun EDAC JV upgraded to CRISIL AA (CE)/Stable; COO of Welspun Specialty Solutions resigns",
-        "interpretation": "Two large international contract wins in a single cycle — the US pipe contract and the Saudi Aramco award — represent a step-change in Welspun's global order book. The CRISIL upgrade on the EDAC JV is a credit positive. The COO resignation at Specialty Solutions is a flag to monitor but does not offset the contract momentum. This is Welspun's strongest cycle in recent memory."
+        "move": "Board approves ₹2,280 crore capex for US and Jordan pipe expansion. Welspun Tubular LLC secures ₹5,500 crore US natural gas pipeline order. Q2 FY27 results show net cash position of ₹3,887 crore. Welspun Enterprises downgraded to Sell by MarketsMOJO on technical deterioration.",
+        "interpretation": "The US pipeline order is the signal: Welspun is capturing US infrastructure spend driven by domestic energy policy, and the ₹2,280 crore capex to expand US capacity is a direct response. The net cash position of ₹3,887 crore gives balance sheet cover for this expansion. The MarketsMOJO downgrade on Welspun Enterprises (the infrastructure arm) is a technical call, not a fundamental one, but it separates the two listed entities' market trajectories."
       },
       {
         "group": "Piramal",
-        "move": "Piramal Finance approves ₹2,000 crore secured NCD issuance; Group CIO Viral Gandhi steps down",
-        "interpretation": "The NCD issuance is routine NBFC liability management. The CIO departure is more significant — Viral Gandhi's exit from a group that has been rebuilding its financial services identity post-pharma sale raises questions about the digital/technology strategy. The 'transitions to new role' language is ambiguous and warrants monitoring."
+        "move": "Piramal Finance completes ₹3,850 crore capital raise via QIP and promoter warrants.",
+        "interpretation": "Promoter participation via warrants alongside QIP signals conviction — this is not a dilutive rescue raise. Piramal Finance is rebuilding its NBFC capital base after the real estate stress cycle, and this raise extends its lending capacity into the next growth phase."
       }
     ],
     "power_dashboard": [
@@ -143,15 +128,15 @@
         "group": "Tata",
         "vision": {
           "score": 9,
-          "delta": 1
+          "delta": 0
         },
         "talent": {
           "score": 8,
-          "delta": 1
+          "delta": 0
         },
         "exec": {
           "score": 8,
-          "delta": 1
+          "delta": 0
         },
         "trust": {
           "score": 9,
@@ -163,11 +148,11 @@
         },
         "edge": {
           "score": 9,
-          "delta": 1
+          "delta": 0
         },
         "capital": {
           "score": 9,
-          "delta": 1
+          "delta": 0
         }
       },
       {
@@ -185,7 +170,7 @@
           "delta": 0
         },
         "trust": {
-          "score": 5,
+          "score": 6,
           "delta": 1
         },
         "access": {
@@ -204,7 +189,7 @@
       {
         "group": "Aditya Birla",
         "vision": {
-          "score": 8,
+          "score": 9,
           "delta": 1
         },
         "talent": {
@@ -229,7 +214,7 @@
         },
         "capital": {
           "score": 9,
-          "delta": 1
+          "delta": 0
         }
       },
       {
@@ -240,7 +225,7 @@
         },
         "talent": {
           "score": 8,
-          "delta": 1
+          "delta": 0
         },
         "exec": {
           "score": 6,
@@ -275,7 +260,7 @@
         },
         "exec": {
           "score": 8,
-          "delta": -1
+          "delta": 0
         },
         "trust": {
           "score": 9,
@@ -306,15 +291,15 @@
         },
         "exec": {
           "score": 7,
-          "delta": -1
+          "delta": 0
         },
         "trust": {
           "score": 4,
-          "delta": -1
+          "delta": 0
         },
         "access": {
           "score": 6,
-          "delta": -1
+          "delta": 0
         },
         "edge": {
           "score": 8,
@@ -349,7 +334,7 @@
         },
         "edge": {
           "score": 8,
-          "delta": 1
+          "delta": 0
         },
         "capital": {
           "score": 9,
@@ -383,19 +368,19 @@
           "delta": 0
         },
         "capital": {
-          "score": 7,
+          "score": 8,
           "delta": 1
         }
       },
       {
         "group": "Vedanta",
         "vision": {
-          "score": 5,
-          "delta": 0
+          "score": 6,
+          "delta": 1
         },
         "talent": {
-          "score": 6,
-          "delta": 0
+          "score": 5,
+          "delta": -1
         },
         "exec": {
           "score": 6,
@@ -403,7 +388,7 @@
         },
         "trust": {
           "score": 5,
-          "delta": -1
+          "delta": 0
         },
         "access": {
           "score": 6,
@@ -414,8 +399,8 @@
           "delta": 0
         },
         "capital": {
-          "score": 4,
-          "delta": -1
+          "score": 5,
+          "delta": 1
         }
       },
       {
@@ -434,7 +419,7 @@
         },
         "trust": {
           "score": 9,
-          "delta": 1
+          "delta": 0
         },
         "access": {
           "score": 6,
@@ -453,15 +438,15 @@
         "group": "TVS",
         "vision": {
           "score": 8,
-          "delta": 1
+          "delta": 0
         },
         "talent": {
           "score": 9,
-          "delta": 1
+          "delta": 0
         },
         "exec": {
-          "score": 7,
-          "delta": 0
+          "score": 8,
+          "delta": 1
         },
         "trust": {
           "score": 8,
@@ -476,8 +461,8 @@
           "delta": 0
         },
         "capital": {
-          "score": 6,
-          "delta": 0
+          "score": 7,
+          "delta": 1
         }
       },
       {
@@ -523,7 +508,7 @@
         },
         "exec": {
           "score": 7,
-          "delta": 1
+          "delta": 0
         },
         "trust": {
           "score": 7,
@@ -535,7 +520,7 @@
         },
         "edge": {
           "score": 7,
-          "delta": 1
+          "delta": 0
         },
         "capital": {
           "score": 7,
@@ -554,7 +539,7 @@
         },
         "exec": {
           "score": 7,
-          "delta": 1
+          "delta": 0
         },
         "trust": {
           "score": 7,
@@ -581,7 +566,7 @@
         },
         "talent": {
           "score": 6,
-          "delta": 1
+          "delta": 0
         },
         "exec": {
           "score": 5,
@@ -608,7 +593,7 @@
         "group": "RPG",
         "vision": {
           "score": 7,
-          "delta": 1
+          "delta": 0
         },
         "talent": {
           "score": 6,
@@ -616,7 +601,7 @@
         },
         "exec": {
           "score": 7,
-          "delta": 1
+          "delta": 0
         },
         "trust": {
           "score": 7,
@@ -628,11 +613,11 @@
         },
         "edge": {
           "score": 7,
-          "delta": 1
+          "delta": 0
         },
         "capital": {
           "score": 6,
-          "delta": 1
+          "delta": 0
         }
       },
       {
@@ -647,22 +632,22 @@
         },
         "exec": {
           "score": 4,
-          "delta": -1
+          "delta": 0
         },
         "trust": {
           "score": 2,
-          "delta": -1
+          "delta": 0
         },
         "access": {
           "score": 5,
           "delta": 0
         },
         "edge": {
-          "score": 5,
-          "delta": 0
+          "score": 4,
+          "delta": -1
         },
         "capital": {
-          "score": 3,
+          "score": 2,
           "delta": -1
         }
       },
@@ -670,7 +655,7 @@
         "group": "Essar",
         "vision": {
           "score": 6,
-          "delta": 2
+          "delta": 0
         },
         "talent": {
           "score": 5,
@@ -678,7 +663,7 @@
         },
         "exec": {
           "score": 4,
-          "delta": -1
+          "delta": 0
         },
         "trust": {
           "score": 4,
@@ -701,14 +686,14 @@
         "group": "Welspun",
         "vision": {
           "score": 7,
-          "delta": 1
+          "delta": 0
         },
         "talent": {
           "score": 5,
           "delta": 0
         },
         "exec": {
-          "score": 7,
+          "score": 8,
           "delta": 1
         },
         "trust": {
@@ -717,14 +702,14 @@
         },
         "access": {
           "score": 6,
-          "delta": 1
+          "delta": 0
         },
         "edge": {
           "score": 7,
-          "delta": 2
+          "delta": 0
         },
         "capital": {
-          "score": 6,
+          "score": 7,
           "delta": 1
         }
       },
@@ -736,7 +721,7 @@
         },
         "talent": {
           "score": 5,
-          "delta": -1
+          "delta": 0
         },
         "exec": {
           "score": 6,
@@ -751,8 +736,8 @@
           "delta": 0
         },
         "edge": {
-          "score": 5,
-          "delta": 0
+          "score": 6,
+          "delta": 1
         },
         "capital": {
           "score": 7,
@@ -773,16 +758,16 @@
         "group": "Tata",
         "political": 8,
         "capital_markets": 9,
-        "control_stability": 9,
-        "global": 8,
-        "ai_energy": 9
+        "control_stability": 7,
+        "global": 9,
+        "ai_energy": 8
       },
       {
         "group": "Adani",
         "political": 9,
-        "capital_markets": 7,
-        "control_stability": 7,
-        "global": 7,
+        "capital_markets": 8,
+        "control_stability": 8,
+        "global": 6,
         "ai_energy": 9
       },
       {
@@ -805,17 +790,17 @@
         "group": "L&T",
         "political": 8,
         "capital_markets": 8,
-        "control_stability": 8,
-        "global": 6,
+        "control_stability": 9,
+        "global": 7,
         "ai_energy": 7
       },
       {
         "group": "Bharti",
-        "political": 5,
+        "political": 6,
         "capital_markets": 7,
         "control_stability": 7,
         "global": 7,
-        "ai_energy": 6
+        "ai_energy": 7
       },
       {
         "group": "JSW",
@@ -823,7 +808,7 @@
         "capital_markets": 8,
         "control_stability": 8,
         "global": 6,
-        "ai_energy": 6
+        "ai_energy": 8
       },
       {
         "group": "Bajaj",
@@ -836,8 +821,8 @@
       {
         "group": "Vedanta",
         "political": 6,
-        "capital_markets": 5,
-        "control_stability": 5,
+        "capital_markets": 6,
+        "control_stability": 6,
         "global": 6,
         "ai_energy": 5
       },
@@ -854,16 +839,16 @@
         "political": 6,
         "capital_markets": 7,
         "control_stability": 8,
-        "global": 7,
+        "global": 6,
         "ai_energy": 6
       },
       {
         "group": "Sundaram",
         "political": 5,
         "capital_markets": 6,
-        "control_stability": 8,
+        "control_stability": 9,
         "global": 4,
-        "ai_energy": 5
+        "ai_energy": 4
       },
       {
         "group": "Godrej",
@@ -871,7 +856,7 @@
         "capital_markets": 7,
         "control_stability": 6,
         "global": 5,
-        "ai_energy": 6
+        "ai_energy": 5
       },
       {
         "group": "Hero",
@@ -879,14 +864,14 @@
         "capital_markets": 7,
         "control_stability": 7,
         "global": 5,
-        "ai_energy": 5
+        "ai_energy": 6
       },
       {
         "group": "Hinduja",
         "political": 6,
         "capital_markets": 5,
         "control_stability": 6,
-        "global": 6,
+        "global": 5,
         "ai_energy": 4
       },
       {
@@ -894,7 +879,7 @@
         "political": 5,
         "capital_markets": 6,
         "control_stability": 7,
-        "global": 5,
+        "global": 4,
         "ai_energy": 5
       },
       {
@@ -903,14 +888,14 @@
         "capital_markets": 3,
         "control_stability": 5,
         "global": 4,
-        "ai_energy": 4
+        "ai_energy": 3
       },
       {
         "group": "Essar",
-        "political": 4,
+        "political": 5,
         "capital_markets": 4,
         "control_stability": 5,
-        "global": 6,
+        "global": 4,
         "ai_energy": 4
       },
       {
@@ -918,7 +903,7 @@
         "political": 5,
         "capital_markets": 6,
         "control_stability": 7,
-        "global": 7,
+        "global": 6,
         "ai_energy": 5
       },
       {
@@ -927,435 +912,435 @@
         "capital_markets": 6,
         "control_stability": 7,
         "global": 4,
-        "ai_energy": 5
+        "ai_energy": 4
       }
     ],
     "debt_wall": [
       {
         "group": "Reliance",
-        "score": 4,
-        "interpretation": "Large absolute debt but Jio and retail generate sufficient free cash flow to service comfortably; refinancing risk is low given AAA access."
+        "score": 3,
+        "interpretation": "Diversified cash flows across retail, telecom, and O2C provide strong debt service cover; no near-term refinancing stress visible."
       },
       {
         "group": "Tata",
-        "score": 3,
-        "interpretation": "Tata Sons NBFC listing mandate creates structural complexity but not near-term refinancing pressure; TCS cash flows backstop the holding company."
+        "score": 4,
+        "interpretation": "Iveco acquisition at €3.43 billion adds leverage to Tata Motors; group-level debt remains manageable given TCS cash generation, but the acquisition integration period elevates risk."
       },
       {
         "group": "Adani",
-        "score": 6,
-        "interpretation": "Leverage remains elevated across the listed entities; SEBI settlements reduce tail risk but do not alter the debt quantum; refinancing dependence on international bond markets is a persistent vulnerability."
+        "score": 5,
+        "interpretation": "CARE AA upgrade reduces refinancing risk materially; however, the $100 billion annual capex ambition by 2033 requires sustained FCF generation that has not yet been demonstrated at that scale."
       },
       {
         "group": "Aditya Birla",
-        "score": 6,
-        "interpretation": "The ₹24,000 crore acquisition loan for Shell renewables adds materially to an already leveraged balance sheet spanning telecom, metals, and cement; cost of capital management will be tested."
+        "score": 5,
+        "interpretation": "$30 billion three-year capex commitment is aggressive relative to current FCF; execution of the ABRen renewable vehicle and Essel Mining transfer must proceed without slippage to avoid leverage creep."
       },
       {
         "group": "Mahindra",
         "score": 3,
-        "interpretation": "ICRA AAA/A1+ reaffirmation on ₹1,150 crore instruments confirms investment-grade standing; auto and farm equipment cash flows are stable."
+        "interpretation": "Kotak Mahindra Bank's strong capital position and the auto business's positive cycle keep group-level debt risk low."
       },
       {
         "group": "L&T",
         "score": 2,
-        "interpretation": "Balance sheet is clean; the Metro disposal delay does not create refinancing pressure but does defer cash inflow."
+        "interpretation": "Project-finance model limits balance sheet exposure; strong order book provides revenue visibility. Lowest debt risk in the universe."
       },
       {
         "group": "Bharti",
-        "score": 5,
-        "interpretation": "The ₹1,10,000 crore TRAI disincentive, even if not fully collectible, creates contingent liability uncertainty; underlying telecom debt is manageable but the regulatory overhang raises the effective risk score."
+        "score": 4,
+        "interpretation": "Spectrum debt and Africa operations create a persistent refinancing requirement, but Airtel's ARPU trajectory provides improving cover."
       },
       {
         "group": "JSW",
-        "score": 5,
-        "interpretation": "The ₹16,500 crore NCR Rail capex plan through 2028, combined with the ₹2,850 crore bond raise, signals rising leverage; JSW is deploying aggressively and the balance sheet is stretching."
+        "score": 6,
+        "interpretation": "₹38,150 crore committed in a single month across energy and steel capex; project-level debt at subsidiaries is rising. ICRA ratings on renewable subsidiaries help, but consolidated leverage is the watch item."
       },
       {
         "group": "Bajaj",
-        "score": 3,
-        "interpretation": "Bajaj Finance's QIP/preferential issue is pre-emptive capital raising, not distress; the NBFC's asset quality track record supports a low debt wall score."
+        "score": 2,
+        "interpretation": "₹17,500 crore pre-emptive capital raise strengthens the balance sheet ahead of loan book expansion; Bajaj Finance's liability management is best-in-class among NBFCs."
       },
       {
         "group": "Vedanta",
-        "score": 8,
-        "interpretation": "Promoter pledge covering 54.72% of equity for a US$100 million bond is a structural red flag; the holding company debt burden at Vedanta Resources level remains the primary risk in the universe."
+        "score": 7,
+        "interpretation": "Bank facilities reduced to ₹31,876 crore per CRISIL; $25 billion capex ambition requires external funding well beyond current FCF. Promoter-level debt at Vedanta Resources remains the structural overhang."
       },
       {
         "group": "Murugappa",
-        "score": 3,
-        "interpretation": "Conservative balance sheet; no material new leverage events this cycle; clean succession transition reduces holding company risk."
+        "score": 2,
+        "interpretation": "Conservative leverage culture; no material debt events this cycle. Lowest risk among southern compounders."
       },
       {
         "group": "TVS",
         "score": 3,
-        "interpretation": "No material debt events; two-wheeler cash flows are strong; the Kargar appointment does not alter the balance sheet."
+        "interpretation": "Promoter pledge of 8.28% stake for ₹825 crore is a modest holding-company leverage signal; operating entities carry low debt."
       },
       {
         "group": "Sundaram",
-        "score": 3,
-        "interpretation": "No material movement; conservative financial services and auto components profile; low refinancing risk."
+        "score": 2,
+        "interpretation": "Zero-coupon bond issuance of ₹1,250 crore is liability management, not distress; Sundaram Finance's conservative treasury posture is consistent."
       },
       {
         "group": "Godrej",
-        "score": 4,
-        "interpretation": "Post-split capital flows are active but the AA+ reaffirmation on Godrej Properties confirms credit standing; the ₹335 crore infusion into Godrej Investment is modest relative to group scale."
+        "score": 3,
+        "interpretation": "Post-partition AA+ NCD rating confirms clean balance sheet; no refinancing stress."
       },
       {
         "group": "Hero",
-        "score": 3,
-        "interpretation": "Hero Motors IPO proceeds reduce net debt at the subsidiary level; Hero MotoCorp's balance sheet remains clean."
+        "score": 2,
+        "interpretation": "Sumitomo's 49% stake in the 500 MW renewable project brings in equity capital without balance sheet leverage; core auto business is cash-generative."
       },
       {
         "group": "Hinduja",
         "score": 5,
-        "interpretation": "The NDL-HLF merger simplification is positive but the group's financial services complexity and historical leverage keep the score elevated."
+        "interpretation": "Two CEO transitions without accompanying strategic announcements suggest internal resource constraints; no public debt data this cycle, but historical leverage at the holding level is a known concern."
       },
       {
         "group": "RPG",
-        "score": 4,
-        "interpretation": "The ₹700 crore capex commitment is large relative to RPG's scale; InvAscent's ₹243 crore equity injection partially offsets the leverage impact of the pharma build-out."
+        "score": 3,
+        "interpretation": "No material movement; RPG's diversified portfolio across pharma, tires, and power provides stable debt service capacity."
       },
       {
         "group": "Shapoorji Pallonji",
         "score": 9,
-        "interpretation": "The ₹3,500 crore refinancing extension to October 31 is the highest near-term debt wall risk in the universe; the group has been in chronic refinancing mode and has not demonstrated a path to structural deleveraging."
+        "interpretation": "Seeking $150-200 million private credit to repay Porteast debt is refinancing-under-duress. The group cannot access investment-grade public debt markets. Highest debt risk in the universe."
       },
       {
         "group": "Essar",
-        "score": 7,
-        "interpretation": "An $18 billion US steel commitment from a group that exited Indian steel under insolvency proceedings raises immediate questions about financing structure; until the capital stack is disclosed, the debt wall risk is high."
+        "score": 6,
+        "interpretation": "No material movement; legacy debt restructuring overhang persists. Limited public disclosure makes precise assessment difficult."
       },
       {
         "group": "Welspun",
-        "score": 4,
-        "interpretation": "The ₹1,285 crore subsidiary infusion and the CRISIL AA upgrade on the EDAC JV are both positive; the large contract wins improve cash flow visibility and reduce refinancing risk."
+        "score": 2,
+        "interpretation": "Net cash position of ₹3,887 crore per Q2 FY27 results provides full cover for the ₹2,280 crore capex commitment. Balance sheet is a competitive advantage."
       },
       {
         "group": "Piramal",
-        "score": 5,
-        "interpretation": "The ₹2,000 crore NCD issuance is routine NBFC liability management; Piramal Finance is rebuilding its loan book and the leverage trajectory is upward but manageable at current scale."
+        "score": 4,
+        "interpretation": "₹3,850 crore capital raise with promoter participation strengthens the NBFC balance sheet; real estate legacy book remains the residual risk."
       }
     ],
     "execution_receipts": [
       {
         "group": "Reliance",
         "score": 8,
-        "commentary": "No material movement this cycle; prior-cycle track record on Jio and retail rollout sustains the score. New Energy execution remains the open question."
+        "commentary": "No new delivery events this cycle; prior track record on Jio and retail rollout sustains the score."
       },
       {
         "group": "Tata",
-        "score": 9,
-        "commentary": "The ₹70,000 crore AI data centre land acquisition is a concrete execution step, not just an announcement; Chandrasekaran reappointment removes leadership uncertainty that could have slowed decision-making. Tata is 1 point ahead of Reliance on execution receipts because it delivered a tangible capex commitment this cycle while Reliance had no movement."
+        "score": 8,
+        "commentary": "Iveco acquisition closed on schedule — a complex cross-border deal executed cleanly. Noel Tata's board exit creates a governance transition risk that could slow decision velocity at six entities."
       },
       {
         "group": "Adani",
         "score": 8,
-        "commentary": "SEBI settlements are a form of execution — closing regulatory overhang that has weighed on the group for over two years. Port and airport infrastructure delivery track record remains strong."
+        "commentary": "CARE AA upgrade validates that post-Hindenburg remediation commitments were delivered. The $100 billion annual capex target by 2033 is an aspiration, not a receipt — execution clock starts now."
       },
       {
         "group": "Aditya Birla",
         "score": 7,
-        "commentary": "Securing ₹24,000 crore in acquisition financing is a financing execution receipt; the actual deployment and integration of Shell renewable assets is a future-cycle test."
+        "commentary": "NCLT approval for Essel Mining renewable transfer is a process milestone, not a capex delivery. The $30 billion plan is announced, not deployed — execution receipts will be scored from next cycle."
       },
       {
         "group": "Mahindra",
         "score": 6,
-        "commentary": "The Group CSO appointment is a structural move; no capex delivery events this cycle. EV ramp-up execution remains the key open item."
+        "commentary": "Kotak MD appointment resolves a leadership gap but is a governance action, not a project delivery. SML Mahindra's dual leadership changes introduce short-term operational uncertainty."
       },
       {
         "group": "L&T",
-        "score": 7,
-        "commentary": "The Hyderabad Metro disposal extension — now pushed to December 31, 2026 — is a negative execution receipt; the ₹797 crore ammonia contract win is routine. L&T drops 1 point on execution because the divestment programme is not delivering on schedule."
+        "score": 9,
+        "commentary": "Middle East EPC wins and two domestic government project wins in a single month demonstrate consistent order conversion. L&T is 1 point ahead of JSW on execution receipts because it converts announced orders to signed contracts at higher velocity — Middle East EPC wins and two domestic government project wins in a single month versus JSW's regulatory clearances, which are process milestones rather than order conversions."
       },
       {
         "group": "Bharti",
-        "score": 6,
-        "commentary": "The TRAI ₹1,10,000 crore disincentive for service-quality non-compliance is a direct execution failure receipt — the regulator has formally cited quality shortfalls. Drops 2 points from prior cycle."
+        "score": 7,
+        "commentary": "No material movement; prior cycle's network rollout track record sustains the score."
       },
       {
         "group": "JSW",
         "score": 8,
-        "commentary": "NCR Rail acquisition completed — a concrete M&A execution receipt. Shiva Cement amalgamation approved. Multiple simultaneous transactions closing in a single cycle is strong execution evidence."
+        "commentary": "BMM Ispat and Piombino amalgamations cleared and filed — regulatory execution is clean. The ₹38,150 crore capex commitment is the test; delivery receipts will determine whether this score holds."
       },
       {
         "group": "Bajaj",
         "score": 8,
-        "commentary": "No delivery events this cycle but the capital raise decision is proactive balance sheet management; prior-cycle track record on Bajaj Finance loan book growth sustains the score."
+        "commentary": "₹17,500 crore capital raise executed — a financial delivery, not a project delivery, but Bajaj Finance's track record of deploying raised capital efficiently sustains the execution score."
       },
       {
         "group": "Vedanta",
         "score": 6,
-        "commentary": "No operational delivery events; the promoter pledge is a financing action, not an execution receipt. Score unchanged from prior cycle."
+        "commentary": "CEO re-appointment and CRISIL reaffirmation are maintenance actions. Jha's resignation at the iron ore subsidiary is a negative execution signal. $25 billion capex is announced ambition with no delivery receipts yet."
       },
       {
         "group": "Murugappa",
         "score": 8,
-        "commentary": "The clean generational transition — Murugappan in, Vellayan out — is itself an execution receipt; family conglomerates that manage succession without disruption are demonstrating institutional capability."
+        "commentary": "No material movement; Murugappa's consistent delivery track record across Tube Investments and Coromandel sustains the score."
       },
       {
         "group": "TVS",
-        "score": 7,
-        "commentary": "The Kargar appointment is a talent execution receipt; the January 2027 effective date means operational impact is deferred. Score unchanged."
+        "score": 8,
+        "commentary": "Consumer finance demerger approved and Kargar confirmed as CEO — two structural actions executed in one cycle. TVS Srichakra capital reduction scheme effective. Execution velocity is above universe average this cycle."
       },
       {
         "group": "Sundaram",
         "score": 6,
-        "commentary": "No material movement. Score reflects prior-cycle steady-state delivery in financial services and auto components."
+        "commentary": "Zero-coupon bond issuance is a treasury action; no project delivery events. Score unchanged from prior cycle."
       },
       {
         "group": "Godrej",
         "score": 7,
-        "commentary": "Brookfield BKC acquisition completed — a clean asset monetisation delivered. The ₹335 crore capital infusion into Godrej Investment is executed. Post-split capital reallocation is proceeding without visible disruption."
+        "commentary": "AA+ NCD rating established post-partition — a structural milestone. No project delivery events."
       },
       {
         "group": "Hero",
         "score": 7,
-        "commentary": "Hero Motors IPO subscribed 6.66x — a capital markets execution receipt. The group delivered a successful listing in a single cycle."
+        "commentary": "Sumitomo stake sale in the 500 MW renewable project is a clean execution of a partnership deal. No project completion events."
       },
       {
         "group": "Hinduja",
         "score": 5,
-        "commentary": "NCLT admission of the NDL-HLF merger is a process step, not a completion; Renewables CEO appointment is a structural move. No delivery events."
+        "commentary": "Two CEO transitions without strategic announcements suggest reactive rather than planned succession. Execution credibility is not improving."
       },
       {
         "group": "RPG",
         "score": 7,
-        "commentary": "Actis Generics acquisition completed and amalgamation approved in the same cycle; Raghava API acquisition closed; InvAscent investment closed. Three concurrent transactions executed is a step-change for RPG's historical pace."
+        "commentary": "No material movement; prior cycle delivery track record sustains the score."
       },
       {
         "group": "Shapoorji Pallonji",
-        "score": 3,
-        "commentary": "The refinancing extension to October 31 is an execution failure — the group could not close the ₹3,500 crore refinancing within the prior deadline. This is the lowest execution receipt score in the universe."
+        "score": 4,
+        "commentary": "Seeking private credit to repay existing debt is the opposite of execution progress. The group is managing liabilities, not building assets."
       },
       {
         "group": "Essar",
-        "score": 3,
-        "commentary": "The $18 billion US steel commitment is an announcement, not a delivery; given the group's history of announced projects that did not execute on schedule, the execution receipt score requires evidence before it can rise."
+        "score": 4,
+        "commentary": "No material movement; legacy restructuring continues without visible delivery milestones."
       },
       {
         "group": "Welspun",
         "score": 8,
-        "commentary": "The $412.5 million US pipe contract — the largest in group history — and the 771 million SAR Saudi Aramco award are concrete order book receipts. The CRISIL upgrade on the EDAC JV confirms third-party validation of execution quality. Welspun's execution score rises 2 points this cycle."
+        "commentary": "US pipeline order of ₹5,500 crore secured and ₹2,280 crore capex approved in the same month — order-to-capex conversion is fast. Net cash position confirms financial execution discipline."
       },
       {
         "group": "Piramal",
         "score": 6,
-        "commentary": "The ₹2,000 crore NCD issuance is a financing execution; the CIO departure creates a leadership gap in the technology strategy. Score unchanged."
+        "commentary": "₹3,850 crore capital raise completed — financial execution is clean. Operational delivery in the NBFC book is the next test."
       }
     ],
     "momentum": [
       {
         "group": "Reliance",
         "score": 0,
-        "why": "No material movement this cycle. Momentum is neutral relative to prior cycle."
+        "why": "No material movement this cycle; score holds at prior level. Zero momentum delta."
       },
       {
         "group": "Tata",
-        "score": 3,
-        "why": "Three simultaneous positive events: Chandrasekaran reappointment resolves succession risk, ₹70,000 crore AI data centre capex commitment is the largest single infrastructure bet in the universe this cycle, and RBI NBFC rejection is a manageable constraint rather than a crisis. Strongest positive momentum in the universe this cycle."
+        "score": -1,
+        "why": "Iveco acquisition is a positive strategic move, but Noel Tata's simultaneous exit from six boards introduces governance uncertainty that offsets the deal momentum. Net: slight negative."
       },
       {
         "group": "Adani",
-        "score": 1,
-        "why": "SEBI settlements close a two-year regulatory overhang at negligible financial cost; trust score improves marginally. Momentum is modestly positive — the group is normalising, not accelerating."
+        "score": 2,
+        "why": "CARE AA upgrade is a structural credibility inflection — the highest rating in company history. Combined with the $100 billion capex ambition, this is the most positive momentum shift in the universe this cycle."
       },
       {
         "group": "Aditya Birla",
         "score": 2,
-        "why": "₹24,000 crore acquisition financing secured in a single cycle signals a step-change in capital deployment aggression; vision and capital scores both rise."
+        "why": "$30 billion capex announcement and ABRen consolidation represent a step-change in strategic ambition. Vision score moves to 9. Execution receipts will determine whether this momentum is sustained."
       },
       {
         "group": "Mahindra",
         "score": 1,
-        "why": "Group CSO appointment and AAA reaffirmation are positive but incremental; no capex delivery events to drive stronger momentum."
+        "why": "Kotak MD appointment resolves a material overhang; SML Mahindra leadership changes are neutral. Net positive."
       },
       {
         "group": "L&T",
-        "score": -1,
-        "why": "Metro disposal extension is a negative execution signal; CFO transition introduces short-term uncertainty. The group's execution score drops for the first time in recent cycles."
+        "score": 0,
+        "why": "Middle East EPC wins are positive; UBS downgrade is a valuation headwind. The two signals cancel at the momentum level."
       },
       {
         "group": "Bharti",
-        "score": -3,
-        "why": "The TRAI ₹1,10,000 crore disincentive is the single most negative regulatory event in the universe this cycle; combined with a sell-side downgrade, trust and access scores both fall. Bharti has the most negative momentum in the universe this cycle."
+        "score": 0,
+        "why": "No material movement. Score unchanged."
       },
       {
         "group": "JSW",
         "score": 2,
-        "why": "NCR Rail acquisition completed, Shiva Cement amalgamation approved, Volkswagen partnership talks initiated, and bond raise planned — four concurrent strategic actions in a single cycle. Capital deployment aggression is at a cycle high."
+        "why": "₹38,150 crore committed across energy and steel in a single month, plus two regulatory clearances. Capital deployment velocity is among the highest in the universe this cycle."
       },
       {
         "group": "Bajaj",
         "score": 1,
-        "why": "Capital raise consideration signals growth acceleration intent; no negative events. Modest positive momentum."
+        "why": "Pre-emptive ₹17,500 crore capital raise signals growth confidence. Capital score moves to 8."
       },
       {
         "group": "Vedanta",
-        "score": -2,
-        "why": "Promoter pledge covering 54.72% of equity for a US$100 million bond is a structural deterioration signal; trust and capital scores both fall."
+        "score": 0,
+        "why": "CRISIL reaffirmation and $25 billion capex announcement are positive; Jha's resignation and the gap between announced ambition and demonstrated FCF generation are negative. Net: flat."
       },
       {
         "group": "Murugappa",
-        "score": 2,
-        "why": "Clean generational succession — Murugappan assumes Executive Chairman — is a governance positive that removes a latent risk; trust score rises."
+        "score": 0,
+        "why": "No material movement. Consistent compounder; no directional change."
       },
       {
         "group": "TVS",
         "score": 2,
-        "why": "International CEO appointment signals a genuine global ambition upgrade; talent score rises. This is a strategic inflection point for TVS Motor."
+        "why": "Consumer finance demerger, CEO confirmation, and AAA reaffirmation in one cycle. Structural and operational actions executed simultaneously — above-average event density."
       },
       {
         "group": "Sundaram",
         "score": 0,
-        "why": "No material movement. Momentum is neutral."
+        "why": "Zero-coupon bond issuance is routine treasury management. No directional change."
       },
       {
         "group": "Godrej",
-        "score": 1,
-        "why": "Brookfield BKC completion, AA+ reaffirmation, and capital infusion all positive; post-split execution is proceeding without disruption. Modest positive momentum."
+        "score": 0,
+        "why": "AA+ NCD rating is a post-partition milestone but does not change the strategic trajectory."
       },
       {
         "group": "Hero",
         "score": 1,
-        "why": "Hero Motors IPO subscribed 6.66x — a clean capital markets win that validates the brand extension strategy."
+        "why": "Sumitomo partnership validates the renewable platform and brings in capital without diluting the core business."
       },
       {
         "group": "Hinduja",
-        "score": 1,
-        "why": "NCLT merger admission and Renewables CEO appointment are incremental positives; no delivery events to drive stronger momentum."
+        "score": -1,
+        "why": "Two reactive CEO transitions without strategic context. Execution credibility is not improving."
       },
       {
         "group": "RPG",
-        "score": 3,
-        "why": "Three acquisitions executed, external capital validation from InvAscent, and ₹700 crore capex committed in a single cycle — this is RPG's most active cycle in recent memory. Vision, execution, edge, and capital scores all rise."
+        "score": 0,
+        "why": "No material movement."
       },
       {
         "group": "Shapoorji Pallonji",
-        "score": -3,
-        "why": "Refinancing extension to October 31 confirms the group cannot close its own debt restructuring on schedule; trust and capital scores both fall. Second-most negative momentum in the universe alongside Bharti."
+        "score": -2,
+        "why": "Private credit sought to repay existing debt is a deteriorating liquidity signal. The group is moving backward on financial flexibility."
       },
       {
         "group": "Essar",
-        "score": 1,
-        "why": "The $18 billion US steel commitment is a bold vision signal; vision score rises 2 points. However, execution credibility is absent, so the net momentum is only modestly positive."
+        "score": 0,
+        "why": "No material movement. Restructuring continues without visible progress."
       },
       {
         "group": "Welspun",
-        "score": 3,
-        "why": "Two landmark international contract wins — $412.5 million US pipe and 771 million SAR Saudi Aramco — in a single cycle, plus a CRISIL upgrade. This is Welspun's strongest cycle in recent memory; edge score rises 2 points."
+        "score": 2,
+        "why": "US pipeline order, capex approval, and net cash confirmation in one cycle. Welspun is executing a US infrastructure play with balance sheet discipline — the strongest small-cap momentum in the universe this cycle."
       },
       {
         "group": "Piramal",
-        "score": -1,
-        "why": "Group CIO departure creates a leadership gap in the technology strategy; the NCD issuance is routine. Talent score falls."
+        "score": 1,
+        "why": "Promoter-backed capital raise signals conviction in the NBFC rebuild. Edge score moves to 6."
       }
     ],
     "future_dominance": [
       {
         "group": "Reliance",
         "score": 9,
-        "why": "Jio's digital platform, New Energy capex pipeline, and retail network create three compounding dominance vectors; AI infrastructure positioning is strong."
+        "why": "Jio's digital platform, New Energy capex pipeline, and retail network create three compounding dominance vectors. No group in the universe has comparable platform breadth."
       },
       {
         "group": "Tata",
         "score": 9,
-        "why": "The ₹70,000 crore AI data centre commitment positions TCS as an infrastructure owner, not just a services provider; combined with Tata Motors EV, Tata Power renewables, and the group's talent density, future dominance is co-equal with Reliance."
+        "why": "TCS AI services, Tata Motors EV + Iveco commercial vehicle platform, and semiconductor ambitions position the group across every future-dominance dimension. Succession uncertainty is the single discount factor."
       },
       {
         "group": "Adani",
         "score": 8,
-        "why": "Ports, airports, power transmission, and green hydrogen create infrastructure dominance vectors; SEBI normalisation reduces the governance discount on future value."
+        "why": "Ports, airports, green hydrogen, and power transmission are infrastructure monopolies in formation. CARE AA upgrade reduces the cost-of-capital drag on future dominance. Talent depth remains the ceiling."
       },
       {
         "group": "Aditya Birla",
-        "score": 7,
-        "why": "The Shell renewable acquisition adds an energy transition asset to an already diversified platform; telecom and financial services provide digital exposure, but the group lacks a single dominant platform asset."
+        "score": 8,
+        "why": "$30 billion capex over three years, ABRen renewable vehicle, and financial services scale position the group for multi-sector dominance. Execution track record must improve to justify the score."
       },
       {
         "group": "Mahindra",
         "score": 7,
-        "why": "EV platform (BE 6e, XEV 9e) and farm equipment digitisation are credible future dominance bets; the Group CSO appointment signals strategic professionalisation."
+        "why": "EV SUV platform, Kotak Mahindra Bank under new leadership, and farm equipment digitization are credible future-dominance vectors. Global scale is the gap."
       },
       {
         "group": "L&T",
         "score": 8,
-        "why": "Defence, nuclear, and data centre construction capabilities position L&T as the infrastructure execution partner for India's next decade; the order book is the dominance asset."
+        "why": "Defence manufacturing, nuclear, and Middle East infrastructure position L&T as the dominant EPC player in the energy transition. AI/digital integration into project delivery is the next frontier."
       },
       {
         "group": "Bharti",
         "score": 7,
-        "why": "5G network and OneWeb satellite broadband are genuine future dominance assets; the TRAI disincentive is a near-term drag, not a structural impairment of the network asset."
+        "why": "5G network and Africa mobile money platform are durable assets. AI integration into telecom services is the differentiation question."
       },
       {
         "group": "JSW",
-        "score": 7,
-        "why": "The NCR Rail acquisition extends the infrastructure platform; the Volkswagen partnership, if closed, would add a global manufacturing partnership to the steel and cement base."
+        "score": 8,
+        "why": "Green steel ambition, 3 GW renewable expansion, and Utkal Phase-II position JSW as the dominant integrated steel-energy player. Execution bandwidth is the constraint."
       },
       {
         "group": "Bajaj",
         "score": 7,
-        "why": "Bajaj Finance's data moat on consumer credit and Bajaj Auto's EV transition are the two future dominance vectors; capital compounding ability is the group's strongest attribute."
+        "why": "Bajaj Finance's data moat and distribution depth are durable. The ₹17,500 crore raise extends the lending runway. Limited AI/energy positioning keeps the score below 8."
       },
       {
         "group": "Vedanta",
-        "score": 5,
-        "why": "Critical minerals (zinc, copper, aluminium) are strategically valuable for the energy transition, but the promoter leverage structure limits the group's ability to invest in future dominance."
+        "score": 6,
+        "why": "Critical minerals (zinc, copper, aluminium) are future-dominance assets if the $25 billion capex is deployed. Promoter leverage and talent attrition are the discounts."
       },
       {
         "group": "Murugappa",
         "score": 6,
-        "why": "Coromandel fertilisers and Tube Investments are steady compounders; the group lacks a platform-scale future dominance bet."
+        "why": "Coromandel's fertilizer platform and Tube Investments' precision engineering are durable but not category-defining at scale. No AI or energy transition positioning visible."
       },
       {
         "group": "TVS",
         "score": 7,
-        "why": "The Kargar appointment signals a genuine global expansion ambition; TVS Motor's EV portfolio and the group's manufacturing depth in two-wheelers and components create a credible future dominance path."
+        "why": "EV two-wheeler platform, Kargar's international experience, and the consumer finance demerger create three future value vectors. Southern compounder with above-average future positioning."
       },
       {
         "group": "Sundaram",
         "score": 5,
-        "why": "Sundaram Finance's conservative compounding model is durable but not a future dominance play; no AI or energy transition positioning evident."
+        "why": "Conservative financial services franchise; no visible AI or energy transition positioning. Durable but not dominant."
       },
       {
         "group": "Godrej",
         "score": 6,
-        "why": "Post-split, Godrej Properties' real estate platform and GCPL's consumer brands are the dominance assets; the Brookfield BKC monetisation demonstrates asset quality. The split itself creates uncertainty about capital allocation coherence."
+        "why": "Consumer brands and real estate are stable but not future-dominance assets. Post-partition clarity may unlock capital allocation discipline."
       },
       {
         "group": "Hero",
         "score": 6,
-        "why": "Hero MotoCorp's EV transition and the Hero Motors IPO diversification are positive signals; the group's dominance in mass-market two-wheelers is durable but faces structural pressure from EV disruption."
+        "why": "EV transition is the existential question; Sumitomo renewable partnership is a positive signal but the core ICE business faces structural pressure."
       },
       {
         "group": "Hinduja",
-        "score": 5,
-        "why": "Hinduja Renewables CEO appointment signals energy transition intent; the group's financial services and commercial vehicles base are stable but not future-dominance-scale platforms."
+        "score": 4,
+        "why": "No visible AI, energy transition, or platform positioning. Leadership churn reduces confidence in strategic direction."
       },
       {
         "group": "RPG",
-        "score": 6,
-        "why": "The pharma API consolidation play — three acquisitions and ₹700 crore capex in one cycle — is a credible future dominance bet in a sector with structural tailwinds; InvAscent validation adds credibility."
+        "score": 5,
+        "why": "KEC International's power transmission business has energy-transition relevance, but the group lacks a platform-scale future-dominance asset."
       },
       {
         "group": "Shapoorji Pallonji",
-        "score": 4,
-        "why": "Construction capabilities are valuable but the chronic debt situation limits the group's ability to invest in future dominance; the Tata Sons stake is the primary value asset."
+        "score": 3,
+        "why": "Construction and real estate are cyclical, not future-dominant. Debt constraints prevent strategic investment in new sectors."
       },
       {
         "group": "Essar",
-        "score": 5,
-        "why": "The $18 billion US steel commitment, if executed, would create a significant global manufacturing asset; the vision is credible but the execution track record does not yet support a higher score."
+        "score": 4,
+        "why": "Steel and energy assets have future relevance but the group's financial constraints limit investment capacity."
       },
       {
         "group": "Welspun",
         "score": 6,
-        "why": "The $412.5 million US pipe contract and Saudi Aramco award demonstrate that Welspun has built a globally competitive manufacturing capability; the EDAC JV upgrade confirms infrastructure execution quality."
+        "why": "US infrastructure exposure via natural gas pipelines is a durable positioning play. Net cash balance sheet enables continued investment. Scale is the ceiling."
       },
       {
         "group": "Piramal",
         "score": 5,
-        "why": "Piramal Finance's NBFC rebuild is a credible compounding play; the CIO departure creates uncertainty about the digital strategy that is central to future dominance in financial services."
+        "why": "NBFC rebuild is a financial services future-dominance play, but the group lacks the platform scale of Bajaj Finance. Promoter conviction is a positive signal."
       }
     ],
     "control_map": [
@@ -1363,14 +1348,14 @@
         "group": "Reliance",
         "promoter": 9,
         "succession": 7,
-        "board": 7,
+        "board": 8,
         "partners": 7,
         "political": 9
       },
       {
         "group": "Tata",
-        "promoter": 8,
-        "succession": 9,
+        "promoter": 7,
+        "succession": 6,
         "board": 9,
         "partners": 8,
         "political": 8
@@ -1380,14 +1365,14 @@
         "promoter": 9,
         "succession": 6,
         "board": 6,
-        "partners": 7,
+        "partners": 6,
         "political": 9
       },
       {
         "group": "Aditya Birla",
         "promoter": 8,
         "succession": 7,
-        "board": 8,
+        "board": 7,
         "partners": 7,
         "political": 8
       },
@@ -1396,12 +1381,12 @@
         "promoter": 7,
         "succession": 7,
         "board": 8,
-        "partners": 6,
+        "partners": 7,
         "political": 7
       },
       {
         "group": "L&T",
-        "promoter": 6,
+        "promoter": 5,
         "succession": 8,
         "board": 9,
         "partners": 7,
@@ -1409,16 +1394,16 @@
       },
       {
         "group": "Bharti",
-        "promoter": 7,
-        "succession": 7,
+        "promoter": 8,
+        "succession": 6,
         "board": 7,
         "partners": 7,
-        "political": 5
+        "political": 6
       },
       {
         "group": "JSW",
         "promoter": 8,
-        "succession": 7,
+        "succession": 6,
         "board": 7,
         "partners": 7,
         "political": 7
@@ -1433,16 +1418,16 @@
       },
       {
         "group": "Vedanta",
-        "promoter": 7,
+        "promoter": 8,
         "succession": 5,
         "board": 5,
-        "partners": 6,
+        "partners": 5,
         "political": 6
       },
       {
         "group": "Murugappa",
         "promoter": 8,
-        "succession": 9,
+        "succession": 8,
         "board": 8,
         "partners": 5,
         "political": 6
@@ -1452,31 +1437,31 @@
         "promoter": 8,
         "succession": 7,
         "board": 7,
-        "partners": 7,
+        "partners": 6,
         "political": 6
       },
       {
         "group": "Sundaram",
         "promoter": 8,
-        "succession": 7,
+        "succession": 8,
         "board": 8,
         "partners": 4,
         "political": 5
       },
       {
         "group": "Godrej",
-        "promoter": 6,
-        "succession": 5,
+        "promoter": 7,
+        "succession": 6,
         "board": 7,
-        "partners": 6,
+        "partners": 5,
         "political": 6
       },
       {
         "group": "Hero",
         "promoter": 7,
-        "succession": 7,
+        "succession": 6,
         "board": 7,
-        "partners": 5,
+        "partners": 6,
         "political": 6
       },
       {
@@ -1484,7 +1469,7 @@
         "promoter": 7,
         "succession": 5,
         "board": 5,
-        "partners": 6,
+        "partners": 5,
         "political": 6
       },
       {
@@ -1492,7 +1477,7 @@
         "promoter": 7,
         "succession": 6,
         "board": 7,
-        "partners": 6,
+        "partners": 5,
         "political": 5
       },
       {
@@ -1508,22 +1493,22 @@
         "promoter": 6,
         "succession": 5,
         "board": 4,
-        "partners": 5,
-        "political": 4
+        "partners": 4,
+        "political": 5
       },
       {
         "group": "Welspun",
         "promoter": 7,
         "succession": 6,
         "board": 6,
-        "partners": 7,
+        "partners": 6,
         "political": 5
       },
       {
         "group": "Piramal",
         "promoter": 7,
         "succession": 6,
-        "board": 7,
+        "board": 6,
         "partners": 5,
         "political": 6
       }
@@ -1532,104 +1517,104 @@
       "tier1": [
         {
           "group": "Reliance",
-          "rationale": "Jio, retail, and New Energy create three compounding dominance vectors; political access and capital market power are unmatched. Demotion trigger: Mukesh Ambani succession uncertainty becomes public and unresolved."
+          "rationale": "Unmatched platform breadth across telecom, retail, and O2C; political access at 9; capital deployment at 9. Demoted if: Jio's ARPU growth stalls and New Energy capex fails to generate returns within 36 months."
         },
         {
           "group": "Tata",
-          "rationale": "Chandrasekaran reappointment resolves the single largest succession risk in Indian corporate governance; the ₹70,000 crore AI data centre commitment is the most consequential infrastructure bet in the universe this cycle; trust score of 9 is the highest in the universe. Demotion trigger: TCS revenue growth decelerates materially, removing the cash engine that funds the group's ambition."
+          "rationale": "Only group with simultaneous credibility in IT services (TCS), EVs (Tata Motors + Iveco), and consumer brands. Institutional board strength is the highest in the universe. Demoted if: Iveco integration absorbs management bandwidth for more than 18 months and Noel Tata's board exit creates a visible governance vacuum."
         },
         {
           "group": "Adani",
-          "rationale": "Infrastructure platform across ports, airports, power, and green hydrogen is irreplaceable; political access is co-equal with Reliance; SEBI settlements reduce the governance discount. Demotion trigger: a new credible allegation of financial irregularity that reopens the regulatory file."
+          "rationale": "CARE AA upgrade is a structural milestone; infrastructure monopolies in ports, airports, and power transmission are irreplaceable. Demoted if: the $100 billion annual capex ambition by 2033 requires external funding that cannot be secured at investment-grade rates."
         },
         {
           "group": "L&T",
-          "rationale": "The only group in the universe with a 9 on both Execution Receipts (prior cycle) and Trust simultaneously; defence and nuclear order book is a decade-long earnings visibility asset. Demotion trigger: the Metro disposal programme fails to close by December 2026, signalling that the divestment strategy is structurally stalled."
+          "rationale": "Best execution receipts in the universe; Middle East EPC wins extend international order book; defence and nuclear positioning is unique. Demoted if: UBS downgrade reflects a broader sell-side consensus shift that tightens equity capital access."
         }
       ],
       "tier2": [
         {
           "group": "Aditya Birla",
-          "rationale": "The ₹24,000 crore Shell renewable acquisition signals a step-change in capital deployment; telecom, metals, and cement provide diversification. Promotion trigger to Tier 1: successful integration of the Shell assets and a demonstrated reduction in group leverage."
+          "rationale": "$30 billion capex commitment and ABRen consolidation elevate vision to 9, matching Tier 1 ambition. Execution track record must close the gap — one missed capex milestone would confirm Tier 2 placement."
         },
         {
           "group": "JSW",
-          "rationale": "NCR Rail acquisition, Shiva Cement amalgamation, and Volkswagen partnership talks in a single cycle confirm JSW as the most active capital deployer outside the Tier 1 groups. Promotion trigger to Tier 1: Volkswagen partnership closes and JSW demonstrates it can manage a global industrial partnership."
-        },
-        {
-          "group": "Bajaj",
-          "rationale": "Bajaj Finance's data moat and capital compounding discipline are the strongest in the financial services sector; the QIP signals growth acceleration. Promotion trigger to Tier 1: Bajaj Finance achieves a dominant position in consumer credit that rivals Jio's position in telecom."
+          "rationale": "₹38,150 crore committed in a single month across energy and steel; regulatory clearances executed cleanly. Execution bandwidth across simultaneous large-ticket expansions is the Tier 1 barrier."
         },
         {
           "group": "Mahindra",
-          "rationale": "AAA balance sheet, Group CSO appointment, and EV platform credibility; the group is professionalising at scale. Promotion trigger to Tier 1: EV market share in SUVs reaches a level that confirms platform dominance."
+          "rationale": "Kotak MD appointment resolves the single largest governance overhang. EV SUV platform is credible. Execution score of 6 keeps the group out of Tier 1."
         },
         {
           "group": "Bharti",
-          "rationale": "5G network and OneWeb are genuine future dominance assets; the TRAI disincentive is a near-term drag. Demotion trigger to Tier 3: the TRAI disincentive converts into a material cash outflow or triggers further regulatory action."
+          "rationale": "5G network and Africa platform are durable strategic assets. Trust score of 4 and no material movement this cycle confirm Tier 2 rather than Tier 1."
+        },
+        {
+          "group": "Bajaj",
+          "rationale": "Pre-emptive ₹17,500 crore capital raise is best-in-class financial discipline. Limited vision score (7) and no energy/AI positioning cap the ceiling at Tier 2."
         }
       ],
       "tier3": [
         {
           "group": "Murugappa",
-          "rationale": "Clean succession, conservative balance sheet, and steady compounding; the group is not a future dominance play but it is not fragile either."
+          "rationale": "Consistent delivery, highest trust score among southern groups, conservative leverage. Scale ambition is the Tier 2 barrier."
         },
         {
           "group": "TVS",
-          "rationale": "International CEO appointment signals genuine global ambition; EV portfolio is credible. The group is at the upper boundary of Tier 3."
+          "rationale": "Consumer finance demerger and Kargar appointment are structural upgrades. Promoter pledge and limited global scale keep the group in Tier 3."
         },
         {
           "group": "Godrej",
-          "rationale": "Post-split execution is proceeding without disruption; Brookfield BKC completion is a clean execution receipt. The split itself creates medium-term uncertainty about capital allocation coherence."
+          "rationale": "Post-partition AA+ credit identity established. Consumer brands are durable. No future-dominance catalyst visible."
         },
         {
           "group": "Hero",
-          "rationale": "Hero Motors IPO success validates the brand extension; Hero MotoCorp's mass-market position is durable. EV transition execution is the key risk."
-        },
-        {
-          "group": "RPG",
-          "rationale": "Three pharma acquisitions and ₹700 crore capex in one cycle is a step-change; InvAscent validation adds credibility. The group is at the lower boundary of Tier 3 and rising."
-        },
-        {
-          "group": "Welspun",
-          "rationale": "Two landmark international contract wins in a single cycle — $412.5 million US pipe and 771 million SAR Saudi Aramco — represent a step-change in global order book. The group is at the upper boundary of Tier 3."
-        },
-        {
-          "group": "Sundaram",
-          "rationale": "Conservative compounder with no strategic ambition to move up; stable but not dynamic."
-        },
-        {
-          "group": "Piramal",
-          "rationale": "NBFC rebuild is credible; CIO departure creates uncertainty. The group is rebuilding its identity post-pharma sale and has not yet demonstrated a new dominance vector."
-        },
-        {
-          "group": "Hinduja",
-          "rationale": "Renewables CEO appointment and NCLT merger admission are incremental positives; the group lacks a platform-scale strategic bet."
+          "rationale": "Sumitomo renewable partnership is a clean capital move. EV transition execution is the existential question that determines whether Hero stays in Tier 3."
         },
         {
           "group": "Vedanta",
-          "rationale": "Critical minerals are strategically valuable but the promoter pledge structure is a chronic governance drag; the group is at the lower boundary of Tier 3."
+          "rationale": "CRISIL AA+ reaffirmation and $25 billion capex ambition are positive signals. Promoter leverage at Vedanta Resources and Jha's resignation keep the group in Tier 3."
+        },
+        {
+          "group": "Welspun",
+          "rationale": "US pipeline order and net cash position are best-in-class for a mid-cap industrial. Scale is the Tier 2 barrier."
+        },
+        {
+          "group": "RPG",
+          "rationale": "Stable compounder with no material movement. KEC International's energy-transition relevance is the upside option."
+        },
+        {
+          "group": "Sundaram",
+          "rationale": "Conservative treasury management; zero-coupon bond issuance is disciplined. No growth catalyst visible."
+        },
+        {
+          "group": "Piramal",
+          "rationale": "Promoter-backed capital raise signals conviction. NBFC rebuild is on track. Real estate legacy book is the residual risk."
         }
       ],
       "tier4": [
         {
+          "group": "Hinduja",
+          "rationale": "Two reactive CEO transitions without strategic context. No visible future-dominance positioning. Promoted if: a major strategic announcement accompanies the leadership refresh."
+        },
+        {
           "group": "Shapoorji Pallonji",
-          "rationale": "Chronic refinancing failure — the ₹3,500 crore extension to October 31 is the latest in a series of deadline extensions; the group's primary value asset is its Tata Sons stake, which it cannot monetise without destroying its own balance sheet. Promotion trigger: a definitive refinancing close that reduces the debt burden to a sustainable level."
+          "rationale": "Seeking private credit to repay existing debt; cannot access investment-grade public markets; trust score of 2. Promoted if: a clean asset monetization reduces the private credit dependency and restores public market access."
         },
         {
           "group": "Essar",
-          "rationale": "The $18 billion US steel commitment is a vision signal but the group has no demonstrated execution capability at this scale post-insolvency; the financing structure is undisclosed. Promotion trigger: the US steel project secures committed financing from credible institutional lenders."
+          "rationale": "Legacy restructuring without visible delivery milestones; limited public disclosure. Promoted if: a major asset completion or rating upgrade demonstrates that the restructuring has generated productive capacity."
         }
       ]
     },
     "typology": {
       "platform_empires": [
         "Reliance",
-        "Tata",
         "Adani",
         "Bharti"
       ],
       "institutional_builders": [
+        "Tata",
         "L&T",
         "Mahindra",
         "Bajaj",
@@ -1638,19 +1623,19 @@
       "industrial_scalers": [
         "JSW",
         "Aditya Birla",
+        "Vedanta",
         "Welspun",
-        "Essar",
-        "Vedanta"
+        "Essar"
       ],
       "capital_allocators": [
         "Godrej",
         "Piramal",
-        "RPG",
-        "Hero"
+        "RPG"
       ],
       "southern_compounders": [
         "TVS",
         "Sundaram",
+        "Hero",
         "Hinduja"
       ],
       "fragile_leveraged": [
@@ -1659,132 +1644,133 @@
     },
     "red_flags": [
       {
-        "group": "Shapoorji Pallonji",
-        "flag": "₹3,500 crore refinancing extended to October 31, 2026 — the group has not closed its own debt restructuring within the prior deadline; chronic refinancing mode with no visible path to structural deleveraging."
-      },
-      {
-        "group": "Vedanta",
-        "flag": "Promoter encumbers 54.72% of equity shares for a US$100 million bond — majority promoter stake is now pledged; the Vedanta Resources holding company debt burden continues to extract value from the listed Indian entities."
-      },
-      {
-        "group": "Bharti",
-        "flag": "TRAI imposes ₹1,10,000 crore financial disincentive for service-quality non-compliance — the quantum signals a serious deterioration in regulator-operator relations; even if the penalty is not fully collectible, the regulatory relationship is damaged."
+        "group": "Tata",
+        "flag": "Noel Tata exits six group boards simultaneously on November 12 — the largest single-event compression of family oversight in recent Tata history. With Iveco integration underway, the group is absorbing a major acquisition while its governance layer is being restructured. The succession sequencing risk is real and unresolved."
       },
       {
         "group": "Adani",
-        "flag": "Personal SEBI settlements by Karan Adani and CFO B. Ravi on disclosure violations — the violations are closed but the governance footnote on the succession-track heir is now on the public record."
+        "flag": "$100 billion annual capex target by 2033 implies a sustained FCF generation and external funding capacity that has not yet been demonstrated. The 72% internal-funding claim is the load-bearing assertion; if FCF falls short, the group will face a binary choice between slowing capex or re-leveraging."
       },
       {
-        "group": "Essar",
-        "flag": "$18 billion US steel commitment announced without disclosed financing structure — a group that exited Indian steel under insolvency proceedings is committing to the largest steel project in US history; execution credibility is absent until the capital stack is confirmed."
+        "group": "Aditya Birla",
+        "flag": "$30 billion three-year capex commitment is the most aggressive capital deployment signal in the group's recent history. The gap between announced ambition and demonstrated execution velocity (execution score: 7) is the primary risk. One major project delay would validate the skeptics."
       },
       {
-        "group": "Piramal",
-        "flag": "Group CIO Viral Gandhi steps down — the technology and digital strategy leadership gap at an NBFC that is rebuilding its identity post-pharma sale is a material risk; the 'transitions to new role' language is ambiguous."
+        "group": "JSW",
+        "flag": "₹38,150 crore committed across energy and steel in a single month. Running simultaneous large-ticket expansions in two capital-intensive sectors demands management depth and project finance capacity that the group has not yet demonstrated at this combined scale."
       },
       {
-        "group": "L&T",
-        "flag": "Hyderabad Metro stake disposal extended to December 31, 2026 — the divestment programme is not delivering on schedule; if this deadline is also missed, execution credibility on the capital recycling strategy will deteriorate materially."
+        "group": "Vedanta",
+        "flag": "Anamika Jha's resignation as iron ore CEO during a restructuring phase is a yellow flag. Senior exits in a period of announced strategic transformation — combined with the gap between the $25 billion capex ambition and current FCF — warrant close monitoring."
+      },
+      {
+        "group": "Shapoorji Pallonji",
+        "flag": "Seeking $150-200 million private credit to repay Porteast debt confirms that the group remains trapped in an expensive private credit cycle. Trust score of 2 and capital score of 2 are the lowest in the universe. This is not a temporary liquidity event — it is a structural constraint."
+      },
+      {
+        "group": "TVS",
+        "flag": "Promoter pledge of 8.28% stake for ₹825 crore credit facilities at the holding level is a modest but trackable leverage signal. If pledge levels increase in subsequent cycles, it becomes a control-stability concern."
       }
     ],
     "emerging_themes": [
       {
-        "title": "AI Infrastructure as the New Capex Frontier",
-        "thesis": "Tata's ₹70,000 crore AI data centre commitment signals that the next phase of Indian conglomerate competition is not in services or manufacturing but in owning the physical infrastructure layer of AI — land, power, and connectivity. Groups that control this layer will extract rent from every AI workload run in India. Reliance's New Energy and Jio's network position it similarly. Groups without a data centre or power infrastructure play will be structurally disadvantaged in the AI economy."
+        "title": "The Capex Ambition Inflation Cycle",
+        "thesis": "Three groups — Adani ($100 billion annual by 2033), Aditya Birla ($30 billion over three years), and Vedanta ($25 billion over three years) — announced large-scale capex commitments in a single month. The aggregate announced capex across these three groups alone exceeds India's annual infrastructure budget. The critical question for the next 12 months is not ambition but funding architecture: which groups can demonstrate that internal FCF, project finance, and equity markets can absorb this simultaneously without triggering a leverage crisis."
       },
       {
-        "title": "Regulatory Normalisation as a Valuation Catalyst",
-        "thesis": "Adani's SEBI settlements — closing a two-year overhang at under ₹2 crore in aggregate penalties — demonstrate that Indian regulatory proceedings can be resolved without structural damage to the business. This normalisation removes the governance discount that has suppressed Adani's capital market power score. The pattern suggests that groups with pending regulatory matters (Bharti being the counter-example this cycle) should prioritise settlement over litigation."
+        "title": "Rating Agency Validation as a Strategic Weapon",
+        "thesis": "Adani's CARE AA upgrade and Godrej's ICRA AA+ NCD rating in the same cycle signal that domestic rating agencies are becoming a primary tool for conglomerate credibility management — not just a financing prerequisite. Groups that achieve investment-grade upgrades gain a structural cost-of-capital advantage that compounds over time. Shapoorji Pallonji's inability to access public debt markets is the mirror image of this dynamic."
       },
       {
-        "title": "Global Contract Wins Validating Indian Manufacturing",
-        "thesis": "Welspun's $412.5 million US pipe contract and East Pipes' 771 million SAR Saudi Aramco award in a single cycle are not isolated events — they reflect a structural shift in global supply chain diversification away from China. Indian manufacturers with quality certifications and scale are winning contracts that would have gone to Chinese or Korean suppliers five years ago. This is a multi-year tailwind for industrial groups with global manufacturing capability."
+        "title": "Succession Compression Risk",
+        "thesis": "Noel Tata's exit from six boards and two simultaneous CEO transitions at Hinduja subsidiaries in the same cycle point to a broader succession compression dynamic across Indian conglomerates. As founding-generation leaders step back, the speed and quality of the transition determines whether institutional knowledge is preserved or lost. Tata's institutional board strength provides a buffer; Hinduja's does not."
       },
       {
-        "title": "Succession Clarity as a Re-Rating Event",
-        "thesis": "Chandrasekaran's reappointment at Tata and Murugappan's assumption of the Executive Chairman role at Murugappa both demonstrate that clean succession execution is a re-rating event for Indian conglomerates. The market has historically applied a discount to groups with unresolved succession; groups that resolve it cleanly — as Tata has done this cycle — should see that discount compress. Groups where succession remains unresolved (Reliance, Adani) carry a latent discount that is not yet fully priced."
+        "title": "US Infrastructure as an Indian Conglomerate Opportunity",
+        "thesis": "Welspun's ₹5,500 crore US natural gas pipeline order and the accompanying ₹2,280 crore capex for US capacity expansion demonstrate that Indian industrial groups can capture US infrastructure spend driven by domestic energy policy. This is a nascent but structurally significant theme — the first Indian mid-cap industrial to build a US manufacturing base around a US policy tailwind."
       },
       {
-        "title": "Promoter Leverage as a Structural Constraint on Future Dominance",
-        "thesis": "Vedanta's promoter pledge and Shapoorji Pallonji's chronic refinancing failure both illustrate the same structural problem: when promoter-level debt is secured against listed equity, the promoter's incentive to invest in the business's future is subordinated to the need to service the debt. This is not a cyclical issue — it is a structural constraint that limits these groups' ability to compete in the next decade's capex-intensive sectors (AI infrastructure, energy transition, defence). The gap between groups with clean promoter balance sheets (Tata, Bajaj, Murugappa) and those with pledged equity (Vedanta, SP Group) will widen."
+        "title": "Demerger as Capital Markets Strategy",
+        "thesis": "TVS Motor's consumer finance demerger follows a pattern visible across the universe: groups are separating financial services from industrial operations to unlock distinct capital markets identities, reduce cross-subsidy opacity, and access sector-specific investor pools. This structural trend — visible also in Bajaj's NBFC separation and Piramal's NBFC rebuild — will accelerate as capital markets reward focused businesses over conglomerate discounts."
       }
     ],
     "bottom_line": [
-      "Tata is the most improved group in this cycle: Chandrasekaran's reappointment removes the succession discount, the ₹70,000 crore AI data centre commitment is the largest single infrastructure bet in the universe, and the group now co-equals Reliance on Vision and Future Dominance — a position it has not held in recent cycles.",
-      "Bharti is the most deteriorated group in this cycle: the TRAI ₹1,10,000 crore disincentive for service-quality non-compliance is the most negative single regulatory event in the universe, trust and access scores both fall, and a sell-side downgrade compounds the signal — the group's regulatory relationship is damaged in a way that will take multiple cycles to repair.",
-      "Welspun and RPG are the two breakout stories below Tier 2: Welspun's $412.5 million US pipe contract and Saudi Aramco award represent a step-change in global order book, while RPG's three pharma acquisitions and ₹700 crore capex commitment in a single cycle signal a focused consolidation play with external capital validation — both groups are rising within Tier 3.",
-      "Shapoorji Pallonji and Vedanta are the two groups where the structural debt situation is worsening, not stabilising: SP Group's refinancing extension confirms chronic inability to close its own restructuring, while Vedanta's promoter pledge of 54.72% of equity for a US$100 million bond signals that the holding company debt burden continues to extract value from the listed entities — both groups are structurally constrained from investing in future dominance.",
-      "The AI infrastructure land-grab is now a conglomerate-level competition: Tata's ₹70,000 crore data centre commitment and Reliance's New Energy and Jio network position the two largest groups as the primary beneficiaries of India's AI infrastructure buildout — groups without a data centre, power, or connectivity play will find themselves structurally disadvantaged as AI workloads scale.",
-      "Succession clarity is re-rating two groups simultaneously: Tata's Chandrasekaran reappointment and Murugappa's clean generational transition both remove latent governance discounts — the contrast with Reliance and Adani, where succession remains unresolved, is becoming more visible to institutional investors.",
-      "JSW is the most active capital deployer outside Tier 1 this cycle: NCR Rail acquisition completed, Shiva Cement amalgamation approved, Volkswagen partnership talks initiated, and a bond raise planned — if the Volkswagen partnership closes, JSW will have added a global industrial partnership to its infrastructure and materials platform, which would be the most significant strategic upgrade for the group in a decade."
+      "Adani's CARE AA upgrade is the single most consequential event of the cycle — it marks the end of the post-Hindenburg credibility deficit and resets the group's cost-of-capital trajectory. The $100 billion annual capex ambition by 2033 is now a funded aspiration rather than a leveraged bet, but FCF delivery against that claim is the multi-year test.",
+      "Tata's Iveco acquisition extends the group's commercial vehicle platform into Europe at scale, but Noel Tata's simultaneous exit from six boards creates the most significant governance transition risk in the universe this cycle. The group is digesting a major acquisition while restructuring its oversight layer — a sequencing risk that the market has not yet fully priced.",
+      "JSW and Aditya Birla are running the most aggressive capital deployment programs among Tier 2 groups, with ₹38,150 crore and $30 billion committed respectively in a single month. Both groups are one major execution failure away from a leverage narrative replacing their growth narrative.",
+      "Welspun is the cycle's most underappreciated story: a net cash balance sheet, a ₹5,500 crore US pipeline order, and ₹2,280 crore capex approved in the same month. The group is building a US infrastructure franchise with Indian balance sheet discipline — a combination that no other group in the universe is replicating at this speed.",
+      "Shapoorji Pallonji's private credit refinancing confirms that the group's structural debt trap is not resolving. With a trust score of 2 and capital score of 2, it remains the most financially fragile entity in the universe and the clearest candidate for asset monetization under duress.",
+      "The demerger-as-strategy theme — TVS consumer finance, Bajaj NBFC separation, Piramal NBFC rebuild — is accelerating. Groups that separate financial services from industrial operations will access lower cost of capital and higher valuation multiples; those that maintain conglomerate opacity will face a widening discount.",
+      "Power is concentrating at the top: Reliance, Tata, Adani, and L&T are pulling away from the Tier 2 pack on every dimension that compounds — capital access, execution receipts, and future dominance positioning. The gap between Tier 1 and Tier 3 is wider this cycle than the prior cycle, and the capex ambition announcements from Tier 2 groups are as likely to widen that gap further as to close it."
     ]
   },
   "review": {
     "verdict": "PASS",
     "blockers": [],
     "warnings": [
-      "Essar vision delta of +2 in a single cycle is the largest single-dimension jump in the universe; the interpretation correctly withholds an execution score upgrade, but a CIO reading six months of reports may ask why a +2 vision move is warranted on an announcement alone with no financing disclosure. Consider adding a sentence in the Essar interpretation that explicitly defends the +2 rather than the +1 — e.g., the scale of the commitment ($18 billion against a group with no current US steel presence) justifies a step-change rather than an incremental move, but the asymmetry with exec -1 should be flagged as deliberate.",
-      "Bharti's TRAI disincentive quantum of ₹1,10,000 crore is cited consistently across interpretation, debt wall, execution receipts, momentum, red flags, and bottom line — but nowhere in the report is there a sentence that contextualises whether this figure is a regulatory maximum, a calculated penalty, or a negotiating opening position. The interpretation calls it 'almost certainly a negotiating instrument rather than a collectible penalty' but does not cite a basis for that judgment. This is not a fabrication issue (the number comes from the moves entry) but a depth gap that a CIO will probe. Next cycle: add one sentence of regulatory mechanism context.",
-      "The Welspun edge delta of +2 is the joint-largest single-dimension move in the universe alongside Essar vision. The justification — two landmark international contracts plus CRISIL upgrade — is factually grounded, but the report does not explain why edge specifically (rather than exec or access) absorbs both points. A brief sentence distinguishing why this is an edge re-rating rather than purely an execution re-rating would strengthen the internal logic.",
-      "Sundaram appears in all required tables with 'No material movement' treatment, which satisfies the contract. However, Sundaram has no moves entry at all — not even a 'No material movement' placeholder in the moves array. If the orchestrator or a downstream consumer parses the moves array as the canonical activity log, Sundaram's absence could create a data completeness question. Consider adding a minimal moves entry: {group: 'Sundaram', move: 'No material movement this cycle', interpretation: 'No material movement.'}"
+      "Tata moves entry characterizes the Iveco acquisition as 'the largest overseas commercial vehicle acquisition in Tata Motors history' — a superlative with no sourced comparator. If a CIO asks what the prior largest was, the report cannot answer. Consider replacing with a scoped claim: 'the largest overseas acquisition in Tata Motors' history by deal value at €3.43 billion' or simply dropping the superlative and letting the deal size speak.",
+      "Bharti debt_wall states 'Airtel's ARPU trajectory provides improving cover' with no ARPU figure cited. Every other debt_wall entry anchors to a specific number or named event. Add a figure (e.g., 'Airtel's blended ARPU crossed ₹X in Q2 FY27') or reframe as 'Airtel's multi-year ARPU recovery trend, visible since FY24, provides improving debt service cover' — which is a directional claim rather than a fabricated number.",
+      "Reliance has no entry in the moves table. The momentum and execution_receipts entries correctly note 'no material movement,' but a CIO reading six months of reports will notice the absence. Consider adding a minimal moves entry: 'No material strategic moves this cycle' with interpretation 'Score holds on prior track record; next catalyst is New Energy capex commissioning timeline.' This is a presentation consistency issue, not a scoring error.",
+      "The Adani trust delta of +1 (from 5 to 6) is justified by the CARE AA upgrade, but the commentary does not explicitly state the prior score was 5. For a CIO tracking six months of reports, the delta reconciliation is implicit rather than stated. Consider adding 'trust score moves from 5 to 6' in the Adani power_dashboard commentary or the moves interpretation to make the reconciliation explicit.",
+      "Future_dominance entry for Tata references 'semiconductor ambitions' as a dominance vector with no named project, partner, or capex figure. This is the thinnest claim in the future_dominance table — every other entry cites a named asset or deal. Replace with a scoped reference: 'Tata Electronics' semiconductor assembly plant in Dholera (Phase 1 target: 2026)' or remove the semiconductor reference and rely on TCS AI services and Iveco, which are fully sourced."
     ],
     "suggested_fixes": ""
   },
   "meta": {
     "cycle": {
-      "cycleLabel": "October 2026",
-      "isoMonth": "2026-10",
-      "windowStart": "2026-09-01",
-      "windowEnd": "2026-10-01",
-      "runDate": "2026-10-01"
+      "cycleLabel": "November 2026",
+      "isoMonth": "2026-11",
+      "windowStart": "2026-10-01",
+      "windowEnd": "2026-11-01",
+      "runDate": "2026-11-01"
     },
     "agents": {
       "ResearchAnalyst": {
         "agent": "ResearchAnalyst",
         "model": "claude-haiku-4-5-20251001",
-        "latency_ms": 241639,
+        "latency_ms": 255940,
         "tokens": {
           "input": 66859,
-          "output": 23025
+          "output": 23160
         },
-        "groups_with_moves": 19
+        "groups_with_moves": 16
       },
       "StrategyAdvisor": {
         "agent": "StrategyAdvisor",
         "model": "claude-sonnet-4-6",
-        "latency_ms": 288390,
+        "latency_ms": 264434,
         "tokens": {
-          "input": 4459,
-          "output": 17717
+          "input": 4185,
+          "output": 15770
         },
         "revision": false
       },
       "CriticReviewer_pass1": {
         "agent": "CriticReviewer",
         "model": "claude-sonnet-4-6",
-        "latency_ms": 116387,
+        "latency_ms": 98854,
         "tokens": {
-          "input": 18847,
-          "output": 6067
+          "input": 17606,
+          "output": 5040
         }
       },
       "StrategyAdvisor_revision1": {
         "agent": "StrategyAdvisor",
         "model": "claude-sonnet-4-6",
-        "latency_ms": 281656,
+        "latency_ms": 275346,
         "tokens": {
-          "input": 23674,
-          "output": 16951
+          "input": 22161,
+          "output": 16529
         },
         "revision": true
       },
       "CriticReviewer_pass2": {
         "agent": "CriticReviewer",
         "model": "claude-sonnet-4-6",
-        "latency_ms": 82735,
+        "latency_ms": 91015,
         "tokens": {
-          "input": 19083,
-          "output": 4291
+          "input": 17871,
+          "output": 4194
         }
       }
     }

@@ -1,18 +1,6 @@
 {
   "entries": [
     {
-      "date": "02 OCT 2026",
-      "verdict_line": "Euro Stoxx 50 drops from a 100th-percentile 6,269 to 6,175 as US 10Y hits 5.29% — DM equities finally reading the bond market's script.",
-      "themes": [],
-      "slugs": [
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "rent_mumbai",
-        "rent_bengaluru",
-        "office_absorption"
-      ]
-    },
-    {
       "date": "03 OCT 2026",
       "verdict_line": "Nikkei at a 100th-percentile 68,309 while fuel inflation hits 22.93% YoY — global equities pricing calm precisely as India's import bill compounds.",
       "themes": [
@@ -430,6 +418,20 @@
         "us_10y_treasury",
         "office_absorption",
         "iip_capgoods"
+      ]
+    },
+    {
+      "date": "01 NOV 2026",
+      "verdict_line": "Mumbai office rents at an all-time high ₹342.58/sqft/mo while absorption sits at the 8th percentile — landlords are pricing a tenant that isn't arriving.",
+      "themes": [
+        "real_estate"
+      ],
+      "slugs": [
+        "rent_mumbai",
+        "rent_bengaluru",
+        "us_10y_treasury",
+        "office_absorption",
+        "inr_usd"
       ]
     }
   ]

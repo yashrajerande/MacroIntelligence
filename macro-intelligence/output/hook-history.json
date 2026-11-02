@@ -1,22 +1,6 @@
 {
   "entries": [
     {
-      "date": "03 OCT 2026",
-      "verdict_line": "Nikkei at a 100th-percentile 68,309 while fuel inflation hits 22.93% YoY — global equities pricing calm precisely as India's import bill compounds.",
-      "themes": [
-        "inflation",
-        "oil"
-      ],
-      "slugs": [
-        "nikkei225",
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "rent_mumbai",
-        "inr_usd",
-        "fuel_inflation"
-      ]
-    },
-    {
       "date": "04 OCT 2026",
       "verdict_line": "DII equity flows at a 100th-percentile ₹58,502 cr / month while Nifty falls five sessions straight — domestic money is catching a falling knife.",
       "themes": [
@@ -432,6 +416,22 @@
         "us_10y_treasury",
         "office_absorption",
         "inr_usd"
+      ]
+    },
+    {
+      "date": "02 NOV 2026",
+      "verdict_line": "SIP inflows at a record ₹32,490 cr / month while NFO collections collapse to a 10-year-low ₹998 cr / month — retail India is buying the index, not the story.",
+      "themes": [
+        "flows"
+      ],
+      "slugs": [
+        "rent_mumbai",
+        "rent_bengaluru",
+        "us_10y_treasury",
+        "inr_usd",
+        "boj_rate",
+        "sip_inflows",
+        "nfo_collections"
       ]
     }
   ]

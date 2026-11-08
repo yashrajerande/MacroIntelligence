@@ -18,26 +18,32 @@ function getMonthKey(isoDate) {
   return isoDate.slice(0, 7); // "2026-04"
 }
 
-function readLedger() {
-  if (!existsSync(LEDGER_PATH)) {
+function readLedger(ledgerPath = LEDGER_PATH) {
+  if (!existsSync(ledgerPath)) {
     return { months: {}, lifetime_usd: 0 };
   }
   try {
-    return JSON.parse(readFileSync(LEDGER_PATH, 'utf-8'));
+    return JSON.parse(readFileSync(ledgerPath, 'utf-8'));
   } catch {
     return { months: {}, lifetime_usd: 0 };
   }
 }
 
-function writeLedger(ledger) {
-  writeFileSync(LEDGER_PATH, JSON.stringify(ledger, null, 2), 'utf-8');
+function writeLedger(ledger, ledgerPath = LEDGER_PATH) {
+  writeFileSync(ledgerPath, JSON.stringify(ledger, null, 2), 'utf-8');
 }
 
 /**
  * Get month-to-date spend.
+ *
+ * @param {string} [ledgerPath] — same override convention as
+ * alreadyPublished()'s indexPath: production never passes this and gets
+ * the real on-disk ledger; tests pass a temp-file path so an assertion
+ * can never be at the mercy of however much this month has actually
+ * spent when the suite happens to run.
  */
-export function getMonthSpend(isoDate) {
-  const ledger = readLedger();
+export function getMonthSpend(isoDate, ledgerPath = LEDGER_PATH) {
+  const ledger = readLedger(ledgerPath);
   const key = getMonthKey(isoDate);
   const month = ledger.months[key];
   if (!month) return { runs: 0, cost_usd: 0 };
@@ -48,8 +54,8 @@ export function getMonthSpend(isoDate) {
  * Check if running would exceed the monthly budget.
  * Returns { allowed, remaining_usd, month_spend_usd, budget_usd }
  */
-export function checkBudget(isoDate, estimatedCost = 0.18) {
-  const { cost_usd } = getMonthSpend(isoDate);
+export function checkBudget(isoDate, estimatedCost = 0.18, ledgerPath = LEDGER_PATH) {
+  const { cost_usd } = getMonthSpend(isoDate, ledgerPath);
   const remaining = MONTHLY_BUDGET_USD - cost_usd;
   return {
     allowed: remaining >= estimatedCost,
@@ -62,8 +68,8 @@ export function checkBudget(isoDate, estimatedCost = 0.18) {
 /**
  * Record a completed run's cost.
  */
-export function recordRunCost(isoDate, runCostUSD, runId) {
-  const ledger = readLedger();
+export function recordRunCost(isoDate, runCostUSD, runId, ledgerPath = LEDGER_PATH) {
+  const ledger = readLedger(ledgerPath);
   const key = getMonthKey(isoDate);
 
   if (!ledger.months[key]) {
@@ -84,15 +90,15 @@ export function recordRunCost(isoDate, runCostUSD, runId) {
     Object.values(ledger.months).reduce((s, m) => s + m.total_usd, 0) * 10000
   ) / 10000;
 
-  writeLedger(ledger);
+  writeLedger(ledger, ledgerPath);
   return ledger;
 }
 
 /**
  * Get cost summary string for the dashboard footer.
  */
-export function getCostSummary(isoDate, thisRunCost) {
-  const { cost_usd, runs } = getMonthSpend(isoDate);
+export function getCostSummary(isoDate, thisRunCost, ledgerPath = LEDGER_PATH) {
+  const { cost_usd, runs } = getMonthSpend(isoDate, ledgerPath);
   const mtd = Math.round((cost_usd + thisRunCost) * 100) / 100;
   return `Run: $${thisRunCost.toFixed(2)} · MTD: $${mtd.toFixed(2)}/$${MONTHLY_BUDGET_USD.toFixed(2)} · Runs: ${runs + 1}`;
 }

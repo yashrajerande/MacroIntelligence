@@ -1314,6 +1314,53 @@ assert(rankedDup.runnerUp.title === 'Different one',
   assert(keepAliveCurl.includes('dashboard_runs?select=run_date') && !keepAliveCurl.includes('run_metadata'), `Keep-alive must query a table that exists`);
 }
 
+// --- Cost Ledger: the exact mechanism behind the 31 OCT 2026 "Budget
+// exceeded" run — checkBudget()/recordRunCost() read/write the real,
+// committed output/cost-ledger.json. Until now this module had NO
+// pre-flight coverage at all, so a change to its month-rollover or
+// rounding logic could silently break the budget cap with nothing to
+// catch it. checkBudget/getMonthSpend/recordRunCost/getCostSummary all
+// take an optional ledgerPath override (same convention as
+// alreadyPublished()'s indexPath above) so these assertions run against
+// a disposable temp file, never the live ledger.
+describe('Cost Ledger — budget cap isolation');
+{
+  const { checkBudget, getMonthSpend, recordRunCost, getCostSummary } =
+    await import('./src/utils/cost-ledger.js');
+
+  const ledgerDir = mkdtempSync(join(tmpdir(), 'mi-ledger-'));
+  const ledgerPath = join(ledgerDir, 'cost-ledger.json');
+
+  // Missing ledger file → zero spend, never throws
+  assert(getMonthSpend('2026-11-01', ledgerPath).cost_usd === 0, `No ledger file yet → $0 spent`);
+  const freshBudget = checkBudget('2026-11-01', 0.18, ledgerPath);
+  assert(freshBudget.allowed === true && freshBudget.remaining_usd === 5, `A fresh month has the full $5 cap available`);
+
+  recordRunCost('2026-11-01', 4.86, 'run-1', ledgerPath);
+  const afterOneRun = getMonthSpend('2026-11-01', ledgerPath);
+  assert(afterOneRun.runs === 1 && afterOneRun.cost_usd === 4.86, `Spend persists across calls via the same ledgerPath`);
+
+  const tightBudget = checkBudget('2026-11-01', 0.18, ledgerPath);
+  assert(tightBudget.allowed === false, `$4.86 spent + $0.18 estimated > $5 cap → not allowed (the exact 31 OCT 2026 case)`);
+  assert(Math.abs(tightBudget.remaining_usd - 0.14) < 0.001, `Remaining must be $0.14, got ${tightBudget.remaining_usd}`);
+
+  // A new calendar month must NOT see the previous month's spend
+  const nextMonth = checkBudget('2026-12-01', 0.18, ledgerPath);
+  assert(nextMonth.allowed === true && nextMonth.remaining_usd === 5, `Nov's spend must not carry into Dec — the cap resets monthly`);
+
+  // Re-running recordRunCost must accumulate, not overwrite
+  recordRunCost('2026-11-02', 0.10, 'run-2', ledgerPath);
+  const afterTwoRuns = getMonthSpend('2026-11-01', ledgerPath);
+  assert(afterTwoRuns.runs === 2 && Math.abs(afterTwoRuns.cost_usd - 4.96) < 0.001, `A second run in the same month must accumulate onto the first`);
+
+  const summary = getCostSummary('2026-11-02', 0.10, ledgerPath);
+  assert(summary.includes('Run: $0.10') && summary.includes('MTD: $5.06/$5.00') && summary.includes('Runs: 3'), `Summary string must show this run, correct MTD (incl. this run), and the next run count: "${summary}"`);
+
+  // A corrupt ledger file must degrade to empty, never crash the budget check
+  writeTmp(ledgerPath, 'not valid json{{{');
+  assert(getMonthSpend('2026-11-01', ledgerPath).cost_usd === 0, `Corrupt ledger file → treated as empty, never throws`);
+}
+
 // --- Executive summary "So What" format. Sections are title / The facts /
 // The tension / Bottom line, assembled deterministically from the fields
 // the model returns so the structure can never drift.

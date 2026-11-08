@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "05 OCT 2026",
-      "verdict_line": "Retail mall vacancy at a 7th-percentile 4.8% vacant signals consumption strength the Nifty's five-session slide refuses to price.",
-      "themes": [
-        "markets",
-        "real_estate"
-      ],
-      "slugs": [
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "inr_usd",
-        "retail_mall_vacancy",
-        "sip_aum"
-      ]
-    },
-    {
       "date": "06 OCT 2026",
       "verdict_line": "US 10Y at 5.28% — a 96th-percentile yield — is doing the Fed's work for it; India's INR at 96.15 is paying the tuition.",
       "themes": [],
@@ -434,6 +419,21 @@
         "boj_rate",
         "nfo_collections",
         "india_vix"
+      ]
+    },
+    {
+      "date": "08 NOV 2026",
+      "verdict_line": "INR at 94.34 — an 87th-percentile print — while FII equity outflows hit ₹49,935 cr / month; the rupee's calm is RBI's balance sheet, not the market's verdict.",
+      "themes": [
+        "currency",
+        "flows"
+      ],
+      "slugs": [
+        "inr_usd",
+        "us_10y_treasury",
+        "nfo_collections",
+        "boj_rate",
+        "euro_stoxx50"
       ]
     }
   ]

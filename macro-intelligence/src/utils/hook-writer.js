@@ -445,12 +445,16 @@ export function getBannedThemes(history, days = 7, maxUses = 2) {
  *   novelty   × 0.10 — bonus if not in recent verdicts, penalty if it is
  *
  * Flat / missing direction → 0.5× multiplier on the whole score.
+ *
+ * @param {object} [lastChangedOverride] — inject a last_changed map instead
+ * of reading the live data-cache.json (tests use this; production callers
+ * never pass it, so they get the real on-disk state as before).
  */
-export function scoreHookCandidates(indicators, history) {
+export function scoreHookCandidates(indicators, history, lastChangedOverride) {
   const recentSlugs = getRecentSlugs(history, 7);
   const recentThemes = getRecentThemes(history, 7);
   const bannedThemes = getBannedThemes(history, 7, 2);
-  const lastChanged = getLastChanged();
+  const lastChanged = lastChangedOverride || getLastChanged();
   const now = Date.now();
   const RELEASE_WINDOW_MS = 10 * 24 * 60 * 60 * 1000;
 

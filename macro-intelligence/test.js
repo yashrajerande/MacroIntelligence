@@ -775,6 +775,17 @@ assert(isNegativeSignal({}) === false, 'Invalid must not be negative');
 
 // ═══════════════════════════════════════════════════════════════════
 // 12. HOOK WRITER SKILL — freshness + anti-repetition for verdict lines
+//
+// FLAG FOR FUTURE TESTS: scoreHookCandidates() reads the live, committed
+// output/data-cache.json (via getLastChanged()) unless you pass its
+// lastChangedOverride param explicitly. Any assertion here that assumes
+// a specific indicator is/isn't "recently changed" MUST pass an explicit
+// override — never rely on what the real cache happens to contain today.
+// This broke in Nov 2026 when a genuine new HPI print flipped a
+// hardcoded "always stale" assumption from coincidentally-true to false,
+// which failed node test.js and silently blocked the daily pipeline for
+// 6 days (pre-flight tests gate every run). Same caution applies to any
+// other function here that reads real on-disk state instead of a mock.
 // ═══════════════════════════════════════════════════════════════════
 console.log('\n[12] Hook Writer Skill...');
 

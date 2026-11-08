@@ -851,7 +851,14 @@ const mixedIndicators = [
   { indicator_slug: 'hpi_mumbai', indicator_name: 'HPI Mumbai', latest_numeric: 180, pct_10y: 85, direction: 'up' },
 ];
 
-const candidates = scoreHookCandidates(mixedIndicators, mockHistory);
+// Explicit empty last_changed map — this test is about the hard-filter
+// logic itself, not about whatever quarterly print happens to have
+// landed recently in the real output/data-cache.json. Without this
+// override the assertion below is at the mercy of production data (it
+// broke in Nov 2026 when a genuine new HPI print legitimately re-admitted
+// hpi_mumbai into its release window — correct pipeline behavior, but it
+// made this test non-deterministic).
+const candidates = scoreHookCandidates(mixedIndicators, mockHistory, {});
 
 // Banned themes AND quarterly frequency are HARD-filtered
 const cdRank = candidates.findIndex(c => c.slug === 'cd_ratio');

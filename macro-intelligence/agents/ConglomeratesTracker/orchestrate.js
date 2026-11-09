@@ -25,6 +25,7 @@ import { renderHTML }       from './Publisher/render.js';
 import { publishGit }       from './Publisher/publishGit.js';
 import { validateCycleOutput } from './skills/validate-cycle.js';
 import { checkBudget, recordRunCost } from '../../src/utils/cost-ledger.js';
+import { sendFailureAlert, currentRunUrl } from '../../src/utils/resilience.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DEPT_OUT = join(__dirname, '..', '..', 'output', 'conglomerates');
@@ -176,6 +177,17 @@ async function run() {
     );
     if (!budget.allowed) {
       console.error(`[Orchestrator] Monthly budget exceeded — aborting.`);
+      // This shares output/cost-ledger.json's $5/month cap with the daily
+      // CEO pipeline — a console.error on a monthly cron nobody tails is
+      // exactly the "silently blocked for days" shape the 31 OCT 2026
+      // incident was. CEO's budget guard alerts; this one didn't.
+      await sendFailureAlert({
+        dateStr: cycle.cycleLabel,
+        kind: 'budget',
+        reason: `Monthly spend $${budget.month_spend_usd} exceeds $${budget.budget_usd} cap (shared with the daily dashboard pipeline)`,
+        runUrl: currentRunUrl(),
+        phase: 'Budget guard',
+      });
       process.exit(1);
     }
 

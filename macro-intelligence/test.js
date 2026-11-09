@@ -107,6 +107,15 @@ for (const [slug, range] of Object.entries(HISTORICAL_RANGES)) {
   assert(typeof range.max === 'number', `HISTORICAL_RANGES[${slug}] missing max`);
   assert(typeof range.p50 === 'number', `HISTORICAL_RANGES[${slug}] missing p50`);
   assert(range.min < range.max, `HISTORICAL_RANGES[${slug}] min >= max`);
+  // scorePct10y()'s piecewise interpolation assumes strict monotonicity.
+  // This broke for any schema entry whose hand-set p50 wasn't near the
+  // middle of its [min,max] range (found live on pmi_composite and 14
+  // other indicators — a 0.2-unit value wobble jumped pct_10y by 32
+  // points because the old derivation split p10/p25/p75/p90 across the
+  // full range independently of p50, rather than anchored on it).
+  assert(range.min <= range.p10 && range.p10 <= range.p25 && range.p25 <= range.p50 &&
+    range.p50 <= range.p75 && range.p75 <= range.p90 && range.p90 <= range.max,
+    `HISTORICAL_RANGES[${slug}] must be monotonic (min≤p10≤p25≤p50≤p75≤p90≤max), got ${JSON.stringify(range)}`);
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -1156,6 +1165,15 @@ assert(rankedDup.runnerUp.title === 'Different one',
   assert(isVintageInFuture('Oct 2026', '2026-09-14') === true, `Next month is in the future`);
   assert(isVintageInFuture('Q2 FY27', '2026-09-14') === true, `Q2 FY27 (Jul-Sep 2026) ends after 14 Sep → future`);
   assert(isVintageInFuture('Q1 FY27', '2026-09-14') === false, `Q1 FY27 (Apr-Jun 2026) is past`);
+  // Month-name branch is UTC-anchored (Date.UTC), not local-timezone — a
+  // "YYYY-MM-DD" runDate parses as UTC midnight, so reading it back with
+  // local-timezone Date accessors (getFullYear/getMonth) drifted a day on
+  // any runner west of UTC, flipping "current month" to "future" right
+  // at a month boundary. These pin the exact boundary dates that exposed
+  // it (correct under Date.UTC regardless of the host machine's TZ).
+  assert(isVintageInFuture('Oct 2026', '2026-10-01') === false, `The 1st of the vintage's own month is current, not future`);
+  assert(isVintageInFuture('Sep 2026', '2026-09-30') === false, `The last day of the vintage's own month is current, not future`);
+  assert(isVintageInFuture('Oct 2026', '2026-09-30') === true, `The day before month-end, next month is still future`);
   assert(isVintageInFuture('Awaited', '2026-09-14') === false && isVintageInFuture(null, '2026-09-14') === false,
     `Awaited/null vintages are never "future"`);
 
@@ -1359,6 +1377,136 @@ describe('Cost Ledger — budget cap isolation');
   // A corrupt ledger file must degrade to empty, never crash the budget check
   writeTmp(ledgerPath, 'not valid json{{{');
   assert(getMonthSpend('2026-11-01', ledgerPath).cost_usd === 0, `Corrupt ledger file → treated as empty, never throws`);
+}
+
+// --- Model-cost table sync: RunLogger.agentCost() falls back to
+// MODEL_COSTS['none'] (zero cost, NO warning) for any model string it
+// doesn't recognize. If a model-ID literal is updated at a call site
+// without also updating this table, every run's recorded cost silently
+// drops to $0 — defeating the budget cap the same way as the 31 OCT
+// incident, but with no error to even point at. This asserts every
+// claude-* model literal actually used anywhere in agents/ or src/ has a
+// matching entry in the exported MODEL_COSTS table.
+describe('Model Cost Table — sync with real call sites');
+{
+  const { MODEL_COSTS } = await import('./agents/CEO/run-log.js');
+  const { readdirSync, statSync } = await import('fs');
+
+  function listJsFiles(dir) {
+    let out = [];
+    for (const entry of readdirSync(dir)) {
+      const p = join(dir, entry);
+      const st = statSync(p);
+      if (st.isDirectory()) out = out.concat(listJsFiles(p));
+      else if (entry.endsWith('.js')) out.push(p);
+    }
+    return out;
+  }
+
+  const sourceFiles = [...listJsFiles(join(__dirname, 'agents')), ...listJsFiles(join(__dirname, 'src'))];
+  const modelIdsUsed = new Set();
+  for (const f of sourceFiles) {
+    const src = readFileSync(f, 'utf8');
+    for (const m of src.matchAll(/model:\s*['"`](claude-[a-z0-9.-]+)['"`]/g)) {
+      modelIdsUsed.add(m[1]);
+    }
+  }
+  assert(modelIdsUsed.size > 0, `Sanity: must find at least one real model: '...' call site`);
+  const missing = [...modelIdsUsed].filter(id => !(id in MODEL_COSTS));
+  assert(missing.length === 0, `Every model ID actually used in an API call must have a MODEL_COSTS entry (silent $0-cost fallback otherwise) — missing: ${JSON.stringify(missing)}`);
+}
+
+// --- Hook history / Risk history: both persist cross-run state keyed by
+// date and previously assumed strict append order (array position IS
+// chronological order) with NO test coverage, because recordHook() and
+// recordTopRisk() read/wrote a fixed path with no override — the same
+// "untestable, so untested, so unnoticed" shape as the cost-ledger gap.
+// DATE_OVERRIDE is a real, operator-triggered backfill path (confirmed
+// by ist-date.js's own comment on a past incident); backfilling a date
+// OLDER than the latest entry on file used to append it after today's,
+// silently corrupting every getRecentThemes/getRecentSlugs slice(-N) and
+// getStreak() backward walk from that point on. Both now sort by date on
+// every write and take an injectable path override, same convention as
+// alreadyPublished()/cost-ledger.js above.
+describe('Hook History & Risk History — chronological order on backfill');
+{
+  const { loadHookHistory, recordHook } = await import('./src/utils/hook-writer.js');
+  const hookDir = mkdtempSync(join(tmpdir(), 'mi-hookhist-'));
+  const hookPath = join(hookDir, 'hook-history.json');
+
+  recordHook('2026-11-05', 'Fifth hook.', [], hookPath);
+  recordHook('2026-11-07', 'Seventh hook.', [], hookPath);
+  // Backfill an OLDER date after two newer ones already exist on file
+  recordHook('2026-11-03', 'Third hook (backfilled after the fact).', [], hookPath);
+
+  const dates = loadHookHistory(hookPath).entries.map(e => e.date);
+  assert(JSON.stringify(dates) === JSON.stringify(['2026-11-03', '2026-11-05', '2026-11-07']),
+    `Entries must stay sorted chronologically regardless of write order, got ${JSON.stringify(dates)}`);
+
+  // Re-recording an existing date (idempotent re-run) must update in
+  // place, not duplicate or reorder
+  recordHook('2026-11-05', 'Fifth hook, revised.', [], hookPath);
+  const after = loadHookHistory(hookPath).entries;
+  assert(after.length === 3 && after[1].verdict_line === 'Fifth hook, revised.',
+    `Re-running the same date must update in place, not duplicate`);
+
+  const { getStreak, recordTopRisk } = await import('./src/utils/risk-tracker.js');
+  const riskDir = mkdtempSync(join(tmpdir(), 'mi-riskhist-'));
+  const riskPath = join(riskDir, 'risk-history.json');
+
+  recordTopRisk('2026-11-05', 'CREDIT CYCLE', 'Fifth day', riskPath);
+  recordTopRisk('2026-11-06', 'CREDIT CYCLE', 'Sixth day', riskPath);
+  recordTopRisk('2026-11-07', 'CREDIT CYCLE', 'Seventh day', riskPath);
+  assert(getStreak('CREDIT CYCLE', '2026-11-07', riskPath) === 2,
+    `Before the backfill: 2 prior consecutive days (05, 06), excluding today (07)`);
+
+  // Backfill an OLDER date with a DIFFERENT theme, after newer same-theme
+  // entries already exist — must not land after them and inflate/break
+  // the streak walk from the array's end.
+  recordTopRisk('2026-11-04', 'INFLATION', 'Fourth day (backfilled)', riskPath);
+  assert(getStreak('CREDIT CYCLE', '2026-11-07', riskPath) === 2,
+    `Backfilling an older, different-theme day must not change the streak read from today's end — got a different count, meaning the backfill landed out of order`);
+  assert(getStreak('INFLATION', '2026-11-07', riskPath) === 0,
+    `The backfilled theme must not appear to be "currently winning" just because it's now in history`);
+}
+
+// --- ConglomeratesTracker shares output/cost-ledger.json's $5/month cap
+// with the daily CEO pipeline (same checkBudget/recordRunCost, same
+// file). CEO's budget guard alerts on exhaustion; ConglomeratesTracker's
+// didn't — a console.error on a monthly cron nobody tails is the same
+// "silently blocked" shape as the 31 OCT 2026 incident, just monthly
+// instead of daily.
+describe('ConglomeratesTracker — budget guard alerts');
+{
+  const congSrc = readFileSync(join(__dirname, 'agents', 'ConglomeratesTracker', 'orchestrate.js'), 'utf8');
+  assert(congSrc.includes("import { sendFailureAlert, currentRunUrl } from '../../src/utils/resilience.js'"),
+    `ConglomeratesTracker must import the same alert helpers CEO uses`);
+  assert(/if \(!budget\.allowed\) \{[\s\S]{0,600}sendFailureAlert\([\s\S]{0,400}process\.exit\(1\)/.test(congSrc),
+    `Budget-exceeded path must alert BEFORE exiting, not just console.error + exit`);
+}
+
+// --- GitPublisher: a swallowed rebase failure used to fall straight
+// through to an unconditional push. If the rebase stopped mid-way, HEAD
+// could simply be a commit already on origin/main — making that push a
+// silent no-op (this run's dashboard, cost-ledger and cache update never
+// reach main, reported as success anyway). All three workflows that
+// push to main must also share a concurrency group — the primary way
+// two runs could overlap and actually hit this — so both the trigger
+// and the swallow itself are covered.
+describe('GitPublisher & workflow concurrency — no silent no-op push');
+{
+  const gitOpsSrc = readFileSync(join(__dirname, 'agents', 'Infrastructure', 'GitPublisher', 'skills', 'git-ops.js'), 'utf8');
+  assert(!/git pull --rebase origin main \|\| true/.test(gitOpsSrc), `Rebase failure must not be swallowed — it must throw like every other command in this list`);
+  assert(/'git pull --rebase origin main',/.test(gitOpsSrc), `Rebase command must still run, just without the error-swallow`);
+
+  for (const wf of ['daily-dashboard.yml', 'manual-trigger.yml']) {
+    const src = readFileSync(join(__dirname, '..', '.github', 'workflows', wf), 'utf8');
+    assert(/concurrency:\s*\n\s*group:\s*macrointelligence-publish\s*\n\s*cancel-in-progress:\s*false/.test(src),
+      `${wf} must share the macrointelligence-publish concurrency group (queue, don't cancel) — otherwise a manual run can overlap the scheduled one and race on the git push`);
+  }
+  const congWf = readFileSync(join(__dirname, '..', '.github', 'workflows', 'conglomerates-monthly.yml'), 'utf8');
+  assert(/concurrency:\s*\n\s*group:\s*macrointelligence-publish/.test(congWf),
+    `conglomerates-monthly.yml must share the same concurrency group — it pushes to main and shares cost-ledger.json too`);
 }
 
 // --- Executive summary "So What" format. Sections are title / The facts /
@@ -1801,10 +1949,27 @@ assert(!missingRead.narrative.includes('VIX'), `No VIX data means no risk-appeti
     `Shared module must export signal, regime and full-day context builders`);
   assert(sharedSrc.includes('export const BANNED_NAMES_RULE'), `Shared module must export the one banned-names rule text every chat surface appends`);
 
+  // istToday(): both tables' run_date column defaults to Postgres
+  // CURRENT_DATE, which resolves in UTC — the rate-limit/budget "today"
+  // boundary used plain `new Date().toISOString().slice(0,10)`, also UTC,
+  // which happened to agree with the DB default but NOT with every other
+  // "is this today's edition" check in this system (all IST-anchored).
+  // Usage logged in the ~2.5h window between the 03:00 IST publish and
+  // 05:30 IST (UTC midnight) landed under the previous day. Both the
+  // read (checkRateLimit) and the write (logUsage) must use the same
+  // explicit IST function so they can never disagree with each other.
+  assert(sharedSrc.includes('export function istToday()') && /toLocaleString\(.en-US.,\s*\{\s*timeZone:\s*.Asia\/Kolkata./.test(sharedSrc),
+    `Shared module must export an IST-anchored "today" helper`);
+
   const rhSrc = readFileSync(join(__dirname, 'supabase', 'functions', 'rabbit-hole-chat', 'index.ts'), 'utf8');
   assert(rhSrc.includes('from "../_shared/macro-context.ts"') && rhSrc.includes('getSignalContext(supabase, sigNum, run_date)') && rhSrc.includes('getRegimeContext(supabase, entry_id, run_date)'),
     `Rabbit Hole must be refactored onto the shared module, not a parallel reimplementation`);
   assert(!/function getSignalContext|function getRegimeContext/.test(rhSrc), `Rabbit Hole must not keep its own copy of the context builders after the refactor`);
+  assert(!/new Date\(\)\.toISOString\(\)\.slice\(0,\s*10\)/.test(rhSrc), `Rabbit Hole's rate limit must not fall back to a plain UTC "today" — use istToday()`);
+  assert(/checkRateLimit[\s\S]{0,150}istToday\(\)/.test(rhSrc), `Rabbit Hole's rate-limit check must use istToday()`);
+  assert(/rabbit_hole_usage"\)\.insert\(\{\s*\n\s*run_date:\s*istToday\(\)/.test(rhSrc), `Rabbit Hole must explicitly write run_date: istToday() on insert — relying on the column's UTC-anchored DB default would disagree with the IST-anchored read`);
+  assert(/fetch\("https:\/\/api\.anthropic\.com\/v1\/messages",[\s\S]{0,400}signal:\s*AbortSignal\.timeout\(/.test(rhSrc),
+    `Rabbit Hole's Anthropic call must have a timeout — a hung connection otherwise has no recovery path`);
 
   const vaSrc = readFileSync(join(__dirname, 'supabase', 'functions', 'voice-assistant-chat', 'index.ts'), 'utf8');
   assert(vaSrc.includes('getFullDayContext(supabase, run_date)'), `Voice Assistant must assemble the WHOLE day, not one card`);
@@ -1814,6 +1979,12 @@ assert(!missingRead.narrative.includes('VIX'), `No VIX data means no risk-appeti
   assert(vaSrc.includes('voice_assistant_usage') && vaSrc.includes('DAILY_BUDGET_USD') && vaSrc.includes('MAX_MESSAGES_PER_IP'),
     `Voice Assistant must have its own budget cap and rate limit, independent of Rabbit Hole's`);
   assert(vaSrc.includes('MAX_TOOL_ROUNDS'), `Tool-use loop must be bounded — an unbounded loop is a runaway-cost bug waiting to happen`);
+  assert(!/new Date\(\)\.toISOString\(\)\.slice\(0,\s*10\)/.test(vaSrc), `Voice Assistant's rate limit must not fall back to a plain UTC "today" — use istToday()`);
+  assert(/checkRateLimit[\s\S]{0,150}istToday\(\)/.test(vaSrc), `Voice Assistant's rate-limit check must use istToday()`);
+  assert(/voice_assistant_usage"\)\.insert\(\{\s*\n\s*run_date:\s*istToday\(\)/.test(vaSrc), `Voice Assistant must explicitly write run_date: istToday() on insert — relying on the column's UTC-anchored DB default would disagree with the IST-anchored read`);
+  assert(/fetch\("https:\/\/api\.anthropic\.com\/v1\/messages",[\s\S]{0,400}signal:\s*AbortSignal\.timeout\(/.test(vaSrc),
+    `Voice Assistant's per-round Anthropic call must have a timeout — up to MAX_TOOL_ROUNDS independently-unbounded hangs otherwise`);
+  assert(/for \(const block of \(data\.content \|\| \[\]\)\)/.test(vaSrc), `Tool-use block iteration must tolerate a missing/null data.content, not just the later text-extraction path`);
 
   // Wiring: renderer, template, workflow
   const renderSrc = readFileSync(join(__dirname, 'agents', 'Production', 'DashboardRenderer', 'render.js'), 'utf8');

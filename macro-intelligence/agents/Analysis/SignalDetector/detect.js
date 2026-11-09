@@ -102,10 +102,13 @@ Return a JSON array of 7 objects wrapped in <<<JSON and >>> markers.`;
 
     let signals;
     const jsonMatch = text.match(/<<<JSON\s*([\s\S]*?)\s*>>>/) || text.match(/\[[\s\S]*\]/);
-    if (jsonMatch) {
-      signals = JSON.parse(jsonMatch[1] || jsonMatch[0]);
-    } else {
+    if (!jsonMatch) {
       throw new Error('[SignalDetector] Failed to extract JSON from response');
+    }
+    try {
+      signals = JSON.parse(jsonMatch[1] || jsonMatch[0]);
+    } catch (err) {
+      throw new Error(`[SignalDetector] Model returned malformed JSON: ${err.message} — near: ${(jsonMatch[1] || jsonMatch[0]).slice(0, 200)}`);
     }
 
     // Enforce structure

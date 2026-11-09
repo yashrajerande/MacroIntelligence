@@ -16,6 +16,18 @@ on:
         type: boolean
         default: false
 
+# Shared with manual-trigger.yml and conglomerates-monthly.yml — all three
+# run orchestrate.js and push to main, sharing output/cost-ledger.json.
+# Without this, a manual run overlapping the scheduled window raced on
+# `git pull --rebase || true` + `git push`, where the swallowed rebase
+# failure could make the push a silent no-op (this run's dashboard, cost
+# record, and cache update never reach main, reported as success anyway).
+# cancel-in-progress: false queues the newer run rather than killing a
+# pipeline mid-way, which would leave worse-than-either inconsistent state.
+concurrency:
+  group: macrointelligence-publish
+  cancel-in-progress: false
+
 jobs:
   run-pipeline:
     runs-on: ubuntu-latest

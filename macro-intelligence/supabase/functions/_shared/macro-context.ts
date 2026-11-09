@@ -48,6 +48,26 @@ export function getDateDaysAgo(isoDate: string, days: number): string {
   return d.toISOString().slice(0, 10);
 }
 
+/**
+ * Today's date in IST, "YYYY-MM-DD". Every other "is this today's
+ * edition" check in this system (the publish cron, the frontend's audio
+ * player gates) is IST-anchored, matching the 03:00 IST publish cadence.
+ * The rate-limit/budget "today" boundary in both chat edge functions used
+ * to be `new Date().toISOString().slice(0,10)` — plain UTC — which meant
+ * usage logged in the ~2.5-hour window between 03:00 IST (publish) and
+ * 05:30 IST (UTC midnight) was bucketed under the PREVIOUS day: a reader
+ * opening a brand-new edition in that window could inherit yesterday's
+ * exhausted budget. Both the rate-limit read and the usage-log insert
+ * must use this same function so they agree on the boundary.
+ */
+export function istToday(): string {
+  const t = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+  const y = t.getFullYear();
+  const m = String(t.getMonth() + 1).padStart(2, "0");
+  const d = String(t.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
 async function latestIndicatorContext(
   supabase: SupabaseClient, slugs: string[], runDate: string,
 ): Promise<string> {

@@ -19,6 +19,13 @@ on:
         required: false
         default: 'false'
 
+# Shared with daily-dashboard.yml and manual-trigger.yml — all three push
+# to main and share output/cost-ledger.json's budget cap. See
+# daily-dashboard.yml's comment for why this matters.
+concurrency:
+  group: macrointelligence-publish
+  cancel-in-progress: false
+
 jobs:
   run-conglomerates:
     runs-on: ubuntu-latest

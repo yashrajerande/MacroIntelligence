@@ -32,8 +32,15 @@ export function isVintageInFuture(vintage, runDate) {
       if (yearMatch) {
         const year = parseInt(yearMatch[0]);
         const month = i;
-        const vintageMonth = new Date(year, month, 1); // start of month
-        const runMonth = new Date(new Date(runDate).getFullYear(), new Date(runDate).getMonth(), 1);
+        // UTC throughout — runDate is a "YYYY-MM-DD" string (parses as UTC
+        // midnight), so reading it back with local-timezone accessors
+        // (getFullYear/getMonth) drifted a day on any runner not in UTC,
+        // flipping "current month" to "future" right at the month
+        // boundary. Dormant on GitHub Actions' UTC-default runners, but a
+        // landmine for any other environment.
+        const vintageMonth = Date.UTC(year, month, 1);
+        const [runYear, runMonthNum] = runDate.split('-').map(Number);
+        const runMonth = Date.UTC(runYear, runMonthNum - 1, 1);
         return vintageMonth > runMonth; // allow current month
       }
     }

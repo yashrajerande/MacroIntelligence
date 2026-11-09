@@ -281,18 +281,33 @@ export const SLUG_MAP = Object.fromEntries(
   ])
 );
 
-/** slug → { min, max, p10, p25, p50, p75, p90 } (replaces HISTORICAL_RANGES) */
+/**
+ * slug → { min, max, p10, p25, p50, p75, p90 } (replaces HISTORICAL_RANGES)
+ *
+ * p10/p25/p75/p90 are anchored on p50 (not independently split across the
+ * full [min,max] span) so the five points are ALWAYS monotonic — min ≤ p10
+ * ≤ p25 ≤ p50 ≤ p75 ≤ p90 ≤ max — whatever p50 happens to be. The old
+ * independent linear split broke this for any right/left-skewed indicator
+ * whose hand-set p50 didn't land near the middle of its range (e.g.
+ * pmi_composite: range [5,65] but p50=54 — the old split's p75 came out
+ * to 50, BELOW p50). scorePct10y()'s piecewise interpolation assumes
+ * strict monotonicity and silently produces a 25-33 point percentile jump
+ * for a trivial value change wherever it doesn't hold — this was live on
+ * 15 real indicators including the currently-fetched pmi_composite.
+ */
 export const HISTORICAL_RANGES = Object.fromEntries(
   Object.entries(INDICATOR_SCHEMA).map(([slug, s]) => {
     const [min, max] = s.expected_range;
-    const span = max - min;
+    const p50 = s.p50;
+    const lowerSpan = p50 - min;
+    const upperSpan = max - p50;
     return [slug, {
       min, max,
-      p10: Math.round((min + span * 0.10) * 100) / 100,
-      p25: Math.round((min + span * 0.25) * 100) / 100,
-      p50: s.p50,
-      p75: Math.round((min + span * 0.75) * 100) / 100,
-      p90: Math.round((min + span * 0.90) * 100) / 100,
+      p10: Math.round((min + lowerSpan * 0.20) * 100) / 100,
+      p25: Math.round((min + lowerSpan * 0.50) * 100) / 100,
+      p50,
+      p75: Math.round((p50 + upperSpan * 0.50) * 100) / 100,
+      p90: Math.round((p50 + upperSpan * 0.80) * 100) / 100,
     }];
   })
 );

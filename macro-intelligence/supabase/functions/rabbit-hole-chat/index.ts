@@ -1,6 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
-import { getSignalContext, getRegimeContext, BANNED_NAMES_RULE } from "../_shared/macro-context.ts";
+import { getSignalContext, getRegimeContext, BANNED_NAMES_RULE, istToday } from "../_shared/macro-context.ts";
 
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY")!;
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
@@ -59,7 +59,7 @@ interface RequestBody {
 }
 
 async function checkRateLimit(ip: string): Promise<{ allowed: boolean; reason?: string }> {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = istToday();
 
   // Check per-IP limit
   const { count: ipCount } = await supabase
@@ -92,6 +92,7 @@ async function logUsage(
 ) {
   const cost = (inputTokens / 1_000_000) * 0.80 + (outputTokens / 1_000_000) * 4.00;
   await supabase.from("rabbit_hole_usage").insert({
+    run_date: istToday(), // explicit — must match checkRateLimit's boundary, not the column's UTC-anchored CURRENT_DATE default
     entry_type: entryType,
     entry_id: entryId,
     user_ip: ip,
@@ -154,7 +155,11 @@ Deno.serve(async (req: Request) => {
 
     const messageNum = conversation.filter((m) => m.role === "user").length + 1;
 
-    // Call Anthropic with streaming
+    // Call Anthropic with streaming. A hung connection (accepted, never
+    // responds — a real upstream failure mode, distinct from a fast
+    // error) used to have no recovery path: the function just sat until
+    // the platform's own hard execution ceiling eventually killed it,
+    // with the panel stuck on "Thinking..." forever.
     const anthropicRes = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
@@ -169,6 +174,7 @@ Deno.serve(async (req: Request) => {
         messages,
         stream: true,
       }),
+      signal: AbortSignal.timeout(45_000),
     });
 
     if (!anthropicRes.ok) {

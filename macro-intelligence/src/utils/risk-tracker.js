@@ -67,10 +67,10 @@ export function classifyRiskSeverity(pct10y) {
   return { badge_type: 'b-neu', badge_label: 'Emerging Risk' };
 }
 
-function readHistory() {
-  if (!existsSync(HISTORY_PATH)) return { history: [] };
+function readHistory(historyPath = HISTORY_PATH) {
+  if (!existsSync(historyPath)) return { history: [] };
   try {
-    const raw = JSON.parse(readFileSync(HISTORY_PATH, 'utf-8'));
+    const raw = JSON.parse(readFileSync(historyPath, 'utf-8'));
     return { history: Array.isArray(raw.history) ? raw.history : [] };
   } catch {
     return { history: [] };
@@ -85,8 +85,8 @@ function readHistory() {
  *        already recorded today's entry, which must not count toward the
  *        "prior days" streak (it printed "Day N+2" on re-runs).
  */
-export function getStreak(theme, excludeDate) {
-  const { history } = readHistory();
+export function getStreak(theme, excludeDate, historyPath = HISTORY_PATH) {
+  const { history } = readHistory(historyPath);
   let streak = 0;
   for (let i = history.length - 1; i >= 0; i--) {
     if (excludeDate && history[i].date === excludeDate) continue;
@@ -100,17 +100,25 @@ export function getStreak(theme, excludeDate) {
  * Record today's winning theme. Idempotent per date (re-running the same
  * day updates in place rather than double-counting the streak).
  */
-export function recordTopRisk(date, theme, title) {
-  const state = readHistory();
-  const last = state.history[state.history.length - 1];
-  if (last && last.date === date) {
-    last.theme = theme;
-    last.title = title;
+export function recordTopRisk(date, theme, title, historyPath = HISTORY_PATH) {
+  const state = readHistory(historyPath);
+  const existing = state.history.find(e => e.date === date);
+  if (existing) {
+    existing.theme = theme;
+    existing.title = title;
   } else {
     state.history.push({ date, theme, title });
   }
+  // Keep chronological order even for a backfill older than the latest
+  // entry on file (DATE_OVERRIDE is a real, operator-triggered path —
+  // see ist-date.js's own comment on a past backfill incident). A blind
+  // push left a backfilled entry AFTER today's, and getStreak()'s
+  // backward walk from the array's end assumes position IS chronological
+  // order — with no error, just a silently wrong streak count from that
+  // point on. ISO "YYYY-MM-DD" strings sort correctly as text.
+  state.history.sort((a, b) => a.date.localeCompare(b.date));
   if (state.history.length > MAX_ENTRIES) {
     state.history = state.history.slice(-MAX_ENTRIES);
   }
-  writeFileSync(HISTORY_PATH, JSON.stringify(state, null, 2), 'utf-8');
+  writeFileSync(historyPath, JSON.stringify(state, null, 2), 'utf-8');
 }

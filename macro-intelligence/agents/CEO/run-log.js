@@ -12,8 +12,13 @@ import { randomUUID } from 'crypto';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..', '..');
 
-// Cost per 1K tokens (as of 2026)
-const MODEL_COSTS = {
+// Cost per 1K tokens (as of 2026). Exported so a pre-flight test can
+// assert every hardcoded model-ID literal used elsewhere in the codebase
+// has a matching entry here — the agentCost() fallback to MODEL_COSTS['none']
+// is silent (zero cost, no warning), so a model-ID update that forgets to
+// also update this table would make the budget cap stop binding with no
+// visible signal, the same failure shape as the 31 OCT 2026 incident.
+export const MODEL_COSTS = {
   'claude-haiku-4-5-20251001': { input: 0.0008, output: 0.001 },
   'claude-sonnet-4-6':         { input: 0.003,  output: 0.015 },
   'none':                      { input: 0,      output: 0 },

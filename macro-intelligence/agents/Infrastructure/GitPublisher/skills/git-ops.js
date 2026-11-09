@@ -32,7 +32,17 @@ export async function gitPublish(filePath, indexPath, commitMessage, ghPat, repo
     `git add -f ${outputDir}/archive.html || echo "[Git] archive.html not found, skipping"`,
     `git add -f ${outputDir}/daily-broadcast.mp3 || echo "[Git] daily-broadcast.mp3 not found, skipping"`,
     `git commit -m "${commitMessage}"`,
-    'git pull --rebase origin main || true',
+    // No `|| true` here — a swallowed rebase failure (conflict, mid-rebase
+    // state) used to fall straight through to the unconditional push
+    // below. If the rebase stopped mid-way, HEAD could simply be a
+    // commit already on origin/main, making that push a silent no-op:
+    // this run's dashboard, cost-ledger update and cache update never
+    // reach main, while the pipeline logs success and sends Telegram as
+    // if they did. Letting this throw (same as every other command in
+    // this list) means the orchestrator's existing withRetry() wrapper
+    // around gitPublish() gets a real chance to re-fetch and retry
+    // instead of publishing a no-op.
+    'git pull --rebase origin main',
     'git push origin HEAD:refs/heads/main',
   ];
 

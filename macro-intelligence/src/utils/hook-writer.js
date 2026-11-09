@@ -297,12 +297,12 @@ const SLUG_TO_THEMES = {
  *   { entries: [{ date, verdict_line, themes: [...], slugs: [...] }] }
  * Empty history is returned if the file does not yet exist.
  */
-export function loadHookHistory() {
-  if (!existsSync(HISTORY_PATH)) {
+export function loadHookHistory(historyPath = HISTORY_PATH) {
+  if (!existsSync(historyPath)) {
     return { entries: [] };
   }
   try {
-    const raw = readFileSync(HISTORY_PATH, 'utf-8');
+    const raw = readFileSync(historyPath, 'utf-8');
     const parsed = JSON.parse(raw);
     if (!parsed.entries || !Array.isArray(parsed.entries)) return { entries: [] };
     return parsed;
@@ -316,8 +316,8 @@ export function loadHookHistory() {
  * prevent unbounded growth. Commits the file via GitPublisher as part of
  * the normal pipeline commit.
  */
-export function recordHook(date, verdictLine, referencedSlugs = []) {
-  const history = loadHookHistory();
+export function recordHook(date, verdictLine, referencedSlugs = [], historyPath = HISTORY_PATH) {
+  const history = loadHookHistory(historyPath);
   const themes = extractThemes(verdictLine);
   const slugs = Array.from(new Set([
     ...referencedSlugs,
@@ -328,12 +328,22 @@ export function recordHook(date, verdictLine, referencedSlugs = []) {
   history.entries = history.entries.filter(e => e.date !== date);
   history.entries.push({ date, verdict_line: verdictLine, themes, slugs });
 
-  // Keep last 30 entries only
+  // Keep chronological order even when `date` is a backfill older than
+  // the latest entry already on file (DATE_OVERRIDE is a real,
+  // operator-triggered path — see ist-date.js's own comment on a past
+  // backfill incident). A blind push left a backfilled entry AFTER
+  // today's, corrupting getRecentThemes/getRecentSlugs's slice(-N) and
+  // every getStreak()-style backward walk that assumes array position is
+  // chronological order — with no error, just silently wrong results
+  // from that point on. ISO "YYYY-MM-DD" strings sort correctly as text.
+  history.entries.sort((a, b) => a.date.localeCompare(b.date));
+
+  // Keep last 30 entries only (by date, now that order is guaranteed)
   history.entries = history.entries.slice(-30);
 
-  const dir = dirname(HISTORY_PATH);
+  const dir = dirname(historyPath);
   if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
-  writeFileSync(HISTORY_PATH, JSON.stringify(history, null, 2));
+  writeFileSync(historyPath, JSON.stringify(history, null, 2));
   return history;
 }
 

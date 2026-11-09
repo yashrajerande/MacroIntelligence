@@ -206,10 +206,13 @@ REMEMBER: Your persona defines three voices (Mishra, Munger, Economist). USE THE
 
     let parsed;
     const jsonMatch = text.match(/<<<JSON\s*([\s\S]*?)\s*>>>/) || text.match(/\{[\s\S]*\}/);
-    if (jsonMatch) {
-      parsed = JSON.parse(jsonMatch[1] || jsonMatch[0]);
-    } else {
+    if (!jsonMatch) {
       throw new Error('[ExecutiveSummaryWriter] Failed to extract JSON from response');
+    }
+    try {
+      parsed = JSON.parse(jsonMatch[1] || jsonMatch[0]);
+    } catch (err) {
+      throw new Error(`[ExecutiveSummaryWriter] Model returned malformed JSON: ${err.message} — near: ${(jsonMatch[1] || jsonMatch[0]).slice(0, 200)}`);
     }
 
     // Handle both old format (array) and new format (object with verdict_line + regime_narratives)

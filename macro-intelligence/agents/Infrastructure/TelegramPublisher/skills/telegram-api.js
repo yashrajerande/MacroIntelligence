@@ -3,6 +3,15 @@
  */
 
 const BASE_URL = 'https://api.telegram.org/bot';
+// None of these calls had a timeout — a hung connection (accepted, never
+// responds) left `await fetch(...)` never settling, which the surrounding
+// "non-blocking" try/catch in orchestrate.js can't catch (nothing ever
+// rejects), so the job just sits until GitHub Actions' own timeout-minutes
+// kills it as "cancelled" rather than "failure" — skipping the
+// if:failure() alert/log-upload steps entirely. Media uploads get a
+// longer window than the plain-text alert send.
+const UPLOAD_TIMEOUT_MS = 30000;
+const MESSAGE_TIMEOUT_MS = 15000;
 
 /**
  * Send a photo to a Telegram chat.
@@ -24,7 +33,7 @@ export async function sendPhoto(token, chatId, imageBuffer, caption = '') {
     form.append('parse_mode', 'HTML');
   }
 
-  const res = await fetch(url, { method: 'POST', body: form });
+  const res = await fetch(url, { method: 'POST', body: form, signal: AbortSignal.timeout(UPLOAD_TIMEOUT_MS) });
   if (!res.ok) {
     const err = await res.text().catch(() => 'unknown');
     throw new Error(`[Telegram] sendPhoto failed: HTTP ${res.status} — ${err}`);
@@ -58,7 +67,7 @@ export async function sendAudio(token, chatId, audioBuffer, title = '60-Second M
     form.append('parse_mode', 'HTML');
   }
 
-  const res = await fetch(url, { method: 'POST', body: form });
+  const res = await fetch(url, { method: 'POST', body: form, signal: AbortSignal.timeout(UPLOAD_TIMEOUT_MS) });
   if (!res.ok) {
     const err = await res.text().catch(() => 'unknown');
     throw new Error(`[Telegram] sendAudio failed: HTTP ${res.status} — ${err}`);
@@ -92,7 +101,7 @@ export async function sendDocument(token, chatId, fileBuffer, filename, caption 
     form.append('parse_mode', 'HTML');
   }
 
-  const res = await fetch(url, { method: 'POST', body: form });
+  const res = await fetch(url, { method: 'POST', body: form, signal: AbortSignal.timeout(UPLOAD_TIMEOUT_MS) });
   if (!res.ok) {
     const err = await res.text().catch(() => 'unknown');
     throw new Error(`[Telegram] sendDocument failed: HTTP ${res.status} — ${err}`);
@@ -113,6 +122,7 @@ export async function sendMessage(token, chatId, text, parseMode = 'HTML') {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ chat_id: chatId, text, parse_mode: parseMode }),
+    signal: AbortSignal.timeout(MESSAGE_TIMEOUT_MS),
   });
   if (!res.ok) {
     const err = await res.text().catch(() => 'unknown');

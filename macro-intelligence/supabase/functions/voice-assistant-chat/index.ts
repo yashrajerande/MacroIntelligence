@@ -18,7 +18,7 @@
 //      streaming upgrade once the question/answer shape is proven.
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
-import { getSignalContext, getRegimeContext, getFullDayContext, BANNED_NAMES_RULE } from "../_shared/macro-context.ts";
+import { getSignalContext, getRegimeContext, getFullDayContext, BANNED_NAMES_RULE, istToday } from "../_shared/macro-context.ts";
 
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY")!;
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
@@ -123,7 +123,7 @@ interface RequestBody {
 }
 
 async function checkRateLimit(ip: string): Promise<{ allowed: boolean; reason?: string }> {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = istToday();
 
   const { count: ipCount } = await supabase
     .from("voice_assistant_usage")
@@ -151,6 +151,7 @@ async function checkRateLimit(ip: string): Promise<{ allowed: boolean; reason?: 
 async function logUsage(ip: string, messageNum: number, inputTokens: number, outputTokens: number) {
   const cost = (inputTokens / 1_000_000) * 0.80 + (outputTokens / 1_000_000) * 4.00;
   await supabase.from("voice_assistant_usage").insert({
+    run_date: istToday(), // explicit — must match checkRateLimit's boundary, not the column's UTC-anchored CURRENT_DATE default
     user_ip: ip,
     message_num: messageNum,
     input_tokens: inputTokens,
@@ -227,6 +228,11 @@ Deno.serve(async (req: Request) => {
     let finalText = "";
 
     for (let round = 0; round < MAX_TOOL_ROUNDS; round++) {
+      // No timeout here used to mean a hung connection (accepted, never
+      // responds) left the mic button stuck in "thinking" forever, with
+      // up to MAX_TOOL_ROUNDS independently-unbounded rounds compounding
+      // it. 30s/round keeps the worst case (all 3 rounds hang) well
+      // under Supabase Edge Functions' own execution ceiling.
       const res = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
         headers: {
@@ -241,6 +247,7 @@ Deno.serve(async (req: Request) => {
           tools: TOOLS,
           messages,
         }),
+        signal: AbortSignal.timeout(30_000),
       });
 
       if (!res.ok) {
@@ -259,7 +266,7 @@ Deno.serve(async (req: Request) => {
       if (data.stop_reason === "tool_use") {
         messages.push({ role: "assistant", content: data.content });
         const toolResults = [];
-        for (const block of data.content) {
+        for (const block of (data.content || [])) {
           if (block.type !== "tool_use") continue;
           const result = await runTool(block.name, block.input, run_date);
           toolResults.push({ type: "tool_result", tool_use_id: block.id, content: result });

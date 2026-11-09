@@ -16,6 +16,13 @@ on:
         required: false
         default: 'false'
 
+# Shared with daily-dashboard.yml and conglomerates-monthly.yml — see
+# daily-dashboard.yml's comment. Prevents this manual run from racing the
+# scheduled run (or another manual run) on the shared git push + cost ledger.
+concurrency:
+  group: macrointelligence-publish
+  cancel-in-progress: false
+
 jobs:
   manual-run:
     runs-on: ubuntu-latest

@@ -3,6 +3,14 @@
  */
 
 const CHUNK_SIZE = 20;
+// Without this, a hung Supabase connection (accepted, never responds —
+// a real failure mode, e.g. the free-tier project waking from pause) left
+// `await fetch(...)` never settling. The surrounding orchestrator try/catch
+// is meant to be non-blocking, but a promise that never rejects never
+// reaches that catch — the job just sits until GitHub Actions' own
+// timeout-minutes kills it, which reports as "cancelled" rather than
+// "failure" and SKIPS the if:failure() alert/log-upload steps entirely.
+const FETCH_TIMEOUT_MS = 15000;
 
 function getHeaders(serviceKey) {
   return {
@@ -21,6 +29,7 @@ async function postWithRetry(url, body, headers, retries = 1) {
         method: 'POST',
         headers,
         body: JSON.stringify(body),
+        signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
       });
       const latency = Date.now() - start;
 
@@ -83,7 +92,7 @@ export async function fetchOne(table, queryParam, supabaseUrl, serviceKey) {
     'Authorization': `Bearer ${serviceKey}`,
   };
 
-  const res = await fetch(url, { headers });
+  const res = await fetch(url, { headers, signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
   if (!res.ok) throw new Error(`fetchOne ${table}: HTTP ${res.status}`);
   const data = await res.json();
   return data[0] || null;

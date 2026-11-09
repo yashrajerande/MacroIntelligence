@@ -1,18 +1,6 @@
 {
   "entries": [
     {
-      "date": "06 OCT 2026",
-      "verdict_line": "US 10Y at 5.28% — a 96th-percentile yield — is doing the Fed's work for it; India's INR at 96.15 is paying the tuition.",
-      "themes": [],
-      "slugs": [
-        "us_10y_treasury",
-        "inr_usd",
-        "office_absorption",
-        "retail_mall_vacancy",
-        "dii_equity_net"
-      ]
-    },
-    {
       "date": "07 OCT 2026",
       "verdict_line": "Mumbai office rents at a 100th-percentile ₹335/sqft/mo while absorption sits at a 6th-percentile 13.2 mn sq ft/quarter — landlords pricing scarcity that occupiers aren't confirming.",
       "themes": [
@@ -434,6 +422,22 @@
         "nfo_collections",
         "boj_rate",
         "euro_stoxx50"
+      ]
+    },
+    {
+      "date": "09 NOV 2026",
+      "verdict_line": "US VIX at 25.64 — a four-month high — while Bank Nifty sits at the 98th percentile; American fear is not yet Indian price.",
+      "themes": [
+        "markets"
+      ],
+      "slugs": [
+        "us_10y_treasury",
+        "inr_usd",
+        "nfo_collections",
+        "boj_rate",
+        "sp500",
+        "bank_nifty",
+        "us_vix"
       ]
     }
   ]

@@ -1,6 +1,39 @@
 {
   "entries": [
     {
+      "date": "02 NOV 2026",
+      "verdict_line": "SIP inflows at a record ₹32,490 cr / month while NFO collections collapse to a 10-year-low ₹998 cr / month — retail India is buying the index, not the story.",
+      "themes": [
+        "flows"
+      ],
+      "slugs": [
+        "rent_mumbai",
+        "rent_bengaluru",
+        "us_10y_treasury",
+        "inr_usd",
+        "boj_rate",
+        "sip_inflows",
+        "nfo_collections"
+      ]
+    },
+    {
+      "date": "03 NOV 2026",
+      "verdict_line": "BOJ at 1.25% p.a. — a 10-year high — while India VIX sits at the 11th percentile; the yen carry unwind is priced nowhere in Indian markets.",
+      "themes": [
+        "markets",
+        "policy",
+        "global_macro"
+      ],
+      "slugs": [
+        "office_absorption",
+        "inr_usd",
+        "us_10y_treasury",
+        "boj_rate",
+        "nfo_collections",
+        "india_vix"
+      ]
+    },
+    {
       "date": "07 OCT 2026",
       "verdict_line": "Mumbai office rents at a 100th-percentile ₹335/sqft/mo while absorption sits at a 6th-percentile 13.2 mn sq ft/quarter — landlords pricing scarcity that occupiers aren't confirming.",
       "themes": [
@@ -15,6 +48,21 @@
       ]
     },
     {
+      "date": "08 NOV 2026",
+      "verdict_line": "INR at 94.34 — an 87th-percentile print — while FII equity outflows hit ₹49,935 cr / month; the rupee's calm is RBI's balance sheet, not the market's verdict.",
+      "themes": [
+        "currency",
+        "flows"
+      ],
+      "slugs": [
+        "inr_usd",
+        "us_10y_treasury",
+        "nfo_collections",
+        "boj_rate",
+        "euro_stoxx50"
+      ]
+    },
+    {
       "date": "08 OCT 2026",
       "verdict_line": "Euro Stoxx 50 slides to 6,180 from a 100th-percentile peak — DM equities cracking precisely as US 10Y at 5.27% yield extracts its toll.",
       "themes": [],
@@ -24,6 +72,22 @@
         "rent_mumbai",
         "inr_usd",
         "rent_bengaluru"
+      ]
+    },
+    {
+      "date": "09 NOV 2026",
+      "verdict_line": "US VIX at 25.64 — a four-month high — while Bank Nifty sits at the 98th percentile; American fear is not yet Indian price.",
+      "themes": [
+        "markets"
+      ],
+      "slugs": [
+        "us_10y_treasury",
+        "inr_usd",
+        "nfo_collections",
+        "boj_rate",
+        "sp500",
+        "bank_nifty",
+        "us_vix"
       ]
     },
     {
@@ -40,6 +104,20 @@
         "inr_usd",
         "rent_bengaluru",
         "sip_inflows"
+      ]
+    },
+    {
+      "date": "10 NOV 2026",
+      "verdict_line": "Fuel inflation at 22.93% YoY — a 95th-percentile print — while repo sits at 5.25% p.a.; the RBI's pause is becoming a policy error in slow motion.",
+      "themes": [
+        "inflation"
+      ],
+      "slugs": [
+        "inr_usd",
+        "us_10y_treasury",
+        "fuel_inflation",
+        "boj_rate",
+        "mf_avg_aum"
       ]
     },
     {
@@ -360,84 +438,6 @@
         "us_10y_treasury",
         "office_absorption",
         "iip_capgoods"
-      ]
-    },
-    {
-      "date": "01 NOV 2026",
-      "verdict_line": "Mumbai office rents at an all-time high ₹342.58/sqft/mo while absorption sits at the 8th percentile — landlords are pricing a tenant that isn't arriving.",
-      "themes": [
-        "real_estate"
-      ],
-      "slugs": [
-        "rent_mumbai",
-        "rent_bengaluru",
-        "us_10y_treasury",
-        "office_absorption",
-        "inr_usd"
-      ]
-    },
-    {
-      "date": "02 NOV 2026",
-      "verdict_line": "SIP inflows at a record ₹32,490 cr / month while NFO collections collapse to a 10-year-low ₹998 cr / month — retail India is buying the index, not the story.",
-      "themes": [
-        "flows"
-      ],
-      "slugs": [
-        "rent_mumbai",
-        "rent_bengaluru",
-        "us_10y_treasury",
-        "inr_usd",
-        "boj_rate",
-        "sip_inflows",
-        "nfo_collections"
-      ]
-    },
-    {
-      "date": "03 NOV 2026",
-      "verdict_line": "BOJ at 1.25% p.a. — a 10-year high — while India VIX sits at the 11th percentile; the yen carry unwind is priced nowhere in Indian markets.",
-      "themes": [
-        "markets",
-        "policy",
-        "global_macro"
-      ],
-      "slugs": [
-        "office_absorption",
-        "inr_usd",
-        "us_10y_treasury",
-        "boj_rate",
-        "nfo_collections",
-        "india_vix"
-      ]
-    },
-    {
-      "date": "08 NOV 2026",
-      "verdict_line": "INR at 94.34 — an 87th-percentile print — while FII equity outflows hit ₹49,935 cr / month; the rupee's calm is RBI's balance sheet, not the market's verdict.",
-      "themes": [
-        "currency",
-        "flows"
-      ],
-      "slugs": [
-        "inr_usd",
-        "us_10y_treasury",
-        "nfo_collections",
-        "boj_rate",
-        "euro_stoxx50"
-      ]
-    },
-    {
-      "date": "09 NOV 2026",
-      "verdict_line": "US VIX at 25.64 — a four-month high — while Bank Nifty sits at the 98th percentile; American fear is not yet Indian price.",
-      "themes": [
-        "markets"
-      ],
-      "slugs": [
-        "us_10y_treasury",
-        "inr_usd",
-        "nfo_collections",
-        "boj_rate",
-        "sp500",
-        "bank_nifty",
-        "us_vix"
       ]
     }
   ]

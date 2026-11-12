@@ -1,23 +1,6 @@
 {
   "entries": [
     {
-      "date": "03 NOV 2026",
-      "verdict_line": "BOJ at 1.25% p.a. — a 10-year high — while India VIX sits at the 11th percentile; the yen carry unwind is priced nowhere in Indian markets.",
-      "themes": [
-        "markets",
-        "policy",
-        "global_macro"
-      ],
-      "slugs": [
-        "office_absorption",
-        "inr_usd",
-        "us_10y_treasury",
-        "boj_rate",
-        "nfo_collections",
-        "india_vix"
-      ]
-    },
-    {
       "date": "07 OCT 2026",
       "verdict_line": "Mumbai office rents at a 100th-percentile ₹335/sqft/mo while absorption sits at a 6th-percentile 13.2 mn sq ft/quarter — landlords pricing scarcity that occupiers aren't confirming.",
       "themes": [
@@ -144,6 +127,21 @@
         "nikkei225",
         "dii_equity_net",
         "fuel_inflation"
+      ]
+    },
+    {
+      "date": "12 NOV 2026",
+      "verdict_line": "Euro Stoxx 50 at a 10-year-high while BOJ at 1.25% p.a. drains the carry trade that funded EM inflows — India's DII cushion buys time, not immunity.",
+      "themes": [
+        "flows",
+        "policy"
+      ],
+      "slugs": [
+        "euro_stoxx50",
+        "us_10y_treasury",
+        "inr_usd",
+        "boj_rate",
+        "hpi_mumbai"
       ]
     },
     {

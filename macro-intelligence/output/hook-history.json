@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "07 OCT 2026",
-      "verdict_line": "Mumbai office rents at a 100th-percentile ₹335/sqft/mo while absorption sits at a 6th-percentile 13.2 mn sq ft/quarter — landlords pricing scarcity that occupiers aren't confirming.",
-      "themes": [
-        "real_estate"
-      ],
-      "slugs": [
-        "us_10y_treasury",
-        "rent_mumbai",
-        "inr_usd",
-        "rent_bengaluru",
-        "office_absorption"
-      ]
-    },
-    {
       "date": "08 NOV 2026",
       "verdict_line": "INR at 94.34 — an 87th-percentile print — while FII equity outflows hit ₹49,935 cr / month; the rupee's calm is RBI's balance sheet, not the market's verdict.",
       "themes": [
@@ -157,6 +143,21 @@
         "inr_usd",
         "rent_bengaluru",
         "office_absorption"
+      ]
+    },
+    {
+      "date": "13 NOV 2026",
+      "verdict_line": "BOJ at 1.25% p.a. — a 10-year high — is unwinding carry trades that funded EM inflows; India's ₹49,935 cr / month FII exodus is the first casualty.",
+      "themes": [
+        "flows",
+        "policy"
+      ],
+      "slugs": [
+        "us_10y_treasury",
+        "inr_usd",
+        "boj_rate",
+        "mf_avg_aum",
+        "nfo_collections"
       ]
     },
     {

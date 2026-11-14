@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "08 NOV 2026",
-      "verdict_line": "INR at 94.34 — an 87th-percentile print — while FII equity outflows hit ₹49,935 cr / month; the rupee's calm is RBI's balance sheet, not the market's verdict.",
-      "themes": [
-        "currency",
-        "flows"
-      ],
-      "slugs": [
-        "inr_usd",
-        "us_10y_treasury",
-        "nfo_collections",
-        "boj_rate",
-        "euro_stoxx50"
-      ]
-    },
-    {
       "date": "08 OCT 2026",
       "verdict_line": "Euro Stoxx 50 slides to 6,180 from a 100th-percentile peak — DM equities cracking precisely as US 10Y at 5.27% yield extracts its toll.",
       "themes": [],
@@ -173,6 +158,20 @@
         "office_absorption",
         "retail_mall_vacancy",
         "sip_aum"
+      ]
+    },
+    {
+      "date": "14 NOV 2026",
+      "verdict_line": "US 10Y at 5.1% yield — a 93rd-percentile print rising for the third consecutive session — reprices every EM carry trade India benefits from, and the RBI has no rate buffer to respond.",
+      "themes": [
+        "policy"
+      ],
+      "slugs": [
+        "us_10y_treasury",
+        "inr_usd",
+        "boj_rate",
+        "mf_avg_aum",
+        "nfo_collections"
       ]
     },
     {

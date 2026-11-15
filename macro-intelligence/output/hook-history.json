@@ -1,18 +1,6 @@
 {
   "entries": [
     {
-      "date": "08 OCT 2026",
-      "verdict_line": "Euro Stoxx 50 slides to 6,180 from a 100th-percentile peak — DM equities cracking precisely as US 10Y at 5.27% yield extracts its toll.",
-      "themes": [],
-      "slugs": [
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "rent_mumbai",
-        "inr_usd",
-        "rent_bengaluru"
-      ]
-    },
-    {
       "date": "09 NOV 2026",
       "verdict_line": "US VIX at 25.64 — a four-month high — while Bank Nifty sits at the 98th percentile; American fear is not yet Indian price.",
       "themes": [
@@ -184,6 +172,18 @@
         "inr_usd",
         "office_absorption",
         "sip_aum"
+      ]
+    },
+    {
+      "date": "15 NOV 2026",
+      "verdict_line": "US 10Y at 5.1% yield — a 93rd-percentile print rising four of five months — is tightening global financial conditions faster than any central bank communiqué.",
+      "themes": [],
+      "slugs": [
+        "us_10y_treasury",
+        "inr_usd",
+        "boj_rate",
+        "copper",
+        "mf_avg_aum"
       ]
     },
     {

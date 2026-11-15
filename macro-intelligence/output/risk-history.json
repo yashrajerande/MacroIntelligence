@@ -1,11 +1,6 @@
 {
   "history": [
     {
-      "date": "2026-09-06",
-      "theme": "CREDIT CYCLE",
-      "title": "Deposit Gap Forces RBI's Hand"
-    },
-    {
       "date": "2026-09-07",
       "theme": "CREDIT CYCLE",
       "title": "Deposit Gap Forces RBI's Hand"
@@ -299,6 +294,11 @@
       "date": "2026-11-14",
       "theme": "GLOBAL LIQUIDITY",
       "title": "BOJ Tightening Breaks Carry Trade Funding"
+    },
+    {
+      "date": "2026-11-15",
+      "theme": "OIL / COMMODITY RISK",
+      "title": "Fuel Inflation at 95th Percentile, Brent Climbing"
     }
   ]
 }

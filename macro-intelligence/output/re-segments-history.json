@@ -1530,6 +1530,214 @@
         }
       },
       "errors": []
+    },
+    {
+      "fetched_at": "2026-11-15T01:13:35.540Z",
+      "run_date": "2026-11-15",
+      "residential": {
+        "vintage": "Q3 2026 (Jul-Sep 2026)",
+        "source": "Anarock / Anarock Research",
+        "bands": [
+          {
+            "band": "affordable",
+            "range": "< ₹40 lakh",
+            "launches_share_pct": 14,
+            "sales_share_pct": null,
+            "sales_yoy_pct": null
+          },
+          {
+            "band": "mid",
+            "range": "₹40-80 lakh",
+            "launches_share_pct": 17,
+            "sales_share_pct": null,
+            "sales_yoy_pct": null
+          },
+          {
+            "band": "premium",
+            "range": "₹80 lakh - ₹1.5 cr",
+            "launches_share_pct": 34,
+            "sales_share_pct": 31,
+            "sales_yoy_pct": null
+          },
+          {
+            "band": "luxury",
+            "range": "₹1.5 - 2.5 cr",
+            "launches_share_pct": 24,
+            "sales_share_pct": null,
+            "sales_yoy_pct": null
+          },
+          {
+            "band": "ultra_luxury",
+            "range": "> ₹2.5 cr",
+            "launches_share_pct": 11,
+            "sales_share_pct": null,
+            "sales_yoy_pct": null
+          }
+        ],
+        "cities": [
+          {
+            "city": "MMR",
+            "sales_units": 31750,
+            "sales_yoy_pct": 5,
+            "launches_units": 37500,
+            "launches_yoy_pct": 27,
+            "price_yoy_pct": 4,
+            "unsold_months": 19
+          },
+          {
+            "city": "NCR",
+            "sales_units": 13765,
+            "sales_yoy_pct": -1,
+            "launches_units": 10900,
+            "launches_yoy_pct": -14,
+            "price_yoy_pct": 12,
+            "unsold_months": 18
+          },
+          {
+            "city": "Bengaluru",
+            "sales_units": 16670,
+            "sales_yoy_pct": 12,
+            "launches_units": 17720,
+            "launches_yoy_pct": 17,
+            "price_yoy_pct": 8,
+            "unsold_months": 15
+          },
+          {
+            "city": "Pune",
+            "sales_units": 15690,
+            "sales_yoy_pct": -6,
+            "launches_units": 18730,
+            "launches_yoy_pct": -3,
+            "price_yoy_pct": 5,
+            "unsold_months": 17
+          },
+          {
+            "city": "Hyderabad",
+            "sales_units": 12970,
+            "sales_yoy_pct": 15,
+            "launches_units": 18950,
+            "launches_yoy_pct": 120,
+            "price_yoy_pct": null,
+            "unsold_months": 28
+          },
+          {
+            "city": "Chennai",
+            "sales_units": 5395,
+            "sales_yoy_pct": -10,
+            "launches_units": 5840,
+            "launches_yoy_pct": -9,
+            "price_yoy_pct": 7,
+            "unsold_months": 18
+          },
+          {
+            "city": "Kolkata",
+            "sales_units": 3980,
+            "sales_yoy_pct": -4,
+            "launches_units": 4680,
+            "launches_yoy_pct": -4,
+            "price_yoy_pct": 7,
+            "unsold_months": 22
+          }
+        ]
+      },
+      "buyers": {
+        "vintage": "FY 2024-25 (April 2024 - March 2025) and H1 FY26 (April-September 2025)",
+        "source": "Anarock, NDTV, Finance Ministry",
+        "nri_share_pct": 18,
+        "nri_share_prev_pct": null,
+        "nri_share_premium_luxury_pct": null,
+        "domestic_share_pct": 82,
+        "nri_top_cities": [
+          "Mumbai",
+          "Bengaluru",
+          "Hyderabad",
+          "Pune",
+          "Delhi NCR"
+        ],
+        "nri_source_regions": [
+          "UAE",
+          "US",
+          "Gulf Cooperation Council countries"
+        ],
+        "developer_nri_shares": [
+          {
+            "developer": "DLF",
+            "nri_sales_share_pct": 32.5,
+            "period": "April-December 2025 (9M FY26)"
+          },
+          {
+            "developer": "DLF",
+            "nri_sales_share_pct": 27,
+            "period": "FY25 (April 2024 - March 2025)"
+          },
+          {
+            "developer": "Puravankara",
+            "nri_sales_share_pct": 15,
+            "period": "Q1 FY27 (April-June 2026)"
+          }
+        ],
+        "nri_trend_note": "NRI demand rising; share reached 18% by value in FY25 and 20% projected for 2025, up from 10-15% baseline, with geopolitical uncertainty concentrating Gulf investment in premium/luxury segments.",
+        "remittances_usd_bn": 155.1,
+        "remittances_yoy_pct": 14.5,
+        "nre_nro_deposit_growth_yoy_pct": null
+      },
+      "commercial": {
+        "vintage": "Q3 2026",
+        "source": "Cushman & Wakefield, CBRE, Colliers, Savills, Knight Frank, JLL, Vestian",
+        "cities": [
+          {
+            "city": "Bengaluru",
+            "absorption_mn_sqft": 5.2,
+            "absorption_yoy_pct": null,
+            "vacancy_pct": null,
+            "rent_yoy_pct": 11.5
+          },
+          {
+            "city": "Hyderabad",
+            "absorption_mn_sqft": 4.2,
+            "absorption_yoy_pct": null,
+            "vacancy_pct": null,
+            "rent_yoy_pct": null
+          },
+          {
+            "city": "MMR",
+            "absorption_mn_sqft": 3.9,
+            "absorption_yoy_pct": 13,
+            "vacancy_pct": 5.5,
+            "rent_yoy_pct": 4
+          },
+          {
+            "city": "NCR",
+            "absorption_mn_sqft": 3.8,
+            "absorption_yoy_pct": null,
+            "vacancy_pct": null,
+            "rent_yoy_pct": 5.4
+          },
+          {
+            "city": "Pune",
+            "absorption_mn_sqft": 2,
+            "absorption_yoy_pct": -14,
+            "vacancy_pct": null,
+            "rent_yoy_pct": null
+          },
+          {
+            "city": "Chennai",
+            "absorption_mn_sqft": 2,
+            "absorption_yoy_pct": -23,
+            "vacancy_pct": null,
+            "rent_yoy_pct": null
+          }
+        ],
+        "occupiers": {
+          "gcc_share_pct": 42,
+          "it_services_share_pct": 23,
+          "bfsi_share_pct": 24,
+          "flex_share_pct": 18,
+          "domestic_share_pct": 47,
+          "global_share_pct": null
+        }
+      },
+      "errors": []
     }
   ]
 }

@@ -1,22 +1,6 @@
 {
   "entries": [
     {
-      "date": "09 NOV 2026",
-      "verdict_line": "US VIX at 25.64 — a four-month high — while Bank Nifty sits at the 98th percentile; American fear is not yet Indian price.",
-      "themes": [
-        "markets"
-      ],
-      "slugs": [
-        "us_10y_treasury",
-        "inr_usd",
-        "nfo_collections",
-        "boj_rate",
-        "sp500",
-        "bank_nifty",
-        "us_vix"
-      ]
-    },
-    {
       "date": "09 OCT 2026",
       "verdict_line": "INR at 97.09 — a 94th-percentile low — while SIP inflows hit ₹32,297 cr / month: domestic savers funding the equity market that foreign capital is quietly abandoning.",
       "themes": [
@@ -198,6 +182,18 @@
         "us_10y_treasury",
         "office_absorption",
         "retail_mall_vacancy"
+      ]
+    },
+    {
+      "date": "16 NOV 2026",
+      "verdict_line": "US 10Y at 5.1% yield — a 93rd-percentile print rising four of the last five months — is the rate that reprices every EM carry trade India benefits from.",
+      "themes": [],
+      "slugs": [
+        "us_10y_treasury",
+        "inr_usd",
+        "boj_rate",
+        "mf_avg_aum",
+        "nfo_collections"
       ]
     },
     {

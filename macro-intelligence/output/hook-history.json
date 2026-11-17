@@ -1,22 +1,6 @@
 {
   "entries": [
     {
-      "date": "09 OCT 2026",
-      "verdict_line": "INR at 97.09 — a 94th-percentile low — while SIP inflows hit ₹32,297 cr / month: domestic savers funding the equity market that foreign capital is quietly abandoning.",
-      "themes": [
-        "markets",
-        "flows"
-      ],
-      "slugs": [
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "rent_mumbai",
-        "inr_usd",
-        "rent_bengaluru",
-        "sip_inflows"
-      ]
-    },
-    {
       "date": "10 NOV 2026",
       "verdict_line": "Fuel inflation at 22.93% YoY — a 95th-percentile print — while repo sits at 5.25% p.a.; the RBI's pause is becoming a policy error in slow motion.",
       "themes": [
@@ -209,6 +193,18 @@
         "us_10y_treasury",
         "boj_rate",
         "office_absorption"
+      ]
+    },
+    {
+      "date": "17 NOV 2026",
+      "verdict_line": "US 10Y at 5.15% yield — a 94th-percentile print rising four of the last five sessions — is the rate that reprices every EM carry trade India benefits from.",
+      "themes": [],
+      "slugs": [
+        "us_10y_treasury",
+        "airline_pax",
+        "sip_accounts",
+        "inr_usd",
+        "boj_rate"
       ]
     },
     {

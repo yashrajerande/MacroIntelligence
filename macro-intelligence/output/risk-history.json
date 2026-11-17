@@ -1,11 +1,6 @@
 {
   "history": [
     {
-      "date": "2026-09-08",
-      "theme": "OIL / COMMODITY RISK",
-      "title": "Fuel Inflation Remains Structural Threat"
-    },
-    {
       "date": "2026-09-14",
       "theme": "GLOBAL LIQUIDITY",
       "title": "US Rates Spike; Carry Trade Unravelling"
@@ -299,6 +294,11 @@
       "date": "2026-11-16",
       "theme": "OIL / COMMODITY RISK",
       "title": "Fuel Inflation at 95th Percentile, Import Bill Spiking"
+    },
+    {
+      "date": "2026-11-17",
+      "theme": "OIL / COMMODITY RISK",
+      "title": "Fuel Inflation at 95th Percentile, Import Bill Swelling"
     }
   ]
 }

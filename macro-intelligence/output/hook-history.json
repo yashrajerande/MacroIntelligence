@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "10 NOV 2026",
-      "verdict_line": "Fuel inflation at 22.93% YoY — a 95th-percentile print — while repo sits at 5.25% p.a.; the RBI's pause is becoming a policy error in slow motion.",
-      "themes": [
-        "inflation"
-      ],
-      "slugs": [
-        "inr_usd",
-        "us_10y_treasury",
-        "fuel_inflation",
-        "boj_rate",
-        "mf_avg_aum"
-      ]
-    },
-    {
       "date": "10 OCT 2026",
       "verdict_line": "Euro Stoxx 50 at a 100th-percentile 6,173 while US 10Y yields slip to 5.22% — DM equities pricing recovery precisely as the bond market withdraws its permission slip.",
       "themes": [],
@@ -221,6 +207,20 @@
         "office_absorption",
         "sip_inflows",
         "nfo_collections"
+      ]
+    },
+    {
+      "date": "18 NOV 2026",
+      "verdict_line": "GST at ₹2,31,290 cr / month — a 90th-percentile record — but services credit at 28.3% YoY is doing the heavy lifting that goods demand cannot.",
+      "themes": [
+        "consumption"
+      ],
+      "slugs": [
+        "us_10y_treasury",
+        "airline_pax",
+        "sip_accounts",
+        "boj_rate",
+        "gst_month"
       ]
     },
     {

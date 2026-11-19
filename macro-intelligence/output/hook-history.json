@@ -1,18 +1,6 @@
 {
   "entries": [
     {
-      "date": "10 OCT 2026",
-      "verdict_line": "Euro Stoxx 50 at a 100th-percentile 6,173 while US 10Y yields slip to 5.22% — DM equities pricing recovery precisely as the bond market withdraws its permission slip.",
-      "themes": [],
-      "slugs": [
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "inr_usd",
-        "office_absorption",
-        "mf_avg_aum"
-      ]
-    },
-    {
       "date": "11 NOV 2026",
       "verdict_line": "Affordability index at a 10-year-low 2.3× while home loan rates sit at 7.35% p.a. — India's housing demand is narrowing to a cohort the market is already overbuilding for.",
       "themes": [
@@ -236,6 +224,20 @@
         "us_10y_treasury",
         "office_absorption",
         "us_vix"
+      ]
+    },
+    {
+      "date": "19 NOV 2026",
+      "verdict_line": "GST at ₹2,31,290 cr / month — a 10-year 90th-percentile print — but services credit at 28.3% YoY is doing the heavy lifting that goods demand cannot.",
+      "themes": [
+        "consumption"
+      ],
+      "slugs": [
+        "us_10y_treasury",
+        "airline_pax",
+        "sip_accounts",
+        "boj_rate",
+        "gst_month"
       ]
     },
     {

@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "11 NOV 2026",
-      "verdict_line": "Affordability index at a 10-year-low 2.3× while home loan rates sit at 7.35% p.a. — India's housing demand is narrowing to a cohort the market is already overbuilding for.",
-      "themes": [
-        "real_estate"
-      ],
-      "slugs": [
-        "euro_stoxx50",
-        "affordability_index",
-        "us_10y_treasury",
-        "inr_usd",
-        "boj_rate"
-      ]
-    },
-    {
       "date": "11 OCT 2026",
       "verdict_line": "Fuel inflation at 22.93% YoY — a 95th-percentile print with Brent rising five sessions straight — is the number RBI's pause cannot survive if crude holds $104.",
       "themes": [
@@ -253,6 +239,21 @@
         "us_10y_treasury",
         "ecom_gmv_growth",
         "fuel_inflation"
+      ]
+    },
+    {
+      "date": "20 NOV 2026",
+      "verdict_line": "BOJ at 1.25% — a 100th-percentile rate shock — is unwinding yen carry trades that funded EM inflows India has not yet priced out.",
+      "themes": [
+        "policy",
+        "global_macro"
+      ],
+      "slugs": [
+        "us_10y_treasury",
+        "airline_pax",
+        "sip_accounts",
+        "inr_usd",
+        "boj_rate"
       ]
     },
     {

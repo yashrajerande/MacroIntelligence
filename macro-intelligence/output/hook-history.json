@@ -1,22 +1,6 @@
 {
   "entries": [
     {
-      "date": "11 OCT 2026",
-      "verdict_line": "Fuel inflation at 22.93% YoY — a 95th-percentile print with Brent rising five sessions straight — is the number RBI's pause cannot survive if crude holds $104.",
-      "themes": [
-        "inflation",
-        "oil"
-      ],
-      "slugs": [
-        "office_absorption",
-        "inr_usd",
-        "us_10y_treasury",
-        "nikkei225",
-        "dii_equity_net",
-        "fuel_inflation"
-      ]
-    },
-    {
       "date": "12 NOV 2026",
       "verdict_line": "Euro Stoxx 50 at a 10-year-high while BOJ at 1.25% p.a. drains the carry trade that funded EM inflows — India's DII cushion buys time, not immunity.",
       "themes": [
@@ -268,6 +252,21 @@
         "bank_nifty",
         "inr_usd",
         "us_10y_treasury"
+      ]
+    },
+    {
+      "date": "21 NOV 2026",
+      "verdict_line": "BOJ at 1.25% p.a. — a 100th-percentile shock — is the carry-trade pin-pull that India's ₹83.39 lakh cr MF AUM hasn't priced.",
+      "themes": [
+        "policy"
+      ],
+      "slugs": [
+        "us_10y_treasury",
+        "airline_pax",
+        "sip_accounts",
+        "boj_rate",
+        "inr_usd",
+        "mf_aum"
       ]
     },
     {

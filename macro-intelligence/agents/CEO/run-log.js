@@ -201,6 +201,8 @@ export class RunLogger {
       pipeline: 'daily',
       cost_complete: s.cost_complete,
       unknown_usage_calls: s.unknown_usage_calls,
+      lower_bound_calls: s.lower_bound_calls,
+      cost_is_lower_bound: s.cost_is_lower_bound,
       partial_calls: s.partial_calls,
       calls: s.calls,
       usage: {
@@ -230,6 +232,8 @@ export class RunLogger {
       total_cost_usd: this.estimateCost(),
       cost_complete: s.cost_complete,
       unknown_usage_calls: s.unknown_usage_calls,
+      lower_bound_calls: s.lower_bound_calls,
+      cost_is_lower_bound: s.cost_is_lower_bound,
       partial_calls: s.partial_calls,
       metered_calls: s.calls,
       unmetered_usd: Math.round(this._unmeteredUsd * 100000) / 100000,
@@ -260,7 +264,7 @@ export class RunLogger {
     console.log(`  Duration: ${this.log.duration_seconds}s`);
     console.log(`  Tokens: ${this.log.cost_summary.total_input_tokens}in / ${this.log.cost_summary.total_output_tokens}out`);
     console.log(`  Cache: ${this.log.cost_summary.total_cache_creation_input_tokens} write / ${this.log.cost_summary.total_cache_read_input_tokens} read · Web searches: ${this.log.cost_summary.total_web_search_requests}`);
-    console.log(`  Estimated Cost: $${this.log.cost_summary.total_cost_usd}${this.log.cost_summary.cost_complete ? '' : ` (+ ${this.log.cost_summary.unknown_usage_calls} call(s) with UNKNOWN usage)`}`);
+    console.log(`  Estimated Cost: $${this.log.cost_summary.total_cost_usd}${this.log.cost_summary.cost_complete ? '' : ` (LOWER BOUND: ${this.log.cost_summary.unknown_usage_calls} call(s) with UNKNOWN usage, ${this.log.cost_summary.lower_bound_calls} partial)`}`);
     console.log(`  Validation: ${this.log.validation.checks_passed}/22 passed, ${this.log.validation.warnings.length} warnings`);
     console.log(`═══════════════════════════════════════════════════════════\n`);
   }

@@ -163,6 +163,8 @@ function costDetails(status) {
     pipeline: 'conglomerates',
     cost_complete: s.cost_complete,
     unknown_usage_calls: s.unknown_usage_calls,
+    lower_bound_calls: s.lower_bound_calls,
+    cost_is_lower_bound: s.cost_is_lower_bound,
     partial_calls: s.partial_calls,
     calls: s.calls,
     usage: {
@@ -412,7 +414,7 @@ async function run() {
     console.log(`  Git:    ${gitResult?.sha || gitResult?.reason || (gitResult?.skipped ? 'skipped' : '—')}`);
     const u = meter.summary();
     console.log(`  Cost:   $${totalCost.toFixed(4)} (list price incl. cache + ${u.web_search_requests} web searches` +
-      `${u.unknown_usage_calls ? `; ${u.unknown_usage_calls} call(s) with UNKNOWN usage, not priced` : ''})`);
+      `${u.cost_complete ? '' : `; LOWER BOUND: ${u.unknown_usage_calls} unknown-usage call(s) not priced, ${u.lower_bound_calls} partial`})`);
     process.exit(0);
   } catch (err) {
     console.error(`[Orchestrator] Failed: ${err.message}`);

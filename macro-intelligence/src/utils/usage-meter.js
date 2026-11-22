@@ -24,13 +24,23 @@
  * on a retry, not on success, not on a failure path that re-records.
  *
  * Usage that cannot be recovered (connection dropped before any usage
- * arrived, client-side timeout) is recorded as an UNKNOWN charge:
- * cost_usd = null, cost_known = false. It is counted and surfaced in the
- * ledger rather than silently priced at $0.
+ * arrived, client-side timeout, a response with absent/null/empty usage)
+ * is recorded as an UNKNOWN charge: cost_usd = null, cost_known = false.
+ * Missing usage is never treated as zero usage. Usage that was only
+ * partly observed (a stream that broke or is still in progress, or a
+ * usage object without input or output counts) is priced as a LOWER
+ * BOUND (lower_bound = true), and any run containing one reports
+ * cost_complete = false.
  *
- * When a journal path is attached, every charge is appended synchronously
- * to a JSONL file. That file survives a hard process kill and is what
- * persist-cost-ledger.js replays to make a failed run's spend durable.
+ * When a journal path is attached, every charge — including each
+ * in-progress stream observation (message_start, message_delta) — is
+ * appended synchronously to a JSONL file, replaced cumulatively per
+ * message id on replay. persist-cost-ledger.js replays it when a job
+ * fails. Limits: an observation is only on disk once its event has been
+ * received and appended; output generated after the last received event
+ * is not in the journal. If the runner itself disappears, or GitHub does
+ * not run the post-failure step (e.g. a job-level timeout), nothing
+ * replays the journal and that run's spend is NOT recovered.
  */
 
 import { AsyncLocalStorage } from 'node:async_hooks';
@@ -72,8 +82,21 @@ const nonNeg = v => (typeof v === 'number' && Number.isFinite(v) && v > 0 ? v : 
  * codebase requests (`cache_control: { type: 'ephemeral' }`). The
  * cache_ttl_source field records which case applied.
  */
+//
+// Missing usage is NOT zero usage. Returns null (→ priced as UNKNOWN) when
+// the object is absent, null, empty, or carries no token/search count at
+// all. When some counts are present but input_tokens or output_tokens is
+// missing, the result has usage_complete = false and its price is only a
+// LOWER BOUND.
+const USAGE_COUNT_FIELDS = ['input_tokens', 'output_tokens', 'cache_creation_input_tokens', 'cache_read_input_tokens'];
+const isCount = v => typeof v === 'number' && Number.isFinite(v) && v >= 0;
+
 export function normalizeUsage(usage) {
   if (!usage || typeof usage !== 'object') return null;
+  const observed = USAGE_COUNT_FIELDS.some(k => isCount(usage[k]))
+    || isCount(usage.server_tool_use?.web_search_requests);
+  if (!observed) return null;
+  const usageComplete = isCount(usage.input_tokens) && isCount(usage.output_tokens);
 
   const cacheCreationTotal = nonNeg(usage.cache_creation_input_tokens);
   let w5 = 0;
@@ -105,6 +128,7 @@ export function normalizeUsage(usage) {
     web_search_requests: nonNeg(stu.web_search_requests),
     web_fetch_requests: nonNeg(stu.web_fetch_requests),
     cache_ttl_source: ttlSource,
+    usage_complete: usageComplete,
   };
 }
 
@@ -130,13 +154,15 @@ export function mergeUsage(base, update) {
 }
 
 /**
- * Price normalized usage. Unknown model → cost_known = false and
- * cost_usd = null (it used to fall back to $0 silently).
+ * Price normalized usage. Unknown model or no observed usage →
+ * cost_known = false and cost_usd = null (never a silent $0). Incomplete
+ * usage (input or output count missing) → a known amount flagged
+ * lower_bound = true.
  */
 export function costOfUsage(model, norm) {
   const rates = MODEL_PRICING_PER_MTOK[model];
-  if (!norm) return { cost_usd: null, cost_known: false, reason: 'no_usage' };
-  if (!rates) return { cost_usd: null, cost_known: false, reason: `unpriced_model:${model}` };
+  if (!norm) return { cost_usd: null, cost_known: false, lower_bound: false, reason: 'no_usage' };
+  if (!rates) return { cost_usd: null, cost_known: false, lower_bound: false, reason: `unpriced_model:${model}` };
   const perTok = rates.input / 1e6;
   const components = {
     input: norm.input_tokens * perTok,
@@ -148,7 +174,7 @@ export function costOfUsage(model, norm) {
   };
   const total = Object.values(components).reduce((s, x) => s + x, 0);
   for (const k of Object.keys(components)) components[k] = round6(components[k]);
-  return { cost_usd: round6(total), cost_known: true, components };
+  return { cost_usd: round6(total), cost_known: true, lower_bound: norm.usage_complete === false, components };
 }
 
 /**
@@ -179,7 +205,9 @@ export class UsageMeter {
       // Replay anything already journaled for this path (a resumed
       // process) so the in-memory total and the journal agree.
       for (const c of readJournal(journalPath)) {
-        if (c.run_id === runId && !this._charges.has(c.charge_id)) this._charges.set(c.charge_id, c);
+        if (c.run_id !== runId) continue;
+        const prev = this._charges.get(c.charge_id);
+        if (!prev || prev.partial) this._charges.set(c.charge_id, c);
       }
     }
   }
@@ -195,9 +223,13 @@ export class UsageMeter {
 
   _store(charge) {
     const existing = this._charges.get(charge.charge_id);
-    // Idempotent: the same response id is charged at most once. A full
-    // record may supersede an earlier partial one for the same id.
-    if (existing && !(existing.partial && !charge.partial)) return existing;
+    // One charge per message id, replaced cumulatively: a later observation
+    // (in-progress stream usage, then the final or broken-stream record)
+    // REPLACES the earlier one — usage counts are cumulative, never added.
+    // Once a final (non-partial) record exists it is never replaced, so a
+    // re-charge of the same response is a no-op.
+    if (existing && !existing.partial) return existing;
+    if (existing && sameCharge(existing, charge)) return existing;
     this._charges.set(charge.charge_id, charge);
     if (this.journalPath) {
       try {
@@ -215,7 +247,11 @@ export class UsageMeter {
     return charge;
   }
 
-  /** Charge a model response (complete, or partial from a broken stream). */
+  /**
+   * Charge a model response. partial = true for in-progress stream
+   * observations and broken streams: the amount is then a LOWER BOUND
+   * (output and searches after the last observed event are not included).
+   */
   chargeResponse({ model, usage, responseId = null, agent = null, partial = false, note = null }) {
     const norm = normalizeUsage(usage);
     const priced = costOfUsage(model, norm);
@@ -227,6 +263,7 @@ export class UsageMeter {
       usage: norm,
       cost_usd: priced.cost_usd,
       cost_known: priced.cost_known,
+      lower_bound: priced.cost_known && (!!partial || priced.lower_bound),
       ...(priced.components ? { components: priced.components } : {}),
       ...(priced.cost_known ? {} : { unknown_reason: priced.reason }),
       partial: !!partial,
@@ -287,13 +324,18 @@ export class UsageMeter {
 }
 
 /** Aggregate a list of charges. Unknown charges are counted, never priced. */
+// cost_usd sums every KNOWN amount (complete charges + lower-bound partial
+// charges). cost_complete is false whenever any charge is unknown or a
+// lower bound — cost_usd is then itself only a lower bound on real spend.
 export function summarizeCharges(charges) {
   const s = {
     accounting_version: ACCOUNTING_VERSION,
     calls: 0,
     cost_usd: 0,
     cost_complete: true,
+    cost_is_lower_bound: false,
     unknown_usage_calls: 0,
+    lower_bound_calls: 0,
     partial_calls: 0,
     input_tokens: 0,
     output_tokens: 0,
@@ -309,6 +351,7 @@ export function summarizeCharges(charges) {
     s.calls++;
     if (c.partial) s.partial_calls++;
     if (!c.cost_known) { s.unknown_usage_calls++; s.cost_complete = false; }
+    else if (c.lower_bound) { s.lower_bound_calls++; s.cost_complete = false; }
     const cost = c.cost_known ? c.cost_usd : 0;
     s.cost_usd += cost;
     if (c.kind === 'anthropic' && c.usage) {
@@ -325,6 +368,7 @@ export function summarizeCharges(charges) {
     a.calls++; a.cost_usd += cost; if (!c.cost_known) a.unknown_usage_calls++;
   }
   s.cost_usd = round6(s.cost_usd);
+  s.cost_is_lower_bound = !s.cost_complete;
   for (const m of Object.values(s.by_model)) m.cost_usd = round6(m.cost_usd);
   for (const a of Object.values(s.by_agent)) a.cost_usd = round6(a.cost_usd);
   return s;
@@ -341,9 +385,16 @@ export function readJournal(path) {
   return out;
 }
 
+function sameCharge(a, b) {
+  const strip = ({ ts, ...rest }) => rest;
+  return JSON.stringify(strip(a)) === JSON.stringify(strip(b));
+}
+
 /**
- * Collapse journal lines into one ledger-ready summary per run_id. Lines
- * are de-duplicated by charge_id (a full record supersedes a partial one).
+ * Collapse journal lines into one ledger-ready summary per run_id, using
+ * the same rule as UsageMeter._store: per charge_id the LAST partial
+ * observation replaces earlier ones (cumulative, never summed) until a
+ * final record appears, which then wins over anything later.
  */
 export function runsFromJournal(lines) {
   const byRun = new Map();
@@ -351,7 +402,7 @@ export function runsFromJournal(lines) {
     if (!l || !l.run_id || !l.charge_id) continue;
     const r = byRun.get(l.run_id) || { run_id: l.run_id, iso_date: l.iso_date, pipeline: l.pipeline, charges: new Map() };
     const prev = r.charges.get(l.charge_id);
-    if (!prev || (prev.partial && !l.partial)) r.charges.set(l.charge_id, l);
+    if (!prev || prev.partial) r.charges.set(l.charge_id, l);
     byRun.set(l.run_id, r);
   }
   return [...byRun.values()].map(r => ({

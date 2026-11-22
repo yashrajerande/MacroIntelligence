@@ -1,7 +1,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import { getSignalContext, getRegimeContext, BANNED_NAMES_RULE, istToday } from "../_shared/macro-context.ts";
-import { costOfUsage, mergeUsage } from "../_shared/anthropic-pricing.ts";
+import { costOfUsage, mergeUsage, usageObserved, usageComplete } from "../_shared/anthropic-pricing.ts";
 
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY")!;
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
@@ -198,12 +198,19 @@ Deno.serve(async (req: Request) => {
     let usageLogged = false;
     // Log exactly once, from whatever usage the stream reported — also
     // when the stream breaks after message_start (input is already billed).
-    const logOnce = async () => {
+    // Absent/empty usage is UNKNOWN, not $0: nothing is logged and the gap
+    // is reported. A broken stream, or usage missing input/output counts,
+    // is logged at what was observed — a LOWER BOUND (the table has no
+    // column for that flag, so it is reported in the function log).
+    const logOnce = async (streamBroken = false) => {
       if (usageLogged) return;
       usageLogged = true;
-      if (!usage) {
-        console.warn("rabbit-hole-chat: response ended without usage — cost UNKNOWN, not logged");
+      if (!usage || !usageObserved(usage)) {
+        console.warn("rabbit-hole-chat: no usage observed — cost UNKNOWN, not logged");
         return;
+      }
+      if (streamBroken || !usageComplete(usage)) {
+        console.warn("rabbit-hole-chat: partial usage — logged cost is a LOWER BOUND");
       }
       await logUsage(entry_type, entry_id, ip, messageNum, usage);
     };
@@ -259,7 +266,7 @@ Deno.serve(async (req: Request) => {
           console.error("Stream error:", err);
           // Billed tokens from a broken stream still count toward the
           // Rabbit Hole daily budget.
-          try { await logOnce(); } catch (logErr) { console.error("Usage log failed:", logErr); }
+          try { await logOnce(true); } catch (logErr) { console.error("Usage log failed:", logErr); }
           controller.error(err);
         }
       },

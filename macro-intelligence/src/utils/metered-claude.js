@@ -16,6 +16,7 @@
  * the raw stream events and merges every cumulative usage field itself.
  */
 
+import { randomUUID } from 'crypto';
 import { meter as defaultMeter, mergeUsage, failureIsUnbilled } from './usage-meter.js';
 
 function recordFailure(m, err, model, agent) {
@@ -47,9 +48,16 @@ export async function meteredCreate(client, params, { agent = null, meter = defa
  * usage (input, cache, output, server_tool_use), so any caller that reads
  * it sees the same numbers the meter charged.
  */
+//
+// Every observed usage update (message_start, each message_delta) is
+// charged immediately as an in-progress PARTIAL observation under the
+// message id, so it is in the journal even if the process is killed before
+// finalMessage() resolves. Each later observation — and finally the
+// complete record — replaces it (cumulative per id, never summed). An
+// in-progress or broken-stream amount is labelled a lower bound.
 export async function meteredStream(client, params, { agent = null, meter = defaultMeter } = {}) {
   const who = agent || meter.currentAgent();
-  const acc = { id: null, usage: null };
+  const acc = { id: null, usage: null, key: null };
   let stream;
   try {
     stream = client.messages.stream(params);
@@ -57,13 +65,21 @@ export async function meteredStream(client, params, { agent = null, meter = defa
     recordFailure(meter, err, params.model, who);
     throw err;
   }
+  const observe = (update) => {
+    acc.usage = mergeUsage(acc.usage, update);
+    acc.key ||= acc.id || `stream-${randomUUID()}`;
+    meter.chargeResponse({
+      model: params.model, usage: acc.usage, responseId: acc.key, agent: who,
+      partial: true, note: 'in-progress stream observation (lower bound)',
+    });
+  };
   stream.on('streamEvent', (event) => {
     if (!event || typeof event !== 'object') return;
     if (event.type === 'message_start' && event.message) {
       acc.id = event.message.id || acc.id;
-      acc.usage = mergeUsage(acc.usage, event.message.usage);
+      if (event.message.usage) observe(event.message.usage);
     } else if (event.type === 'message_delta' && event.usage) {
-      acc.usage = mergeUsage(acc.usage, event.usage);
+      observe(event.usage);
     }
   });
 
@@ -73,10 +89,11 @@ export async function meteredStream(client, params, { agent = null, meter = defa
   } catch (err) {
     if (acc.usage) {
       // The model started generating: input (and any output so far) is
-      // billed. Charge what the stream reported, flagged partial.
+      // billed. Charge what the stream reported, flagged partial — a lower
+      // bound, since output after the last received event is not counted.
       meter.chargeResponse({
-        model: params.model, usage: acc.usage, responseId: acc.id, agent: who,
-        partial: true, note: `stream error: ${err?.message || err}`,
+        model: params.model, usage: acc.usage, responseId: acc.key, agent: who,
+        partial: true, note: `stream error (lower bound): ${err?.message || err}`,
       });
     } else {
       recordFailure(meter, err, params.model, who);
@@ -84,8 +101,11 @@ export async function meteredStream(client, params, { agent = null, meter = defa
     throw err;
   }
 
+  // A returned message with absent/null/empty usage stays UNKNOWN:
+  // mergeUsage(undefined, null) is {}, which normalizeUsage treats as "no
+  // usage observed", never as a known $0.
   const usage = mergeUsage(final?.usage, acc.usage);
   if (final) final.usage = usage;
-  meter.chargeResponse({ model: params.model, usage, responseId: final?.id || acc.id, agent: who });
+  meter.chargeResponse({ model: params.model, usage, responseId: acc.key || final?.id || null, agent: who });
   return final;
 }

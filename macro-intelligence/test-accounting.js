@@ -226,6 +226,112 @@ export async function runAccountingTests({ describe, assert }) {
     assert(near(m4.summary().cost_usd, 8e-6 + 5e-6), 'Non-streaming create (pre-flight ping) is charged');
   }
 
+  // ── 4b. Missing usage is UNKNOWN; partial usage is a lower bound ───
+  describe('Accounting — missing vs zero usage, lower bounds (regression)');
+  {
+    // The independent-review repro: on() does nothing, finalMessage()
+    // returns a message with NO usage.
+    const noUsageClient = { messages: { stream: () => ({
+      on() { return this; },
+      async finalMessage() { return { id: 'mock-no-usage', content: [] }; },
+    }) } };
+    const m = new U.UsageMeter();
+    await meteredStream(noUsageClient, { model: HAIKU }, { meter: m, agent: 'Repro' });
+    const s = m.summary();
+    assert(s.calls === 1 && s.unknown_usage_calls === 1 && s.cost_complete === false && s.cost_is_lower_bound === true,
+      `Repro: final message without usage → 1 UNKNOWN call, cost_complete=false (got unknown=${s.unknown_usage_calls}, complete=${s.cost_complete})`);
+    assert(m.charges()[0].cost_usd === null && m.charges()[0].cost_known === false,
+      'Repro: the charge is cost_usd=null / cost_known=false, not a known $0');
+
+    for (const [label, usage] of [['absent', undefined], ['null', null], ['empty {}', {}],
+      ['mergeUsage(undefined,null)', U.mergeUsage(undefined, null)], ['null counts', { input_tokens: null, output_tokens: null }]]) {
+      assert(U.normalizeUsage(usage) === null, `normalizeUsage(${label}) → null (nothing observed)`);
+      const mm = new U.UsageMeter();
+      mm.chargeResponse({ model: HAIKU, usage, responseId: `msg_${label}` });
+      assert(mm.summary().unknown_usage_calls === 1 && !mm.summary().cost_complete, `Charge with ${label} usage → UNKNOWN`);
+    }
+    for (const [label, client] of [
+      ['create without usage', mockStreamClient({ response: { id: 'msg_c0', content: [] } })],
+      ['create with usage: null', mockStreamClient({ response: { id: 'msg_c1', usage: null } })],
+      ['create with usage: {}', mockStreamClient({ response: { id: 'msg_c2', usage: {} } })],
+    ]) {
+      const mm = new U.UsageMeter();
+      await meteredCreate(client, { model: HAIKU }, { meter: mm });
+      assert(mm.summary().unknown_usage_calls === 1 && mm.summary().cost_usd === 0 && !mm.summary().cost_complete,
+        `meteredCreate: ${label} → UNKNOWN, total flagged incomplete`);
+    }
+
+    // Meaningful partial usage: counts present but output missing.
+    const pn = U.normalizeUsage({ input_tokens: 3000, cache_read_input_tokens: 1000 });
+    const pc = U.costOfUsage(HAIKU, pn);
+    assert(pn.usage_complete === false && pc.cost_known && pc.lower_bound && near(pc.cost_usd, 3000e-6 + 1000e-6 * 0.1),
+      'Input-only usage priced from what was observed, flagged lower_bound');
+    const zero = U.costOfUsage(HAIKU, U.normalizeUsage({ input_tokens: 0, output_tokens: 0 }));
+    assert(zero.cost_known && zero.cost_usd === 0 && !zero.lower_bound, 'Explicit zero counts are a real, complete $0');
+
+    // Received partial stream (truncated output) is NOT a complete total.
+    const mt = new U.UsageMeter();
+    const truncated = { events: [startEv('msg_TR', { input_tokens: 4000, output_tokens: 1 })], throwAfterEvents: new Error('ECONNRESET') };
+    try { await meteredStream(mockStreamClient(truncated), { model: HAIKU }, { meter: mt }); } catch { /* expected */ }
+    const ts2 = mt.summary();
+    assert(ts2.calls === 1 && ts2.lower_bound_calls === 1 && ts2.cost_complete === false && ts2.cost_is_lower_bound && near(ts2.cost_usd, 4000e-6 + 5e-6),
+      'Truncated stream: observed amount kept, labelled lower bound, run total not complete');
+  }
+
+  // ── 4c. Incremental journaling mid-stream ──────────────────────────
+  describe('Accounting — incremental stream journal (cumulative per message id)');
+  {
+    const jdir = mkdtempSync(join(tmpdir(), 'acct-journal-'));
+    const jpath = P.journalPathFor('run-inc', jdir);
+    const m = new U.UsageMeter();
+    m.attachRun({ runId: 'run-inc', isoDate: '2026-11-22', pipeline: 'daily', journalPath: jpath });
+
+    // Simulate a hard kill mid-stream: events arrive, finalMessage never resolves.
+    let release;
+    const hung = { messages: { stream: () => {
+      const ls = [];
+      return {
+        on(ev, cb) { if (ev === 'streamEvent') ls.push(cb); return this; },
+        finalMessage() {
+          for (const l of ls) l(startEv('msg_KILL', { input_tokens: 6000, output_tokens: 1, cache_read_input_tokens: 2000 }));
+          for (const l of ls) l(deltaEv({ output_tokens: 300, server_tool_use: { web_search_requests: 2 } }));
+          return new Promise(r => { release = r; }); // never resolved before the "kill"
+        },
+      };
+    } } };
+    meteredStream(hung, { model: HAIKU }, { meter: m, agent: 'MacroDataAnalyst' }).catch(() => {});
+    await new Promise(r => setImmediate(r));
+
+    // "Process killed": only the on-disk journal remains.
+    const lines = U.readJournal(jpath).filter(l => l.charge_id === 'msg_KILL');
+    assert(lines.length === 2, `Each observed usage update is journaled as it arrives (got ${lines.length} lines)`);
+    const [run] = U.runsFromJournal(U.readJournal(jpath));
+    const expected = 6000e-6 + 2000e-6 * 0.1 + 300 * 5e-6 + 2 * 0.01;
+    assert(run && run.summary.calls === 1 && near(run.summary.cost_usd, expected)
+      && run.summary.web_search_requests === 2 && run.summary.output_tokens === 300,
+      'Replay after a mid-stream kill: one charge, latest cumulative usage (no double count across observations)');
+    assert(run.summary.lower_bound_calls === 1 && run.summary.cost_complete === false,
+      'Mid-stream journal amount is labelled a lower bound');
+
+    // If the stream later completes, the final record replaces the partial.
+    release({ id: 'msg_KILL', content: [], usage: { input_tokens: 6000, output_tokens: 300 } });
+    await new Promise(r => setImmediate(r));
+    const [run2] = U.runsFromJournal(U.readJournal(jpath));
+    assert(run2.summary.calls === 1 && run2.summary.lower_bound_calls === 0 && run2.summary.cost_complete === true && near(run2.summary.cost_usd, expected),
+      'Completed stream: final record supersedes partial observations, same id counted once, now complete');
+    assert(m.summary().calls === 1 && near(m.summary().cost_usd, expected), 'In-memory meter agrees with the journal');
+
+    // A partial observation journaled AFTER a final one never replaces it.
+    appendFileSync(jpath, JSON.stringify({ ...U.readJournal(jpath).at(-1), partial: true, lower_bound: true, cost_usd: 0.000001 }) + '\n');
+    const [run3] = U.runsFromJournal(U.readJournal(jpath));
+    assert(near(run3.summary.cost_usd, expected) && run3.summary.cost_complete, 'Final record is never replaced by a later partial line');
+
+    // Ledger entry for an incomplete run is explicitly a lower bound.
+    const d = P.entryDetails(run, 'failed');
+    assert(d.cost_is_lower_bound === true && d.lower_bound_calls === 1 && d.cost_complete === false,
+      'Durable ledger entry labels partial amounts as a lower bound');
+  }
+
   // ── 5. RunLogger uses the meter; VoiceBroadcaster Claude+OpenAI once ─
   describe('Accounting — RunLogger totals and VoiceBroadcaster combined cost');
   {
@@ -397,11 +503,26 @@ export async function runAccountingTests({ describe, assert }) {
     assert(rh.includes('from("rabbit_hole_usage")') && va.includes('from("voice_assistant_usage")') && !rh.includes('cost-ledger') && !va.includes('cost-ledger'),
       'Chat budgets stay in their own tables, separate from the pipeline ledger');
     assert(rh.includes('costOfUsage(MODEL, usage)') && va.includes('costOfUsage(MODEL, data.usage)'), 'Both price from the full usage object');
-    assert(/catch \(err\) \{[\s\S]{0,200}logOnce\(\)/.test(rh) && /if \(!res\.ok\)[\s\S]{0,200}logOnce\(\)/.test(va),
+    assert(/catch \(err\) \{[\s\S]{0,250}logOnce\(true\)/.test(rh) && /if \(!res\.ok\)[\s\S]{0,200}logOnce\(\)/.test(va),
       'Billed usage is logged on stream/round failure paths');
+    assert(/if \(!usage \|\| !usageObserved\(usage\)\)[\s\S]{0,120}UNKNOWN, not logged/.test(rh),
+      'Rabbit Hole: absent/empty usage is reported UNKNOWN, never logged as $0');
+    assert(/streamBroken \|\| !usageComplete\(usage\)[\s\S]{0,120}LOWER BOUND/.test(rh) && /!usageComplete\(data\.usage\)[\s\S]{0,120}LOWER BOUND/.test(va),
+      'Chat functions label broken-stream / incomplete usage as a lower bound');
     let ts = null;
     try { ts = await import('./supabase/functions/_shared/anthropic-pricing.ts'); } catch { /* Node without TS stripping */ }
     if (ts) {
+      // Missing-usage regression (shared chat helper)
+      assert(ts.costOfUsage(HAIKU, undefined) === null && ts.costOfUsage(HAIKU, null) === null
+        && ts.costOfUsage(HAIKU, {}) === null && ts.costOfUsage(HAIKU, ts.mergeUsage(undefined, null)) === null,
+        'Chat pricing: absent / null / {} / mergeUsage(undefined,null) usage → null (UNKNOWN), not $0');
+      assert(ts.costOfUsage(HAIKU, { input_tokens: null, output_tokens: null }) === null,
+        'Chat pricing: usage with only null counts → UNKNOWN');
+      const partialTs = { input_tokens: 2000, output_tokens: null };
+      assert(near(ts.costOfUsage(HAIKU, partialTs), 0.002) && ts.usageObserved(partialTs) && !ts.usageComplete(partialTs),
+        'Chat pricing: input-only usage priced from what was observed and flagged incomplete (lower bound)');
+      assert(ts.usageComplete({ input_tokens: 0, output_tokens: 0 }) && ts.costOfUsage(HAIKU, { input_tokens: 0, output_tokens: 0 }) === 0,
+        'Chat pricing: explicit zero counts are a real, complete $0');
       const cost = ts.costOfUsage(HAIKU, { input_tokens: 1000, output_tokens: 100, cache_read_input_tokens: 2000, cache_creation_input_tokens: 400 });
       assert(near(cost, Math.round((1000e-6 + 100 * 5e-6 + 2000e-6 * 0.1 + 400e-6 * 1.25) * 1e6) / 1e6), 'Chat pricing helper matches pipeline pricing');
       assert(ts.costOfUsage('nope', { input_tokens: 1 }) === null, 'Chat pricing: unpriced model → null, not $0');

@@ -8,9 +8,13 @@
  * that spend and the $5/month cap under-bound.
  *
  * What it does (workflow step `if: failure() || cancelled()`):
- *   1. Replays the crash-safe usage journals (logs/cost-journal-*.jsonl,
- *      appended at every Anthropic response boundary — survives parse
- *      errors, exhausted retries and hard kills).
+ *   1. Replays the usage journals (logs/cost-journal-*.jsonl). A line is
+ *      appended for every observed stream usage update and at every
+ *      response boundary, so the journal keeps spend from parse errors,
+ *      exhausted retries and broken streams, and — when the Node process
+ *      is killed mid-stream — the usage observed up to the last received
+ *      event (replaced cumulatively per message id; recorded as a lower
+ *      bound).
  *   2. Upserts one entry per run_id into the ledger (idempotent: a run
  *      already recorded, e.g. by the success path or a previous attempt of
  *      this step, is replaced, never added twice).
@@ -27,6 +31,22 @@
  *
  * SKIP_GIT_PUSH=true (manual "local output only" runs) is honoured: the
  * ledger is updated on disk only and nothing is pushed.
+ *
+ * What this does NOT guarantee (recovery is best-effort, not crash-proof):
+ *   - It only runs if GitHub runs this step on the same runner after the
+ *     failure. If the runner itself is lost (infrastructure failure,
+ *     runner shutdown) or GitHub does not execute post-failure steps —
+ *     e.g. a job-level `timeout-minutes` cancellation, which has not been
+ *     verified to run `if: failure() || cancelled()` steps — the journal is
+ *     never replayed and that run's spend is NOT recovered.
+ *   - The push itself can fail (network, auth, 4 rejected attempts); the
+ *     step then exits non-zero and the spend stays only in the artifact.
+ *   - Usage after the last received stream event, and API attempts the SDK
+ *     retried internally (hidden from callers; SDK retry policy unchanged),
+ *     are not in the journal at all.
+ *   - Amounts from partial/in-progress observations are lower bounds
+ *     (entry cost_is_lower_bound = true); unknown-usage calls are counted
+ *     but not priced.
  */
 
 import { execFileSync } from 'child_process';
@@ -62,6 +82,8 @@ export function entryDetails(run, status) {
     pipeline: run.pipeline || null,
     cost_complete: s.cost_complete,
     unknown_usage_calls: s.unknown_usage_calls,
+    lower_bound_calls: s.lower_bound_calls,
+    cost_is_lower_bound: s.cost_is_lower_bound,
     partial_calls: s.partial_calls,
     calls: s.calls,
     usage: {
@@ -165,7 +187,7 @@ export async function persistFailedRunCosts({
     const s = r.summary;
     console.log(`[persist-cost-ledger] run ${r.run_id} (${r.pipeline || '?'}, ${r.iso_date}): ` +
       `$${s.cost_usd.toFixed(4)} over ${s.calls} call(s)` +
-      (s.unknown_usage_calls ? `, ${s.unknown_usage_calls} with UNKNOWN usage (not priced)` : ''));
+      (s.cost_complete ? '' : ` — LOWER BOUND (${s.unknown_usage_calls} unknown-usage call(s) not priced, ${s.lower_bound_calls} partial)`));
   }
 
   // Local copy first: the failure artifact then shows the same numbers.

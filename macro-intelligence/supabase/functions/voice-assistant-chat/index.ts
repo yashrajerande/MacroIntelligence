@@ -19,7 +19,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import { getSignalContext, getRegimeContext, getFullDayContext, BANNED_NAMES_RULE, istToday } from "../_shared/macro-context.ts";
-import { costOfUsage } from "../_shared/anthropic-pricing.ts";
+import { costOfUsage, usageComplete } from "../_shared/anthropic-pricing.ts";
 
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY")!;
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
@@ -283,8 +283,13 @@ Deno.serve(async (req: Request) => {
       // rounds is correct (no round's usage is cumulative of another's).
       totalInputTokens += data.usage?.input_tokens || 0;
       totalOutputTokens += data.usage?.output_tokens || 0;
+      // Absent/empty usage → UNKNOWN for this round (null, not $0); usage
+      // without input or output counts → priced as a LOWER BOUND. The table
+      // has no flag column, so both are reported in the function log and
+      // the logged cost_usd is then a lower bound.
       const roundCost = costOfUsage(MODEL, data.usage);
-      if (roundCost === null) console.warn("voice-assistant-chat: round without usage — cost UNKNOWN for this round");
+      if (roundCost === null) console.warn("voice-assistant-chat: round without usage — cost UNKNOWN for this round; logged total is a LOWER BOUND");
+      else if (!usageComplete(data.usage)) console.warn("voice-assistant-chat: partial usage — logged total is a LOWER BOUND");
       totalCostUsd += roundCost ?? 0;
       billedRounds++;
 

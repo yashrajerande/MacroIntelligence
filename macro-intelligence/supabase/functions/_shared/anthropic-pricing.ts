@@ -36,13 +36,31 @@ export function mergeUsage(base: Usage, update: Usage): Record<string, unknown> 
   return out;
 }
 
+const isCount = (v: unknown) => typeof v === "number" && Number.isFinite(v) && v >= 0;
+
+// True when usage carries at least one token/search count. Absent, null,
+// empty ({}) or count-less usage is "nothing observed" — UNKNOWN, not zero.
+export function usageObserved(usage: Usage): boolean {
+  if (!usage || typeof usage !== "object") return false;
+  return ["input_tokens", "output_tokens", "cache_creation_input_tokens", "cache_read_input_tokens"]
+    .some((k) => isCount(usage[k])) || isCount(usage.server_tool_use?.web_search_requests);
+}
+
+// True only when both input and output counts are present. Otherwise any
+// price from costOfUsage is a LOWER BOUND (e.g. a stream that broke after
+// message_start, before the final message_delta).
+export function usageComplete(usage: Usage): boolean {
+  return !!usage && isCount(usage.input_tokens) && isCount(usage.output_tokens);
+}
+
 // USD cost of one response's usage. input_tokens, cache_creation and
 // cache_read are disjoint in the API, so adding them never double counts.
 // Cache writes without a TTL split are priced at the 5-minute default.
-// Returns null for a model with no price (never silently $0).
+// Returns null (UNKNOWN, never a silent $0) for a model with no price or
+// for usage with nothing observed.
 export function costOfUsage(model: string, usage: Usage): number | null {
   const r = PRICING_PER_MTOK[model];
-  if (!r || !usage) return null;
+  if (!r || !usage || !usageObserved(usage)) return null;
   const perTok = r.input / 1e6;
   const cc = usage.cache_creation || {};
   let w5 = n(cc.ephemeral_5m_input_tokens);

@@ -7,6 +7,7 @@ import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import Anthropic from '@anthropic-ai/sdk';
+import { meteredStream } from '../../../src/utils/metered-claude.js';
 import { scoreAllIndicators } from './skills/signal-scoring.js';
 import { getPolarity, classifyIndicator, scoreIndicator } from '../../../src/utils/polarity.js';
 import { trendSuffix, TREND_GUIDANCE } from '../../../src/utils/trend-context.js';
@@ -88,14 +89,13 @@ For each signal, provide:
 
 Return a JSON array of 7 objects wrapped in <<<JSON and >>> markers.`;
 
-    const stream = client.messages.stream({
+    const response = await meteredStream(client, {
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 4096,
       temperature: 0,
       system: [{ type: 'text', text: persona, cache_control: { type: 'ephemeral' } }],
       messages: [{ role: 'user', content: prompt }],
-    });
-    const response = await stream.finalMessage();
+    }, { agent: 'SignalDetector' });
 
     const tokens = { input: response.usage?.input_tokens || 0, output: response.usage?.output_tokens || 0 };
     const text = response.content.filter(b => b.type === 'text').map(b => b.text).join('');

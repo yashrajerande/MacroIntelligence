@@ -24,6 +24,8 @@ import {
   preflightModelCheck, alreadyPublished, sendFailureAlert, currentRunUrl,
 } from '../../src/utils/resilience.js';
 import { normalizeAllIndicators } from '../../src/utils/unit-normalizer.js';
+import { meter } from '../../src/utils/usage-meter.js';
+import { journalPathFor } from '../../src/utils/persist-cost-ledger.js';
 import { scorePct10y } from '../Analysis/SignalDetector/skills/signal-scoring.js';
 
 import { MarketDataAnalyst }      from '../DataIntelligence/MarketDataAnalyst/fetch.js';
@@ -51,11 +53,15 @@ import { OpsManager }             from '../Infrastructure/OpsManager/report.js';
 // overloads get three spaced attempts, a genuine bug still gets the
 // original single retry, and billing/auth (which no retry can fix) are
 // rethrown immediately so the run can alert instead of burning minutes.
+//
+// Every attempt runs inside meter.runAs(agentName): each Anthropic
+// response is charged to that agent at the response boundary, so a failed
+// attempt that is retried still counts (once) in the run's cost.
 async function withRetry(fn, agentName, logger) {
   let attempt = 0;
   for (;;) {
     try {
-      return await fn();
+      return await meter.runAs(agentName, fn);
     } catch (err) {
       const kind = classifyModelError(err);
       if (isTerminalModelError(kind)) throw err;
@@ -90,15 +96,26 @@ async function run() {
   const logger = new RunLogger(isoDate);
   logger.start(dateStr);
 
+  // Every Anthropic response this process receives is charged to the
+  // meter and appended to a crash-safe journal. On a failed job the
+  // workflow's "Persist cost ledger" step replays that journal into
+  // main's ledger (src/utils/persist-cost-ledger.js), so the next run's
+  // budget guard sees the spend even though this runner is discarded.
+  meter.attachRun({
+    runId: logger.log.run_id, isoDate, pipeline: 'daily',
+    journalPath: journalPathFor(logger.log.run_id),
+  });
+
   // A failed run has still spent real API money — every exit path must
   // charge the ledger, or a recurring failure burns the monthly budget
-  // without the cap ever binding.
-  let costRecorded = false;
+  // without the cap ever binding. recordRunCost is idempotent per run_id,
+  // so a later re-record (or the workflow persist step) never doubles it.
+  // (A run that already recorded 'success' and then failed — e.g. the
+  // push — is re-recorded as 'failed' with its full cost, same run_id.)
   const recordCostOnFailure = () => {
-    if (costRecorded) return;
+    if (meter.summary().calls === 0) return; // nothing was spent
     try {
-      recordRunCost(isoDate, logger.estimateCost(), logger.log.run_id);
-      costRecorded = true;
+      recordRunCost(isoDate, logger.estimateCost(), logger.log.run_id, undefined, logger.costDetails('failed'));
     } catch { /* ledger write is best-effort on the failure path */ }
   };
 
@@ -134,6 +151,7 @@ async function run() {
         logger.error('Model pre-flight failed', pf.message);
         await sendFailureAlert({ dateStr, kind: pf.kind, reason: pf.message, runUrl: currentRunUrl(), phase: 'Pre-flight' });
         logger.fail(`Model pre-flight failed (${pf.kind})`);
+        recordCostOnFailure();
         process.exit(1);
       }
       if (pf.kind) logger.warn('Model pre-flight degraded', pf.message);
@@ -515,8 +533,7 @@ async function run() {
     // of the commit — otherwise every fresh CI checkout sees $0 spent and
     // the monthly budget cap never binds.
     const finalCost = logger.estimateCost();
-    recordRunCost(isoDate, finalCost, logger.log.run_id);
-    costRecorded = true;
+    recordRunCost(isoDate, finalCost, logger.log.run_id, undefined, logger.costDetails('success'));
 
     // GitPublisher pushes every run — the most transient-failure-prone step.
     await withRetry(

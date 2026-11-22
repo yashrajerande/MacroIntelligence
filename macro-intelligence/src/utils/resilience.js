@@ -82,7 +82,9 @@ export async function preflightModelCheck({ client, model = 'claude-haiku-4-5-20
       const { default: Anthropic } = await import('@anthropic-ai/sdk');
       client = new Anthropic();
     }
-    await client.messages.create({ model, max_tokens: 1, messages: [{ role: 'user', content: 'ping' }] });
+    // Metered: the one-token ping is real (tiny) spend.
+    const { meteredCreate } = await import('./metered-claude.js');
+    await meteredCreate(client, { model, max_tokens: 1, messages: [{ role: 'user', content: 'ping' }] }, { agent: 'ModelPreflight' });
     return { ok: true, kind: null, message: 'ok' };
   } catch (err) {
     const kind = classifyModelError(err);

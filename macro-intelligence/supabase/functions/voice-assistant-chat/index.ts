@@ -19,6 +19,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import { getSignalContext, getRegimeContext, getFullDayContext, BANNED_NAMES_RULE, istToday } from "../_shared/macro-context.ts";
+import { costOfUsage } from "../_shared/anthropic-pricing.ts";
 
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY")!;
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
@@ -148,8 +149,12 @@ async function checkRateLimit(ip: string): Promise<{ allowed: boolean; reason?: 
   return { allowed: true };
 }
 
-async function logUsage(ip: string, messageNum: number, inputTokens: number, outputTokens: number) {
-  const cost = (inputTokens / 1_000_000) * 0.80 + (outputTokens / 1_000_000) * 4.00;
+// costUsd is the sum of each round's cost priced from its FULL usage
+// (input, 5m/1h cache writes, cache reads, output, web searches) at
+// current list prices — it used to use stale Haiku rates ($0.80/$4 per
+// MTok instead of $1/$5) on input/output only.
+async function logUsage(ip: string, messageNum: number, inputTokens: number, outputTokens: number, costUsd: number) {
+  const cost = costUsd;
   await supabase.from("voice_assistant_usage").insert({
     run_date: istToday(), // explicit — must match checkRateLimit's boundary, not the column's UTC-anchored CURRENT_DATE default
     user_ip: ip,
@@ -225,8 +230,21 @@ Deno.serve(async (req: Request) => {
 
     let totalInputTokens = 0;
     let totalOutputTokens = 0;
+    let totalCostUsd = 0;
+    let billedRounds = 0;
+    let usageLogged = false;
     let finalText = "";
 
+    // Rounds already answered are billed even if a LATER round fails
+    // (non-OK response, timeout, thrown error). Log them exactly once on
+    // every exit path so they count toward the voice daily budget.
+    const logOnce = async () => {
+      if (usageLogged || billedRounds === 0) return;
+      usageLogged = true;
+      await logUsage(ip, messageNum, totalInputTokens, totalOutputTokens, Math.round(totalCostUsd * 1e6) / 1e6);
+    };
+
+    try {
     for (let round = 0; round < MAX_TOOL_ROUNDS; round++) {
       // No timeout here used to mean a hung connection (accepted, never
       // responds) left the mic button stuck in "thinking" forever, with
@@ -253,6 +271,7 @@ Deno.serve(async (req: Request) => {
       if (!res.ok) {
         const errText = await res.text();
         console.error("Anthropic error:", res.status, errText);
+        await logOnce(); // earlier rounds of this message were billed
         return new Response(JSON.stringify({ error: "AI service error" }), {
           status: 502,
           headers: { "Access-Control-Allow-Origin": "*" },
@@ -260,8 +279,14 @@ Deno.serve(async (req: Request) => {
       }
 
       const data = await res.json();
+      // Each round is a separate response with its own usage: summing
+      // rounds is correct (no round's usage is cumulative of another's).
       totalInputTokens += data.usage?.input_tokens || 0;
       totalOutputTokens += data.usage?.output_tokens || 0;
+      const roundCost = costOfUsage(MODEL, data.usage);
+      if (roundCost === null) console.warn("voice-assistant-chat: round without usage — cost UNKNOWN for this round");
+      totalCostUsd += roundCost ?? 0;
+      billedRounds++;
 
       if (data.stop_reason === "tool_use") {
         messages.push({ role: "assistant", content: data.content });
@@ -281,12 +306,17 @@ Deno.serve(async (req: Request) => {
         .join("");
       break;
     }
+    } catch (err) {
+      // e.g. a round timing out after earlier rounds were answered
+      try { await logOnce(); } catch (logErr) { console.error("Usage log failed:", logErr); }
+      throw err;
+    }
 
     if (!finalText) {
       finalText = "I wasn't able to put together an answer for that one — try asking it a different way.";
     }
 
-    await logUsage(ip, messageNum, totalInputTokens, totalOutputTokens);
+    await logOnce();
 
     return new Response(JSON.stringify({
       answer: finalText,

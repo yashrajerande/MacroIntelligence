@@ -17,6 +17,7 @@ import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import Anthropic from '@anthropic-ai/sdk';
+import { meteredStream } from '../../../src/utils/metered-claude.js';
 import {
   loadHookHistory,
   recordHook,
@@ -192,14 +193,13 @@ SECTION FORMAT IS NON-NEGOTIABLE: the so-what-format.md skill in your system pro
 
 REMEMBER: Your persona defines three voices (Mishra, Munger, Economist). USE THEM TO THINK — never to attribute. Every regime narrative must show at least one inversion (Munger), one proxy-vs-headline tension (Mishra), and zero banned phrases (Economist test). The names are your private analytical anchors and MUST NOT appear in the output. Do not write "as Mishra notes", "applying Munger", "in the FT's voice", or any variant. Present every conclusion as your own, unattributed.`;
 
-    const stream = client.messages.stream({
+    const response = await meteredStream(client, {
       model: 'claude-sonnet-4-6',
       max_tokens: 4096,
       temperature: 0.3,
       system: [{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }],
       messages: [{ role: 'user', content: prompt }],
-    });
-    const response = await stream.finalMessage();
+    }, { agent: 'ExecutiveSummaryWriter' });
 
     const tokens = { input: response.usage?.input_tokens || 0, output: response.usage?.output_tokens || 0 };
     const text = response.content.filter(b => b.type === 'text').map(b => b.text).join('');

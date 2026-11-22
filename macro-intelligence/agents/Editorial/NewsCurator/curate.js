@@ -3,6 +3,7 @@
  */
 
 import Anthropic from '@anthropic-ai/sdk';
+import { meteredStream } from '../../../src/utils/metered-claude.js';
 import { fetchAllFeeds, pickTopNews, getFeedHealthSummary } from './skills/rss-feeds.js';
 
 const client = new Anthropic();
@@ -24,7 +25,9 @@ export class NewsCurator {
         `${i + 1}. [${item.category}] "${item.headline}" (source: ${item.source_name}, buzz: ${item.buzz_tag})`
       ).join('\n');
 
-      const stream = client.messages.stream({
+      // Charged to the usage meter at the response boundary — the JSON
+      // parse below can fail without losing the spend.
+      const response = await meteredStream(client, {
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 512,
         system: [{
@@ -36,8 +39,7 @@ export class NewsCurator {
           role: 'user',
           content: `Today is ${isoDate}. Refine these headlines:\n${prompt}`,
         }],
-      });
-      const response = await stream.finalMessage();
+      }, { agent: 'NewsCurator' });
 
       tokens.input = response.usage?.input_tokens || 0;
       tokens.output = response.usage?.output_tokens || 0;

@@ -15,7 +15,9 @@ import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import Anthropic from '@anthropic-ai/sdk';
+import { meteredStream } from '../../../src/utils/metered-claude.js';
 import { generateSpeech } from './skills/tts-api.js';
+import { meter, normalizeUsage, costOfUsage } from '../../../src/utils/usage-meter.js';
 import {
   loadHookHistory,
   scoreHookCandidates,
@@ -117,14 +119,13 @@ RULES:
 
 Return ONLY the script text. No JSON. No markers. Just the words to be spoken.`;
 
-    const stream = client.messages.stream({
+    const response = await meteredStream(client, {
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 512,
       temperature: 0.5,
       system: [{ type: 'text', text: persona, cache_control: { type: 'ephemeral' } }],
       messages: [{ role: 'user', content: prompt }],
-    });
-    const response = await stream.finalMessage();
+    }, { agent: 'VoiceBroadcaster' });
 
     const tokens = {
       input: response.usage?.input_tokens || 0,
@@ -141,7 +142,23 @@ Return ONLY the script text. No JSON. No markers. Just the words to be spoken.`;
     console.log(`[VoiceBroadcaster] Script: ${wordCount} words, ${scriptText.length} chars`);
 
     // ── Step 3: Generate audio via OpenAI TTS ────────────────────────
-    const { buffer: audioBuffer, costEstimate: ttsCost } = await generateSpeech(scriptText);
+    // The OpenAI TTS spend is charged to the same meter (agent
+    // VoiceBroadcaster), so the ledger carries Claude + OpenAI exactly once.
+    // An HTTP error response is not billed; a timeout may have been, so it
+    // is recorded as unknown rather than $0.
+    let audioBuffer, ttsCost;
+    try {
+      ({ buffer: audioBuffer, costEstimate: ttsCost } = await generateSpeech(scriptText));
+    } catch (err) {
+      if (!/\[TTS\] HTTP \d+/.test(err.message || '')) {
+        meter.chargeUnknown({ provider: 'openai', model: 'tts-1-hd', agent: 'VoiceBroadcaster', reason: err.message });
+      }
+      throw err;
+    }
+    meter.chargeExternal({
+      provider: 'openai', model: 'tts-1-hd', cost_usd: ttsCost, agent: 'VoiceBroadcaster',
+      detail: { characters: scriptText.length },
+    });
 
     // ── Step 4: Save MP3 ─────────────────────────────────────────────
     const outputDir = join(ROOT, 'output');
@@ -159,7 +176,10 @@ Return ONLY the script text. No JSON. No markers. Just the words to be spoken.`;
     writeFileSync(join(outputDir, 'daily-broadcast-script.txt'), scriptText, 'utf-8');
 
     const latency = Date.now() - start;
-    const haikuCost = (tokens.input / 1000) * 0.0008 + (tokens.output / 1000) * 0.001;
+    // Full Haiku price incl. cache writes/reads (response.usage is the
+    // merged usage meteredStream charged). Display only — the ledger total
+    // comes from the meter.
+    const haikuCost = costOfUsage('claude-haiku-4-5-20251001', normalizeUsage(response.usage)).cost_usd || 0;
     const totalCost = Math.round((haikuCost + ttsCost) * 10000) / 10000;
 
     console.log(`[VoiceBroadcaster] Done in ${latency}ms. Cost: $${totalCost} (Haiku: $${haikuCost.toFixed(4)}, TTS: $${ttsCost.toFixed(4)})`);

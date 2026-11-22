@@ -72,6 +72,15 @@ jobs:
           GITHUB_REPOSITORY:       ${{ github.repository }}
           NODE_ENV:                production
 
+      # Accounting only — see daily-dashboard.yml. Shares the $5/month
+      # ledger, so a failed monthly cycle's spend must reach main too.
+      - name: Persist cost ledger (accounting only)
+        if: failure() || cancelled()
+        working-directory: macro-intelligence
+        run: node src/utils/persist-cost-ledger.js
+        env:
+          SKIP_GIT_PUSH:           ${{ inputs.skip_git_push }}
+
       - name: Upload state on failure
         if: failure()
         uses: actions/upload-artifact@v4

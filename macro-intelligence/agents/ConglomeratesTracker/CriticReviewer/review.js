@@ -8,6 +8,7 @@ import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import Anthropic from '@anthropic-ai/sdk';
+import { meteredStream } from '../../../src/utils/metered-claude.js';
 import { UNIVERSE } from '../skills/universe.js';
 import { scanBannedNames } from '../../../src/utils/banned-names.js';
 
@@ -129,7 +130,7 @@ Apply your Persona's review discipline. Return verdict PASS only if every
 score reconciles, every commentary line carries a fact, and no banned
 phrases survived. Otherwise REVISE with specific blockers.`;
 
-    const stream = client.messages.stream({
+    const response = await meteredStream(client, {
       model: 'claude-sonnet-4-6',
       // The draft Sonnet reads is 30-40KB of nested JSON across 21 groups
       // and 8 tables. A REVISE verdict with specific blockers and suggested
@@ -139,8 +140,7 @@ phrases survived. Otherwise REVISE with specific blockers.`;
       temperature: 0.1,
       system: [{ type: 'text', text: persona, cache_control: { type: 'ephemeral' } }],
       messages: [{ role: 'user', content: prompt }],
-    });
-    const response = await stream.finalMessage();
+    }, { agent: 'CriticReviewer' });
 
     const tokens = {
       input: response.usage?.input_tokens || 0,
@@ -216,14 +216,13 @@ Rules — absolute:
 4. Re-emit the FULL corrected JSON with the exact same schema as the
    draft, wrapped in <<<JSON ... >>>. No prose before or after.`;
 
-    const stream = client.messages.stream({
+    const response = await meteredStream(client, {
       model: 'claude-sonnet-4-6',
       max_tokens: 32768,
       temperature: 0,
       system: [{ type: 'text', text: persona, cache_control: { type: 'ephemeral' } }],
       messages: [{ role: 'user', content: prompt }],
-    });
-    const response = await stream.finalMessage();
+    }, { agent: 'CriticReviewer' });
 
     const tokens = {
       input: response.usage?.input_tokens || 0,

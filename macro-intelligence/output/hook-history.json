@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "12 NOV 2026",
-      "verdict_line": "Euro Stoxx 50 at a 10-year-high while BOJ at 1.25% p.a. drains the carry trade that funded EM inflows — India's DII cushion buys time, not immunity.",
-      "themes": [
-        "flows",
-        "policy"
-      ],
-      "slugs": [
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "inr_usd",
-        "boj_rate",
-        "hpi_mumbai"
-      ]
-    },
-    {
       "date": "12 OCT 2026",
       "verdict_line": "DII equity flows hit a 100th-percentile ₹58,502 cr / month while INR slides to 97.09 — domestic capital flooding in as foreign hands quietly exit the currency.",
       "themes": [
@@ -281,6 +266,21 @@
         "office_absorption",
         "us_10y_treasury",
         "inr_usd"
+      ]
+    },
+    {
+      "date": "22 NOV 2026",
+      "verdict_line": "GST at ₹2,31,290 cr / month — a 90th-percentile record — but services credit surging 28.3% YoY is doing the heavy lifting; formalisation and leverage are not the same demand story.",
+      "themes": [
+        "consumption",
+        "leverage"
+      ],
+      "slugs": [
+        "us_10y_treasury",
+        "airline_pax",
+        "sip_accounts",
+        "boj_rate",
+        "gst_month"
       ]
     },
     {

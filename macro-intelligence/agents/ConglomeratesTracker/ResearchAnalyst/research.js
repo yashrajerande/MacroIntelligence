@@ -7,6 +7,7 @@ import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import Anthropic from '@anthropic-ai/sdk';
+import { meteredStream } from '../../../src/utils/metered-claude.js';
 import { UNIVERSE } from '../skills/universe.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -41,15 +42,16 @@ no_material_movement=true.`;
   try {
     // Streaming so the SDK doesn't pre-flight-reject web_search calls
     // for taking too long (multiple internal tool rounds add up).
-    const stream = client.messages.stream({
+    // Charged (tokens + cache + web searches) at the response boundary;
+    // a failed or unparseable group still records what it spent.
+    response = await meteredStream(client, {
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 2048,
       temperature: 0.1,
       system: [{ type: 'text', text: persona, cache_control: { type: 'ephemeral' } }],
       tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: 4 }],
       messages: [{ role: 'user', content: prompt }],
-    });
-    response = await stream.finalMessage();
+    }, { agent: 'ResearchAnalyst' });
   } catch (err) {
     console.warn(`[ResearchAnalyst] ${group} fetch failed: ${err.message}`);
     return { group, no_material_movement: true, moves: [], error: err.message };

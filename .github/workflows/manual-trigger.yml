@@ -73,6 +73,15 @@ jobs:
           GITHUB_REPOSITORY:    ${{ github.repository }}
           NODE_ENV:             development
 
+      # Accounting only — see daily-dashboard.yml. Honours skip_git_push:
+      # with it set, the ledger is updated in the uploaded artifact only.
+      - name: Persist cost ledger (accounting only)
+        if: failure() || cancelled()
+        working-directory: macro-intelligence
+        run: node src/utils/persist-cost-ledger.js
+        env:
+          SKIP_GIT_PUSH:        ${{ inputs.skip_git_push }}
+
       - uses: actions/upload-artifact@v4
         if: always()
         with:

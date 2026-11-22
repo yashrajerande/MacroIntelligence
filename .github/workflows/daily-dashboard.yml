@@ -98,6 +98,17 @@ jobs:
           GITHUB_REPOSITORY:    ${{ github.repository }}
           NODE_ENV:             production
 
+      # Accounting only. A failed run has still spent API money; its cost
+      # journal (logs/cost-journal-*.jsonl) is replayed into main's
+      # output/cost-ledger.json — that one file, committed from a separate
+      # worktree on top of current main — so tomorrow's budget guard sees
+      # it. Idempotent per run_id; no-op when nothing was spent. Runs in
+      # this job, i.e. inside the macrointelligence-publish concurrency group.
+      - name: Persist cost ledger (accounting only)
+        if: failure() || cancelled()
+        working-directory: macro-intelligence
+        run: node src/utils/persist-cost-ledger.js
+
       - name: Upload logs on failure
         if: failure()
         uses: actions/upload-artifact@v4

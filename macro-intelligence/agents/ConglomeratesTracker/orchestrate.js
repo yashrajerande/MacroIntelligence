@@ -24,7 +24,10 @@ import { CriticReviewer }   from './CriticReviewer/review.js';
 import { renderHTML }       from './Publisher/render.js';
 import { publishGit }       from './Publisher/publishGit.js';
 import { validateCycleOutput } from './skills/validate-cycle.js';
-import { checkBudget, recordRunCost } from '../../src/utils/cost-ledger.js';
+import { randomUUID } from 'crypto';
+import { checkBudget, recordRunCost, LEDGER_PATH } from '../../src/utils/cost-ledger.js';
+import { meter } from '../../src/utils/usage-meter.js';
+import { journalPathFor } from '../../src/utils/persist-cost-ledger.js';
 import { sendFailureAlert, currentRunUrl } from '../../src/utils/resilience.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -149,15 +152,30 @@ async function withRetry(fn, label) {
   }
 }
 
-function tokenCostUSD(tokens, model) {
-  // Conservative public list-price approximation. Real cost is reconciled
-  // post-run via Anthropic billing per Best Practice #4.
-  const RATES = {
-    'claude-haiku-4-5-20251001': { in: 1.0, out: 5.0 },   // per 1M tokens
-    'claude-sonnet-4-6':         { in: 3.0, out: 15.0 },
+// Ledger details from the usage meter. Every Anthropic response in this
+// process (incl. failed/retried/partial ones and web searches) was charged
+// at the response boundary; research served from the cycle cache costs
+// nothing this run (the old token sum re-charged the cached tokens).
+function costDetails(status) {
+  const s = meter.summary();
+  return {
+    status,
+    pipeline: 'conglomerates',
+    cost_complete: s.cost_complete,
+    unknown_usage_calls: s.unknown_usage_calls,
+    lower_bound_calls: s.lower_bound_calls,
+    cost_is_lower_bound: s.cost_is_lower_bound,
+    partial_calls: s.partial_calls,
+    calls: s.calls,
+    usage: {
+      input_tokens: s.input_tokens,
+      output_tokens: s.output_tokens,
+      cache_creation_5m_input_tokens: s.cache_creation_5m_input_tokens,
+      cache_creation_1h_input_tokens: s.cache_creation_1h_input_tokens,
+      cache_read_input_tokens: s.cache_read_input_tokens,
+      web_search_requests: s.web_search_requests,
+    },
   };
-  const r = RATES[model] || { in: 3.0, out: 15.0 };
-  return ((tokens.input || 0) * r.in + (tokens.output || 0) * r.out) / 1_000_000;
 }
 
 async function run() {
@@ -167,6 +185,22 @@ async function run() {
 
   const startTs = Date.now();
   const meta = { cycle, agents: {} };
+
+  // One run_id per process attempt (it used to be the fixed
+  // `congs-YYYY-MM`). The ledger upserts by run_id, so a fixed id would
+  // let a same-month re-run overwrite a failed attempt's real spend.
+  const runId = `congs-${cycle.isoMonth}-${randomUUID().slice(0, 8)}`;
+  meter.attachRun({ runId, isoDate: cycle.runDate, pipeline: 'conglomerates', journalPath: journalPathFor(runId) });
+
+  // Every abort path charges the ledger (idempotent per run_id). The
+  // workflow's "Persist cost ledger" step then makes it durable on main.
+  const recordCostOnFailure = () => {
+    if (meter.summary().calls === 0) return;
+    try {
+      recordRunCost(cycle.runDate, meter.summary().cost_usd, runId, undefined, costDetails('failed'));
+    } catch { /* best-effort on the failure path */ }
+  };
+  const abort = () => { recordCostOnFailure(); process.exit(1); };
 
   try {
     // ── BUDGET GUARD (Best Practice #5) ─────────────────────────────
@@ -257,7 +291,7 @@ async function run() {
       if (!boundary.valid) {
         console.error('[Orchestrator] Boundary validation still failing — aborting.');
         for (const e of boundary.errors) console.error(`  · ${e}`);
-        process.exit(1);
+        abort();
       }
     }
 
@@ -320,7 +354,7 @@ async function run() {
         if (!redpenBoundary.valid) {
           console.error('[Orchestrator] Red-pen output failed boundary validation — aborting.');
           for (const e of redpenBoundary.errors) console.error(`  · ${e}`);
-          process.exit(1);
+          abort();
         }
         advised = { ...advised, data: redpen.data };
         review = { ...review, data: { ...review.data, verdict: 'PASS', redpen_applied: true } };
@@ -328,7 +362,7 @@ async function run() {
       } else {
         console.error(`[Orchestrator] Still REVISE after ${MAX_REVISIONS} revisions (${blockers.length} blockers — too many for red-pen). Aborting publish.`);
         console.error('Blockers:', JSON.stringify(blockers, null, 2));
-        process.exit(1);
+        abort();
       }
     }
 
@@ -355,35 +389,37 @@ async function run() {
       meta,
     });
 
+    // ── COST RECORDING (Best Practice #4) ──────────────────────────
+    // BEFORE publishing, so the updated cost-ledger.json is part of the
+    // published commit (it used to be written after the push and was lost
+    // with the runner). No model call happens after this point.
+    const totalCost = meter.summary().cost_usd;
+    recordRunCost(cycle.runDate, totalCost, runId, undefined, costDetails('success'));
+
     // Git (skip if env says so). state.json and the research cache are
     // committed too — the next cycle's delta computation depends on them
-    // surviving the ephemeral runner.
+    // surviving the ephemeral runner. The cost ledger rides along.
     const gitResult = publishGit({
       archivePath: rendered.archivePath,
       latestPath:  rendered.latestPath,
       rootIndexPath: ROOT_INDEX,
-      statePaths: [STATE_PATH, researchCachePath],
+      statePaths: [STATE_PATH, researchCachePath, LEDGER_PATH],
       cycleLabel: cycle.cycleLabel,
       dryRun: process.env.SKIP_GIT_PUSH === 'true',
     });
-
-    // ── COST RECORDING (Best Practice #4) ──────────────────────────
-    const totalCost = Object.values(meta.agents).reduce((sum, m) => {
-      if (!m?.tokens || !m?.model) return sum;
-      return sum + tokenCostUSD(m.tokens, m.model);
-    }, 0);
-    recordRunCost(cycle.runDate, totalCost, `congs-${cycle.isoMonth}`);
 
     const totalMs = Date.now() - startTs;
     console.log(`\n═══ Cycle ${cycle.cycleLabel} complete in ${(totalMs / 1000).toFixed(1)}s ═══`);
     console.log(`  HTML:   ${rendered.latestPath}`);
     console.log(`  Git:    ${gitResult?.sha || gitResult?.reason || (gitResult?.skipped ? 'skipped' : '—')}`);
-    console.log(`  Cost:   $${totalCost.toFixed(4)} (estimate — verify against Anthropic billing)`);
+    const u = meter.summary();
+    console.log(`  Cost:   $${totalCost.toFixed(4)} (list price incl. cache + ${u.web_search_requests} web searches` +
+      `${u.cost_complete ? '' : `; LOWER BOUND: ${u.unknown_usage_calls} unknown-usage call(s) not priced, ${u.lower_bound_calls} partial`})`);
     process.exit(0);
   } catch (err) {
     console.error(`[Orchestrator] Failed: ${err.message}`);
     console.error(err.stack);
-    process.exit(1);
+    abort();
   }
 }
 

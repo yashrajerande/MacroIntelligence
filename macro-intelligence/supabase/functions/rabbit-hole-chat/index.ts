@@ -1,6 +1,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import { getSignalContext, getRegimeContext, BANNED_NAMES_RULE, istToday } from "../_shared/macro-context.ts";
+import { costOfUsage, mergeUsage, usageObserved, usageComplete } from "../_shared/anthropic-pricing.ts";
 
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY")!;
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
@@ -86,11 +87,18 @@ async function checkRateLimit(ip: string): Promise<{ allowed: boolean; reason?: 
   return { allowed: true };
 }
 
+// cost_usd is priced from the FULL usage object (input, 5m/1h cache
+// writes, cache reads, output, web searches) at current list prices — it
+// used to use stale Haiku rates ($0.80/$4 per MTok instead of $1/$5).
+// input_tokens/output_tokens keep their existing column meaning.
 async function logUsage(
   entryType: string, entryId: string, ip: string,
-  messageNum: number, inputTokens: number, outputTokens: number
+  // deno-lint-ignore no-explicit-any
+  messageNum: number, usage: Record<string, any>
 ) {
-  const cost = (inputTokens / 1_000_000) * 0.80 + (outputTokens / 1_000_000) * 4.00;
+  const inputTokens = usage.input_tokens || 0;
+  const outputTokens = usage.output_tokens || 0;
+  const cost = costOfUsage(MODEL, usage) ?? 0;
   await supabase.from("rabbit_hole_usage").insert({
     run_date: istToday(), // explicit — must match checkRateLimit's boundary, not the column's UTC-anchored CURRENT_DATE default
     entry_type: entryType,
@@ -185,8 +193,27 @@ Deno.serve(async (req: Request) => {
 
     // Stream the response through to the client
     const encoder = new TextEncoder();
-    let inputTokens = 0;
-    let outputTokens = 0;
+    // deno-lint-ignore no-explicit-any
+    let usage: Record<string, any> | null = null;
+    let usageLogged = false;
+    // Log exactly once, from whatever usage the stream reported — also
+    // when the stream breaks after message_start (input is already billed).
+    // Absent/empty usage is UNKNOWN, not $0: nothing is logged and the gap
+    // is reported. A broken stream, or usage missing input/output counts,
+    // is logged at what was observed — a LOWER BOUND (the table has no
+    // column for that flag, so it is reported in the function log).
+    const logOnce = async (streamBroken = false) => {
+      if (usageLogged) return;
+      usageLogged = true;
+      if (!usage || !usageObserved(usage)) {
+        console.warn("rabbit-hole-chat: no usage observed — cost UNKNOWN, not logged");
+        return;
+      }
+      if (streamBroken || !usageComplete(usage)) {
+        console.warn("rabbit-hole-chat: partial usage — logged cost is a LOWER BOUND");
+      }
+      await logUsage(entry_type, entry_id, ip, messageNum, usage);
+    };
 
     const stream = new ReadableStream({
       async start(controller) {
@@ -215,12 +242,14 @@ Deno.serve(async (req: Request) => {
                   controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: event.delta.text })}\n\n`));
                 }
 
+                // message_delta usage is cumulative (output, and cache /
+                // server-tool counts when present): merge, never add.
                 if (event.type === "message_delta" && event.usage) {
-                  outputTokens = event.usage.output_tokens || 0;
+                  usage = mergeUsage(usage, event.usage);
                 }
 
                 if (event.type === "message_start" && event.message?.usage) {
-                  inputTokens = event.message.usage.input_tokens || 0;
+                  usage = mergeUsage(usage, event.message.usage);
                 }
               } catch {
                 // Skip unparseable lines
@@ -229,12 +258,15 @@ Deno.serve(async (req: Request) => {
           }
 
           // Log usage after stream completes
-          await logUsage(entry_type, entry_id, ip, messageNum, inputTokens, outputTokens);
+          await logOnce();
 
-          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ done: true, usage: { input_tokens: inputTokens, output_tokens: outputTokens } })}\n\n`));
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ done: true, usage: { input_tokens: usage?.input_tokens || 0, output_tokens: usage?.output_tokens || 0 } })}\n\n`));
           controller.close();
         } catch (err) {
           console.error("Stream error:", err);
+          // Billed tokens from a broken stream still count toward the
+          // Rabbit Hole daily budget.
+          try { await logOnce(true); } catch (logErr) { console.error("Usage log failed:", logErr); }
           controller.error(err);
         }
       },

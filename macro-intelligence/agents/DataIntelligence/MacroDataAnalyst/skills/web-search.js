@@ -3,11 +3,17 @@
  */
 
 import Anthropic from '@anthropic-ai/sdk';
+import { meteredStream } from '../../../../src/utils/metered-claude.js';
 
 const client = new Anthropic();
 
+// The response (tokens, cache writes/reads and every web search) is
+// charged to the usage meter inside meteredStream, BEFORE the JSON below
+// is parsed — a parse_failed result still costs what it cost. The calling
+// agent is attributed via the meter's async context (orchestrator
+// withRetry), so this shared helper needs no agent name.
 export async function searchAndExtract(query, extractionPrompt) {
-  const stream = client.messages.stream({
+  const response = await meteredStream(client, {
     model: 'claude-haiku-4-5-20251001',
     max_tokens: 4096,
     system: [{
@@ -21,7 +27,6 @@ export async function searchAndExtract(query, extractionPrompt) {
       content: `${query}\n\nExtract: ${extractionPrompt}`,
     }],
   });
-  const response = await stream.finalMessage();
 
   // Concatenate all text blocks from the response
   let fullText = '';

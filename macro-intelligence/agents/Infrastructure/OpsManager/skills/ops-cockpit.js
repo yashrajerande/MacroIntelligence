@@ -302,7 +302,10 @@ export async function generateCockpit({ dateStr, isoDate, agentMetas, feedHealth
           // m.tokens.* rendered "—" for every agent on every run.
           const tokIn = m.input_tokens ?? m.tokens?.input ?? 0;
           const tokOut = m.output_tokens ?? m.tokens?.output ?? 0;
-          const cost = m.cost_usd || ((tokIn / 1000) * 0.0008 + (tokOut / 1000) * 0.001);
+          // RunLogger always records cost_usd (from the usage meter, incl.
+          // cache and web search). The fallback used stale Haiku rates
+          // ($0.80/$1 per MTok); it now uses the current $1/$5.
+          const cost = typeof m.cost_usd === 'number' ? m.cost_usd : ((tokIn / 1000) * 0.001 + (tokOut / 1000) * 0.005);
           const model = m.model || 'none';
           // Real status, not hardcoded OK — a failed agent showed green.
           const ok = (m.status || 'ok') === 'ok';

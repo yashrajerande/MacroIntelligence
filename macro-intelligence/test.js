@@ -2010,6 +2010,13 @@ assert(!missingRead.narrative.includes('VIX'), `No VIX data means no risk-appeti
   assert(missingFragments.length === 0, `Template's hand-ported speech formatting must repeat every replacement string from the Node skill verbatim — missing: ${JSON.stringify(missingFragments)}`);
 }
 
+// --- API cost accounting (usage meter, cache/search pricing, failure
+// journal durability, Conglomerates ordering). Mocks + a local bare git
+// repo only — zero API cost, zero network. Also: node test-accounting.js
+{
+  const { runAccountingTests } = await import('./test-accounting.js');
+  await runAccountingTests({ describe, assert });
+}
 
 console.log(`\n═══════════════════════════════════════════════════════════`);
 console.log(`  Test Results: ${pass} passed, ${fail} failed`);

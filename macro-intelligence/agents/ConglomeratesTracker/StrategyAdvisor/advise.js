@@ -7,6 +7,7 @@ import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import Anthropic from '@anthropic-ai/sdk';
+import { meteredStream } from '../../../src/utils/metered-claude.js';
 import { UNIVERSE } from '../skills/universe.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -131,14 +132,13 @@ Wrap the JSON in <<<JSON ... >>>.`;
     // max_tokens × estimated tok/sec could exceed its 10-min timeout, and
     // 32768 trips that heuristic for Sonnet. Streaming bypasses the check
     // and also lets us watch the response build in real time.
-    const stream = client.messages.stream({
+    const response = await meteredStream(client, {
       model: 'claude-sonnet-4-6',
       max_tokens: 32768,
       temperature: 0.25,
       system: [{ type: 'text', text: persona, cache_control: { type: 'ephemeral' } }],
       messages: [{ role: 'user', content: prompt }],
-    });
-    const response = await stream.finalMessage();
+    }, { agent: 'StrategyAdvisor' });
 
     const tokens = {
       input: response.usage?.input_tokens || 0,

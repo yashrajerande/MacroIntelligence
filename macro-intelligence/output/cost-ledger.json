@@ -7,115 +7,134 @@
           "date": "2026-07-13",
           "run_id": "3931e716-30f7-4e7e-a89a-c04722b879f3",
           "cost_usd": 0.0772,
-          "timestamp": "2026-07-12T22:27:31.548Z"
+          "timestamp": "2026-07-12T22:27:31.548Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-07-14",
           "run_id": "6801672d-5a67-4e70-b0fc-ca7e4118167e",
           "cost_usd": 0.072,
-          "timestamp": "2026-07-13T22:31:01.583Z"
+          "timestamp": "2026-07-13T22:31:01.583Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-07-15",
           "run_id": "79569227-0303-4bbe-9b74-44400f40e9b4",
           "cost_usd": 0.0766,
-          "timestamp": "2026-07-14T22:33:50.166Z"
+          "timestamp": "2026-07-14T22:33:50.166Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-07-16",
           "run_id": "be5a80db-cb02-441a-b794-07d8ea1d3853",
           "cost_usd": 0.0801,
-          "timestamp": "2026-07-15T22:33:16.750Z"
+          "timestamp": "2026-07-15T22:33:16.750Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-07-17",
           "run_id": "18d1d344-a144-4e91-a6c8-b6f4cc5461a2",
           "cost_usd": 0.0781,
-          "timestamp": "2026-07-16T22:32:05.312Z"
+          "timestamp": "2026-07-16T22:32:05.312Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-07-18",
           "run_id": "7f53652d-e691-4d70-b8bf-3bb1c762aacb",
           "cost_usd": 0.0769,
-          "timestamp": "2026-07-17T22:25:32.335Z"
+          "timestamp": "2026-07-17T22:25:32.335Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-07-19",
           "run_id": "6e0bc865-bdae-4698-a70a-a2998724e586",
           "cost_usd": 0.0784,
-          "timestamp": "2026-07-18T22:26:53.013Z"
+          "timestamp": "2026-07-18T22:26:53.013Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-07-20",
           "run_id": "c0cad1e6-bc71-46e7-858f-a45c91e06ac9",
           "cost_usd": 0.0729,
-          "timestamp": "2026-07-19T22:29:16.579Z"
+          "timestamp": "2026-07-19T22:29:16.579Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-07-21",
           "run_id": "ed0ac923-7022-409b-b7c0-30c51704cbab",
           "cost_usd": 0.0805,
-          "timestamp": "2026-07-20T22:33:23.802Z"
+          "timestamp": "2026-07-20T22:33:23.802Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-07-22",
           "run_id": "16976f12-9b27-4f79-9e57-a63ba53f8b62",
           "cost_usd": 0.0764,
-          "timestamp": "2026-07-21T22:29:51.478Z"
+          "timestamp": "2026-07-21T22:29:51.478Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-07-23",
           "run_id": "32aec470-366a-417f-b24d-dc076261efaf",
           "cost_usd": 0.0764,
-          "timestamp": "2026-07-22T22:36:13.426Z"
+          "timestamp": "2026-07-22T22:36:13.426Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-07-24",
           "run_id": "76b602a9-f7d7-4a49-b00e-9b7d97645914",
           "cost_usd": 0.0745,
-          "timestamp": "2026-07-23T22:33:32.422Z"
+          "timestamp": "2026-07-23T22:33:32.422Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-07-25",
           "run_id": "51f9e98b-228c-4cb8-b5e4-30c51db880bb",
           "cost_usd": 0.0776,
-          "timestamp": "2026-07-24T22:37:23.959Z"
+          "timestamp": "2026-07-24T22:37:23.959Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-07-26",
           "run_id": "28fec093-9a3a-4b35-9fc1-3919a7812dfd",
           "cost_usd": 0.0767,
-          "timestamp": "2026-07-25T22:30:09.360Z"
+          "timestamp": "2026-07-25T22:30:09.360Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-07-27",
           "run_id": "a6b08b1f-11ab-4c8a-99d2-d50f549a7267",
           "cost_usd": 0.0715,
-          "timestamp": "2026-07-26T22:34:14.588Z"
+          "timestamp": "2026-07-26T22:34:14.588Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-07-28",
           "run_id": "66646c62-6712-4bb0-81f0-38af63b71eb6",
           "cost_usd": 0.0784,
-          "timestamp": "2026-07-27T22:36:17.761Z"
+          "timestamp": "2026-07-27T22:36:17.761Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-07-29",
           "run_id": "70bcb300-1da0-42a5-94a6-2199b2dbfb3e",
           "cost_usd": 0.0786,
-          "timestamp": "2026-07-28T22:36:19.999Z"
+          "timestamp": "2026-07-28T22:36:19.999Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-07-30",
           "run_id": "a694d74d-76cb-40e9-a9c3-582691afa20e",
           "cost_usd": 0.0752,
-          "timestamp": "2026-07-29T22:31:47.962Z"
+          "timestamp": "2026-07-29T22:31:47.962Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-07-31",
           "run_id": "41d85e7a-9148-45d1-b61e-8eaa7d08c59f",
           "cost_usd": 0.0723,
-          "timestamp": "2026-07-30T22:38:58.003Z"
+          "timestamp": "2026-07-30T22:38:58.003Z",
+          "accounting": "legacy_incomplete"
         }
       ]
     },
@@ -126,175 +145,204 @@
           "date": "2026-08-01",
           "run_id": "dd831ef2-2905-42ce-8a2d-bc45879e74e6",
           "cost_usd": 0.0767,
-          "timestamp": "2026-07-31T22:35:23.172Z"
+          "timestamp": "2026-07-31T22:35:23.172Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-02",
           "run_id": "8178e055-ddbc-418d-b902-b73a5d0b5967",
           "cost_usd": 0.0781,
-          "timestamp": "2026-08-01T22:29:41.983Z"
+          "timestamp": "2026-08-01T22:29:41.983Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-03",
           "run_id": "12eeab97-778a-448a-80a9-d2e5256f088f",
           "cost_usd": 0.0732,
-          "timestamp": "2026-08-02T22:30:09.972Z"
+          "timestamp": "2026-08-02T22:30:09.972Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-04",
           "run_id": "06cfde0a-4286-466b-8819-8976aab11b9a",
           "cost_usd": 0.078,
-          "timestamp": "2026-08-03T22:35:59.236Z"
+          "timestamp": "2026-08-03T22:35:59.236Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-05",
           "run_id": "f67fabfd-c482-412d-88a2-706d49df475b",
           "cost_usd": 0.0747,
-          "timestamp": "2026-08-04T22:38:16.098Z"
+          "timestamp": "2026-08-04T22:38:16.098Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-06",
           "run_id": "d79c1fd0-5dec-49bf-ab98-3bd870a75a22",
           "cost_usd": 0.0733,
-          "timestamp": "2026-08-05T22:37:14.736Z"
+          "timestamp": "2026-08-05T22:37:14.736Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-07",
           "run_id": "5821132b-eae4-432c-9981-a030013ba909",
           "cost_usd": 0.0786,
-          "timestamp": "2026-08-07T01:05:44.820Z"
+          "timestamp": "2026-08-07T01:05:44.820Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-08",
           "run_id": "c5e6269d-02c7-4b51-a1dc-8a70ebdc5714",
           "cost_usd": 0.0767,
-          "timestamp": "2026-08-07T22:09:10.029Z"
+          "timestamp": "2026-08-07T22:09:10.029Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-09",
           "run_id": "b8ea5762-fa2d-412e-836d-8b7867a2d566",
           "cost_usd": 0.0794,
-          "timestamp": "2026-08-08T21:58:26.153Z"
+          "timestamp": "2026-08-08T21:58:26.153Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-10",
           "run_id": "5459b443-b271-482b-a520-4813a25f753c",
           "cost_usd": 0.0815,
-          "timestamp": "2026-08-09T22:00:58.185Z"
+          "timestamp": "2026-08-09T22:00:58.185Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-11",
           "run_id": "19fece9e-dfbf-43e1-95c1-9d7f1ec4875c",
           "cost_usd": 0.0802,
-          "timestamp": "2026-08-10T22:09:50.877Z"
+          "timestamp": "2026-08-10T22:09:50.877Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-12",
           "run_id": "069db84c-0897-441d-b2f6-72d11b3f663f",
           "cost_usd": 0.0754,
-          "timestamp": "2026-08-11T22:15:23.300Z"
+          "timestamp": "2026-08-11T22:15:23.300Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-13",
           "run_id": "f1ba3c00-889a-4ea9-9356-ba3d26ed57c8",
           "cost_usd": 0.0753,
-          "timestamp": "2026-08-12T22:13:28.419Z"
+          "timestamp": "2026-08-12T22:13:28.419Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-14",
           "run_id": "cdd65028-8a81-47a6-82f8-3bcd3503fdf3",
           "cost_usd": 0.0774,
-          "timestamp": "2026-08-13T22:14:17.757Z"
+          "timestamp": "2026-08-13T22:14:17.757Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-15",
           "run_id": "f5ff7b55-708e-4cee-9ac5-563fdfeeeaff",
           "cost_usd": 0.0765,
-          "timestamp": "2026-08-14T21:52:53.636Z"
+          "timestamp": "2026-08-14T21:52:53.636Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-16",
           "run_id": "d9607d24-c5fd-4d6d-94f5-ee50ef0e6c0f",
           "cost_usd": 0.0794,
-          "timestamp": "2026-08-15T21:49:15.202Z"
+          "timestamp": "2026-08-15T21:49:15.202Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-17",
           "run_id": "71b371a0-ab6a-4d03-ae91-299b8311762e",
           "cost_usd": 0.0791,
-          "timestamp": "2026-08-16T21:48:36.983Z"
+          "timestamp": "2026-08-16T21:48:36.983Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-18",
           "run_id": "a49e13d0-c262-4c5a-bf8d-cc176c688231",
           "cost_usd": 0.0754,
-          "timestamp": "2026-08-17T21:53:28.576Z"
+          "timestamp": "2026-08-17T21:53:28.576Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-19",
           "run_id": "6b95d38f-0143-4d69-a9c5-7469d797df53",
           "cost_usd": 0.0781,
-          "timestamp": "2026-08-18T21:51:09.915Z"
+          "timestamp": "2026-08-18T21:51:09.915Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-20",
           "run_id": "6a9c4c9a-a981-440c-babc-d3e86ca7ce2a",
           "cost_usd": 0.0767,
-          "timestamp": "2026-08-19T21:53:58.955Z"
+          "timestamp": "2026-08-19T21:53:58.955Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-21",
           "run_id": "65f7ed4e-2dfb-43ff-babb-e90b58e9b5fd",
           "cost_usd": 0.0826,
-          "timestamp": "2026-08-20T21:56:52.396Z"
+          "timestamp": "2026-08-20T21:56:52.396Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-22",
           "run_id": "b5607aca-d6af-4020-ae22-f38860294d7d",
           "cost_usd": 0.073,
-          "timestamp": "2026-08-21T21:52:26.831Z"
+          "timestamp": "2026-08-21T21:52:26.831Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-23",
           "run_id": "dee761db-43db-4784-b9a5-81f76f0f8876",
           "cost_usd": 0.0832,
-          "timestamp": "2026-08-22T21:50:13.527Z"
+          "timestamp": "2026-08-22T21:50:13.527Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-24",
           "run_id": "a227a604-35ec-4177-9369-cb66cfaa4e19",
           "cost_usd": 0.0771,
-          "timestamp": "2026-08-23T21:49:42.239Z"
+          "timestamp": "2026-08-23T21:49:42.239Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-25",
           "run_id": "2e188a34-cfe1-4034-a9f8-20a524bf76a6",
           "cost_usd": 0.0742,
-          "timestamp": "2026-08-24T21:56:43.176Z"
+          "timestamp": "2026-08-24T21:56:43.176Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-26",
           "run_id": "35640994-647d-4cfd-9c89-d244c6e8adbf",
           "cost_usd": 0.0797,
-          "timestamp": "2026-08-25T21:56:10.905Z"
+          "timestamp": "2026-08-25T21:56:10.905Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-27",
           "run_id": "4dc0fed8-19b7-4606-9677-37c5baf55086",
           "cost_usd": 0.0762,
-          "timestamp": "2026-08-27T01:01:02.755Z"
+          "timestamp": "2026-08-27T01:01:02.755Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-30",
           "run_id": "7b8e9da4-1aa8-49db-9d98-4bf1b4746dd4",
           "cost_usd": 0.0868,
-          "timestamp": "2026-08-29T23:34:48.023Z"
+          "timestamp": "2026-08-29T23:34:48.023Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-08-31",
           "run_id": "8f50cb0c-df0e-4120-bd69-e742097cbeac",
           "cost_usd": 0.077,
-          "timestamp": "2026-08-30T23:45:55.470Z"
+          "timestamp": "2026-08-30T23:45:55.470Z",
+          "accounting": "legacy_incomplete"
         }
       ]
     },
@@ -305,169 +353,197 @@
           "date": "2026-09-01",
           "run_id": "183a17b0-3d24-4845-a960-71b4a9b30f35",
           "cost_usd": 0.0738,
-          "timestamp": "2026-09-01T00:46:54.511Z"
+          "timestamp": "2026-09-01T00:46:54.511Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-02",
           "run_id": "c58ef90b-3671-4d33-847c-64bab7bc1d9d",
           "cost_usd": 0.0745,
-          "timestamp": "2026-09-01T23:31:16.776Z"
+          "timestamp": "2026-09-01T23:31:16.776Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-03",
           "run_id": "51d517ec-ad4f-49e7-972a-78be8fa7afcb",
           "cost_usd": 0.0798,
-          "timestamp": "2026-09-02T23:33:01.371Z"
+          "timestamp": "2026-09-02T23:33:01.371Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-04",
           "run_id": "16a1aea1-6725-43ce-8864-aadc86272f3a",
           "cost_usd": 0.0716,
-          "timestamp": "2026-09-03T23:34:29.170Z"
+          "timestamp": "2026-09-03T23:34:29.170Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-06",
           "run_id": "78ae85ef-a16f-40bb-8d5f-3cf10ec12b76",
           "cost_usd": 0.1072,
-          "timestamp": "2026-09-05T23:11:59.454Z"
+          "timestamp": "2026-09-05T23:11:59.454Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-07",
           "run_id": "41b1f595-b819-4f43-b334-0e20b29ca0a8",
           "cost_usd": 0.1246,
-          "timestamp": "2026-09-06T23:04:32.610Z"
+          "timestamp": "2026-09-06T23:04:32.610Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-08",
           "run_id": "3d99c6cb-ef4f-49ad-aacb-aa122b037aa5",
           "cost_usd": 0.1579,
-          "timestamp": "2026-09-07T23:46:21.340Z"
+          "timestamp": "2026-09-07T23:46:21.340Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-14",
           "run_id": "edd3083c-91cd-49fa-95ac-9ddb4359ca9c",
           "cost_usd": 0.1592,
-          "timestamp": "2026-09-14T13:52:46.743Z"
+          "timestamp": "2026-09-14T13:52:46.743Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-15",
           "run_id": "afceb680-fd50-40d5-8e4e-1181af7bd498",
           "cost_usd": 0.1326,
-          "timestamp": "2026-09-15T00:00:48.225Z"
+          "timestamp": "2026-09-15T00:00:48.225Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-15",
           "run_id": "5d1eeb5b-0f2d-4d9c-a1b6-c3f728e305ed",
           "cost_usd": 0.1177,
-          "timestamp": "2026-09-15T15:07:28.568Z"
+          "timestamp": "2026-09-15T15:07:28.568Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-16",
           "run_id": "9767a435-1eeb-4e9d-993f-566f0c488d28",
           "cost_usd": 0.1213,
-          "timestamp": "2026-09-15T23:38:56.271Z"
+          "timestamp": "2026-09-15T23:38:56.271Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-17",
           "run_id": "34d75da6-e31e-49ca-ba7f-a0fe794173ed",
           "cost_usd": 0.1212,
-          "timestamp": "2026-09-16T23:47:59.250Z"
+          "timestamp": "2026-09-16T23:47:59.250Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-18",
           "run_id": "9b080c19-a0b4-4426-8665-a85de987bdd7",
           "cost_usd": 0.1266,
-          "timestamp": "2026-09-17T23:40:14.504Z"
+          "timestamp": "2026-09-17T23:40:14.504Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-19",
           "run_id": "c79724e6-8077-4d07-addd-218556e87424",
           "cost_usd": 0.1229,
-          "timestamp": "2026-09-18T23:33:11.131Z"
+          "timestamp": "2026-09-18T23:33:11.131Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-20",
           "run_id": "d3c64001-d08b-40c9-9f05-ddca592e8b9f",
           "cost_usd": 0.1291,
-          "timestamp": "2026-09-19T23:26:18.219Z"
+          "timestamp": "2026-09-19T23:26:18.219Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-21",
           "run_id": "a191eefd-d113-41a4-9d43-77c989219903",
           "cost_usd": 0.1202,
-          "timestamp": "2026-09-20T23:25:12.052Z"
+          "timestamp": "2026-09-20T23:25:12.052Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-22",
           "run_id": "1d0039da-86d5-41af-a395-607e69b16d01",
           "cost_usd": 0.1262,
-          "timestamp": "2026-09-22T00:16:43.384Z"
+          "timestamp": "2026-09-22T00:16:43.384Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-23",
           "run_id": "701daa86-5505-4359-b7ef-5110431ffcd4",
           "cost_usd": 0.1217,
-          "timestamp": "2026-09-22T23:46:19.812Z"
+          "timestamp": "2026-09-22T23:46:19.812Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-24",
           "run_id": "be2cc685-e7f5-410a-9b12-fd030dba370e",
           "cost_usd": 0.1195,
-          "timestamp": "2026-09-23T23:56:35.205Z"
+          "timestamp": "2026-09-23T23:56:35.205Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-24",
           "run_id": "e65bcbba-f8da-4f66-8952-015e05660f32",
           "cost_usd": 0.1282,
-          "timestamp": "2026-09-24T02:24:02.928Z"
+          "timestamp": "2026-09-24T02:24:02.928Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-24",
           "run_id": "c1c35a7d-daa1-4e9d-b9c3-8287c37f899a",
           "cost_usd": 0.1404,
-          "timestamp": "2026-09-24T02:30:26.408Z"
+          "timestamp": "2026-09-24T02:30:26.408Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-24",
           "run_id": "bb9fc535-1a68-4790-8896-e03f83801a1e",
           "cost_usd": 0.156,
-          "timestamp": "2026-09-24T02:47:38.210Z"
+          "timestamp": "2026-09-24T02:47:38.210Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-24",
           "run_id": "504ad222-c31f-442d-9ffe-503d41a91f1a",
           "cost_usd": 0.1634,
-          "timestamp": "2026-09-24T02:55:28.325Z"
+          "timestamp": "2026-09-24T02:55:28.325Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-26",
           "run_id": "2dc1d1c2-9782-4a9d-b827-590d53fdca02",
           "cost_usd": 0.1511,
-          "timestamp": "2026-09-26T00:05:42.272Z"
+          "timestamp": "2026-09-26T00:05:42.272Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-27",
           "run_id": "60fafc28-abe0-4e29-aa28-d1a33c02291d",
           "cost_usd": 0.1482,
-          "timestamp": "2026-09-26T23:49:27.728Z"
+          "timestamp": "2026-09-26T23:49:27.728Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-28",
           "run_id": "c53e374b-869f-462a-bae5-1e9283d0e731",
           "cost_usd": 0.1477,
-          "timestamp": "2026-09-27T23:56:45.796Z"
+          "timestamp": "2026-09-27T23:56:45.796Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-29",
           "run_id": "df9c97c0-9e73-40de-86f9-cb5086028739",
           "cost_usd": 0.1532,
-          "timestamp": "2026-09-29T01:14:06.909Z"
+          "timestamp": "2026-09-29T01:14:06.909Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-09-30",
           "run_id": "0a8e003d-61df-425e-804d-8d6ae8a8ab83",
           "cost_usd": 0.1439,
-          "timestamp": "2026-09-30T00:45:02.569Z"
+          "timestamp": "2026-09-30T00:45:02.569Z",
+          "accounting": "legacy_incomplete"
         }
       ]
     },
@@ -478,309 +554,388 @@
           "date": "2026-10-01",
           "run_id": "49f64c8e-00ac-4c46-83fe-141b94503187",
           "cost_usd": 0.1548,
-          "timestamp": "2026-10-01T00:47:55.845Z"
+          "timestamp": "2026-10-01T00:47:55.845Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-02",
           "run_id": "1aca0420-7c50-43e3-a4ae-affe6e0198df",
           "cost_usd": 0.1504,
-          "timestamp": "2026-10-02T01:04:59.932Z"
+          "timestamp": "2026-10-02T01:04:59.932Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-03",
           "run_id": "f07be68f-6d0e-478e-80a3-d28a20009c31",
           "cost_usd": 0.1444,
-          "timestamp": "2026-10-03T00:42:00.409Z"
+          "timestamp": "2026-10-03T00:42:00.409Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-04",
           "run_id": "bc142de5-b998-48fb-85aa-c1f6713b49de",
           "cost_usd": 0.1505,
-          "timestamp": "2026-10-04T00:02:08.219Z"
+          "timestamp": "2026-10-04T00:02:08.219Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-05",
           "run_id": "db4ee50d-f0ca-4b43-be18-c11894566439",
           "cost_usd": 0.1493,
-          "timestamp": "2026-10-05T00:08:42.158Z"
+          "timestamp": "2026-10-05T00:08:42.158Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-06",
           "run_id": "e65cf34c-4ee8-4452-bcf5-daa1c8a43919",
           "cost_usd": 0.146,
-          "timestamp": "2026-10-06T01:53:31.035Z"
+          "timestamp": "2026-10-06T01:53:31.035Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-07",
           "run_id": "2f421a61-20c1-4d67-adc9-acdc1297f1b1",
           "cost_usd": 0.146,
-          "timestamp": "2026-10-07T00:59:51.459Z"
+          "timestamp": "2026-10-07T00:59:51.459Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-08",
           "run_id": "05e17248-006e-4fa0-b4de-6a99e2659de1",
           "cost_usd": 0.1633,
-          "timestamp": "2026-10-08T01:16:55.965Z"
+          "timestamp": "2026-10-08T01:16:55.965Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-09",
           "run_id": "e7143d30-53d3-4f4c-86b5-a4c4b6f9326b",
           "cost_usd": 0.1484,
-          "timestamp": "2026-10-09T01:23:25.506Z"
+          "timestamp": "2026-10-09T01:23:25.506Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-10",
           "run_id": "35c4edc1-a06d-4b18-bdca-a3ad50edd487",
           "cost_usd": 0.1475,
-          "timestamp": "2026-10-10T01:11:32.829Z"
+          "timestamp": "2026-10-10T01:11:32.829Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-11",
           "run_id": "757c044f-56df-4219-a5d9-7a3ced841054",
           "cost_usd": 0.1508,
-          "timestamp": "2026-10-11T00:25:09.798Z"
+          "timestamp": "2026-10-11T00:25:09.798Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-11",
           "run_id": "33b94b0a-cf93-4957-aa73-b3bf98a13d33",
           "cost_usd": 0.1493,
-          "timestamp": "2026-10-11T16:06:29.910Z"
+          "timestamp": "2026-10-11T16:06:29.910Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-12",
           "run_id": "7daba686-2747-4345-b4b3-f877782f5214",
           "cost_usd": 0.15,
-          "timestamp": "2026-10-12T00:45:00.084Z"
+          "timestamp": "2026-10-12T00:45:00.084Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-13",
           "run_id": "d317e630-94e4-42e8-83e7-73a9b53f6390",
           "cost_usd": 0.1499,
-          "timestamp": "2026-10-13T02:44:08.219Z"
+          "timestamp": "2026-10-13T02:44:08.219Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-14",
           "run_id": "7918f112-6b51-43ab-81b7-4c73d4cd16dc",
           "cost_usd": 0.1459,
-          "timestamp": "2026-10-14T00:33:33.071Z"
+          "timestamp": "2026-10-14T00:33:33.071Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-15",
           "run_id": "72263c63-222d-4c6e-829f-0ca6f1e693a0",
           "cost_usd": 0.1628,
-          "timestamp": "2026-10-15T00:05:41.084Z"
+          "timestamp": "2026-10-15T00:05:41.084Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-16",
           "run_id": "d0d5b32d-1d05-4378-a0be-bd8fbc77c4ca",
           "cost_usd": 0.1817,
-          "timestamp": "2026-10-15T23:51:02.993Z"
+          "timestamp": "2026-10-15T23:51:02.993Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-17",
           "run_id": "8b82ebf3-7276-4268-8f00-7c6ad35ce40d",
           "cost_usd": 0.1571,
-          "timestamp": "2026-10-16T23:50:22.073Z"
+          "timestamp": "2026-10-16T23:50:22.073Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-18",
           "run_id": "2dad73eb-cd9b-44a8-8db2-3fa749e16da8",
           "cost_usd": 0.1445,
-          "timestamp": "2026-10-17T23:22:20.931Z"
+          "timestamp": "2026-10-17T23:22:20.931Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-19",
           "run_id": "201a5189-d5b4-4a8c-97ef-3c2ad02e63ee",
           "cost_usd": 0.1499,
-          "timestamp": "2026-10-18T23:36:14.526Z"
+          "timestamp": "2026-10-18T23:36:14.526Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-20",
           "run_id": "ea9f3959-568d-4969-83d7-92bc6e55d6ba",
           "cost_usd": 0.143,
-          "timestamp": "2026-10-20T00:35:46.757Z"
+          "timestamp": "2026-10-20T00:35:46.757Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-21",
           "run_id": "a8d05e69-8e7e-46ba-9ebb-0e49e9bcbfaf",
           "cost_usd": 0.1433,
-          "timestamp": "2026-10-21T00:05:52.250Z"
+          "timestamp": "2026-10-21T00:05:52.250Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-22",
           "run_id": "e0a11482-fad6-4745-bed7-02f094934856",
           "cost_usd": 0.1653,
-          "timestamp": "2026-10-22T00:12:19.165Z"
+          "timestamp": "2026-10-22T00:12:19.165Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-23",
           "run_id": "7955c77a-1de9-422e-9b3f-c6a080f72c0a",
           "cost_usd": 0.1485,
-          "timestamp": "2026-10-23T00:07:52.871Z"
+          "timestamp": "2026-10-23T00:07:52.871Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-24",
           "run_id": "e8048e56-35b1-4029-a60f-928502def7a7",
           "cost_usd": 0.1467,
-          "timestamp": "2026-10-23T23:59:14.354Z"
+          "timestamp": "2026-10-23T23:59:14.354Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-25",
           "run_id": "6291ef91-800e-4c8a-b344-91bdbe7fa16b",
           "cost_usd": 0.1547,
-          "timestamp": "2026-10-24T23:36:30.394Z"
+          "timestamp": "2026-10-24T23:36:30.394Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-26",
           "run_id": "a0992fea-fae2-4921-ad47-1a7bead2c8b2",
           "cost_usd": 0.1533,
-          "timestamp": "2026-10-25T23:30:43.452Z"
+          "timestamp": "2026-10-25T23:30:43.452Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-27",
           "run_id": "767ed631-4386-44b8-b4e0-6e35b6547b6e",
           "cost_usd": 0.1431,
-          "timestamp": "2026-10-27T00:44:49.420Z"
+          "timestamp": "2026-10-27T00:44:49.420Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-28",
           "run_id": "d1268dda-66ca-4a08-b78a-346b1ba24ddc",
           "cost_usd": 0.1533,
-          "timestamp": "2026-10-28T00:43:30.866Z"
+          "timestamp": "2026-10-28T00:43:30.866Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-29",
           "run_id": "560b2e1c-eb9f-458e-b96c-72af3cd34bd1",
           "cost_usd": 0.1639,
-          "timestamp": "2026-10-29T01:13:22.158Z"
+          "timestamp": "2026-10-29T01:13:22.158Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-30",
           "run_id": "201da3d3-2900-4626-9467-818c19dc924c",
           "cost_usd": 0.1554,
-          "timestamp": "2026-10-30T01:19:24.338Z"
+          "timestamp": "2026-10-30T01:19:24.338Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-10-31",
           "run_id": "06a75c36-3f5f-4495-8401-bd0ce7b5e56a",
           "cost_usd": 0.1514,
-          "timestamp": "2026-10-31T01:01:05.872Z"
+          "timestamp": "2026-10-31T01:01:05.872Z",
+          "accounting": "legacy_incomplete"
         }
       ]
     },
     "2026-11": {
-      "total_usd": 2.6052,
+      "total_usd": 2.791,
       "runs": [
         {
           "date": "2026-11-01",
           "run_id": "a1b35abd-9173-4516-adf1-ebcd242c8abb",
           "cost_usd": 0.1487,
-          "timestamp": "2026-11-01T00:22:00.644Z"
+          "timestamp": "2026-11-01T00:22:00.644Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-11-02",
           "run_id": "30a2eea5-64c0-4c33-8767-0c72a6556c34",
           "cost_usd": 0.1484,
-          "timestamp": "2026-11-02T01:01:49.548Z"
+          "timestamp": "2026-11-02T01:01:49.548Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-11-03",
           "run_id": "a29501d8-5499-4f52-873d-07806e784a9d",
           "cost_usd": 0.1505,
-          "timestamp": "2026-11-03T03:03:34.332Z"
+          "timestamp": "2026-11-03T03:03:34.332Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-11-08",
           "run_id": "85ddbdc4-eace-4cd5-95b2-d30e59ca6aa8",
           "cost_usd": 0.1541,
-          "timestamp": "2026-11-08T05:37:10.569Z"
+          "timestamp": "2026-11-08T05:37:10.569Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-11-09",
           "run_id": "44ee9931-72e8-4034-98ce-32efbd874baa",
           "cost_usd": 0.1352,
-          "timestamp": "2026-11-09T01:10:25.638Z"
+          "timestamp": "2026-11-09T01:10:25.638Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-11-10",
           "run_id": "06edb9e7-f03d-4ca1-81d5-e76764c7ab8d",
           "cost_usd": 0.1397,
-          "timestamp": "2026-11-10T03:46:25.806Z"
+          "timestamp": "2026-11-10T03:46:25.806Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-11-11",
           "run_id": "f6e24f79-c75b-4323-b3c0-864ccad32804",
           "cost_usd": 0.1354,
-          "timestamp": "2026-11-11T01:26:32.382Z"
+          "timestamp": "2026-11-11T01:26:32.382Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-11-12",
           "run_id": "8e766fb1-bf89-442b-b28b-efba8b873f6f",
           "cost_usd": 0.1415,
-          "timestamp": "2026-11-12T02:26:15.353Z"
+          "timestamp": "2026-11-12T02:26:15.353Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-11-13",
           "run_id": "bd629c6e-5e7b-4b19-bd3e-af4eae3b7181",
           "cost_usd": 0.1364,
-          "timestamp": "2026-11-13T02:04:04.458Z"
+          "timestamp": "2026-11-13T02:04:04.458Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-11-14",
           "run_id": "1bf5f048-ef26-4e16-b3ab-440703cd9fb8",
           "cost_usd": 0.1384,
-          "timestamp": "2026-11-14T01:39:56.001Z"
+          "timestamp": "2026-11-14T01:39:56.001Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-11-15",
           "run_id": "17fd4be1-0bda-419a-8328-a219b2bc7c0d",
           "cost_usd": 0.1514,
-          "timestamp": "2026-11-15T01:15:55.602Z"
+          "timestamp": "2026-11-15T01:15:55.602Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-11-16",
           "run_id": "349e9bdf-4941-4ff0-be00-9802a2d127ac",
           "cost_usd": 0.1402,
-          "timestamp": "2026-11-16T01:21:27.781Z"
+          "timestamp": "2026-11-16T01:21:27.781Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-11-17",
           "run_id": "5b141e99-6465-4784-b4b1-94ec7abe8c59",
           "cost_usd": 0.1695,
-          "timestamp": "2026-11-17T04:09:22.898Z"
+          "timestamp": "2026-11-17T04:09:22.898Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-11-18",
           "run_id": "f1c6f483-5129-4e28-969d-e1c04a059360",
           "cost_usd": 0.1426,
-          "timestamp": "2026-11-18T03:06:20.976Z"
+          "timestamp": "2026-11-18T03:06:20.976Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-11-19",
           "run_id": "4c9768bd-bda2-4654-9123-82dac5d607f7",
           "cost_usd": 0.1411,
-          "timestamp": "2026-11-19T02:46:11.704Z"
+          "timestamp": "2026-11-19T02:46:11.704Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-11-20",
           "run_id": "40487cc1-03e2-4866-8b0f-9a47fa9bee8f",
           "cost_usd": 0.1431,
-          "timestamp": "2026-11-20T02:32:34.200Z"
+          "timestamp": "2026-11-20T02:32:34.200Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-11-21",
           "run_id": "f0c7125c-f8e9-49d6-b3a4-8830281c8353",
           "cost_usd": 0.1369,
-          "timestamp": "2026-11-21T02:44:17.091Z"
+          "timestamp": "2026-11-21T02:44:17.091Z",
+          "accounting": "legacy_incomplete"
         },
         {
           "date": "2026-11-22",
           "run_id": "14f34ce9-37a5-4e9a-af66-f7656f1969a3",
           "cost_usd": 0.1521,
-          "timestamp": "2026-11-22T01:32:35.253Z"
+          "timestamp": "2026-11-22T01:32:35.253Z",
+          "accounting": "legacy_incomplete"
+        },
+        {
+          "date": "2026-11-23",
+          "run_id": "7f84ca63-8267-436d-a648-cdb589381fca",
+          "cost_usd": 0.1858,
+          "timestamp": "2026-11-23T01:56:49.654Z",
+          "accounting_version": 2,
+          "status": "success",
+          "pipeline": "daily",
+          "cost_complete": true,
+          "unknown_usage_calls": 0,
+          "lower_bound_calls": 0,
+          "cost_is_lower_bound": false,
+          "partial_calls": 0,
+          "calls": 6,
+          "usage": {
+            "input_tokens": 30468,
+            "output_tokens": 7797,
+            "cache_creation_5m_input_tokens": 5854,
+            "cache_creation_1h_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "web_search_requests": 0
+          }
         }
       ]
     }
   },
-  "lifetime_usd": 14.7131
+  "lifetime_usd": 14.8989,
+  "accounting_notes": "Run entries labeled accounting=\"legacy_incomplete\" predate accounting v2: they priced claude-haiku-4-5 at $0.80/$1 per MTok instead of $1/$5, omitted cache-write, cache-read and web-search ($10 per 1,000) charges, and failed runs were not persisted. They understate real spend and were deliberately not backfilled (no usage record exists to price them from).",
+  "accounting": {
+    "version": 2,
+    "pricing_source": "https://platform.claude.com/docs/en/about-claude/pricing",
+    "pricing_verified_on": "2026-11-22"
+  }
 }

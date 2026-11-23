@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "12 OCT 2026",
-      "verdict_line": "DII equity flows hit a 100th-percentile ₹58,502 cr / month while INR slides to 97.09 — domestic capital flooding in as foreign hands quietly exit the currency.",
-      "themes": [
-        "markets",
-        "flows"
-      ],
-      "slugs": [
-        "us_10y_treasury",
-        "rent_mumbai",
-        "inr_usd",
-        "rent_bengaluru",
-        "office_absorption"
-      ]
-    },
-    {
       "date": "13 NOV 2026",
       "verdict_line": "BOJ at 1.25% p.a. — a 10-year high — is unwinding carry trades that funded EM inflows; India's ₹49,935 cr / month FII exodus is the first casualty.",
       "themes": [
@@ -296,6 +281,20 @@
         "us_10y_treasury",
         "inr_usd",
         "office_absorption"
+      ]
+    },
+    {
+      "date": "23 NOV 2026",
+      "verdict_line": "GST at ₹2,31,290 cr / month — a 90th-percentile record — but services credit at 28.3% YoY is doing the heavy lifting that goods demand cannot.",
+      "themes": [
+        "consumption"
+      ],
+      "slugs": [
+        "us_10y_treasury",
+        "airline_pax",
+        "sip_accounts",
+        "boj_rate",
+        "gst_month"
       ]
     },
     {

@@ -1,21 +1,6 @@
 {
   "entries": [
     {
-      "date": "13 NOV 2026",
-      "verdict_line": "BOJ at 1.25% p.a. — a 10-year high — is unwinding carry trades that funded EM inflows; India's ₹49,935 cr / month FII exodus is the first casualty.",
-      "themes": [
-        "flows",
-        "policy"
-      ],
-      "slugs": [
-        "us_10y_treasury",
-        "inr_usd",
-        "boj_rate",
-        "mf_avg_aum",
-        "nfo_collections"
-      ]
-    },
-    {
       "date": "13 OCT 2026",
       "verdict_line": "Retail mall vacancy at a 10-year-low 4.8% vacant while office absorption oscillates violently — consumption is the economy's load-bearing wall, not capex.",
       "themes": [
@@ -309,6 +294,21 @@
         "affordability_index",
         "office_absorption",
         "us_10y_treasury"
+      ]
+    },
+    {
+      "date": "24 NOV 2026",
+      "verdict_line": "GST at ₹2,31,290 cr / month — a 10-year 90th-percentile print — but decompose it and the BOJ at a 100th-percentile 1.25% p.a. is the carry-unwind fuse nobody is pricing.",
+      "themes": [
+        "consumption",
+        "policy"
+      ],
+      "slugs": [
+        "us_10y_treasury",
+        "airline_pax",
+        "sip_accounts",
+        "boj_rate",
+        "inr_usd"
       ]
     },
     {

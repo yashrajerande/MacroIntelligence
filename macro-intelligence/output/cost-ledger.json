@@ -777,7 +777,7 @@
       ]
     },
     "2026-11": {
-      "total_usd": 2.791,
+      "total_usd": 2.8548,
       "runs": [
         {
           "date": "2026-11-01",
@@ -927,11 +927,35 @@
             "cache_read_input_tokens": 0,
             "web_search_requests": 0
           }
+        },
+        {
+          "date": "2026-11-24",
+          "run_id": "ed200443-5db0-4bf1-93d1-96d46d67026f",
+          "cost_usd": 0.0638,
+          "timestamp": "2026-11-24T05:28:31.533Z",
+          "accounting_version": 2,
+          "status": "failed",
+          "pipeline": "daily",
+          "cost_complete": true,
+          "unknown_usage_calls": 0,
+          "lower_bound_calls": 0,
+          "cost_is_lower_bound": false,
+          "partial_calls": 0,
+          "calls": 3,
+          "usage": {
+            "input_tokens": 22786,
+            "output_tokens": 8193,
+            "cache_creation_5m_input_tokens": 0,
+            "cache_creation_1h_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "web_search_requests": 0
+          },
+          "source": "failure-journal"
         }
       ]
     }
   },
-  "lifetime_usd": 14.8989,
+  "lifetime_usd": 14.9627,
   "accounting_notes": "Run entries labeled accounting=\"legacy_incomplete\" predate accounting v2: they priced claude-haiku-4-5 at $0.80/$1 per MTok instead of $1/$5, omitted cache-write, cache-read and web-search ($10 per 1,000) charges, and failed runs were not persisted. They understate real spend and were deliberately not backfilled (no usage record exists to price them from).",
   "accounting": {
     "version": 2,

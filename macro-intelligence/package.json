@@ -23,6 +23,7 @@
     "conglomerates:dry-run": "SKIP_GIT_PUSH=true node agents/ConglomeratesTracker/orchestrate.js",
     "conglomerates:test": "node agents/ConglomeratesTracker/test.js",
     "test:accounting": "node test-accounting.js",
+    "test:truncation": "node test-truncation.js",
     "test:validate":"node agents/Production/Validator/validate.js --test",
     "test:dry-run": "SKIP_SUPABASE=true SKIP_GIT_PUSH=true node agents/CEO/orchestrate.js"
   },

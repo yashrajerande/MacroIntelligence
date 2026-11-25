@@ -472,8 +472,15 @@ export async function runAccountingTests({ describe, assert }) {
   // ── 9. Every pipeline call site is metered; workflows persist ─────
   describe('Accounting — call-site and workflow wiring');
   {
+    // SignalDetector goes through streamUntilComplete (src/utils/model-output.js),
+    // which meters every attempt via meteredStream.
+    const sd = readFileSync(join(__dirname, 'agents/Analysis/SignalDetector/detect.js'), 'utf8');
+    const mo = readFileSync(join(__dirname, 'src/utils/model-output.js'), 'utf8');
+    assert(sd.includes('streamUntilComplete(this.client') && !/client\.messages\.(stream|create)\(/.test(sd)
+      && (mo.match(/meteredStream\(client/g) || []).length === 2 && !/client\.messages\.(stream|create)\(/.test(mo),
+      'agents/Analysis/SignalDetector/detect.js meters every attempt (via streamUntilComplete → meteredStream)');
     const daily = [
-      'agents/DataIntelligence/MacroDataAnalyst/skills/web-search.js', 'agents/Analysis/SignalDetector/detect.js',
+      'agents/DataIntelligence/MacroDataAnalyst/skills/web-search.js',
       'agents/Editorial/ExecutiveSummaryWriter/write.js', 'agents/Editorial/NewsCurator/curate.js',
       'agents/Production/VoiceBroadcaster/broadcast.js',
     ];

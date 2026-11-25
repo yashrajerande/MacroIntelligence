@@ -35,6 +35,10 @@ export const PUBLISHED_INDEX_PATH = join(ROOT, 'output', 'index.html');
  */
 export function classifyModelError(err) {
   if (!err) return null;
+  // Output cut off at max_tokens (src/utils/model-output.js). The agent has
+  // already retried once with a higher cap; re-sending the same request
+  // would truncate again and pay again.
+  if (err.code === 'output_truncated') return 'truncated';
   const msg = String(err.message || err).toLowerCase();
   const status = Number(err.status || err.statusCode || (msg.match(/\b(4\d\d|5\d\d)\b/) || [])[1] || 0);
 
@@ -62,7 +66,8 @@ export function retryDelaysFor(kind) {
     case 'overloaded':  return [10000, 30000, 60000];
     case 'server':      return [5000, 20000, 60000];
     case 'billing':
-    case 'auth':        return [];
+    case 'auth':
+    case 'truncated':   return []; // truncated: escalation already done in-agent
     default:            return [5000];
   }
 }
@@ -124,6 +129,7 @@ const FIX_FOR = {
   server:     'Upstream server error. The 05:00 IST retry will pick it up; no action needed unless it repeats.',
   supabase:   'Supabase is unreachable (paused?). Dashboard still published from cache; restore the project at supabase.com.',
   git:        'Could not push to GitHub. Check the GH_PAT secret has not expired.',
+  truncated:  'A model response hit its output cap even after one retry at a higher cap. Raise the agent\'s max_tokens (named in the reason) or shorten its requested output.',
   validation: 'Validator rejected the edition. Open the run log; the rule that fired is named in the first ✗ line.',
   budget:     'Monthly budget cap reached. Raise the cap in cost-ledger config or wait for the new month.',
   unknown:    'Open the run log for the stack trace.',

@@ -2018,6 +2018,14 @@ assert(!missingRead.narrative.includes('VIX'), `No VIX data means no risk-appeti
   await runAccountingTests({ describe, assert });
 }
 
+// --- Output truncation (max_tokens): SignalDetector cap + explicit
+// stop_reason handling + no identical re-send. Mock clients only.
+// Also: node test-truncation.js
+{
+  const { runTruncationTests } = await import('./test-truncation.js');
+  await runTruncationTests({ describe, assert });
+}
+
 console.log(`\n═══════════════════════════════════════════════════════════`);
 console.log(`  Test Results: ${pass} passed, ${fail} failed`);
 console.log(`═══════════════════════════════════════════════════════════\n`);

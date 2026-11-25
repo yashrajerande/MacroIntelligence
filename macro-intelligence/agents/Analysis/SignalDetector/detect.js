@@ -7,7 +7,7 @@ import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import Anthropic from '@anthropic-ai/sdk';
-import { meteredStream } from '../../../src/utils/metered-claude.js';
+import { streamUntilComplete } from '../../../src/utils/model-output.js';
 import { scoreAllIndicators } from './skills/signal-scoring.js';
 import { getPolarity, classifyIndicator, scoreIndicator } from '../../../src/utils/polarity.js';
 import { trendSuffix, TREND_GUIDANCE } from '../../../src/utils/trend-context.js';
@@ -16,6 +16,10 @@ import { displayUnit } from '../../../src/utils/indicator-schema.js';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const persona = readFileSync(join(__dirname, 'Persona.md'), 'utf-8');
 const client = new Anthropic();
+
+// Output caps — see the call site in detect() for the reasoning.
+export const SIGNAL_DETECTOR_MAX_TOKENS = 8192;
+export const SIGNAL_DETECTOR_ESCALATED_MAX_TOKENS = 16384;
 
 const SIGNAL_THEMES = [
   { num: 1, theme: 'CREDIT CYCLE' },
@@ -28,6 +32,12 @@ const SIGNAL_THEMES = [
 ];
 
 export class SignalDetector {
+  // The client is injectable so tests can exercise the truncation path
+  // with a mock; production always uses the module's Anthropic client.
+  constructor({ client: injected } = {}) {
+    this.client = injected || client;
+  }
+
   async detect(allData) {
     const start = Date.now();
 
@@ -89,13 +99,18 @@ For each signal, provide:
 
 Return a JSON array of 7 objects wrapped in <<<JSON and >>> markers.`;
 
-    const response = await meteredStream(client, {
+    // 7 signals as JSON normally run ~3.5-4K output tokens; 4096 truncated
+    // the response on 24 & 25 NOV 2026 (both attempts stopped at exactly
+    // 4,096). 8192 gives ~2x headroom; a truncated answer is retried ONCE
+    // at 16384, then fails explicitly with OutputTruncatedError instead of
+    // a generic JSON-parse error.
+    const response = await streamUntilComplete(this.client, {
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: 4096,
+      max_tokens: SIGNAL_DETECTOR_MAX_TOKENS,
       temperature: 0,
       system: [{ type: 'text', text: persona, cache_control: { type: 'ephemeral' } }],
       messages: [{ role: 'user', content: prompt }],
-    }, { agent: 'SignalDetector' });
+    }, { agent: 'SignalDetector', escalateTo: SIGNAL_DETECTOR_ESCALATED_MAX_TOKENS });
 
     const tokens = { input: response.usage?.input_tokens || 0, output: response.usage?.output_tokens || 0 };
     const text = response.content.filter(b => b.type === 'text').map(b => b.text).join('');

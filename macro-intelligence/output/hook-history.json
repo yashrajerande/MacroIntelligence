@@ -1,20 +1,6 @@
 {
   "entries": [
     {
-      "date": "14 NOV 2026",
-      "verdict_line": "US 10Y at 5.1% yield — a 93rd-percentile print rising for the third consecutive session — reprices every EM carry trade India benefits from, and the RBI has no rate buffer to respond.",
-      "themes": [
-        "policy"
-      ],
-      "slugs": [
-        "us_10y_treasury",
-        "inr_usd",
-        "boj_rate",
-        "mf_avg_aum",
-        "nfo_collections"
-      ]
-    },
-    {
       "date": "14 OCT 2026",
       "verdict_line": "US 10Y at 5.24% yield — a 95th-percentile print rising three of five sessions — is repricing every EM carry trade India has benefited from since 2023.",
       "themes": [],
@@ -337,6 +323,21 @@
         "us_10y_treasury",
         "nfo_collections",
         "sip_inflows"
+      ]
+    },
+    {
+      "date": "26 NOV 2026",
+      "verdict_line": "BOJ at a 10-year-high 1.25% p.a. while US 10Y yields fall to 4.91% — the yen carry unwind nobody has priced is India's next liquidity shock.",
+      "themes": [
+        "policy",
+        "global_macro"
+      ],
+      "slugs": [
+        "us_10y_treasury",
+        "airline_pax",
+        "sip_accounts",
+        "boj_rate",
+        "inr_usd"
       ]
     },
     {

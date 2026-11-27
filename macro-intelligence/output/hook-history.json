@@ -1,18 +1,6 @@
 {
   "entries": [
     {
-      "date": "14 OCT 2026",
-      "verdict_line": "US 10Y at 5.24% yield — a 95th-percentile print rising three of five sessions — is repricing every EM carry trade India has benefited from since 2023.",
-      "themes": [],
-      "slugs": [
-        "euro_stoxx50",
-        "us_10y_treasury",
-        "inr_usd",
-        "office_absorption",
-        "sip_aum"
-      ]
-    },
-    {
       "date": "15 NOV 2026",
       "verdict_line": "US 10Y at 5.1% yield — a 93rd-percentile print rising four of five months — is tightening global financial conditions faster than any central bank communiqué.",
       "themes": [],
@@ -353,6 +341,21 @@
         "us_10y_treasury",
         "boj_rate",
         "brent_usd"
+      ]
+    },
+    {
+      "date": "27 NOV 2026",
+      "verdict_line": "SIP inflows at a 94th-percentile ₹32,160 cr / month but YoY growth at 8.9% — the retail bid is plateauing precisely when DII absorption needs to replace ₹49,935 cr of FII flight.",
+      "themes": [
+        "flows",
+        "real_estate"
+      ],
+      "slugs": [
+        "us_10y_treasury",
+        "airline_pax",
+        "sip_inflows",
+        "sip_accounts",
+        "boj_rate"
       ]
     },
     {
